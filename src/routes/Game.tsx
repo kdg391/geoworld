@@ -57,7 +57,6 @@ const Game = () => {
     const pathRef = useRef<google.maps.Polyline | null>(null)
 
     const [timeLeft, setTimeLeft] = useState<number | null>(null)
-    const [timeUp, setTimeUp] = useState(false)
 
     const data = GAMES_DATA.find((g) => g.code === params.code)!
 
@@ -163,7 +162,6 @@ const Game = () => {
             }
         }
 
-        setTimeUp(true)
         setRoundFinished(true)
     }
 
