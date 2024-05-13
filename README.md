@@ -7,8 +7,11 @@ Look at the street view and guess where you are.
 ## To Do
 
 [ ] refactor code
+
 [ ] add new locations
+
 [ ] responsive ui
+
 [ ] multi player
 
 ## References
