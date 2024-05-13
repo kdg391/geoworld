@@ -6,13 +6,13 @@ Look at the street view and guess where you are.
 
 ## To Do
 
-[ ] refactor code
+- [ ] refactor code
 
-[ ] add new locations
+- [ ] add new locations
 
-[ ] responsive ui
+- [ ] responsive ui
 
-[ ] multi player
+- [ ] multi player
 
 ## References
 
