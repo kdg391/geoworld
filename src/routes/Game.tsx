@@ -23,7 +23,8 @@ const Game = () => {
     const location = useLocation()
     const params = useParams()
 
-    if (params?.code === undefined) return <Navigate to="/" />
+    if (params?.code === undefined)
+        return <Navigate to="/geography-guessing/" />
 
     const state = location.state as State
 
