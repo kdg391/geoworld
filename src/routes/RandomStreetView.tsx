@@ -1,0 +1,135 @@
+import { Loader } from '@googlemaps/js-api-loader'
+import { useEffect, useRef, useState } from 'react'
+
+import styles from './RandomStreetView.module.css'
+
+const randomLatLng = (): google.maps.LatLngLiteral => {
+    const lat = Math.random() * 180 - 90
+    const lng = Math.random() * 360 - 180
+
+    return {
+        lat,
+        lng,
+    }
+}
+
+const RandomStreetView = () => {
+    const mapElRef = useRef<HTMLDivElement | null>(null)
+    const svPanoramaElRef = useRef<HTMLDivElement | null>(null)
+
+    const mapRef = useRef<google.maps.Map | null>(null)
+    const svPanoramaRef = useRef<google.maps.StreetViewPanorama | null>(null)
+    const svServiceRef = useRef<google.maps.StreetViewService | null>(null)
+
+    const [showMap, setShowMap] = useState(false)
+
+    const loadPanorama = (location: google.maps.LatLngLiteral) => {
+        if (!svPanoramaRef.current) return
+        if (!svServiceRef.current) return
+
+        svServiceRef.current
+            .getPanorama({
+                location,
+                preference: google.maps.StreetViewPreference.NEAREST,
+                // sources: [google.maps.StreetViewSource.OUTDOOR],
+            })
+            .then(({ data }) => {
+                if (data.location) {
+                    svPanoramaRef.current?.setPano(data.location.pano)
+                    svPanoramaRef.current?.setPov({
+                        heading: 0,
+                        pitch: 0,
+                    })
+
+                    if (data.location.latLng)
+                        mapRef.current?.setCenter(data.location.latLng)
+                }
+            })
+            .catch(console.error)
+    }
+
+    useEffect(() => {
+        const init = async () => {
+            const loader = new Loader({
+                apiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
+                version: 'weekly',
+            })
+
+            const { Map } = await loader.importLibrary('maps')
+            const {
+                StreetViewCoverageLayer,
+                StreetViewPanorama,
+                StreetViewService,
+            } = await loader.importLibrary('streetView')
+
+            const map = new Map(mapElRef.current as HTMLDivElement, {
+                center: {
+                    lat: 0,
+                    lng: 0,
+                },
+                disableDefaultUI: true,
+                clickableIcons: false,
+                streetViewControl: true,
+                zoom: 5,
+                mapId: import.meta.env.VITE_GOOGLE_MAPS_1,
+            })
+
+            const svPanorama = new StreetViewPanorama(
+                svPanoramaElRef.current as HTMLDivElement,
+                {
+                    addressControl: false,
+                    fullscreenControl: false,
+                },
+            )
+
+            map.setStreetView(svPanorama)
+
+            const svService = new StreetViewService()
+
+            const svLayer = new StreetViewCoverageLayer()
+            svLayer.setMap(map)
+
+            mapRef.current = map
+            svPanoramaRef.current = svPanorama
+            svServiceRef.current = svService
+
+            loadPanorama(randomLatLng())
+        }
+
+        init()
+    }, [])
+
+    return (
+        <main>
+            <div className={styles.buttons}>
+                <button
+                    onClick={() => {
+                        setShowMap(!showMap)
+                    }}
+                >
+                    Open the Map
+                </button>
+                <button
+                    onClick={async () => {
+                        await loadPanorama(randomLatLng())
+                    }}
+                >
+                    Get StreetView
+                </button>
+            </div>
+
+            <div
+                className={styles.mapContainer}
+                style={{
+                    display: showMap ? 'flex' : 'none',
+                }}
+            >
+                <div ref={mapElRef} className={styles.map} />
+            </div>
+
+            <div ref={svPanoramaElRef} className={styles.pano} />
+        </main>
+    )
+}
+
+export default RandomStreetView

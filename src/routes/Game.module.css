@@ -1,0 +1,76 @@
+:global main {
+    width: 100%;
+    height: 100%;
+}
+
+.roundResultContainer {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    z-index: 5;
+}
+
+.roundResultWrapper {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    height: 100%;
+    background-color: var(--modal-wrapper-bg);
+    text-align: center;
+}
+
+.resultMap {
+    width: 100%;
+    height: 100%;
+}
+
+.resultInfo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    padding: 1rem 0;
+    height: 12rem;
+    width: 100%;
+}
+
+.resultInfo h2 {
+    margin: 12px 0;
+}
+
+.guessMapContainer {
+    position: absolute;
+    right: 24px;
+    bottom: 24px;
+    z-index: 4;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 32dvw;
+    height: 36dvh;
+}
+
+.map {
+    width: 100%;
+    height: 100%;
+}
+
+.guessBtn,
+.nextBtn,
+.goToHomeBtn {
+    font-size: 1rem;
+    padding: 12px 24px;
+    background-color: var(--primary-color);
+    color: #fff;
+    border-radius: 8px;
+}
+
+.guessBtn:disabled {
+    background-color: #3b3b3b;
+}
