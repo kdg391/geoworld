@@ -2,11 +2,7 @@
 
 A geography guessing game inspired by GeoGuessr and GeoHub.
 
-Look at the street view and guess where you are.
-
 ## To Do
-
-- [ ] refactor code
 
 - [ ] add new locations
 
