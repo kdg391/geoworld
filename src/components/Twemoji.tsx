@@ -21,7 +21,6 @@ const Twemoji: React.FC<
             src={`https://cdnjs.cloudflare.com/ajax/libs/twemoji/15.1.0/svg/${code}.svg`}
             width={width}
             height={height}
-            alt={emoji}
             {...props}
         />
     )

@@ -1,0 +1,17 @@
+.main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.backToHome {
+    text-decoration: none;
+    font-size: 1rem;
+    color: #3493ff;
+    transition: color 0.2s ease-in;
+}
+
+.backToHome:hover {
+    color: #50a2ff;
+}

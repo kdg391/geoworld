@@ -37,14 +37,10 @@ const LocationPicker = () => {
                 version: 'weekly',
             })
 
-            const { Map } = await loader.importLibrary('maps')
-            const {
-                StreetViewCoverageLayer,
-                StreetViewPanorama,
-                StreetViewService,
-            } = await loader.importLibrary('streetView')
+            await loader.importLibrary('maps')
+            await loader.importLibrary('streetView')
 
-            const map = new Map(mapElRef.current!, {
+            const map = new google.maps.Map(mapElRef.current!, {
                 center: {
                     lat: 36.629169,
                     lng: 127.939914,
@@ -57,15 +53,15 @@ const LocationPicker = () => {
                 mapId: import.meta.env.VITE_GOOGLE_MAPS_1,
             })
 
-            const svPanorama = new StreetViewPanorama(
+            const svPanorama = new google.maps.StreetViewPanorama(
                 svPanoramaElRef.current as HTMLDivElement,
             )
 
             map.setStreetView(svPanorama)
 
-            const svService = new StreetViewService()
+            const svService = new google.maps.StreetViewService()
 
-            const svLayer = new StreetViewCoverageLayer()
+            const svLayer = new google.maps.StreetViewCoverageLayer()
             svLayer.setMap(map)
 
             mapRef.current = map

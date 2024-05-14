@@ -10,12 +10,14 @@
 
 .map {
     float: left;
-    width: 50%;
-    height: 80%;
 }
 
 .pano {
     float: right;
+}
+
+.map,
+.pano {
     width: 50%;
-    height: 80%;
+    height: 100%;
 }

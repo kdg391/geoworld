@@ -10,11 +10,16 @@ interface GameSettings {
 }
 
 interface Props {
+    googleApiLoaded: boolean
     location: google.maps.LatLngLiteral
     settings: GameSettings
 }
 
-const StreetView: React.FC<Props> = ({ location, settings }) => {
+const StreetView: React.FC<Props> = ({
+    googleApiLoaded,
+    location,
+    settings,
+}) => {
     const svPanoramaElRef = useRef<HTMLDivElement | null>(null)
 
     const svPanoramaRef = useRef<google.maps.StreetViewPanorama | null>(null)
@@ -31,7 +36,7 @@ const StreetView: React.FC<Props> = ({ location, settings }) => {
                 location,
             })
             .then(({ data }) => {
-                if (data.location !== undefined) {
+                if (data.location) {
                     svPanoramaRef.current?.setPano(data.location.pano)
                     svPanoramaRef.current?.setPov({
                         heading: 0,
@@ -66,18 +71,10 @@ const StreetView: React.FC<Props> = ({ location, settings }) => {
     }
 
     useEffect(() => {
-        if (!window.google) return
+        if (!googleApiLoaded) return
 
         const init = async () => {
-            const { ControlPosition } = (await google.maps.importLibrary(
-                'core',
-            )) as google.maps.CoreLibrary
-            const { StreetViewPanorama, StreetViewService } =
-                (await google.maps.importLibrary(
-                    'streetView',
-                )) as google.maps.StreetViewLibrary
-
-            const svPanorama = new StreetViewPanorama(
+            const svPanorama = new google.maps.StreetViewPanorama(
                 svPanoramaElRef.current as HTMLDivElement,
                 {
                     addressControl: false,
@@ -88,21 +85,21 @@ const StreetView: React.FC<Props> = ({ location, settings }) => {
                     motionTracking: false,
                     panControl: settings.canPan,
                     panControlOptions: {
-                        position: ControlPosition.LEFT_BOTTOM,
+                        position: google.maps.ControlPosition.LEFT_BOTTOM,
                     },
                     scrollwheel: settings.canZoom,
                     showRoadLabels: false,
                 },
             )
 
-            const svService = new StreetViewService()
+            const svService = new google.maps.StreetViewService()
 
             svPanoramaRef.current = svPanorama
             svServiceRef.current = svService
         }
 
         init()
-    }, [])
+    }, [googleApiLoaded])
 
     useEffect(() => {
         loadPanorama()

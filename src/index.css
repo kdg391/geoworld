@@ -40,7 +40,7 @@
         --modal-wrapper-bg: #e3e3e3;
 
         --map-select-modal-bg: rgba(0, 0, 0, 0.5);
-        --map-select-modal-wrapper-bg: rgb(225, 225, 225);
+        --map-select-modal-wrapper-bg: #fff;
     }
 }
 

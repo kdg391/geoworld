@@ -26,9 +26,13 @@ const Game = () => {
     if (params?.code === undefined)
         return <Navigate to="/geography-guessing/" />
 
-    const state = location.state as State
+    const state = location.state as State | null
+
+    if (state === null) return <Navigate to="/geography-guessing/" />
 
     const navigate = useNavigate()
+
+    const [googleApiLoaded, setGoogleApiLoaded] = useState(false)
 
     const [round, setRound] = useState(0)
     const [roundFinished, setRoundFinished] = useState(false)
@@ -39,10 +43,10 @@ const Game = () => {
 
     const [locations, setLocations] = useState<google.maps.LatLngLiteral[]>([])
 
-    const mapElRef = useRef<HTMLDivElement | null>(null)
+    const guessMapElRef = useRef<HTMLDivElement | null>(null)
     const resultMapElRef = useRef<HTMLDivElement | null>(null)
 
-    const mapRef = useRef<google.maps.Map | null>(null)
+    const guessMapRef = useRef<google.maps.Map | null>(null)
     const resultMapRef = useRef<google.maps.Map | null>(null)
 
     const markerRef = useRef<google.maps.marker.AdvancedMarkerElement | null>(
@@ -173,9 +177,12 @@ const Game = () => {
                 version: 'weekly',
             })
 
-            const { Map, Polyline } = await loader.importLibrary('maps')
-            const { AdvancedMarkerElement, PinElement } =
-                await loader.importLibrary('marker')
+            await loader.importLibrary('core')
+            await loader.importLibrary('maps')
+            await loader.importLibrary('marker')
+            await loader.importLibrary('streetView')
+
+            setGoogleApiLoaded(true)
 
             let locations = [...data.locations]
 
@@ -187,23 +194,26 @@ const Game = () => {
             setLocations(locations.slice(0, 5))
             setTimeLeft(state.timeLimit)
 
-            const map = new Map(mapElRef.current as HTMLDivElement, {
-                zoom: 6,
-                disableDefaultUI: true,
-                zoomControl: true,
-                clickableIcons: false,
-                fullscreenControl: true,
-                draggableCursor: 'crosshair',
-                mapId: import.meta.env.VITE_GOOGLE_MAPS_1,
-                ...DEFAULT_OPTIONS,
-                ...data.defaultOptions,
+            const guessMap = new google.maps.Map(
+                guessMapElRef.current as HTMLDivElement,
+                {
+                    zoom: 6,
+                    disableDefaultUI: true,
+                    zoomControl: true,
+                    clickableIcons: false,
+                    fullscreenControl: true,
+                    draggableCursor: 'crosshair',
+                    mapId: import.meta.env.VITE_GOOGLE_MAPS_1,
+                    ...DEFAULT_OPTIONS,
+                    ...data.defaultOptions,
+                },
+            )
+
+            const marker = new google.maps.marker.AdvancedMarkerElement({
+                map: guessMap,
             })
 
-            const marker = new AdvancedMarkerElement({
-                map,
-            })
-
-            const resultMap = new Map(
+            const resultMap = new google.maps.Map(
                 resultMapElRef.current as HTMLDivElement,
                 {
                     disableDefaultUI: true,
@@ -214,20 +224,20 @@ const Game = () => {
                 },
             )
 
-            const pinBackground = new PinElement({
+            const pinBackground = new google.maps.marker.PinElement({
                 background: '#04d61d',
             })
 
-            const resultMarker1 = new AdvancedMarkerElement({
+            const resultMarker1 = new google.maps.marker.AdvancedMarkerElement({
                 map: resultMap,
             })
 
-            const resultMarker2 = new AdvancedMarkerElement({
+            const resultMarker2 = new google.maps.marker.AdvancedMarkerElement({
                 map: resultMap,
                 content: pinBackground.element,
             })
 
-            const path = new Polyline({
+            const path = new google.maps.Polyline({
                 geodesic: true,
                 strokeColor: '#000000',
                 strokeOpacity: 1.0,
@@ -236,7 +246,7 @@ const Game = () => {
 
             path.setMap(resultMap)
 
-            mapRef.current = map
+            guessMapRef.current = guessMap
             resultMapRef.current = resultMap
 
             markerRef.current = marker
@@ -250,16 +260,16 @@ const Game = () => {
     }, [])
 
     useEffect(() => {
-        if (!mapRef.current) return
+        if (!guessMapRef.current) return
 
-        const clickEvent = mapRef.current.addListener(
+        const clickEvent = guessMapRef.current.addListener(
             'click',
             (event: google.maps.MapMouseEvent) => {
                 setMarkerPosition(event.latLng?.toJSON() ?? null)
 
                 if (markerRef.current !== null) {
                     if (markerRef.current.map === null)
-                        markerRef.current.map = mapRef.current
+                        markerRef.current.map = guessMapRef.current
 
                     markerRef.current.position = event.latLng
                 }
@@ -269,14 +279,14 @@ const Game = () => {
         return () => {
             clickEvent.remove()
         }
-    }, [mapRef.current])
+    }, [guessMapRef.current])
 
     useEffect(() => {
-        if (mapRef.current) {
-            mapRef.current.setCenter(
+        if (guessMapRef.current) {
+            guessMapRef.current.setCenter(
                 data.defaultOptions?.center ?? DEFAULT_OPTIONS.center!,
             )
-            mapRef.current.setZoom(6)
+            guessMapRef.current.setZoom(6)
         }
 
         if (markerRef.current) {
@@ -332,21 +342,24 @@ const Game = () => {
                         {gameFinished ? (
                             <>
                                 <h2>Total {totalScore} Points</h2>
-                                <button
-                                    onClick={() => {
-                                        navigate(0)
-                                    }}
-                                >
-                                    Replay
-                                </button>
-                                <button
-                                    className={styles.goToHomeBtn}
-                                    onClick={() => {
-                                        navigate('/geography-guessing/')
-                                    }}
-                                >
-                                    Exit
-                                </button>
+                                <div>
+                                    <button
+                                        className={styles.replayBtn}
+                                        onClick={() => {
+                                            navigate(0)
+                                        }}
+                                    >
+                                        Replay
+                                    </button>
+                                    <button
+                                        className={styles.exitBtn}
+                                        onClick={() => {
+                                            navigate('/geography-guessing/')
+                                        }}
+                                    >
+                                        Exit
+                                    </button>
+                                </div>
                             </>
                         ) : (
                             <>
@@ -384,7 +397,7 @@ const Game = () => {
             </div>
 
             <div className={styles.guessMapContainer}>
-                <div ref={mapElRef} className={styles.map} />
+                <div ref={guessMapElRef} className={styles.guessMap} />
 
                 <button
                     className={styles.guessBtn}
@@ -398,6 +411,7 @@ const Game = () => {
             </div>
 
             <StreetView
+                googleApiLoaded={googleApiLoaded}
                 location={locations[round]}
                 settings={{
                     canMove: state.canMove,

@@ -27,19 +27,31 @@ const Home = () => {
             {showModal && (
                 <div className={styles.mapSelectModal}>
                     <div className={styles.mapSelectModalWrapper}>
-                        {game?.emoji && <Twemoji emoji={game.emoji} />}
+                        {game?.emoji && (
+                            <Twemoji
+                                emoji={game.emoji}
+                                width={36}
+                                height={36}
+                                alt={game.country}
+                            />
+                        )}
                         <h2>{game?.country}</h2>
-                        <p>{game?.locations.length ?? 0} Locations</p>
+                        <p>{game?.locations.length} Locations</p>
                         <div>
                             <label htmlFor="move">Move</label>
-                            <input
-                                type="checkbox"
-                                id="move"
-                                defaultChecked={canMove}
-                                onChange={(event) => {
-                                    setCanMove(event.target.checked)
-                                }}
-                            />
+                            <div className={styles.checkBox}>
+                                <input
+                                    type="checkbox"
+                                    id="move"
+                                    defaultChecked={canMove}
+                                    onChange={(event) => {
+                                        setCanMove(event.target.checked)
+                                    }}
+                                />
+                                <label htmlFor="move">
+                                    <span></span>
+                                </label>
+                            </div>
                         </div>
                         <div>
                             <label htmlFor="pan">Pan</label>
@@ -47,6 +59,7 @@ const Home = () => {
                                 type="checkbox"
                                 id="pan"
                                 defaultChecked={canPan}
+                                className={styles.checkBox}
                                 onChange={(event) => {
                                     setCanPan(event.target.checked)
                                 }}
@@ -58,6 +71,7 @@ const Home = () => {
                                 type="checkbox"
                                 id="zoom"
                                 defaultChecked={canZoom}
+                                className={styles.checkBox}
                                 onChange={(event) => {
                                     setCanZoom(event.target.checked)
                                 }}

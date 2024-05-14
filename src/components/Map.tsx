@@ -1,6 +1,8 @@
 import React, { useEffect, useRef } from 'react'
 
 interface Props {
+    googleApiLoaded: boolean
+
     defaultOptions?: google.maps.MapOptions
     onMount: (map: google.maps.Map) => void
 }
@@ -11,20 +13,19 @@ const Map: React.FC<
             React.HTMLAttributes<HTMLDivElement>,
             HTMLDivElement
         >
-> = ({ defaultOptions, onMount, ...props }) => {
+> = ({ googleApiLoaded, defaultOptions, onMount, ...props }) => {
     const mapElRef = useRef<HTMLDivElement | null>(null)
-    const mapRef = useRef<google.maps.Map | null>(null)
 
     useEffect(() => {
-        if (!window.google) return
-        if (!window.google.maps.Map) return
+        if (!googleApiLoaded) return
 
-        const map = new google.maps.Map(mapElRef.current!, defaultOptions)
+        const map = new google.maps.Map(
+            mapElRef.current as HTMLDivElement,
+            defaultOptions,
+        )
 
         onMount(map)
-
-        mapRef.current = map
-    }, [])
+    }, [googleApiLoaded])
 
     return <div ref={mapElRef} {...props}></div>
 }
