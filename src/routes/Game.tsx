@@ -1,11 +1,13 @@
+import { Loader } from '@googlemaps/js-api-loader'
 import { useEffect, useRef, useState } from 'react'
 import { Navigate, useLocation, useNavigate, useParams } from 'react-router-dom'
-import { Loader } from '@googlemaps/js-api-loader'
 
+import ResultMap from '../components/ResultMap.js'
 import RoundStatus from '../components/RoundStatus.js'
 import StreetView from '../components/StreetView.js'
 
-import { DEFAULT_OPTIONS, GAMES_DATA } from '../utils/constants.js'
+import COUNTRY_BOUNDS from '../utils/constants/countryBounds.js'
+import { DEFAULT_OPTIONS, GAMES_DATA } from '../utils/constants/index.js'
 import { calculateDistance, calculateRoundScore } from '../utils/index.js'
 
 import styles from './Game.module.css'
@@ -23,12 +25,10 @@ const Game = () => {
     const location = useLocation()
     const params = useParams()
 
-    if (params?.code === undefined)
-        return <Navigate to="/geography-guessing/" />
-
     const state = location.state as State | null
 
-    if (state === null) return <Navigate to="/geography-guessing/" />
+    if (params.code === undefined || state === null)
+        return <Navigate to="/geography-guessing/" />
 
     const navigate = useNavigate()
 
@@ -41,7 +41,12 @@ const Game = () => {
     const [roundScore, setRoundScore] = useState(0)
     const [distance, setDistance] = useState(0)
 
-    const [locations, setLocations] = useState<google.maps.LatLngLiteral[]>([])
+    const [actualLocations, setActualLocations] = useState<
+        google.maps.LatLngLiteral[]
+    >([])
+    const [guessedLocations, setGuessedLocations] = useState<
+        google.maps.LatLngLiteral[]
+    >([])
 
     const guessMapElRef = useRef<HTMLDivElement | null>(null)
     const resultMapElRef = useRef<HTMLDivElement | null>(null)
@@ -65,6 +70,127 @@ const Game = () => {
 
     const data = GAMES_DATA.find((g) => g.code === params.code)!
 
+    const init = async () => {
+        const loader = new Loader({
+            apiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
+            version: 'weekly',
+        })
+
+        await loader.importLibrary('core')
+        await loader.importLibrary('maps')
+        await loader.importLibrary('marker')
+        await loader.importLibrary('streetView')
+
+        setGoogleApiLoaded(true)
+
+        let locations = [...data.locations]
+
+        for (let i = locations.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1))
+            ;[locations[i], locations[j]] = [locations[j], locations[i]]
+        }
+
+        setActualLocations(locations.slice(0, 5))
+        setTimeLeft(state.timeLimit)
+
+        const guessMap = new google.maps.Map(
+            guessMapElRef.current as HTMLDivElement,
+            {
+                zoom: 6,
+                disableDefaultUI: true,
+                zoomControl: true,
+                clickableIcons: false,
+                fullscreenControl: true,
+                draggableCursor: 'crosshair',
+                mapId: import.meta.env.VITE_GOOGLE_MAPS_1,
+                ...DEFAULT_OPTIONS,
+                ...data.defaultOptions,
+            },
+        )
+
+        const marker = new google.maps.marker.AdvancedMarkerElement({
+            map: guessMap,
+        })
+
+        const resultMap = new google.maps.Map(
+            resultMapElRef.current as HTMLDivElement,
+            {
+                disableDefaultUI: true,
+                zoomControl: true,
+                clickableIcons: false,
+                gestureHandling: 'greedy',
+                mapId: import.meta.env.VITE_GOOGLE_MAPS_2,
+            },
+        )
+
+        const pinBackground = new google.maps.marker.PinElement({
+            background: '#04d61d',
+        })
+
+        const resultMarker1 = new google.maps.marker.AdvancedMarkerElement({
+            map: resultMap,
+        })
+
+        const resultMarker2 = new google.maps.marker.AdvancedMarkerElement({
+            map: resultMap,
+            content: pinBackground.element,
+        })
+
+        const lineSymbol = {
+            path: 'M 0,-1 0,1',
+            strokeOpacity: 1,
+            scale: 2,
+        }
+
+        const path = new google.maps.Polyline({
+            geodesic: true,
+            strokeColor: '#000000',
+            strokeOpacity: 0,
+            icons: [
+                {
+                    icon: lineSymbol,
+                    offset: '0',
+                    repeat: '8px',
+                },
+            ],
+            map: resultMap,
+        })
+
+        guessMapRef.current = guessMap
+        resultMapRef.current = resultMap
+
+        markerRef.current = marker
+        resultMarker1Ref.current = resultMarker1
+        resultMarker2Ref.current = resultMarker2
+
+        pathRef.current = path
+
+        fitGuessMapBounds()
+    }
+
+    const fitGuessMapBounds = () => {
+        if (!guessMapRef.current) return
+
+        if (params.code !== undefined && params.code in COUNTRY_BOUNDS) {
+            const [lng1, lat1, lng2, lat2] = COUNTRY_BOUNDS[
+                params.code as 'kr' | 'us'
+            ] as number[]
+
+            const bounds = new google.maps.LatLngBounds()
+
+            bounds.extend(new google.maps.LatLng(lat1, lng1))
+            bounds.extend(new google.maps.LatLng(lat2, lng2))
+
+            guessMapRef.current.fitBounds(bounds)
+            guessMapRef.current.setCenter(bounds.getCenter())
+        } else {
+            guessMapRef.current.setCenter(
+                DEFAULT_OPTIONS.center as google.maps.LatLngLiteral,
+            )
+            guessMapRef.current.setZoom(2)
+        }
+    }
+
     const finishRound = () => {
         if (!markerRef.current) return
 
@@ -81,9 +207,11 @@ const Game = () => {
 
         setMarkerPosition(markerPos)
 
+        setGuessedLocations((locs) => [...locs, markerPos])
+
         const _distance = calculateDistance(
             markerPos,
-            locations[round],
+            actualLocations[round],
             'metric',
         )
 
@@ -96,7 +224,7 @@ const Game = () => {
         const bounds = new google.maps.LatLngBounds()
 
         bounds.extend(markerPos)
-        bounds.extend(locations[round])
+        bounds.extend(actualLocations[round])
 
         resultMapRef.current?.fitBounds(bounds)
         resultMapRef.current?.setCenter(bounds.getCenter())
@@ -108,7 +236,7 @@ const Game = () => {
         }
 
         if (resultMarker2Ref.current) {
-            resultMarker2Ref.current.position = locations[round]
+            resultMarker2Ref.current.position = actualLocations[round]
         }
 
         pathRef.current?.setPath([
@@ -123,7 +251,7 @@ const Game = () => {
         if (markerPosition) {
             const _distance = calculateDistance(
                 markerPosition,
-                locations[round],
+                actualLocations[round],
                 'metric',
             )
 
@@ -135,7 +263,7 @@ const Game = () => {
 
             const bounds = new google.maps.LatLngBounds()
 
-            bounds.extend(locations[round])
+            bounds.extend(actualLocations[round])
 
             resultMapRef.current?.fitBounds(bounds)
             resultMapRef.current?.setCenter(bounds.getCenter())
@@ -147,7 +275,7 @@ const Game = () => {
             }
 
             if (resultMarker2Ref.current) {
-                resultMarker2Ref.current.position = locations[round]
+                resultMarker2Ref.current.position = actualLocations[round]
             }
 
             pathRef.current?.setPath([
@@ -157,13 +285,13 @@ const Game = () => {
         } else {
             const bounds = new google.maps.LatLngBounds()
 
-            bounds.extend(locations[round])
+            bounds.extend(actualLocations[round])
 
             resultMapRef.current?.fitBounds(bounds)
             resultMapRef.current?.setCenter(bounds.getCenter())
 
             if (resultMarker2Ref.current) {
-                resultMarker2Ref.current.position = locations[round]
+                resultMarker2Ref.current.position = actualLocations[round]
             }
         }
 
@@ -171,91 +299,6 @@ const Game = () => {
     }
 
     useEffect(() => {
-        const init = async () => {
-            const loader = new Loader({
-                apiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
-                version: 'weekly',
-            })
-
-            await loader.importLibrary('core')
-            await loader.importLibrary('maps')
-            await loader.importLibrary('marker')
-            await loader.importLibrary('streetView')
-
-            setGoogleApiLoaded(true)
-
-            let locations = [...data.locations]
-
-            for (let i = locations.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1))
-                ;[locations[i], locations[j]] = [locations[j], locations[i]]
-            }
-
-            setLocations(locations.slice(0, 5))
-            setTimeLeft(state.timeLimit)
-
-            const guessMap = new google.maps.Map(
-                guessMapElRef.current as HTMLDivElement,
-                {
-                    zoom: 6,
-                    disableDefaultUI: true,
-                    zoomControl: true,
-                    clickableIcons: false,
-                    fullscreenControl: true,
-                    draggableCursor: 'crosshair',
-                    mapId: import.meta.env.VITE_GOOGLE_MAPS_1,
-                    ...DEFAULT_OPTIONS,
-                    ...data.defaultOptions,
-                },
-            )
-
-            const marker = new google.maps.marker.AdvancedMarkerElement({
-                map: guessMap,
-            })
-
-            const resultMap = new google.maps.Map(
-                resultMapElRef.current as HTMLDivElement,
-                {
-                    disableDefaultUI: true,
-                    zoomControl: true,
-                    clickableIcons: false,
-                    gestureHandling: 'greedy',
-                    mapId: import.meta.env.VITE_GOOGLE_MAPS_2,
-                },
-            )
-
-            const pinBackground = new google.maps.marker.PinElement({
-                background: '#04d61d',
-            })
-
-            const resultMarker1 = new google.maps.marker.AdvancedMarkerElement({
-                map: resultMap,
-            })
-
-            const resultMarker2 = new google.maps.marker.AdvancedMarkerElement({
-                map: resultMap,
-                content: pinBackground.element,
-            })
-
-            const path = new google.maps.Polyline({
-                geodesic: true,
-                strokeColor: '#000000',
-                strokeOpacity: 1.0,
-                strokeWeight: 2,
-            })
-
-            path.setMap(resultMap)
-
-            guessMapRef.current = guessMap
-            resultMapRef.current = resultMap
-
-            markerRef.current = marker
-            resultMarker1Ref.current = resultMarker1
-            resultMarker2Ref.current = resultMarker2
-
-            pathRef.current = path
-        }
-
         init()
     }, [])
 
@@ -282,12 +325,7 @@ const Game = () => {
     }, [guessMapRef.current])
 
     useEffect(() => {
-        if (guessMapRef.current) {
-            guessMapRef.current.setCenter(
-                data.defaultOptions?.center ?? DEFAULT_OPTIONS.center!,
-            )
-            guessMapRef.current.setZoom(6)
-        }
+        fitGuessMapBounds()
 
         if (markerRef.current) {
             markerRef.current.map = null
@@ -319,6 +357,58 @@ const Game = () => {
         }
     }, [timeLeft])
 
+    useEffect(() => {
+        if (!gameFinished) return
+
+        resultMarker1Ref.current!.map = null
+        resultMarker2Ref.current!.map = null
+        pathRef.current?.setMap(null)
+
+        const bounds = new google.maps.LatLngBounds()
+
+        for (let i = 0; i < actualLocations.length; i++) {
+            new google.maps.marker.AdvancedMarkerElement({
+                map: resultMapRef.current,
+                position: guessedLocations[i],
+            })
+
+            new google.maps.marker.AdvancedMarkerElement({
+                map: resultMapRef.current,
+                position: actualLocations[i],
+                content: new google.maps.marker.PinElement({
+                    background: '#04d61d',
+                }).element,
+            })
+
+            const lineSymbol = {
+                path: 'M 0,-1 0,1',
+                strokeOpacity: 1,
+                scale: 2,
+            }
+
+            new google.maps.Polyline({
+                geodesic: true,
+                strokeColor: '#000000',
+                strokeOpacity: 0,
+                icons: [
+                    {
+                        icon: lineSymbol,
+                        offset: '0',
+                        repeat: '8px',
+                    },
+                ],
+                map: resultMapRef.current,
+                path: [guessedLocations[i], actualLocations[i]],
+            })
+
+            bounds.extend(guessedLocations[i])
+            bounds.extend(actualLocations[i])
+        }
+
+        resultMapRef.current?.fitBounds(bounds)
+        resultMapRef.current?.setCenter(bounds.getCenter())
+    }, [gameFinished])
+
     return (
         <main>
             <RoundStatus
@@ -337,6 +427,15 @@ const Game = () => {
             >
                 <div className={styles.roundResultWrapper}>
                     <div ref={resultMapElRef} className={styles.resultMap} />
+                    <ResultMap
+                        googleApiLoaded={googleApiLoaded}
+                        actualLocations={actualLocations}
+                        guessedLocations={guessedLocations}
+                        gameFinished={gameFinished}
+                        round={round}
+                        roundFinished={roundFinished}
+                        className={styles.resultMap}
+                    />
 
                     <div className={styles.resultInfo}>
                         {gameFinished ? (
@@ -412,7 +511,7 @@ const Game = () => {
 
             <StreetView
                 googleApiLoaded={googleApiLoaded}
-                location={locations[round]}
+                location={actualLocations[round]}
                 settings={{
                     canMove: state.canMove,
                     canPan: state.canPan,

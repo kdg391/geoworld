@@ -23,6 +23,49 @@ const RandomStreetView = () => {
 
     const [showMap, setShowMap] = useState(false)
 
+    const init = async () => {
+        const loader = new Loader({
+            apiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
+            version: 'weekly',
+        })
+
+        await loader.importLibrary('maps')
+        await loader.importLibrary('streetView')
+
+        const map = new google.maps.Map(mapElRef.current as HTMLDivElement, {
+            center: {
+                lat: 0,
+                lng: 0,
+            },
+            disableDefaultUI: true,
+            clickableIcons: false,
+            streetViewControl: true,
+            zoom: 5,
+            mapId: import.meta.env.VITE_GOOGLE_MAPS_1,
+        })
+
+        const svPanorama = new google.maps.StreetViewPanorama(
+            svPanoramaElRef.current as HTMLDivElement,
+            {
+                addressControl: false,
+                fullscreenControl: false,
+            },
+        )
+
+        map.setStreetView(svPanorama)
+
+        const svService = new google.maps.StreetViewService()
+
+        const svLayer = new google.maps.StreetViewCoverageLayer()
+        svLayer.setMap(map)
+
+        mapRef.current = map
+        svPanoramaRef.current = svPanorama
+        svServiceRef.current = svService
+
+        loadPanorama(randomLatLng())
+    }
+
     const loadPanorama = (location: google.maps.LatLngLiteral) => {
         if (!svPanoramaRef.current) return
         if (!svServiceRef.current) return
@@ -49,52 +92,6 @@ const RandomStreetView = () => {
     }
 
     useEffect(() => {
-        const init = async () => {
-            const loader = new Loader({
-                apiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
-                version: 'weekly',
-            })
-
-            await loader.importLibrary('maps')
-            await loader.importLibrary('streetView')
-
-            const map = new google.maps.Map(
-                mapElRef.current as HTMLDivElement,
-                {
-                    center: {
-                        lat: 0,
-                        lng: 0,
-                    },
-                    disableDefaultUI: true,
-                    clickableIcons: false,
-                    streetViewControl: true,
-                    zoom: 5,
-                    mapId: import.meta.env.VITE_GOOGLE_MAPS_1,
-                },
-            )
-
-            const svPanorama = new google.maps.StreetViewPanorama(
-                svPanoramaElRef.current as HTMLDivElement,
-                {
-                    addressControl: false,
-                    fullscreenControl: false,
-                },
-            )
-
-            map.setStreetView(svPanorama)
-
-            const svService = new google.maps.StreetViewService()
-
-            const svLayer = new google.maps.StreetViewCoverageLayer()
-            svLayer.setMap(map)
-
-            mapRef.current = map
-            svPanoramaRef.current = svPanorama
-            svServiceRef.current = svService
-
-            loadPanorama(randomLatLng())
-        }
-
         init()
     }, [])
 
@@ -106,7 +103,7 @@ const RandomStreetView = () => {
                         setShowMap(!showMap)
                     }}
                 >
-                    Open the Map
+                    Open Map
                 </button>
                 <button
                     onClick={async () => {

@@ -1,0 +1,25 @@
+.footer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    background-color: var(--footer-bg);
+    padding: 1rem 1.5rem;
+}
+
+.footer ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.footer ul li a {
+    text-decoration: none;
+    color: var(--color);
+}
+
+.footer ul li a:hover {
+    text-decoration: underline;
+}
+
+.links {
+    margin-left: 8px;
+}

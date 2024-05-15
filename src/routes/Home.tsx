@@ -1,11 +1,12 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
+import Footer from '../components/Footer.js'
 import GameCard from '../components/GameCard.js'
 import Header from '../components/Header.js'
 import Twemoji from '../components/Twemoji.js'
 
-import { GAMES_DATA, type GameData } from '../utils/constants.js'
+import { GAMES_DATA, type GameData } from '../utils/constants/index.js'
 
 import styles from './Home.module.css'
 
@@ -27,17 +28,19 @@ const Home = () => {
             {showModal && (
                 <div className={styles.mapSelectModal}>
                     <div className={styles.mapSelectModalWrapper}>
-                        {game?.emoji && (
-                            <Twemoji
-                                emoji={game.emoji}
-                                width={36}
-                                height={36}
-                                alt={game.country}
-                            />
-                        )}
-                        <h2>{game?.country}</h2>
+                        <h2 className={styles.title}>
+                            {game?.emoji && (
+                                <Twemoji
+                                    emoji={game.emoji}
+                                    width={32}
+                                    height={32}
+                                    alt={game.country}
+                                />
+                            )}
+                            {game?.country}
+                        </h2>
                         <p>{game?.locations.length} Locations</p>
-                        <div>
+                        <div className={styles.asdf}>
                             <label htmlFor="move">Move</label>
                             <div className={styles.checkBox}>
                                 <input
@@ -53,29 +56,37 @@ const Home = () => {
                                 </label>
                             </div>
                         </div>
-                        <div>
+                        <div className={styles.asdf}>
                             <label htmlFor="pan">Pan</label>
-                            <input
-                                type="checkbox"
-                                id="pan"
-                                defaultChecked={canPan}
-                                className={styles.checkBox}
-                                onChange={(event) => {
-                                    setCanPan(event.target.checked)
-                                }}
-                            />
+                            <div className={styles.checkBox}>
+                                <input
+                                    type="checkbox"
+                                    id="pan"
+                                    defaultChecked={canPan}
+                                    onChange={(event) => {
+                                        setCanPan(event.target.checked)
+                                    }}
+                                />
+                                <label htmlFor="pan">
+                                    <span></span>
+                                </label>
+                            </div>
                         </div>
-                        <div>
+                        <div className={styles.asdf}>
                             <label htmlFor="zoom">Zoom</label>
-                            <input
-                                type="checkbox"
-                                id="zoom"
-                                defaultChecked={canZoom}
-                                className={styles.checkBox}
-                                onChange={(event) => {
-                                    setCanZoom(event.target.checked)
-                                }}
-                            />
+                            <div className={styles.checkBox}>
+                                <input
+                                    type="checkbox"
+                                    id="zoom"
+                                    defaultChecked={canZoom}
+                                    onChange={(event) => {
+                                        setCanZoom(event.target.checked)
+                                    }}
+                                />
+                                <label htmlFor="zoom">
+                                    <span></span>
+                                </label>
+                            </div>
                         </div>
                         <div>
                             <label htmlFor="time-limit">Time Limit</label>
@@ -141,7 +152,7 @@ const Home = () => {
                 </div>
             )}
 
-            <section className={styles.section}>
+            <section id="maps" className={styles.mapsSection}>
                 <div className={styles.container}>
                     <h2>Maps</h2>
                     <div className={styles.wrapper}>
@@ -159,7 +170,7 @@ const Home = () => {
                 </div>
             </section>
 
-            <footer></footer>
+            <Footer />
         </main>
     )
 }

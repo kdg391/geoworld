@@ -7,7 +7,7 @@ interface Props {
     onMount: (map: google.maps.Map) => void
 }
 
-const Map: React.FC<
+const GoogleMap: React.FC<
     Props &
         React.DetailedHTMLProps<
             React.HTMLAttributes<HTMLDivElement>,
@@ -30,4 +30,4 @@ const Map: React.FC<
     return <div ref={mapElRef} {...props}></div>
 }
 
-export default Map
+export default GoogleMap

@@ -4,8 +4,8 @@
     left: 0;
     z-index: 2;
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    gap: 16px;
     padding: 12px 16px;
     width: 100%;
     height: 64px;
@@ -15,7 +15,7 @@
 
 .header h1 {
     margin: 0;
-    font-size: 1.375rem;
+    font-size: 1.25rem;
 }
 
 .header h1 a,
@@ -24,11 +24,23 @@
     color: inherit;
 }
 
+.header nav {
+    display: flex;
+    justify-content: space-between;
+    flex-grow: 1;
+}
+
 .header ul {
     list-style: none;
     margin: 0;
     padding: 0;
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 24px;
+}
+
+.anchorCenter {
+    display: flex;
+    align-items: center;
+    gap: 4px;
 }

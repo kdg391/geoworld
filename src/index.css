@@ -15,6 +15,9 @@
 
     --header-bg: #181818;
     --header-border: rgba(255, 255, 255, 0.15);
+
+    --footer-bg: #2e2e2e;
+
     --map-card-bg: #181818;
     --map-card-border: rgba(255, 255, 255, 0.05);
     --round-info-bg: #333;
@@ -23,6 +26,11 @@
 
     --map-select-modal-bg: rgba(0, 0, 0, 0.8);
     --map-select-modal-wrapper-bg: rgb(16, 16, 16);
+
+    --scrollbar-thumb-color: #2a2a2a;
+    --scrollbar-thumb-color-hover: #323232;
+    --scrollbar-thumb-color-active: #474747;
+    --scrollbar-track-color: #191919;
 }
 
 /* light theme */
@@ -33,6 +41,9 @@
 
         --header-bg: #f4f4f4;
         --header-border: rgba(0, 0, 0, 0.15);
+
+        --footer-bg: #c9c9c9;
+
         --map-card-bg: #eee;
         --map-card-border: rgba(0, 0, 0, 0.075);
         --round-info-bg: #fff;
@@ -41,6 +52,46 @@
 
         --map-select-modal-bg: rgba(0, 0, 0, 0.5);
         --map-select-modal-wrapper-bg: #fff;
+
+        --scrollbar-thumb-color: #cdcdcd;
+        --scrollbar-thumb-color-hover: #adadad;
+        --scrollbar-thumb-color-active: #9b9b9b;
+        --scrollbar-track-color: #dddddd;
+    }
+}
+
+@supports (scrollbar-width: thin) and (not selector(::-webkit-scrollbar)) {
+    :root {
+        scrollbar-width: thin;
+        scrollbar-gutter: auto;
+        scrollbar-color: var(--scrollbar-track-color)
+            var(--scrollbar-thumb-color);
+    }
+}
+
+@supports selector(::-webkit-scrollbar) {
+    ::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: var(--scrollbar-thumb-color);
+    }
+
+    ::-webkit-scrollbar-track {
+        background-color: var(--scrollbar-track-color);
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background-color: var(--scrollbar-thumb-color-hover);
+    }
+
+    ::-webkit-scrollbar-thumb:active {
+        background-color: var(--scrollbar-thumb-color-active);
+    }
+
+    ::-webkit-scrollbar-button {
+        display: none;
     }
 }
 

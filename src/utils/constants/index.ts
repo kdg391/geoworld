@@ -2,7 +2,6 @@ export const MAX_ROUNDS = 5
 
 export interface GameData {
     code: string
-    name?: string
     country: string
     scoreFactor?: number
     emoji: string
@@ -23,12 +22,6 @@ export const GAMES_DATA: GameData[] = [
         country: 'South Korea',
         emoji: '🇰🇷',
         scoreFactor: 72,
-        defaultOptions: {
-            center: {
-                lat: 36.629169,
-                lng: 127.939914,
-            },
-        },
         locations: [
             {
                 lat: 37.575720018048926,
@@ -311,6 +304,30 @@ export const GAMES_DATA: GameData[] = [
         code: 'jp',
         country: 'Japan',
         emoji: '🇯🇵',
+        locations: [],
+    },
+    {
+        code: 'it',
+        country: 'Italy',
+        emoji: '🇮🇹',
+        locations: [],
+    },
+    {
+        code: 'uk',
+        country: 'United Kingdom',
+        emoji: '🇬🇧',
+        locations: [],
+    },
+    {
+        code: 'sg',
+        country: 'Singapore',
+        emoji: '🇸🇬',
+        locations: [],
+    },
+    {
+        code: 'ca',
+        country: 'Canada',
+        emoji: '🇨🇦',
         locations: [],
     },
 ]

@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { MAX_ROUNDS } from '../utils/constants.js'
+import { MAX_ROUNDS } from '../utils/constants/index.js'
 import { formatTimeLeft } from '../utils/index.js'
 
 import styles from './RoundStatus.module.css'

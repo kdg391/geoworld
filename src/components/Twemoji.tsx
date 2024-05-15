@@ -13,14 +13,12 @@ const Twemoji: React.FC<
             React.ImgHTMLAttributes<HTMLImageElement>,
             HTMLImageElement
         >
-> = ({ emoji, width = 36, height = 36, ...props }) => {
+> = ({ emoji, ...props }) => {
     const code = twemoji.convert.toCodePoint(emoji)
 
     return (
         <img
             src={`https://cdnjs.cloudflare.com/ajax/libs/twemoji/15.1.0/svg/${code}.svg`}
-            width={width}
-            height={height}
             {...props}
         />
     )

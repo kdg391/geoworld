@@ -2,7 +2,7 @@ import React from 'react'
 
 import Twemoji from '../components/Twemoji.js'
 
-import type { GameData } from '../utils/constants.js'
+import { MAX_ROUNDS, type GameData } from '../utils/constants/index.js'
 
 import styles from './GameCard.module.css'
 import homeStyles from '../routes/Home.module.css'
@@ -14,11 +14,16 @@ interface GameCardProps {
 
 const GameCard: React.FC<GameCardProps> = ({ gameData, onPlayBtnClick }) => (
     <div className={styles.mapItem}>
-        <Twemoji emoji={gameData.emoji} />
+        <Twemoji
+            emoji={gameData.emoji}
+            width={36}
+            height={36}
+            alt={gameData.country}
+        />
         <div className={styles.countryName}>{gameData.country}</div>
         <button
             className={homeStyles.playBtn}
-            disabled={gameData.locations.length < 5}
+            disabled={gameData.locations.length < MAX_ROUNDS}
             onClick={onPlayBtnClick}
         >
             Play
