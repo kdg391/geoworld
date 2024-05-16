@@ -96,7 +96,6 @@ const Game = () => {
         const guessMap = new google.maps.Map(
             guessMapElRef.current as HTMLDivElement,
             {
-                zoom: 6,
                 disableDefaultUI: true,
                 zoomControl: true,
                 clickableIcons: false,

@@ -28,7 +28,12 @@ const ResultMap: React.FC<
 }) => {
     const resultMapRef = useRef<google.maps.Map | null>(null)
 
-    const markersRef = useRef<google.maps.marker.AdvancedMarkerElement[]>([])
+    const actualMarkersRef = useRef<google.maps.marker.AdvancedMarkerElement[]>(
+        [],
+    )
+    const guessedMarkersRef = useRef<
+        google.maps.marker.AdvancedMarkerElement[]
+    >([])
     const polylinesRef = useRef<google.maps.Polyline[]>([])
 
     const fitMapBounds = () => {
@@ -63,12 +68,13 @@ const ResultMap: React.FC<
                     content: pinElement.element,
                 })
 
-                const guess = new google.maps.marker.AdvancedMarkerElement({
+                const guessed = new google.maps.marker.AdvancedMarkerElement({
                     map: resultMapRef.current,
                     position: guessedLocations[i],
                 })
 
-                markersRef.current.push(actual, guess)
+                actualMarkersRef.current.push(actual)
+                guessedMarkersRef.current.push(guessed)
             }
         } else {
             const actual = new google.maps.marker.AdvancedMarkerElement({
@@ -77,12 +83,13 @@ const ResultMap: React.FC<
                 content: pinElement.element,
             })
 
-            const guess = new google.maps.marker.AdvancedMarkerElement({
+            const guessed = new google.maps.marker.AdvancedMarkerElement({
                 map: resultMapRef.current,
                 position: guessedLocations[round],
             })
 
-            markersRef.current.push(actual, guess)
+            actualMarkersRef.current.push(actual)
+            guessedMarkersRef.current.push(guessed)
         }
     }
 
@@ -132,14 +139,12 @@ const ResultMap: React.FC<
         }
     }
 
-    useEffect(() => {
-        console.log(actualLocations, guessedLocations)
-    }, [actualLocations, guessedLocations])
+    const updateMap = () => {
+        for (const marker of actualMarkersRef.current) {
+            marker.map = null
+        }
 
-    useEffect(() => {
-        if (!roundFinished) return
-
-        for (const marker of markersRef.current) {
+        for (const marker of guessedMarkersRef.current) {
             marker.map = null
         }
 
@@ -150,22 +155,18 @@ const ResultMap: React.FC<
         renderMarkers()
         renderPolylines()
         fitMapBounds()
+    }
+
+    useEffect(() => {
+        if (!roundFinished) return
+
+        updateMap()
     }, [roundFinished])
 
     useEffect(() => {
         if (!gameFinished) return
 
-        for (const marker of markersRef.current) {
-            marker.map = null
-        }
-
-        for (const polyline of polylinesRef.current) {
-            polyline.setMap(null)
-        }
-
-        renderMarkers()
-        renderPolylines()
-        fitMapBounds()
+        updateMap()
     }, [gameFinished])
 
     return (

@@ -2,7 +2,6 @@ import React, { useEffect, useRef } from 'react'
 
 interface Props {
     googleApiLoaded: boolean
-
     defaultOptions?: google.maps.MapOptions
     onMount: (map: google.maps.Map) => void
 }
