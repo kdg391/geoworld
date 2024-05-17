@@ -2,12 +2,17 @@ import { Loader } from '@googlemaps/js-api-loader'
 import { useEffect, useRef, useState } from 'react'
 import { Navigate, useLocation, useNavigate, useParams } from 'react-router-dom'
 
+import GuessMap from '../components/GuessMap.js'
 import ResultMap from '../components/ResultMap.js'
 import RoundStatus from '../components/RoundStatus.js'
 import StreetView from '../components/StreetView.js'
 
 import COUNTRY_BOUNDS from '../utils/constants/countryBounds.js'
-import { DEFAULT_OPTIONS, GAMES_DATA } from '../utils/constants/index.js'
+import {
+    DEFAULT_OPTIONS,
+    GAMES_DATA,
+    MAX_ROUNDS,
+} from '../utils/constants/index.js'
 import { calculateDistance, calculateRoundScore } from '../utils/index.js'
 
 import styles from './Game.module.css'
@@ -18,8 +23,6 @@ interface State {
     canZoom: boolean
     timeLimit: number | null
 }
-
-const MAX_ROUNDS = 5
 
 const Game = () => {
     const location = useLocation()
@@ -37,6 +40,8 @@ const Game = () => {
     const [round, setRound] = useState(0)
     const [roundFinished, setRoundFinished] = useState(false)
     const [gameFinished, setGameFinished] = useState(false)
+    const [timedUp, setTimedUp] = useState(false)
+
     const [totalScore, setTotalScore] = useState(0)
     const [roundScore, setRoundScore] = useState(0)
     const [distance, setDistance] = useState(0)
@@ -57,8 +62,6 @@ const Game = () => {
     const [markerPosition, setMarkerPosition] = useState<
         google.maps.LatLngLiteral | google.maps.LatLngAltitudeLiteral | null
     >(null)
-
-    const [timeLeft, setTimeLeft] = useState<number | null>(null)
 
     const data = GAMES_DATA.find((g) => g.code === params.code)!
 
@@ -83,7 +86,6 @@ const Game = () => {
         }
 
         setActualLocations(locations.slice(0, 5))
-        setTimeLeft(state.timeLimit)
 
         const guessMap = new google.maps.Map(
             guessMapElRef.current as HTMLDivElement,
@@ -114,9 +116,8 @@ const Game = () => {
         if (!guessMapRef.current) return
 
         if (params.code !== undefined && params.code in COUNTRY_BOUNDS) {
-            const [lng1, lat1, lng2, lat2] = COUNTRY_BOUNDS[
-                params.code as 'kr' | 'us'
-            ] as number[]
+            // @ts-ignore
+            const [lng1, lat1, lng2, lat2] = COUNTRY_BOUNDS[params.code]
 
             const bounds = new google.maps.LatLngBounds()
 
@@ -134,37 +135,22 @@ const Game = () => {
     }
 
     const finishRound = () => {
-        if (!markerRef.current) return
+        if (markerPosition) {
+            const _distance = calculateDistance(
+                markerPosition,
+                actualLocations[round],
+                'metric',
+            )
 
-        let markerPos = markerRef.current.position ?? null
+            const _roundScore = calculateRoundScore(_distance, data.scoreFactor)
 
-        if (markerPos === null) return
+            setDistance(_distance)
+            setRoundScore(_roundScore)
+            setTotalScore((p) => p + _roundScore)
+            setGuessedLocations((locs) => [...locs, markerPosition])
 
-        if (
-            markerPos instanceof google.maps.LatLng ||
-            markerPos instanceof google.maps.LatLngAltitude
-        ) {
-            markerPos = markerPos.toJSON()
+            setRoundFinished(true)
         }
-
-        setMarkerPosition(markerPos)
-        setGuessedLocations((locs) => [...locs, markerPos])
-
-        const _distance = calculateDistance(
-            markerPos,
-            actualLocations[round],
-            'metric',
-        )
-
-        const _roundScore = calculateRoundScore(_distance, data.scoreFactor)
-
-        setDistance(_distance)
-        setRoundScore(_roundScore)
-        setTotalScore((p) => p + _roundScore)
-
-        markerRef.current.map = null
-
-        setRoundFinished(true)
     }
 
     const finishTimeUp = () => {
@@ -180,8 +166,7 @@ const Game = () => {
             setDistance(_distance)
             setRoundScore(_roundScore)
             setTotalScore((s) => s + _roundScore)
-
-            markerRef.current!.map = null
+            setGuessedLocations((locs) => [...locs, markerPosition])
         }
 
         setRoundFinished(true)
@@ -199,10 +184,7 @@ const Game = () => {
             (event: google.maps.MapMouseEvent) => {
                 setMarkerPosition(event.latLng?.toJSON() ?? null)
 
-                if (markerRef.current !== null) {
-                    if (markerRef.current.map === null)
-                        markerRef.current.map = guessMapRef.current
-
+                if (markerRef.current) {
                     markerRef.current.position = event.latLng
                 }
             },
@@ -217,41 +199,18 @@ const Game = () => {
         fitGuessMapBounds()
 
         if (markerRef.current) {
-            markerRef.current.map = null
             markerRef.current.position = null
 
             setMarkerPosition(null)
         }
-
-        if (state.timeLimit !== null) {
-            setTimeLeft(state.timeLimit)
-        }
     }, [round])
-
-    useEffect(() => {
-        if (timeLeft === null) return
-
-        const interval = setInterval(() => {
-            setTimeLeft((prev) => (prev as number) - 1)
-        }, 1000)
-
-        if (timeLeft <= 0) {
-            clearInterval(interval)
-
-            finishTimeUp()
-        }
-
-        return () => {
-            clearInterval(interval)
-        }
-    }, [timeLeft])
 
     return (
         <main>
             <RoundStatus
+                finishTimeUp={finishTimeUp}
                 mapName={data.country}
                 round={round}
-                timeLeft={timeLeft}
                 timeLimit={state.timeLimit}
                 totalScore={totalScore}
             />
@@ -333,6 +292,15 @@ const Game = () => {
 
             <div className={styles.guessMapContainer}>
                 <div ref={guessMapElRef} className={styles.guessMap} />
+                <GuessMap
+                    googleApiLoaded={googleApiLoaded}
+                    code={params.code}
+                    data={data}
+                    markerPosition={markerPosition}
+                    setMarkerPosition={setMarkerPosition}
+                    round={round}
+                    className={styles.guessMap}
+                />
 
                 <button
                     className={styles.guessBtn}

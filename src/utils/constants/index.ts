@@ -16,6 +16,8 @@ export const DEFAULT_OPTIONS: google.maps.MapOptions = {
     },
 }
 
+// Official Maps
+// todo: change to geojson
 export const GAMES_DATA: GameData[] = [
     {
         code: 'kr',

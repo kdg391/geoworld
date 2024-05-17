@@ -27,6 +27,31 @@ const StreetView: React.FC<Props> = ({
 
     const positionHistoryRef = useRef<google.maps.LatLngLiteral[]>([])
 
+    const init = () => {
+        const svPanorama = new google.maps.StreetViewPanorama(
+            svPanoramaElRef.current as HTMLDivElement,
+            {
+                addressControl: false,
+                clickToGo: settings.canMove,
+                disableDefaultUI: true,
+                disableDoubleClickZoom: !settings.canZoom,
+                linksControl: settings.canMove,
+                motionTracking: false,
+                panControl: settings.canPan,
+                panControlOptions: {
+                    position: google.maps.ControlPosition.LEFT_BOTTOM,
+                },
+                scrollwheel: settings.canZoom,
+                showRoadLabels: false,
+            },
+        )
+
+        const svService = new google.maps.StreetViewService()
+
+        svPanoramaRef.current = svPanorama
+        svServiceRef.current = svService
+    }
+
     const loadPanorama = () => {
         if (!svPanoramaRef.current) return
         if (!svServiceRef.current) return
@@ -72,31 +97,6 @@ const StreetView: React.FC<Props> = ({
 
     useEffect(() => {
         if (!googleApiLoaded) return
-
-        const init = async () => {
-            const svPanorama = new google.maps.StreetViewPanorama(
-                svPanoramaElRef.current as HTMLDivElement,
-                {
-                    addressControl: false,
-                    clickToGo: settings.canMove,
-                    disableDefaultUI: true,
-                    disableDoubleClickZoom: !settings.canZoom,
-                    linksControl: settings.canMove,
-                    motionTracking: false,
-                    panControl: settings.canPan,
-                    panControlOptions: {
-                        position: google.maps.ControlPosition.LEFT_BOTTOM,
-                    },
-                    scrollwheel: settings.canZoom,
-                    showRoadLabels: false,
-                },
-            )
-
-            const svService = new google.maps.StreetViewService()
-
-            svPanoramaRef.current = svPanorama
-            svServiceRef.current = svService
-        }
 
         init()
     }, [googleApiLoaded])

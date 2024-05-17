@@ -6,8 +6,8 @@ import Marker from './Marker.js'
 interface Props {
     googleApiLoaded: boolean
     actualLocations: google.maps.LatLngLiteral[]
-    guessedLocations: google.maps.LatLngLiteral[]
     gameFinished: boolean
+    guessedLocations: google.maps.LatLngLiteral[]
     round: number
     roundFinished: boolean
 }
@@ -21,8 +21,8 @@ const ResultMap: React.FC<
 > = ({
     googleApiLoaded,
     actualLocations,
-    guessedLocations,
     gameFinished,
+    guessedLocations,
     round,
     roundFinished,
     ...props
@@ -152,6 +152,10 @@ const ResultMap: React.FC<
         for (const polyline of polylinesRef.current) {
             polyline.setMap(null)
         }
+
+        actualMarkersRef.current = []
+        guessedMarkersRef.current = []
+        polylinesRef.current = []
 
         renderMarkers()
         renderPolylines()
