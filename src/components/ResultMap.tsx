@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 
 import GoogleMap from './GoogleMap.js'
+import Marker from './Marker.js'
 
 interface Props {
     googleApiLoaded: boolean
@@ -183,7 +184,17 @@ const ResultMap: React.FC<
                 resultMapRef.current = map
             }}
             {...props}
-        />
+        >
+            {guessedMarkersRef.current.map((marker, index) => (
+                <Marker
+                    key={index}
+                    position={marker.position!}
+                    options={{
+                        map: resultMapRef.current,
+                    }}
+                />
+            ))}
+        </GoogleMap>
     )
 }
 

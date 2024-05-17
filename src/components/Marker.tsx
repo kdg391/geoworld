@@ -1,8 +1,11 @@
 import React from 'react'
 
 interface Props {
-    position: google.maps.LatLng
     options: google.maps.marker.AdvancedMarkerElementOptions
+    position:
+        | google.maps.LatLng
+        | google.maps.LatLngLiteral
+        | google.maps.LatLngAltitudeLiteral
 }
 
 const Marker: React.FC<Props> = () => {

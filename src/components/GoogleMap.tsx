@@ -26,6 +26,10 @@ const GoogleMap: React.FC<
         onMount(map)
     }, [googleApiLoaded])
 
+    useEffect(() => {
+        if (!props.children) return
+    }, [props.children])
+
     return <div ref={mapElRef} {...props}></div>
 }
 
