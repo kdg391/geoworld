@@ -40,7 +40,7 @@ const Game = () => {
     const [round, setRound] = useState(0)
     const [roundFinished, setRoundFinished] = useState(false)
     const [gameFinished, setGameFinished] = useState(false)
-    const [timedUp, setTimedUp] = useState(false)
+    // const [timedUp, setTimedUp] = useState(false)
 
     const [totalScore, setTotalScore] = useState(0)
     const [roundScore, setRoundScore] = useState(0)
