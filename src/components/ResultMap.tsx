@@ -101,20 +101,24 @@ const ResultMap: React.FC<
             scale: 2,
         }
 
+        const polylineOptions = {
+            geodesic: true,
+            strokeColor: '#000000',
+            strokeOpacity: 0,
+            icons: [
+                {
+                    icon: lineSymbol,
+                    offset: '0',
+                    repeat: '8px',
+                },
+            ],
+            map: resultMapRef.current,
+        }
+
         if (gameFinished) {
             for (let i = 0; i < actualLocations.length; i++) {
                 const polyline = new google.maps.Polyline({
-                    geodesic: true,
-                    strokeColor: '#000000',
-                    strokeOpacity: 0,
-                    icons: [
-                        {
-                            icon: lineSymbol,
-                            offset: '0',
-                            repeat: '8px',
-                        },
-                    ],
-                    map: resultMapRef.current,
+                    ...polylineOptions,
                     path: [actualLocations[i], guessedLocations[i]],
                 })
 
@@ -122,17 +126,7 @@ const ResultMap: React.FC<
             }
         } else {
             const polyline = new google.maps.Polyline({
-                geodesic: true,
-                strokeColor: '#000000',
-                strokeOpacity: 0,
-                icons: [
-                    {
-                        icon: lineSymbol,
-                        offset: '0',
-                        repeat: '8px',
-                    },
-                ],
-                map: resultMapRef.current,
+                ...polylineOptions,
                 path: [actualLocations[round], guessedLocations[round]],
             })
 

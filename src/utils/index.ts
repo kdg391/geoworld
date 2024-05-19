@@ -47,3 +47,15 @@ export const formatTimeLeft = (timeLeft: number) => {
 
     return `${mins}:${secs}`
 }
+
+// https://stackoverflow.com/a/12646864
+export const shuffleArray = (arr: any[]) => {
+    const newArr = [...arr]
+
+    for (let i = newArr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1))
+        ;[newArr[i], newArr[j]] = [newArr[j], newArr[i]]
+    }
+
+    return newArr
+}

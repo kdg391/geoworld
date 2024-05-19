@@ -1,3 +1,5 @@
+export type CountryCodes = keyof typeof COUNTRY_BOUNDS
+
 // https://gist.github.com/chriseugenerodriguez/659a84b989b3f35cb034a9f9ee1a914f
 const COUNTRY_BOUNDS = {
     af: [60.5284298033, 29.318572496, 75.1580277851, 38.4862816432],

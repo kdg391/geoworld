@@ -6,7 +6,7 @@ import GameCard from '../components/GameCard.js'
 import Header from '../components/Header.js'
 import Twemoji from '../components/Twemoji.js'
 
-import { GAMES_DATA, type GameData } from '../utils/constants/index.js'
+import { OFFICIAL_MAPS, type GameData } from '../utils/constants/index.js'
 
 import styles from './Home.module.css'
 
@@ -40,7 +40,7 @@ const Home = () => {
                             {game?.country}
                         </h2>
                         <p>{game?.locations.length} Locations</p>
-                        <div className={styles.asdf}>
+                        <div className={styles.setting}>
                             <label htmlFor="move">Move</label>
                             <div className={styles.checkBox}>
                                 <input
@@ -56,7 +56,7 @@ const Home = () => {
                                 </label>
                             </div>
                         </div>
-                        <div className={styles.asdf}>
+                        <div className={styles.setting}>
                             <label htmlFor="pan">Pan</label>
                             <div className={styles.checkBox}>
                                 <input
@@ -72,7 +72,7 @@ const Home = () => {
                                 </label>
                             </div>
                         </div>
-                        <div className={styles.asdf}>
+                        <div className={styles.setting}>
                             <label htmlFor="zoom">Zoom</label>
                             <div className={styles.checkBox}>
                                 <input
@@ -156,7 +156,7 @@ const Home = () => {
                 <div className={styles.container}>
                     <h2>Maps</h2>
                     <div className={styles.wrapper}>
-                        {GAMES_DATA.map((g, index) => (
+                        {OFFICIAL_MAPS.map((g, index) => (
                             <GameCard
                                 key={index}
                                 gameData={g}

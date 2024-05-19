@@ -6,7 +6,7 @@ import { formatTimeLeft } from '../utils/index.js'
 import styles from './RoundStatus.module.css'
 
 interface Props {
-    finishTimeUp: () => void
+    finishTimeOut: () => void
     mapName: string
     round: number
     timeLimit: number | null
@@ -14,7 +14,7 @@ interface Props {
 }
 
 const RoundStatus: React.FC<Props> = ({
-    finishTimeUp,
+    finishTimeOut,
     mapName,
     round,
     timeLimit,
@@ -42,7 +42,7 @@ const RoundStatus: React.FC<Props> = ({
         if (timeLeft <= 0) {
             clearInterval(interval)
 
-            finishTimeUp()
+            finishTimeOut()
         }
 
         return () => {

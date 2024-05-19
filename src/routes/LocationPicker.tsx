@@ -51,6 +51,20 @@ const LocationPicker = () => {
         mapRef.current = map
         svPanoramaRef.current = svPanorama
         svServiceRef.current = svService
+
+        map.addListener('click', (event: google.maps.MapMouseEvent) => {
+            if (event.latLng) {
+                loadPanorama(event.latLng.toJSON())
+            }
+        })
+
+        svPanorama.addListener('position_changed', () => {
+            const position = svPanorama.getPosition()
+
+            if (!position) return
+
+            setPosition(position.toJSON())
+        })
     }
 
     const loadPanorama = (location: google.maps.LatLngLiteral) => {
@@ -71,42 +85,6 @@ const LocationPicker = () => {
     useEffect(() => {
         init()
     }, [])
-
-    useEffect(() => {
-        if (!mapRef.current) return
-
-        const clickEvent = mapRef.current.addListener(
-            'click',
-            (event: google.maps.MapMouseEvent) => {
-                if (event.latLng) {
-                    loadPanorama(event.latLng.toJSON())
-                }
-            },
-        )
-
-        return () => {
-            clickEvent.remove()
-        }
-    }, [mapRef.current])
-
-    useEffect(() => {
-        if (!svPanoramaRef.current) return
-
-        const positionChangeEvent = svPanoramaRef.current.addListener(
-            'position_changed',
-            () => {
-                const position = svPanoramaRef.current?.getPosition()
-
-                if (!position) return
-
-                setPosition(position.toJSON())
-            },
-        )
-
-        return () => {
-            positionChangeEvent.remove()
-        }
-    }, [svPanoramaRef.current])
 
     return (
         <main className={styles.main}>

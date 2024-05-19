@@ -18,7 +18,7 @@ export const DEFAULT_OPTIONS: google.maps.MapOptions = {
 
 // Official Maps
 // todo: change to geojson
-export const GAMES_DATA: GameData[] = [
+export const OFFICIAL_MAPS: GameData[] = [
     {
         code: 'kr',
         country: 'South Korea',
@@ -277,6 +277,10 @@ export const GAMES_DATA: GameData[] = [
                 lat: 47.6017273824806,
                 lng: -122.32959835427592,
             },
+            {
+                lat: 37.553465982390215,
+                lng: 126.96987499202926,
+            },
             //
             {
                 lat: 41.96594618689584,
@@ -338,7 +342,7 @@ export const WORLD_GAME: GameData = {
     code: 'world',
     country: 'World',
     emoji: '🌐',
-    locations: GAMES_DATA.map((r) => r.locations).flat(1),
+    locations: OFFICIAL_MAPS.map((r) => r.locations).flat(1),
 }
 
-GAMES_DATA.push(WORLD_GAME)
+OFFICIAL_MAPS.push(WORLD_GAME)

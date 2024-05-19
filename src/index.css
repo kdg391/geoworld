@@ -8,8 +8,37 @@
 
     --primary-color: #2a57eb;
     --secondary-color: #3b3b3b;
+}
 
-    /* dark theme (default) */
+[data-theme='light'] {
+    color-scheme: light;
+
+    --color: #000;
+    --background-color: #fff;
+
+    --header-bg: #f4f4f4;
+    --header-border: rgba(0, 0, 0, 0.15);
+
+    --footer-bg: #c9c9c9;
+
+    --map-card-bg: #eee;
+    --map-card-border: rgba(0, 0, 0, 0.075);
+    --round-info-bg: #fff;
+    --modal-container-bg: rgba(0, 0, 0, 0.6);
+    --modal-wrapper-bg: #e3e3e3;
+
+    --map-select-modal-bg: rgba(0, 0, 0, 0.5);
+    --map-select-modal-wrapper-bg: #fff;
+
+    --scrollbar-thumb-color: #cdcdcd;
+    --scrollbar-thumb-color-hover: #adadad;
+    --scrollbar-thumb-color-active: #9b9b9b;
+    --scrollbar-track-color: #dddddd;
+}
+
+[data-theme='dark'] {
+    color-scheme: dark;
+
     --color: #fff;
     --background-color: #101010;
 
@@ -31,33 +60,6 @@
     --scrollbar-thumb-color-hover: #323232;
     --scrollbar-thumb-color-active: #474747;
     --scrollbar-track-color: #191919;
-}
-
-/* light theme */
-@media (prefers-color-scheme: light) {
-    :root {
-        --color: #000;
-        --background-color: #fff;
-
-        --header-bg: #f4f4f4;
-        --header-border: rgba(0, 0, 0, 0.15);
-
-        --footer-bg: #c9c9c9;
-
-        --map-card-bg: #eee;
-        --map-card-border: rgba(0, 0, 0, 0.075);
-        --round-info-bg: #fff;
-        --modal-container-bg: rgba(0, 0, 0, 0.6);
-        --modal-wrapper-bg: #e3e3e3;
-
-        --map-select-modal-bg: rgba(0, 0, 0, 0.5);
-        --map-select-modal-wrapper-bg: #fff;
-
-        --scrollbar-thumb-color: #cdcdcd;
-        --scrollbar-thumb-color-hover: #adadad;
-        --scrollbar-thumb-color-active: #9b9b9b;
-        --scrollbar-track-color: #dddddd;
-    }
 }
 
 @supports (scrollbar-width: thin) and (not selector(::-webkit-scrollbar)) {
