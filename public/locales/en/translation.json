@@ -1,0 +1,69 @@
+{
+    "home": {
+        "officialMaps": "Official Maps",
+        "locations": "{locations} Locations",
+        "move": "Move",
+        "pan": "Pan",
+        "zoom": "Zoom",
+        "timeLimit": "Time Limit",
+        "noLimit": "No Limit",
+        "timeLimitFormat": "{minutes, number, ::unit/minute} {seconds, number, ::unit/second}",
+        "cancel": "Cancel",
+        "play": "Play"
+    },
+    "game": {
+        "controls": {
+            "returnToStart": "Return to Start",
+            "undo": "Undo"
+        },
+        "roundStatus": {
+            "map": "Map",
+            "round": "Round",
+            "score": "Score"
+        },
+        "roundPoints": "+{roundScore} Points",
+        "roundResult": {
+            "imperial": "Your guess was <strong>{distance, number, ::unit/mile .#}</strong> from the correct location",
+            "metric": "Your guess was <strong>{distance, number, ::unit/kilometer .#}</strong> from the correct location"
+        },
+        "viewResults": "View Results",
+        "nextRound": "Next Round",
+        "totalPoints": "Total {totalScore} Points",
+        "replay": "Replay",
+        "exit": "Exit"
+    },
+    "header": {
+        "maps": "Maps"
+    },
+    "footer": {
+        "theme": "Theme",
+        "themes": {
+            "light": "Light",
+            "dark": "Dark",
+            "system": "System"
+        },
+        "language": "Language",
+        "distanceUnit": "Distance Unit",
+        "distanceUnits": {
+            "imperial": "Imperial (mi)",
+            "metric": "Metric (km)"
+        },
+        "randomStreetView": "Random Street View"
+    },
+    "notFound": {
+        "backToHome": "Back to Home"
+    },
+    "worldMap": "World",
+    "countries": {
+        "ca": "Canada",
+        "cn": "China",
+        "fr": "France",
+        "gb": "United Kingdom",
+        "it": "Italy",
+        "jp": "Japan",
+        "kr": "South Korea",
+        "sg": "Singapore",
+        "tw": "Taiwan",
+        "us": "United States"
+    }
+}

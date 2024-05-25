@@ -16,7 +16,7 @@ const Footer = () => {
     return (
         <footer className={styles.footer}>
             <div>
-                <h4>Geography Guessing</h4>
+                <h3>Geography Guessing</h3>
                 <div>
                     <div>
                         <label htmlFor="theme">{t('footer.theme')}</label>

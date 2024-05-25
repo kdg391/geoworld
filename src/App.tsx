@@ -1,17 +1,18 @@
+import { lazy, Suspense } from 'react'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
-import ErrorPage from './components/ErrorPage.js'
-
+import SettingsProvider from './providers/SettingsProvider.js'
 import ThemeProvider from './providers/ThemeProvider.js'
 
-import Game from './routes/Game.js'
-import Home from './routes/Home.js'
-import LocationPicker from './routes/LocationPicker.js'
-import NotFound from './routes/NotFound.js'
-import RandomStreetView from './routes/RandomStreetView.js'
-import SettingsProvider from './providers/SettingsProvider.js'
-
 import './i18n.js'
+
+const ErrorPage = lazy(() => import('./components/ErrorPage.js'))
+
+const Game = lazy(() => import('./routes/Game.js'))
+const Home = lazy(() => import('./routes/Home.js'))
+const LocationPicker = lazy(() => import('./routes/LocationPicker.js'))
+const NotFound = lazy(() => import('./routes/NotFound.js'))
+const RandomStreetView = lazy(() => import('./routes/RandomStreetView.js'))
 
 const router = createBrowserRouter([
     {
@@ -43,7 +44,9 @@ const router = createBrowserRouter([
 const App = () => (
     <ThemeProvider>
         <SettingsProvider>
-            <RouterProvider router={router} />
+            <Suspense>
+                <RouterProvider router={router} />
+            </Suspense>
         </SettingsProvider>
     </ThemeProvider>
 )

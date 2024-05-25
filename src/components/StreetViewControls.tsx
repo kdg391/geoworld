@@ -1,8 +1,8 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { FaFlag, FaRotateLeft } from 'react-icons/fa6'
 
 import styles from './StreetViewControls.module.css'
-import { useTranslation } from 'react-i18next'
 
 interface Props {
     onReturnToStartClick: React.MouseEventHandler<HTMLButtonElement>

@@ -1,7 +1,9 @@
-import React, { useEffect, useRef } from 'react'
+import React, { lazy, Suspense, useEffect, useRef } from 'react'
 
-import GoogleMap from './GoogleMap.js'
-import Marker from './Marker.js'
+import type GoogleMapType from './GoogleMap.js'
+
+const GoogleMap = lazy(() => import('./GoogleMap.js')) as typeof GoogleMapType
+const Marker = lazy(() => import('./Marker.js'))
 
 interface Props {
     googleApiLoaded: boolean
@@ -63,6 +65,9 @@ const ResultMap: React.FC<
             marker.map = null
         }
 
+        actualMarkers.current = []
+        guessedMarkers.current = []
+
         const pinElement = new google.maps.marker.PinElement({
             background: '#04d61d',
         })
@@ -121,6 +126,12 @@ const ResultMap: React.FC<
             map: resultMapRef.current,
         }
 
+        for (const polyline of polylinesRef.current) {
+            polyline.setMap(null)
+        }
+
+        polylinesRef.current = []
+
         if (gameFinished) {
             for (let i = 0; i < actualLocations.length; i++) {
                 const polyline = new google.maps.Polyline({
@@ -141,12 +152,6 @@ const ResultMap: React.FC<
     }
 
     const updateMap = () => {
-        for (const polyline of polylinesRef.current) {
-            polyline.setMap(null)
-        }
-
-        polylinesRef.current = []
-
         renderMarkers()
         renderPolylines()
         fitMapBounds()
@@ -165,39 +170,41 @@ const ResultMap: React.FC<
     }, [gameFinished])
 
     return (
-        <GoogleMap
-            googleApiLoaded={googleApiLoaded}
-            defaultOptions={{
-                disableDefaultUI: true,
-                zoomControl: true,
-                clickableIcons: false,
-                gestureHandling: 'greedy',
-                mapId: import.meta.env.VITE_GOOGLE_MAPS_2,
-            }}
-            onMount={(map) => {
-                resultMapRef.current = map
-            }}
-            {...props}
-        >
-            {actualMarkers.current.map((marker, index) => (
-                <Marker
-                    key={index}
-                    position={marker.position!}
-                    options={{
-                        map: resultMapRef.current,
-                    }}
-                />
-            ))}
-            {guessedMarkers.current.map((marker, index) => (
-                <Marker
-                    key={index}
-                    position={marker.position!}
-                    options={{
-                        map: resultMapRef.current,
-                    }}
-                />
-            ))}
-        </GoogleMap>
+        <Suspense>
+            <GoogleMap
+                googleApiLoaded={googleApiLoaded}
+                defaultOptions={{
+                    disableDefaultUI: true,
+                    zoomControl: true,
+                    clickableIcons: false,
+                    gestureHandling: 'greedy',
+                    mapId: import.meta.env.VITE_GOOGLE_MAPS_2,
+                }}
+                onMount={(map) => {
+                    resultMapRef.current = map
+                }}
+                {...props}
+            >
+                {actualMarkers.current.map((marker, index) => (
+                    <Marker
+                        key={index}
+                        position={marker.position!}
+                        options={{
+                            map: resultMapRef.current,
+                        }}
+                    />
+                ))}
+                {guessedMarkers.current.map((marker, index) => (
+                    <Marker
+                        key={index}
+                        position={marker.position!}
+                        options={{
+                            map: resultMapRef.current,
+                        }}
+                    />
+                ))}
+            </GoogleMap>
+        </Suspense>
     )
 }
 

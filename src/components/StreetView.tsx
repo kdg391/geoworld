@@ -1,7 +1,8 @@
-import React, { useEffect, useRef } from 'react'
+import React, { lazy, Suspense, useEffect, useRef } from 'react'
 
 import styles from './StreetView.module.css'
-import StreetViewControls from './StreetViewControls'
+
+const StreetViewControls = lazy(() => import('./StreetViewControls.js'))
 
 interface GameSettings {
     canMove: boolean
@@ -147,10 +148,12 @@ const StreetView: React.FC<Props> = ({
     return (
         <>
             {settings.canMove && (
-                <StreetViewControls
-                    onReturnToStartClick={onReturnToStartClick}
-                    onUndoClick={onUndoClick}
-                />
+                <Suspense>
+                    <StreetViewControls
+                        onReturnToStartClick={onReturnToStartClick}
+                        onUndoClick={onUndoClick}
+                    />
+                </Suspense>
             )}
             <div ref={svPanoramaElRef} className={styles.streetView}></div>
         </>

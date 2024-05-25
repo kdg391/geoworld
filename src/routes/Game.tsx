@@ -1,12 +1,7 @@
 import { Loader } from '@googlemaps/js-api-loader'
-import { useEffect, useState } from 'react'
+import { lazy, Suspense, useEffect, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { Navigate, useLocation, useNavigate, useParams } from 'react-router-dom'
-
-import GuessMap from '../components/GuessMap.js'
-import ResultMap from '../components/ResultMap.js'
-import RoundStatus from '../components/RoundStatus.js'
-import StreetView from '../components/StreetView.js'
 
 import useSettings from '../hooks/useSettings.js'
 
@@ -19,6 +14,11 @@ import {
 } from '../utils/index.js'
 
 import styles from './Game.module.css'
+
+const GuessMap = lazy(() => import('../components/GuessMap.js'))
+const ResultMap = lazy(() => import('../components/ResultMap.js'))
+const RoundStatus = lazy(() => import('../components/RoundStatus.js'))
+const StreetView = lazy(() => import('../components/StreetView.js'))
 
 interface State {
     canMove: boolean
@@ -126,17 +126,19 @@ const Game = () => {
 
     return (
         <main>
-            <RoundStatus
-                finishTimeOut={finishTimeOut}
-                mapName={
-                    data.code === 'world'
-                        ? t('worldMap')
-                        : t(`countries.${data.code}`)
-                }
-                round={round}
-                timeLimit={state.timeLimit}
-                totalScore={totalScore}
-            />
+            <Suspense>
+                <RoundStatus
+                    finishTimeOut={finishTimeOut}
+                    mapName={
+                        data.code === 'world'
+                            ? t('worldMap')
+                            : t(`countries.${data.code}`)
+                    }
+                    round={round}
+                    timeLimit={state.timeLimit}
+                    totalScore={totalScore}
+                />
+            </Suspense>
 
             <div
                 className={styles.roundResultContainer}
@@ -145,15 +147,17 @@ const Game = () => {
                 }}
             >
                 <div className={styles.roundResultWrapper}>
-                    <ResultMap
-                        googleApiLoaded={googleApiLoaded}
-                        actualLocations={actualLocations}
-                        guessedLocations={guessedLocations}
-                        gameFinished={gameFinished}
-                        round={round}
-                        roundFinished={roundFinished}
-                        className={styles.resultMap}
-                    />
+                    <Suspense>
+                        <ResultMap
+                            googleApiLoaded={googleApiLoaded}
+                            actualLocations={actualLocations}
+                            guessedLocations={guessedLocations}
+                            gameFinished={gameFinished}
+                            round={round}
+                            roundFinished={roundFinished}
+                            className={styles.resultMap}
+                        />
+                    </Suspense>
 
                     <div className={styles.resultInfo}>
                         {gameFinished ? (
@@ -226,15 +230,17 @@ const Game = () => {
             </div>
 
             <div className={styles.guessMapContainer}>
-                <GuessMap
-                    googleApiLoaded={googleApiLoaded}
-                    code={params.code as CountryCodes}
-                    data={data}
-                    markerPosition={markerPosition}
-                    setMarkerPosition={setMarkerPosition}
-                    round={round}
-                    className={styles.guessMap}
-                />
+                <Suspense>
+                    <GuessMap
+                        googleApiLoaded={googleApiLoaded}
+                        code={params.code as CountryCodes}
+                        data={data}
+                        markerPosition={markerPosition}
+                        setMarkerPosition={setMarkerPosition}
+                        round={round}
+                        className={styles.guessMap}
+                    />
+                </Suspense>
 
                 <button
                     className={styles.guessBtn}
@@ -247,15 +253,17 @@ const Game = () => {
                 </button>
             </div>
 
-            <StreetView
-                googleApiLoaded={googleApiLoaded}
-                location={actualLocations[round]}
-                settings={{
-                    canMove: state.canMove,
-                    canPan: state.canPan,
-                    canZoom: state.canZoom,
-                }}
-            />
+            <Suspense>
+                <StreetView
+                    googleApiLoaded={googleApiLoaded}
+                    location={actualLocations[round]}
+                    settings={{
+                        canMove: state.canMove,
+                        canPan: state.canPan,
+                        canZoom: state.canZoom,
+                    }}
+                />
+            </Suspense>
         </main>
     )
 }

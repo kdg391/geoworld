@@ -1,11 +1,13 @@
-import React, { useEffect, useRef } from 'react'
-
-import GoogleMap from './GoogleMap.js'
+import React, { lazy, Suspense, useEffect, useRef } from 'react'
 
 import COUNTRY_BOUNDS, {
     type CountryCodes,
 } from '../utils/constants/countryBounds.js'
 import { DEFAULT_OPTIONS, type GameData } from '../utils/constants/index.js'
+
+import type GoogleMapType from './GoogleMap.js'
+
+const GoogleMap = lazy(() => import('./GoogleMap.js')) as typeof GoogleMapType
 
 interface Props {
     googleApiLoaded: boolean
@@ -88,31 +90,36 @@ const GuessMap: React.FC<
     }, [round])
 
     return (
-        <GoogleMap
-            googleApiLoaded={googleApiLoaded}
-            defaultOptions={{
-                disableDefaultUI: true,
-                zoomControl: true,
-                clickableIcons: false,
-                fullscreenControl: true,
-                draggableCursor: 'crosshair',
-                mapId: import.meta.env.VITE_GOOGLE_MAPS_1,
-                ...DEFAULT_OPTIONS,
-                ...data.defaultOptions,
-            }}
-            onMount={(map) => {
-                guessMapRef.current = map
+        <Suspense>
+            <GoogleMap
+                googleApiLoaded={googleApiLoaded}
+                defaultOptions={{
+                    disableDefaultUI: true,
+                    zoomControl: true,
+                    clickableIcons: false,
+                    fullscreenControl: true,
+                    draggableCursor: 'crosshair',
+                    mapId: import.meta.env.VITE_GOOGLE_MAPS_1,
+                    ...DEFAULT_OPTIONS,
+                    ...data.defaultOptions,
+                }}
+                onMount={(map) => {
+                    guessMapRef.current = map
 
-                map.addListener('click', (event: google.maps.MapMouseEvent) => {
-                    setMarkerPosition(event.latLng?.toJSON() ?? null)
+                    map.addListener(
+                        'click',
+                        (event: google.maps.MapMouseEvent) => {
+                            setMarkerPosition(event.latLng?.toJSON() ?? null)
 
-                    if (markerRef.current) {
-                        markerRef.current.position = event.latLng
-                    }
-                })
-            }}
-            {...props}
-        />
+                            if (markerRef.current) {
+                                markerRef.current.position = event.latLng
+                            }
+                        },
+                    )
+                }}
+                {...props}
+            />
+        </Suspense>
     )
 }
 

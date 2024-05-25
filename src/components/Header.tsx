@@ -6,6 +6,7 @@ import styles from './Header.module.css'
 
 const Header = () => {
     const { t } = useTranslation()
+
     return (
         <header className={styles.header}>
             <div>

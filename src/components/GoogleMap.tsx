@@ -4,6 +4,7 @@ interface Props {
     googleApiLoaded: boolean
     defaultOptions?: google.maps.MapOptions
     onMount: (map: google.maps.Map) => void
+    children?: React.ReactNode
 }
 
 const GoogleMap: React.FC<
@@ -33,6 +34,8 @@ const GoogleMap: React.FC<
     useEffect(() => {
         if (!props.children) return
         if (!mapRef.current) return
+
+        console.log('a')
 
         React.Children.map(props.children, (child, index) => {
             const marker = new google.maps.marker.AdvancedMarkerElement({

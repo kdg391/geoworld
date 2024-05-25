@@ -1,7 +1,5 @@
-import React from 'react'
+import React, { lazy, Suspense } from 'react'
 import { useTranslation } from 'react-i18next'
-
-import Twemoji from '../components/Twemoji.js'
 
 import {
     FLAG_ENOJIS,
@@ -11,6 +9,8 @@ import {
 
 import styles from './GameCard.module.css'
 import homeStyles from '../routes/Home.module.css'
+
+const Twemoji = lazy(() => import('./Twemoji.js'))
 
 interface GameCardProps {
     gameData: GameData
@@ -22,20 +22,22 @@ const GameCard: React.FC<GameCardProps> = ({ gameData, onPlayBtnClick }) => {
 
     return (
         <div className={styles.mapItem}>
-            <Twemoji
-                emoji={
-                    gameData.code === 'world'
-                        ? '🌐'
-                        : FLAG_ENOJIS[gameData.code]
-                }
-                width={36}
-                height={36}
-                alt={
-                    gameData.code === 'world'
-                        ? t('worldMap')
-                        : t(`countries.${gameData.code}`)
-                }
-            />
+            <Suspense>
+                <Twemoji
+                    emoji={
+                        gameData.code === 'world'
+                            ? '🌐'
+                            : FLAG_ENOJIS[gameData.code]
+                    }
+                    width={36}
+                    height={36}
+                    alt={
+                        gameData.code === 'world'
+                            ? t('worldMap')
+                            : t(`countries.${gameData.code}`)
+                    }
+                />
+            </Suspense>
             <div className={styles.countryName}>
                 {gameData.code === 'world'
                     ? t('worldMap')
