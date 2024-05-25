@@ -57,9 +57,9 @@ const Footer = () => {
                         <label htmlFor="unit">{t('footer.distanceUnit')}</label>
                         <select
                             id="unit"
-                            defaultValue={settingsContext?.unit}
+                            defaultValue={settingsContext?.distanceUnit}
                             onChange={(event) => {
-                                settingsContext?.setUnit(
+                                settingsContext?.setDistanceUnit(
                                     event.target.value as DistanceUnit,
                                 )
                             }}

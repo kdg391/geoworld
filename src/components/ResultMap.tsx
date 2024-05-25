@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef } from 'react'
 
 import GoogleMap from './GoogleMap.js'
 import Marker from './Marker.js'
@@ -29,12 +29,10 @@ const ResultMap: React.FC<
 }) => {
     const resultMapRef = useRef<google.maps.Map | null>(null)
 
-    const [actualMarkers, setActualMarkers] = useState<
-        google.maps.marker.AdvancedMarkerElement[]
-    >([])
-    const [guessedMarkers, setGuessedMarkers] = useState<
-        google.maps.marker.AdvancedMarkerElement[]
-    >([])
+    const actualMarkers = useRef<google.maps.marker.AdvancedMarkerElement[]>([])
+    const guessedMarkers = useRef<google.maps.marker.AdvancedMarkerElement[]>(
+        [],
+    )
     const polylinesRef = useRef<google.maps.Polyline[]>([])
 
     const fitMapBounds = () => {
@@ -57,6 +55,14 @@ const ResultMap: React.FC<
     }
 
     const renderMarkers = () => {
+        for (const marker of actualMarkers.current) {
+            marker.map = null
+        }
+
+        for (const marker of guessedMarkers.current) {
+            marker.map = null
+        }
+
         const pinElement = new google.maps.marker.PinElement({
             background: '#04d61d',
         })
@@ -74,8 +80,8 @@ const ResultMap: React.FC<
                     position: guessedLocations[i],
                 })
 
-                setActualMarkers((markers) => [...markers, actual])
-                setGuessedMarkers((markers) => [...markers, guessed])
+                actualMarkers.current.push(actual)
+                guessedMarkers.current.push(guessed)
             }
         } else {
             const actual = new google.maps.marker.AdvancedMarkerElement({
@@ -89,8 +95,8 @@ const ResultMap: React.FC<
                 position: guessedLocations[round],
             })
 
-            setActualMarkers((markers) => [...markers, actual])
-            setGuessedMarkers((markers) => [...markers, guessed])
+            actualMarkers.current.push(actual)
+            guessedMarkers.current.push(guessed)
         }
     }
 
@@ -135,25 +141,6 @@ const ResultMap: React.FC<
     }
 
     const updateMap = () => {
-        setActualMarkers((markers) => {
-            for (const marker of markers) {
-                marker.map = null
-            }
-
-            return markers
-        })
-
-        setGuessedMarkers((markers) => {
-            for (const marker of markers) {
-                marker.map = null
-            }
-
-            return markers
-        })
-
-        setActualMarkers([])
-        setGuessedMarkers([])
-
         for (const polyline of polylinesRef.current) {
             polyline.setMap(null)
         }
@@ -192,7 +179,7 @@ const ResultMap: React.FC<
             }}
             {...props}
         >
-            {actualMarkers.map((marker, index) => (
+            {actualMarkers.current.map((marker, index) => (
                 <Marker
                     key={index}
                     position={marker.position!}
@@ -201,7 +188,7 @@ const ResultMap: React.FC<
                     }}
                 />
             ))}
-            {guessedMarkers.map((marker, index) => (
+            {guessedMarkers.current.map((marker, index) => (
                 <Marker
                     key={index}
                     position={marker.position!}

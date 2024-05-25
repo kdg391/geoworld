@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import SettingsContext from '../contexts/SettingsContext.js'
 
@@ -9,14 +9,28 @@ interface Props {
 }
 
 const SettingsProvider: React.FC<Props> = ({ children }) => {
-    const [unit, setUnit] = useState<DistanceUnit>('metric')
+    const [distanceUnit, setDistanceUnit] = useState<DistanceUnit>(
+        () =>
+            (localStorage.getItem('distanceUnit') as DistanceUnit | null) ??
+            'metric',
+    )
+
+    useEffect(() => {
+        const unit = localStorage.getItem('distanceUnit')
+
+        if (distanceUnit === unit) return
+
+        try {
+            localStorage.setItem('distanceUnit', distanceUnit)
+        } catch {}
+    }, [distanceUnit])
 
     const providerValue = React.useMemo(
         () => ({
-            unit,
-            setUnit,
+            distanceUnit,
+            setDistanceUnit,
         }),
-        [unit],
+        [distanceUnit],
     )
 
     return (

@@ -87,7 +87,7 @@ const Game = () => {
             const _distance = calculateDistance(
                 markerPosition,
                 actualLocations[round],
-                settingsContext?.unit ?? 'metric',
+                settingsContext?.distanceUnit ?? 'metric',
             )
 
             const _roundScore = calculateRoundScore(_distance, data.scoreFactor)
@@ -106,7 +106,7 @@ const Game = () => {
             const _distance = calculateDistance(
                 markerPosition,
                 actualLocations[round],
-                settingsContext?.unit ?? 'metric',
+                settingsContext?.distanceUnit ?? 'metric',
             )
 
             const _roundScore = calculateRoundScore(_distance, data.scoreFactor)
@@ -191,7 +191,7 @@ const Game = () => {
                                 </h2>
                                 <p>
                                     <Trans
-                                        i18nKey={`game.roundResult.${settingsContext?.unit}`}
+                                        i18nKey={`game.roundResult.${settingsContext?.distanceUnit}`}
                                         values={{
                                             distance,
                                         }}

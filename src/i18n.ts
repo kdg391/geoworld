@@ -168,7 +168,7 @@ i18next
                     },
                 },
                 notFound: {
-                    backToHome: 'Back to Home',
+                    backToHome: '홈으로 돌아가기',
                 },
             },
         },
