@@ -39,9 +39,9 @@ const Home = () => {
                                 <>
                                     <Twemoji
                                         emoji={
-                                            game.code in FLAG_ENOJIS
-                                                ? FLAG_ENOJIS[game.code]
-                                                : '🌐'
+                                            game.code === 'world'
+                                                ? '🌐'
+                                                : FLAG_ENOJIS[game.code]
                                         }
                                         width={32}
                                         height={32}

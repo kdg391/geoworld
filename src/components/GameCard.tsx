@@ -24,9 +24,9 @@ const GameCard: React.FC<GameCardProps> = ({ gameData, onPlayBtnClick }) => {
         <div className={styles.mapItem}>
             <Twemoji
                 emoji={
-                    gameData.code in FLAG_ENOJIS
-                        ? FLAG_ENOJIS[gameData.code]
-                        : '🌐'
+                    gameData.code === 'world'
+                        ? '🌐'
+                        : FLAG_ENOJIS[gameData.code]
                 }
                 width={36}
                 height={36}

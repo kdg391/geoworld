@@ -1,7 +1,7 @@
 export const MAX_ROUNDS = 5
 
 export interface GameData {
-    code: string
+    code: Codes | 'world'
     scoreFactor?: number
     defaultOptions?: google.maps.MapOptions
     locations: google.maps.LatLngLiteral[]
@@ -14,9 +14,10 @@ export const DEFAULT_OPTIONS: google.maps.MapOptions = {
     },
 }
 
+export type Codes = keyof typeof FLAG_ENOJIS
+
 export const FLAG_ENOJIS = {
     ca: '🇨🇦',
-    ch: '🇨🇭',
     cn: '🇨🇳',
     fr: '🇫🇷',
     gb: '🇬🇧',
