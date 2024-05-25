@@ -88,6 +88,9 @@ i18next
                         us: 'United States',
                     },
                 },
+                notFound: {
+                    backToHome: 'Back to Home',
+                },
             },
             ko: {
                 translation: {
@@ -163,6 +166,9 @@ i18next
                         tw: '대만',
                         us: '미국',
                     },
+                },
+                notFound: {
+                    backToHome: 'Back to Home',
                 },
             },
         },

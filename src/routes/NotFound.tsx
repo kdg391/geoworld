@@ -4,14 +4,14 @@ import styles from './NotFound.module.css'
 import { useTranslation } from 'react-i18next'
 
 const NotFound = () => {
-    const { t } = useTranslation()
+    const { t } = useTranslation('notFound')
 
     return (
         <main className={styles.main}>
             <h1>404 Not Found</h1>
             <div>
                 <Link to="/geography-guessing/" className={styles.backToHome}>
-                    Back to Home
+                    {t('backToHome')}
                 </Link>
             </div>
         </main>
