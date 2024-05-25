@@ -1,3 +1,5 @@
+import type { DistanceUnit } from '../types/index.js'
+
 const EARTH_RADIUS = {
     metric: 6378.137,
     imperial: 3958.8,
@@ -9,7 +11,7 @@ const rad = (n: number) => n * (Math.PI / 180)
 export function calculateDistance(
     l1: google.maps.LatLngLiteral,
     l2: google.maps.LatLngLiteral,
-    unit: 'metric' | 'imperial',
+    unit: DistanceUnit,
 ) {
     const R = EARTH_RADIUS[unit]
 
@@ -28,7 +30,13 @@ export function calculateDistance(
 }
 
 // https://github.com/benlikescode/geohub/blob/main/backend/utils/calculateRoundScore.ts
-export function calculateRoundScore(distance: number, scoreFactor = 2000) {
+export function calculateRoundScore(
+    distance: number,
+    scoreFactor = 2000,
+    unit: DistanceUnit = 'metric',
+) {
+    if (unit === 'imperial') distance *= 1.60934
+
     if (distance * 1000 < 25) return 5000
 
     const power = (distance * -1) / scoreFactor

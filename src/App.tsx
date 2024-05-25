@@ -9,6 +9,9 @@ import Home from './routes/Home.js'
 import LocationPicker from './routes/LocationPicker.js'
 import NotFound from './routes/NotFound.js'
 import RandomStreetView from './routes/RandomStreetView.js'
+import SettingsProvider from './providers/SettingsProvider.js'
+
+import './i18n.js'
 
 const router = createBrowserRouter([
     {
@@ -39,7 +42,9 @@ const router = createBrowserRouter([
 
 const App = () => (
     <ThemeProvider>
-        <RouterProvider router={router} />
+        <SettingsProvider>
+            <RouterProvider router={router} />
+        </SettingsProvider>
     </ThemeProvider>
 )
 

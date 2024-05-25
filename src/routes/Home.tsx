@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
 import Footer from '../components/Footer.js'
@@ -6,18 +7,23 @@ import GameCard from '../components/GameCard.js'
 import Header from '../components/Header.js'
 import Twemoji from '../components/Twemoji.js'
 
-import { OFFICIAL_MAPS, type GameData } from '../utils/constants/index.js'
+import {
+    FLAG_ENOJIS,
+    OFFICIAL_MAPS,
+    type GameData,
+} from '../utils/constants/index.js'
 
 import styles from './Home.module.css'
 
 const Home = () => {
     const navigate = useNavigate()
+    const { t } = useTranslation()
 
-    const [showModal, setShowModal] = useState<boolean>(false)
+    const [showModal, setShowModal] = useState(false)
 
-    const [canMove, setCanMove] = useState<boolean>(true)
-    const [canPan, setCanPan] = useState<boolean>(true)
-    const [canZoom, setCanZoom] = useState<boolean>(true)
+    const [canMove, setCanMove] = useState(true)
+    const [canPan, setCanPan] = useState(true)
+    const [canZoom, setCanZoom] = useState(true)
     const [timeLimit, setTimeLimit] = useState<number | null>(null)
 
     const [game, setGame] = useState<GameData | null>(null)
@@ -29,19 +35,35 @@ const Home = () => {
                 <div className={styles.mapSelectModal}>
                     <div className={styles.mapSelectModalWrapper}>
                         <h2 className={styles.title}>
-                            {game?.emoji && (
-                                <Twemoji
-                                    emoji={game.emoji}
-                                    width={32}
-                                    height={32}
-                                    alt={game.country}
-                                />
+                            {game?.code && (
+                                <>
+                                    <Twemoji
+                                        emoji={
+                                            game.code in FLAG_ENOJIS
+                                                ? FLAG_ENOJIS[game.code]
+                                                : '🌐'
+                                        }
+                                        width={32}
+                                        height={32}
+                                        alt={
+                                            game.code === 'world'
+                                                ? t('worldMap')
+                                                : t(`countries.${game.code}`)
+                                        }
+                                    />
+                                    {game.code === 'world'
+                                        ? t('worldMap')
+                                        : t(`countries.${game.code}`)}
+                                </>
                             )}
-                            {game?.country}
                         </h2>
-                        <p>{game?.locations.length} Locations</p>
+                        <p>
+                            {t('home.locations', {
+                                locations: game?.locations.length,
+                            })}
+                        </p>
                         <div className={styles.setting}>
-                            <label htmlFor="move">Move</label>
+                            <label htmlFor="move">{t('home.move')}</label>
                             <div className={styles.checkBox}>
                                 <input
                                     type="checkbox"
@@ -57,7 +79,7 @@ const Home = () => {
                             </div>
                         </div>
                         <div className={styles.setting}>
-                            <label htmlFor="pan">Pan</label>
+                            <label htmlFor="pan">{t('home.pan')}</label>
                             <div className={styles.checkBox}>
                                 <input
                                     type="checkbox"
@@ -73,7 +95,7 @@ const Home = () => {
                             </div>
                         </div>
                         <div className={styles.setting}>
-                            <label htmlFor="zoom">Zoom</label>
+                            <label htmlFor="zoom">{t('home.zoom')}</label>
                             <div className={styles.checkBox}>
                                 <input
                                     type="checkbox"
@@ -89,17 +111,19 @@ const Home = () => {
                             </div>
                         </div>
                         <div>
-                            <label htmlFor="time-limit">Time Limit</label>
-                            <span>
-                                {' '}
-                                (
-                                {timeLimit === null
-                                    ? 'No Limit'
-                                    : `${Math.floor(timeLimit / 60)} m ${
-                                          timeLimit % 60
-                                      } s`}
-                                )
-                            </span>
+                            <label htmlFor="time-limit">
+                                {t('home.timeLimit')}
+                            </label>
+                        </div>
+                        <div>
+                            (
+                            {timeLimit === null
+                                ? t('home.noLimit')
+                                : t('home.timeLimitFormat', {
+                                      minutes: Math.floor(timeLimit / 60),
+                                      seconds: timeLimit % 60,
+                                  })}
+                            )
                         </div>
                         <div>
                             <input
@@ -127,7 +151,7 @@ const Home = () => {
                                     setShowModal(false)
                                 }}
                             >
-                                Cancel
+                                {t('home.cancel')}
                             </button>
                             <button
                                 className={styles.playBtn}
@@ -145,7 +169,7 @@ const Home = () => {
                                     )
                                 }}
                             >
-                                Play
+                                {t('home.play')}
                             </button>
                         </div>
                     </div>
@@ -154,7 +178,7 @@ const Home = () => {
 
             <section id="maps" className={styles.mapsSection}>
                 <div className={styles.container}>
-                    <h2>Maps</h2>
+                    <h2>{t('home.officialMaps')}</h2>
                     <div className={styles.wrapper}>
                         {OFFICIAL_MAPS.map((g, index) => (
                             <GameCard

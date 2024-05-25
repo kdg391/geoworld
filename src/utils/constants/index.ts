@@ -2,9 +2,7 @@ export const MAX_ROUNDS = 5
 
 export interface GameData {
     code: string
-    country: string
     scoreFactor?: number
-    emoji: string
     defaultOptions?: google.maps.MapOptions
     locations: google.maps.LatLngLiteral[]
 }
@@ -16,13 +14,49 @@ export const DEFAULT_OPTIONS: google.maps.MapOptions = {
     },
 }
 
+export const FLAG_ENOJIS = {
+    ca: '🇨🇦',
+    ch: '🇨🇭',
+    cn: '🇨🇳',
+    fr: '🇫🇷',
+    gb: '🇬🇧',
+    it: '🇮🇹',
+    jp: '🇯🇵',
+    kr: '🇰🇷',
+    sg: '🇸🇬',
+    tw: '🇹🇼',
+    us: '🇺🇸',
+}
+
 // Official Maps
 // todo: change to geojson
 export const OFFICIAL_MAPS: GameData[] = [
     {
+        code: 'ca',
+        locations: [],
+    },
+    {
+        code: 'cn',
+        locations: [],
+    },
+    {
+        code: 'fr',
+        locations: [],
+    },
+    {
+        code: 'gb',
+        locations: [],
+    },
+    {
+        code: 'it',
+        locations: [],
+    },
+    {
+        code: 'jp',
+        locations: [],
+    },
+    {
         code: 'kr',
-        country: 'South Korea',
-        emoji: '🇰🇷',
         scoreFactor: 72,
         locations: [
             {
@@ -252,9 +286,15 @@ export const OFFICIAL_MAPS: GameData[] = [
         ],
     },
     {
+        code: 'sg',
+        locations: [],
+    },
+    {
+        code: 'tw',
+        locations: [],
+    },
+    {
         code: 'us',
-        country: 'United States',
-        emoji: '🇺🇸',
         scoreFactor: 918,
         locations: [
             {
@@ -294,54 +334,10 @@ export const OFFICIAL_MAPS: GameData[] = [
             },
         ],
     },
-    {
-        code: 'fr',
-        country: 'France',
-        emoji: '🇫🇷',
-        locations: [],
-    },
-    {
-        code: 'tw',
-        country: 'Taiwan',
-        emoji: '🇹🇼',
-        locations: [],
-    },
-    {
-        code: 'jp',
-        country: 'Japan',
-        emoji: '🇯🇵',
-        locations: [],
-    },
-    {
-        code: 'it',
-        country: 'Italy',
-        emoji: '🇮🇹',
-        locations: [],
-    },
-    {
-        code: 'uk',
-        country: 'United Kingdom',
-        emoji: '🇬🇧',
-        locations: [],
-    },
-    {
-        code: 'sg',
-        country: 'Singapore',
-        emoji: '🇸🇬',
-        locations: [],
-    },
-    {
-        code: 'ca',
-        country: 'Canada',
-        emoji: '🇨🇦',
-        locations: [],
-    },
 ]
 
 export const WORLD_GAME: GameData = {
     code: 'world',
-    country: 'World',
-    emoji: '🌐',
     locations: OFFICIAL_MAPS.map((r) => r.locations).flat(1),
 }
 

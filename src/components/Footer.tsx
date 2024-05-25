@@ -1,13 +1,17 @@
+import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
+import useSettings from '../hooks/useSettings.js'
 import useTheme from '../hooks/useTheme.js'
 
 import styles from './Footer.module.css'
 
-import type { Theme } from '../types/index.js'
+import type { DistanceUnit, Theme } from '../types/index.js'
 
 const Footer = () => {
     const themeContext = useTheme()
+    const settingsContext = useSettings()
+    const { i18n, t } = useTranslation()
 
     return (
         <footer className={styles.footer}>
@@ -15,7 +19,7 @@ const Footer = () => {
                 <h4>Geography Guessing</h4>
                 <div>
                     <div>
-                        <label htmlFor="theme">Theme</label>
+                        <label htmlFor="theme">{t('footer.theme')}</label>
                         <select
                             id="theme"
                             defaultValue={themeContext?.theme}
@@ -25,16 +29,47 @@ const Footer = () => {
                                 )
                             }}
                         >
-                            <option value="light">Light</option>
-                            <option value="dark">Dark</option>
-                            <option value="system">System</option>
+                            <option value="light">
+                                {t('footer.themes.light')}
+                            </option>
+                            <option value="dark">
+                                {t('footer.themes.dark')}
+                            </option>
+                            <option value="system">
+                                {t('footer.themes.system')}
+                            </option>
                         </select>
                     </div>
                     <div>
-                        <label htmlFor="language">Language</label>
-                        <select id="language">
+                        <label htmlFor="language">{t('footer.language')}</label>
+                        <select
+                            id="language"
+                            defaultValue={i18n.language}
+                            onChange={(event) => {
+                                i18n.changeLanguage(event.target.value)
+                            }}
+                        >
                             <option value="en">English</option>
                             <option value="ko">한국어</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label htmlFor="unit">{t('footer.distanceUnit')}</label>
+                        <select
+                            id="unit"
+                            defaultValue={settingsContext?.unit}
+                            onChange={(event) => {
+                                settingsContext?.setUnit(
+                                    event.target.value as DistanceUnit,
+                                )
+                            }}
+                        >
+                            <option value="imperial">
+                                {t('footer.distanceUnits.imperial')}
+                            </option>
+                            <option value="metric">
+                                {t('footer.distanceUnits.metric')}
+                            </option>
                         </select>
                     </div>
                 </div>
@@ -49,7 +84,7 @@ const Footer = () => {
                     </li>
                     <li>
                         <Link to="/geography-guessing/random-streetview">
-                            Random StreetView
+                            {t('footer.randomStreetView')}
                         </Link>
                     </li>
                 </ul>

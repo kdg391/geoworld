@@ -30,6 +30,8 @@
     --map-select-modal-bg: rgba(0, 0, 0, 0.5);
     --map-select-modal-wrapper-bg: #fff;
 
+    --range-track-bg: #000;
+
     --scrollbar-thumb-color: #cdcdcd;
     --scrollbar-thumb-color-hover: #adadad;
     --scrollbar-thumb-color-active: #9b9b9b;
@@ -55,6 +57,8 @@
 
     --map-select-modal-bg: rgba(0, 0, 0, 0.8);
     --map-select-modal-wrapper-bg: rgb(16, 16, 16);
+
+    --range-track-bg: #fff;
 
     --scrollbar-thumb-color: #2a2a2a;
     --scrollbar-thumb-color-hover: #323232;

@@ -1,11 +1,14 @@
 import { Loader } from '@googlemaps/js-api-loader'
 import { useEffect, useState } from 'react'
+import { Trans, useTranslation } from 'react-i18next'
 import { Navigate, useLocation, useNavigate, useParams } from 'react-router-dom'
 
 import GuessMap from '../components/GuessMap.js'
 import ResultMap from '../components/ResultMap.js'
 import RoundStatus from '../components/RoundStatus.js'
 import StreetView from '../components/StreetView.js'
+
+import useSettings from '../hooks/useSettings.js'
 
 import type { CountryCodes } from '../utils/constants/countryBounds.js'
 import { OFFICIAL_MAPS, MAX_ROUNDS } from '../utils/constants/index.js'
@@ -34,6 +37,7 @@ const Game = () => {
         return <Navigate to="/geography-guessing/" />
 
     const navigate = useNavigate()
+    const { t } = useTranslation()
 
     const [googleApiLoaded, setGoogleApiLoaded] = useState(false)
 
@@ -55,6 +59,8 @@ const Game = () => {
     const [markerPosition, setMarkerPosition] = useState<
         google.maps.LatLngLiteral | google.maps.LatLngAltitudeLiteral | null
     >(null)
+
+    const settingsContext = useSettings()
 
     const data = OFFICIAL_MAPS.find((g) => g.code === params.code)!
 
@@ -81,7 +87,7 @@ const Game = () => {
             const _distance = calculateDistance(
                 markerPosition,
                 actualLocations[round],
-                'metric',
+                settingsContext?.unit ?? 'metric',
             )
 
             const _roundScore = calculateRoundScore(_distance, data.scoreFactor)
@@ -100,7 +106,7 @@ const Game = () => {
             const _distance = calculateDistance(
                 markerPosition,
                 actualLocations[round],
-                'metric',
+                settingsContext?.unit ?? 'metric',
             )
 
             const _roundScore = calculateRoundScore(_distance, data.scoreFactor)
@@ -122,7 +128,11 @@ const Game = () => {
         <main>
             <RoundStatus
                 finishTimeOut={finishTimeOut}
-                mapName={data.country}
+                mapName={
+                    data.code === 'world'
+                        ? t('worldMap')
+                        : t(`countries.${data.code}`)
+                }
                 round={round}
                 timeLimit={state.timeLimit}
                 totalScore={totalScore}
@@ -149,7 +159,9 @@ const Game = () => {
                         {gameFinished ? (
                             <>
                                 <h2>
-                                    Total {totalScore.toLocaleString()} Points
+                                    {t('game.totalPoints', {
+                                        totalScore: totalScore.toLocaleString(),
+                                    })}
                                 </h2>
                                 <div>
                                     <button
@@ -158,7 +170,7 @@ const Game = () => {
                                             navigate(0)
                                         }}
                                     >
-                                        Replay
+                                        {t('game.replay')}
                                     </button>
                                     <button
                                         className={styles.exitBtn}
@@ -166,16 +178,24 @@ const Game = () => {
                                             navigate('/geography-guessing/')
                                         }}
                                     >
-                                        Exit
+                                        {t('game.exit')}
                                     </button>
                                 </div>
                             </>
                         ) : (
                             <>
-                                <h2>+{roundScore.toLocaleString()} Points</h2>
+                                <h2>
+                                    {t('game.roundPoints', {
+                                        roundScore: roundScore.toLocaleString(),
+                                    })}
+                                </h2>
                                 <p>
-                                    Your guess was {distance.toFixed(1)} km from
-                                    the correct location
+                                    <Trans
+                                        i18nKey={`game.roundResult.${settingsContext?.unit}`}
+                                        values={{
+                                            distance,
+                                        }}
+                                    />
                                 </p>
                                 {round === MAX_ROUNDS - 1 ? (
                                     <button
@@ -185,7 +205,7 @@ const Game = () => {
                                             setGameFinished(true)
                                         }}
                                     >
-                                        View Results
+                                        {t('game.viewResults')}
                                     </button>
                                 ) : (
                                     <button
@@ -196,7 +216,7 @@ const Game = () => {
                                             setRoundFinished(false)
                                         }}
                                     >
-                                        Next Round
+                                        {t('game.nextRound')}
                                     </button>
                                 )}
                             </>

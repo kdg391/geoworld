@@ -8,8 +8,6 @@ interface Props {
         | google.maps.LatLngAltitudeLiteral
 }
 
-const Marker: React.FC<Props> = () => {
-    return <></>
-}
+const Marker: React.FC<Props> = () => <></>
 
 export default Marker

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { MAX_ROUNDS } from '../utils/constants/index.js'
 import { formatTimeLeft } from '../utils/index.js'
@@ -20,6 +21,8 @@ const RoundStatus: React.FC<Props> = ({
     timeLimit,
     totalScore,
 }) => {
+    const { t } = useTranslation()
+
     const [timeLeft, setTimeLeft] = useState<number | null>(null)
 
     useEffect(() => {
@@ -60,17 +63,17 @@ const RoundStatus: React.FC<Props> = ({
 
             <div className={styles.roundInfo}>
                 <div>
-                    <span>Map</span>
+                    <span>{t('game.roundStatus.map')}</span>
                     <span>{mapName}</span>
                 </div>
                 <div>
-                    <span>Round</span>
+                    <span>{t('game.roundStatus.round')}</span>
                     <span>
                         {round + 1} / {MAX_ROUNDS}
                     </span>
                 </div>
                 <div>
-                    <span>Score</span>
+                    <span>{t('game.roundStatus.score')}</span>
                     <span>{totalScore.toLocaleString()}</span>
                 </div>
             </div>
