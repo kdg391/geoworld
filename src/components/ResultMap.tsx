@@ -43,7 +43,7 @@ const ResultMap: React.FC<
         const bounds = new google.maps.LatLngBounds()
 
         if (gameFinished) {
-            for (let i = 0; i < actualLocations.length; i++) {
+            for (let i = 0; i < guessedLocations.length; i++) {
                 bounds.extend(actualLocations[i])
                 bounds.extend(guessedLocations[i])
             }
@@ -73,7 +73,7 @@ const ResultMap: React.FC<
         })
 
         if (gameFinished) {
-            for (let i = 0; i < actualLocations.length; i++) {
+            for (let i = 0; i < guessedLocations.length; i++) {
                 const actual = new google.maps.marker.AdvancedMarkerElement({
                     map: resultMapRef.current,
                     position: actualLocations[i],
@@ -178,7 +178,7 @@ const ResultMap: React.FC<
                     zoomControl: true,
                     clickableIcons: false,
                     gestureHandling: 'greedy',
-                    mapId: import.meta.env.VITE_GOOGLE_MAPS_2,
+                    mapId: import.meta.env.VITE_GOOGLE_MAPS_RESULT,
                 }}
                 onMount={(map) => {
                     resultMapRef.current = map

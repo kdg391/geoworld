@@ -34,7 +34,7 @@ const LocationPicker = () => {
             streetViewControl: true,
             scrollwheel: true,
             clickableIcons: false,
-            mapId: import.meta.env.VITE_GOOGLE_MAPS_1,
+            draggableCursor: 'crosshair',
         })
 
         const svPanorama = new google.maps.StreetViewPanorama(

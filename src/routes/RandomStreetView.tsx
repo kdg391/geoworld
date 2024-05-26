@@ -41,7 +41,6 @@ const RandomStreetView = () => {
             clickableIcons: false,
             streetViewControl: true,
             zoom: 5,
-            mapId: import.meta.env.VITE_GOOGLE_MAPS_1,
         })
 
         const svPanorama = new google.maps.StreetViewPanorama(

@@ -10,26 +10,26 @@ const Header = () => {
     return (
         <header className={styles.header}>
             <div>
-                <h1>
+                <h2>
                     <Link
                         to="/geography-guessing/"
                         className={styles.anchorCenter}
                     >
                         <img
                             src="/geography-guessing/icon.png"
-                            width={24}
-                            height={24}
+                            width={20}
+                            height={20}
                             alt="logo"
                         />
                         Geography Guessing
                     </Link>
-                </h1>
+                </h2>
             </div>
 
             <nav>
                 <ul>
                     <li>
-                        <a href="#maps">{t('header.maps')}</a>
+                        <a href="#official-maps">{t('header.officialMaps')}</a>
                     </li>
                 </ul>
                 <ul>

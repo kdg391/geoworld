@@ -6,7 +6,7 @@ import { Navigate, useLocation, useNavigate, useParams } from 'react-router-dom'
 import useSettings from '../hooks/useSettings.js'
 
 import type { CountryCodes } from '../utils/constants/countryBounds.js'
-import { OFFICIAL_MAPS, MAX_ROUNDS } from '../utils/constants/index.js'
+import { OFFICIAL_MAPS } from '../utils/constants/index.js'
 import {
     calculateDistance,
     calculateRoundScore,
@@ -24,6 +24,7 @@ interface State {
     canMove: boolean
     canPan: boolean
     canZoom: boolean
+    rounds: number
     timeLimit: number | null
 }
 
@@ -77,9 +78,14 @@ const Game = () => {
 
         setGoogleApiLoaded(true)
 
-        const locations = shuffleArray(data.locations)
+        const shuffled = shuffleArray(data.locations)
+        const locations = shuffled.slice(0, state.rounds)
 
-        setActualLocations(locations.slice(0, 5))
+        setActualLocations(locations)
+
+        if (import.meta.env.DEV) {
+            console.log(locations)
+        }
     }
 
     const finishRound = () => {
@@ -131,10 +137,11 @@ const Game = () => {
                     finishTimeOut={finishTimeOut}
                     mapName={
                         data.code === 'world'
-                            ? t('worldMap')
+                            ? t('worldwide')
                             : t(`countries.${data.code}`)
                     }
                     round={round}
+                    rounds={state.rounds}
                     timeLimit={state.timeLimit}
                     totalScore={totalScore}
                 />
@@ -201,7 +208,7 @@ const Game = () => {
                                         }}
                                     />
                                 </p>
-                                {round === MAX_ROUNDS - 1 ? (
+                                {round === state.rounds - 1 ? (
                                     <button
                                         className={styles.nextBtn}
                                         onClick={() => {

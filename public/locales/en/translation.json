@@ -5,6 +5,7 @@
         "move": "Move",
         "pan": "Pan",
         "zoom": "Zoom",
+        "rounds": "Rounds",
         "timeLimit": "Time Limit",
         "noLimit": "No Limit",
         "timeLimitFormat": "{minutes, number, ::unit/minute} {seconds, number, ::unit/second}",
@@ -33,7 +34,7 @@
         "exit": "Exit"
     },
     "header": {
-        "maps": "Maps"
+        "officialMaps": "Official Maps"
     },
     "footer": {
         "theme": "Theme",
@@ -53,15 +54,18 @@
     "notFound": {
         "backToHome": "Back to Home"
     },
-    "worldMap": "World",
+    "worldwide": "Worldwide",
     "countries": {
+        "au": "Australia",
         "ca": "Canada",
         "cn": "China",
+        "de": "Germany",
         "fr": "France",
         "gb": "United Kingdom",
         "it": "Italy",
         "jp": "Japan",
         "kr": "South Korea",
+        "pl": "Poland",
         "sg": "Singapore",
         "tw": "Taiwan",
         "us": "United States"

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { MAX_ROUNDS } from '../utils/constants/index.js'
 import { formatTimeLeft } from '../utils/index.js'
 
 import styles from './RoundStatus.module.css'
@@ -10,6 +9,7 @@ interface Props {
     finishTimeOut: () => void
     mapName: string
     round: number
+    rounds: number
     timeLimit: number | null
     totalScore: number
 }
@@ -18,6 +18,7 @@ const RoundStatus: React.FC<Props> = ({
     finishTimeOut,
     mapName,
     round,
+    rounds,
     timeLimit,
     totalScore,
 }) => {
@@ -61,7 +62,7 @@ const RoundStatus: React.FC<Props> = ({
                 </div>
             )}
 
-            <div className={styles.roundInfo}>
+            <div className={styles.roundStatus}>
                 <div>
                     <span>{t('game.roundStatus.map')}</span>
                     <span>{mapName}</span>
@@ -69,7 +70,7 @@ const RoundStatus: React.FC<Props> = ({
                 <div>
                     <span>{t('game.roundStatus.round')}</span>
                     <span>
-                        {round + 1} / {MAX_ROUNDS}
+                        {round + 1} / {rounds}
                     </span>
                 </div>
                 <div>

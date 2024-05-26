@@ -1,7 +1,7 @@
-export const MAX_ROUNDS = 5
+export const DEFAULT_MAX_ROUNDS = 5
 
 export interface GameData {
-    code: Codes | 'world'
+    code: Codes | 'worldwide'
     scoreFactor?: number
     defaultOptions?: google.maps.MapOptions
     locations: google.maps.LatLngLiteral[]
@@ -17,13 +17,16 @@ export const DEFAULT_OPTIONS: google.maps.MapOptions = {
 export type Codes = keyof typeof FLAG_ENOJIS
 
 export const FLAG_ENOJIS = {
+    au: '🇦🇺',
     ca: '🇨🇦',
     cn: '🇨🇳',
+    de: '🇩🇪',
     fr: '🇫🇷',
     gb: '🇬🇧',
     it: '🇮🇹',
     jp: '🇯🇵',
     kr: '🇰🇷',
+    pl: '🇵🇱',
     sg: '🇸🇬',
     tw: '🇹🇼',
     us: '🇺🇸',
@@ -33,11 +36,24 @@ export const FLAG_ENOJIS = {
 // todo: change to geojson
 export const OFFICIAL_MAPS: GameData[] = [
     {
+        code: 'au',
+        locations: [
+            {
+                lat: -33.85014308559627,
+                lng: 151.02919986348329,
+            },
+        ],
+    },
+    {
         code: 'ca',
         locations: [],
     },
     {
         code: 'cn',
+        locations: [],
+    },
+    {
+        code: 'de',
         locations: [],
     },
     {
@@ -287,6 +303,10 @@ export const OFFICIAL_MAPS: GameData[] = [
         ],
     },
     {
+        code: 'pl',
+        locations: [],
+    },
+    {
         code: 'sg',
         locations: [],
     },
@@ -338,8 +358,8 @@ export const OFFICIAL_MAPS: GameData[] = [
 ]
 
 export const WORLD_GAME: GameData = {
-    code: 'world',
+    code: 'worldwide',
     locations: OFFICIAL_MAPS.map((r) => r.locations).flat(1),
 }
 
-OFFICIAL_MAPS.push(WORLD_GAME)
+OFFICIAL_MAPS.unshift(WORLD_GAME)

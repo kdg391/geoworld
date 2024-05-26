@@ -5,6 +5,7 @@
         "move": "이동",
         "pan": "Pan",
         "zoom": "줌",
+        "rounds": "라운드",
         "timeLimit": "시간 제한",
         "noLimit": "제한 없음",
         "timeLimitFormat": "{minutes, number, ::unit/minute} {seconds, number, ::unit/second}",
@@ -33,7 +34,7 @@
         "exit": "나가기"
     },
     "header": {
-        "maps": "맵"
+        "officialMaps": "공식 맵"
     },
     "footer": {
         "theme": "테마",
@@ -53,15 +54,18 @@
     "notFound": {
         "backToHome": "홈으로 돌아가기"
     },
-    "worldMap": "월드",
+    "worldwide": "월드",
     "countries": {
+        "au": "오스트레일리아",
         "ca": "캐나다",
         "cn": "중국",
+        "de": "독일",
         "fr": "프랑스",
         "gb": "영국",
         "it": "이탈리아",
         "jp": "일본",
-        "kr": "한국",
+        "kr": "대한민국",
+        "pl": "폴란드",
         "sg": "싱가포르",
         "tw": "대만",
         "us": "미국"

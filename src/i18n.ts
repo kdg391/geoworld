@@ -13,6 +13,9 @@ i18next
         backend: {
             loadPath: '/geography-guessing/locales/{{lng}}/{{ns}}.json',
         },
+        detection: {
+            lookupLocalStorage: 'lang',
+        },
         fallbackLng: 'en',
         interpolation: {
             escapeValue: false,

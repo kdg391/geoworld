@@ -1,9 +1,10 @@
 .footer {
     display: flex;
     flex-wrap: wrap;
-    gap: 12px;
+    gap: 16px;
     background-color: var(--footer-bg);
-    padding: 1rem 1.5rem;
+    border-top: 1px solid var(--footer-border);
+    padding: 1.2rem 1.5rem;
 }
 
 .footer ul {
@@ -20,6 +21,39 @@
     text-decoration: underline;
 }
 
+.settings {
+    display: flex;
+    gap: 8px;
+}
+
+.settingTitle {
+    margin-bottom: 4px;
+}
+
 .links {
     margin-left: 8px;
+}
+
+:global .theme-select .theme-selector__control,
+:global .language-select .language-selector__control,
+:global .distance-unit-select .distance-unit-selector__control {
+    background-color: var(--bg-color);
+}
+
+:global .theme-select .theme-selector__single-value,
+:global .language-select .language-selector__single-value,
+:global .distance-unit-select .distance-unit-selector__single-value {
+    color: var(--color);
+}
+
+.optionLabel {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+:global .label-img {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

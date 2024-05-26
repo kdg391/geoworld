@@ -99,7 +99,7 @@ const GuessMap: React.FC<
                     clickableIcons: false,
                     fullscreenControl: true,
                     draggableCursor: 'crosshair',
-                    mapId: import.meta.env.VITE_GOOGLE_MAPS_1,
+                    mapId: import.meta.env.VITE_GOOGLE_MAPS_GUESS,
                     ...DEFAULT_OPTIONS,
                     ...data.defaultOptions,
                 }}

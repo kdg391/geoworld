@@ -9,25 +9,25 @@
     width: 100%;
 }
 
-.roundInfo {
+.roundStatus {
     position: absolute;
     top: 1rem;
     right: 1rem;
     padding: 8px 16px;
     gap: 16px;
     display: flex;
-    background-color: var(--round-info-bg);
+    background-color: var(--round-status-bg);
     font-size: 1rem;
 }
 
-.roundInfo > div {
+.roundStatus > div {
     display: flex;
     flex-direction: column;
 }
 
 .timeLeft {
     position: relative;
-    background-color: var(--round-info-bg);
+    background-color: var(--round-status-bg);
     padding: 8px 16px;
     max-width: 72px;
     margin-top: 1rem;
