@@ -14,7 +14,7 @@
     justify-content: center;
     width: 100%;
     min-height: 128px;
-    max-height: 176px;
+    max-height: 144px;
     padding-bottom: 6px;
     aspect-ratio: 16 / 9;
     object-fit: cover;
