@@ -136,7 +136,7 @@ const Game = () => {
                 <RoundStatus
                     finishTimeOut={finishTimeOut}
                     mapName={
-                        data.code === 'world'
+                        data.code === 'worldwide'
                             ? t('worldwide')
                             : t(`countries.${data.code}`)
                     }

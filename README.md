@@ -2,12 +2,6 @@
 
 A geography guessing game inspired by GeoGuessr, [GeoHub](https://github.com/benlikescode/GeoHub), and [GeoGuess](https://github.com/GeoGuess/GeoGuess).
 
-## To Do
-
-- [ ] add new locations
-
-- [ ] multi player
-
 ## References
 
 - <https://github.com/benlikescode/GeoHub>
@@ -16,7 +10,7 @@ A geography guessing game inspired by GeoGuessr, [GeoHub](https://github.com/ben
 
 ## Image
 
-- Icon: <https://www.flaticon.com/kr/free-icon/map_1865269?term=%EC%A7%80%EB%8F%84&page=1&position=15&origin=search&related_id=1865269>
+- Icon: <https://www.flaticon.com/free-icon/map_1865269?term=map&page=1&position=33&origin=search&related_id=1865269>
 
 ### Maps
 
