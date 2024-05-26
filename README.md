@@ -8,7 +8,7 @@ A geography guessing game inspired by GeoGuessr, [GeoHub](https://github.com/ben
 - <https://github.com/GeoGuess/GeoGuess>
 - <https://github.com/ErickKS/vite-react-router>
 
-## Image
+## Image Sources
 
 - Icon: <https://www.flaticon.com/free-icon/map_1865269?term=map&page=1&position=33&origin=search&related_id=1865269>
 
