@@ -3,7 +3,7 @@
         "officialMaps": "공식 맵",
         "locations": "위치 {locations}개",
         "move": "이동",
-        "pan": "Pan",
+        "pan": "팬",
         "zoom": "줌",
         "rounds": "라운드",
         "timeLimit": "시간 제한",
@@ -13,6 +13,7 @@
         "play": "플레이"
     },
     "game": {
+        "guess": "Guess",
         "controls": {
             "returnToStart": "시작 지점으로 돌아가기",
             "undo": "되돌리기"
@@ -49,7 +50,11 @@
             "imperial": "마일 (mi)",
             "metric": "미터 (km)"
         },
-        "randomStreetView": "랜덤 스트리트 뷰"
+        "links": "링크",
+        "linkTexts": {
+            "locationPicker": "Location Picker",
+            "randomStreetView": "랜덤 스트리트 뷰"
+        }
     },
     "notFound": {
         "backToHome": "홈으로 돌아가기"

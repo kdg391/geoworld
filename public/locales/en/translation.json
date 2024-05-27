@@ -13,6 +13,7 @@
         "play": "Play"
     },
     "game": {
+        "guess": "Guess",
         "controls": {
             "returnToStart": "Return to Start",
             "undo": "Undo"
@@ -49,7 +50,11 @@
             "imperial": "Imperial (mi)",
             "metric": "Metric (km)"
         },
-        "randomStreetView": "Random Street View"
+        "links": "Links",
+        "linkTexts": {
+            "locationPicker": "Location Picker",
+            "randomStreetView": "Random Street View"
+        }
     },
     "notFound": {
         "backToHome": "Back to Home"

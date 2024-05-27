@@ -43,6 +43,11 @@
     margin: 12px 0;
 }
 
+.resultInfo :global .result-actions {
+    display: flex;
+    gap: 8px;
+}
+
 .guessMapContainer {
     position: absolute;
     right: 24px;
@@ -62,15 +67,21 @@
 
 .guessBtn,
 .nextBtn,
-.exitBtn,
 .replayBtn {
+    background-color: var(--primary-color);
+}
+
+.guessBtn,
+.nextBtn,
+.replayBtn,
+.exitBtn {
     font-size: 1rem;
     padding: 12px 24px;
-    background-color: var(--primary-color);
     color: #fff;
     border-radius: 8px;
 }
 
+.exitBtn,
 .guessBtn:disabled {
     background-color: var(--secondary-color);
 }

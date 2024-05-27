@@ -26,7 +26,7 @@ const Home = () => {
             {showModal && (
                 <Suspense>
                     <MapSettingsModal
-                        gameData={gameData}
+                        gameData={gameData as GameData}
                         setShowModal={setShowModal}
                     />
                 </Suspense>

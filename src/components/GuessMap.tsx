@@ -100,7 +100,6 @@ const GuessMap: React.FC<
                     fullscreenControl: true,
                     draggableCursor: 'crosshair',
                     mapId: import.meta.env.VITE_GOOGLE_MAPS_GUESS,
-                    ...DEFAULT_OPTIONS,
                     ...data.defaultOptions,
                 }}
                 onMount={(map) => {

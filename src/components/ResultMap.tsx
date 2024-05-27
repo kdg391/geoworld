@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useEffect, useRef } from 'react'
+import React, { lazy, Suspense, useEffect, useRef, useState } from 'react'
 
 import type GoogleMapType from './GoogleMap.js'
 
@@ -31,10 +31,12 @@ const ResultMap: React.FC<
 }) => {
     const resultMapRef = useRef<google.maps.Map | null>(null)
 
-    const actualMarkers = useRef<google.maps.marker.AdvancedMarkerElement[]>([])
-    const guessedMarkers = useRef<google.maps.marker.AdvancedMarkerElement[]>(
-        [],
-    )
+    const [actualMarkers, setActualMarkers] = useState<
+        google.maps.marker.AdvancedMarkerElement[]
+    >([])
+    const [guessedMarkers, setGuessedMarkers] = useState<
+        google.maps.marker.AdvancedMarkerElement[]
+    >([])
     const polylinesRef = useRef<google.maps.Polyline[]>([])
 
     const fitMapBounds = () => {
@@ -57,19 +59,22 @@ const ResultMap: React.FC<
     }
 
     const renderMarkers = () => {
-        for (const marker of actualMarkers.current) {
-            marker.map = null
-        }
+        setActualMarkers((markers) => {
+            for (const marker of markers) {
+                marker.position = null
+                marker.map = null
+            }
 
-        for (const marker of guessedMarkers.current) {
-            marker.map = null
-        }
+            return []
+        })
 
-        actualMarkers.current = []
-        guessedMarkers.current = []
+        setGuessedMarkers((markers) => {
+            for (const marker of markers) {
+                marker.position = null
+                marker.map = null
+            }
 
-        const pinElement = new google.maps.marker.PinElement({
-            background: '#04d61d',
+            return []
         })
 
         if (gameFinished) {
@@ -77,7 +82,9 @@ const ResultMap: React.FC<
                 const actual = new google.maps.marker.AdvancedMarkerElement({
                     map: resultMapRef.current,
                     position: actualLocations[i],
-                    content: pinElement.element,
+                    content: new google.maps.marker.PinElement({
+                        background: '#04d61d',
+                    }).element,
                 })
 
                 const guessed = new google.maps.marker.AdvancedMarkerElement({
@@ -85,14 +92,16 @@ const ResultMap: React.FC<
                     position: guessedLocations[i],
                 })
 
-                actualMarkers.current.push(actual)
-                guessedMarkers.current.push(guessed)
+                setActualMarkers((markers) => [...markers, actual])
+                setGuessedMarkers((markers) => [...markers, guessed])
             }
         } else {
             const actual = new google.maps.marker.AdvancedMarkerElement({
                 map: resultMapRef.current,
                 position: actualLocations[round],
-                content: pinElement.element,
+                content: new google.maps.marker.PinElement({
+                    background: '#04d61d',
+                }).element,
             })
 
             const guessed = new google.maps.marker.AdvancedMarkerElement({
@@ -100,8 +109,8 @@ const ResultMap: React.FC<
                 position: guessedLocations[round],
             })
 
-            actualMarkers.current.push(actual)
-            guessedMarkers.current.push(guessed)
+            setActualMarkers([actual])
+            setGuessedMarkers([guessed])
         }
     }
 
@@ -151,23 +160,21 @@ const ResultMap: React.FC<
         }
     }
 
-    const updateMap = () => {
+    useEffect(() => {
+        if (!gameFinished) return
+
         renderMarkers()
         renderPolylines()
         fitMapBounds()
-    }
+    }, [gameFinished])
 
     useEffect(() => {
         if (!roundFinished) return
 
-        updateMap()
+        renderMarkers()
+        renderPolylines()
+        fitMapBounds()
     }, [roundFinished])
-
-    useEffect(() => {
-        if (!gameFinished) return
-
-        updateMap()
-    }, [gameFinished])
 
     return (
         <Suspense>
@@ -185,7 +192,7 @@ const ResultMap: React.FC<
                 }}
                 {...props}
             >
-                {actualMarkers.current.map((marker, index) => (
+                {actualMarkers.map((marker, index) => (
                     <Marker
                         key={index}
                         position={marker.position!}
@@ -194,7 +201,7 @@ const ResultMap: React.FC<
                         }}
                     />
                 ))}
-                {guessedMarkers.current.map((marker, index) => (
+                {guessedMarkers.map((marker, index) => (
                     <Marker
                         key={index}
                         position={marker.position!}

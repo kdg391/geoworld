@@ -37,10 +37,10 @@ const RandomStreetView = () => {
                 lat: 0,
                 lng: 0,
             },
+            zoom: 1,
             disableDefaultUI: true,
             clickableIcons: false,
             streetViewControl: true,
-            zoom: 5,
         })
 
         const svPanorama = new google.maps.StreetViewPanorama(

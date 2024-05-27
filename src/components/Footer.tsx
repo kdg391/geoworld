@@ -2,7 +2,7 @@ import { lazy, Suspense } from 'react'
 import { useTranslation } from 'react-i18next'
 import { FaComputer, FaMoon, FaSun } from 'react-icons/fa6'
 import { Link } from 'react-router-dom'
-import Select from 'react-select'
+import Select, { GroupBase, type StylesConfig } from 'react-select'
 
 import useSettings from '../hooks/useSettings.js'
 import useTheme from '../hooks/useTheme.js'
@@ -60,6 +60,37 @@ const Footer = () => {
         },
     ]
 
+    const selectStyles: StylesConfig = {
+        control: (base) => ({
+            ...base,
+            backgroundColor: 'var(--bg-color)',
+        }),
+        indicatorSeparator: () => ({
+            display: 'none',
+        }),
+        menuList: (base) => ({
+            ...base,
+            backgroundColor: 'var(--selector-bg)',
+        }),
+        option: (base, props) => ({
+            ...base,
+            backgroundColor: props.isFocused
+                ? 'var(--selector-focused-bg)'
+                : props.isSelected
+                ? 'var(--selector-selected-bg)'
+                : 'var(--selector-bg)',
+            color: props.isFocused
+                ? 'var(--selector-focused-color)'
+                : props.isSelected
+                ? 'var(--selector-selected-color)'
+                : 'var(--selector-color)',
+        }),
+        singleValue: (base) => ({
+            ...base,
+            color: 'var(--color)',
+        }),
+    }
+
     return (
         <footer className={styles.footer}>
             <div>
@@ -67,10 +98,13 @@ const Footer = () => {
                 <div className={styles.settings}>
                     <div>
                         <div className={styles.settingTitle}>
-                            {t('footer.theme')}
+                            <label id="theme-aria-label" htmlFor="theme">
+                                {t('footer.theme')}
+                            </label>
                         </div>
                         <Select
-                            id="theme"
+                            aria-labelledby="theme-aria-label"
+                            inputId="theme"
                             className="theme-select"
                             classNamePrefix="theme-selector"
                             isSearchable={false}
@@ -93,19 +127,24 @@ const Footer = () => {
                             )}
                             menuPortalTarget={document.body}
                             menuPosition="fixed"
-                            styles={{
-                                indicatorSeparator: () => ({
-                                    display: 'none',
-                                }),
-                            }}
+                            styles={
+                                selectStyles as StylesConfig<
+                                    (typeof themeOptions)[number],
+                                    false,
+                                    GroupBase<(typeof themeOptions)[number]>
+                                >
+                            }
                         />
                     </div>
                     <div>
                         <div className={styles.settingTitle}>
-                            {t('footer.language')}
+                            <label id="language-aria-label" htmlFor="language">
+                                {t('footer.language')}
+                            </label>
                         </div>
                         <Select
-                            id="language"
+                            aria-labelledby="language-aria-label"
+                            inputId="language"
                             className="language-select react-select"
                             classNamePrefix="language-selector"
                             isSearchable={false}
@@ -144,10 +183,16 @@ const Footer = () => {
                     </div>
                     <div>
                         <div className={styles.settingTitle}>
-                            {t('footer.distanceUnit')}
+                            <label
+                                id="distance-unit-aria-label"
+                                htmlFor="distance-unit"
+                            >
+                                {t('footer.distanceUnit')}
+                            </label>
                         </div>
                         <Select
-                            id="distance-unit"
+                            aria-labelledby="distance-unit-aria-label"
+                            inputId="distance-unit"
                             className="distance-unit-select react-select"
                             classNamePrefix="distance-unit-selector"
                             isSearchable={false}
@@ -175,16 +220,16 @@ const Footer = () => {
                 </div>
             </div>
             <div className={styles.links}>
-                <h4>Links</h4>
+                <h4>{t('footer.links')}</h4>
                 <ul>
                     <li>
                         <Link to="/geography-guessing/location-picker">
-                            Location Picker
+                            {t('footer.linkTexts.locationPicker')}
                         </Link>
                     </li>
                     <li>
                         <Link to="/geography-guessing/random-streetview">
-                            {t('footer.randomStreetView')}
+                            {t('footer.linkTexts.randomStreetView')}
                         </Link>
                     </li>
                 </ul>

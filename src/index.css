@@ -39,6 +39,13 @@
     --scrollbar-thumb-color-hover: #adadad;
     --scrollbar-thumb-color-active: #9b9b9b;
     --scrollbar-track-color: #ddd;
+
+    --selector-focused-bg: #9bdcff;
+    --selector-focused-color: #fff;
+    --selector-selected-bg: #adadad;
+    --selector-selected-color: #fff;
+    --selector-bg: #f1f1f1;
+    --selector-color: #000;
 }
 
 [data-theme='dark'] {
@@ -53,16 +60,16 @@
     --footer-bg: #232323;
     --footer-border: rgba(255, 255, 255, 0.1);
 
-    --map-card-bg: #181818;
+    --map-card-bg: #1e1e1e;
     --map-card-border: rgba(255, 255, 255, 0.05);
 
-    --map-settings-modal-bg: rgba(0, 0, 0, 0.8);
-    --map-settings-modal-wrapper-bg: rgb(16, 16, 16);
+    --map-settings-modal-bg: rgba(0, 0, 0, 0.75);
+    --map-settings-modal-wrapper-bg: rgb(19, 19, 19);
 
     --round-status-bg: #333;
 
-    --modal-container-bg: rgba(0, 0, 0, 0.7);
-    --modal-wrapper-bg: #393939;
+    --modal-container-bg: rgba(0, 0, 0, 0.75);
+    --modal-wrapper-bg: #272727;
 
     --range-track-bg: #fff;
 
@@ -70,6 +77,13 @@
     --scrollbar-thumb-color-hover: #323232;
     --scrollbar-thumb-color-active: #414141;
     --scrollbar-track-color: #191919;
+
+    --selector-focused-bg: #50a1ff;
+    --selector-focused-color: #fff;
+    --selector-selected-bg: #6e6e6e;
+    --selector-selected-color: #000;
+    --selector-bg: #333;
+    --selector-color: #fff;
 }
 
 @supports (scrollbar-width: thin) and (not selector(::-webkit-scrollbar)) {

@@ -3,8 +3,6 @@ import twemoji from 'twemoji'
 
 interface Props {
     emoji: string
-    width?: number
-    height?: number
 }
 
 const Twemoji: React.FC<

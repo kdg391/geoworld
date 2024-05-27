@@ -20,9 +20,11 @@ const MapCard: React.FC<GameCardProps> = ({ gameData, onPlayBtnClick }) => {
         <div className={styles.mapCard}>
             <div
                 className={styles.mapThumbnail}
-                style={{
-                    backgroundImage: `linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75)), url('/geography-guessing/assets/images/${gameData.code}.avif')`,
-                }}
+                style={
+                    {
+                        '--image-url': `url('/geography-guessing/assets/images/${gameData.code}.avif')`,
+                    } as React.CSSProperties
+                }
             >
                 <div className={styles.mapNameWrapper}>
                     <Suspense>

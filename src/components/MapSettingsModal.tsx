@@ -14,7 +14,7 @@ import homeStyles from '../routes/Home.module.css'
 const Twemoji = lazy(() => import('./Twemoji.js'))
 
 interface Props {
-    gameData: GameData | null
+    gameData: GameData
     setShowModal: React.Dispatch<React.SetStateAction<boolean>>
 }
 
@@ -25,36 +25,36 @@ const MapSettingsModal: React.FC<Props> = ({ gameData, setShowModal }) => {
     const [canMove, setCanMove] = useState(true)
     const [canPan, setCanPan] = useState(true)
     const [canZoom, setCanZoom] = useState(true)
-    const [rounds, setRounds] = useState(DEFAULT_MAX_ROUNDS)
+    const [rounds, setRounds] = useState(
+        gameData.locations.length > DEFAULT_MAX_ROUNDS
+            ? DEFAULT_MAX_ROUNDS
+            : gameData.locations.length,
+    )
     const [timeLimit, setTimeLimit] = useState<number | null>(null)
 
     return (
         <div className={styles.mapSettingsModal}>
             <div className={styles.mapSettingsModalWrapper}>
                 <h3 className={styles.title}>
-                    {gameData?.code && (
-                        <>
-                            <Suspense>
-                                <Twemoji
-                                    emoji={
-                                        gameData.code === 'worldwide'
-                                            ? '🌐'
-                                            : FLAG_ENOJIS[gameData.code]
-                                    }
-                                    width={32}
-                                    height={32}
-                                    alt={
-                                        gameData.code === 'worldwide'
-                                            ? t('worldwide')
-                                            : t(`countries.${gameData.code}`)
-                                    }
-                                />
-                            </Suspense>
-                            {gameData.code === 'worldwide'
-                                ? t('worldwide')
-                                : t(`countries.${gameData.code}`)}
-                        </>
-                    )}
+                    <Suspense>
+                        <Twemoji
+                            emoji={
+                                gameData.code === 'worldwide'
+                                    ? '🌐'
+                                    : FLAG_ENOJIS[gameData.code]
+                            }
+                            width={32}
+                            height={32}
+                            alt={
+                                gameData.code === 'worldwide'
+                                    ? t('worldwide')
+                                    : t(`countries.${gameData.code}`)
+                            }
+                        />
+                    </Suspense>
+                    {gameData.code === 'worldwide'
+                        ? t('worldwide')
+                        : t(`countries.${gameData.code}`)}
                 </h3>
                 <div className={styles.setting}>
                     <label htmlFor="move">{t('home.move')}</label>
@@ -106,31 +106,30 @@ const MapSettingsModal: React.FC<Props> = ({ gameData, setShowModal }) => {
                 </div>
                 <div>
                     <label htmlFor="rounds">{t('home.rounds')}</label>
-                    {gameData && (
-                        <input
-                            type="number"
-                            id="rounds"
-                            min={1}
-                            max={
-                                gameData.locations.length > 10
-                                    ? 10
-                                    : gameData.locations.length
-                            }
-                            pattern="[0-9]*"
-                            value={rounds}
-                            onChange={(event) => {
-                                const value = Math.max(
-                                    parseInt(event.target.min),
-                                    Math.min(
-                                        parseInt(event.target.max),
-                                        parseInt(event.target.value),
-                                    ),
-                                )
 
-                                setRounds(value)
-                            }}
-                        />
-                    )}
+                    <input
+                        type="number"
+                        id="rounds"
+                        min={1}
+                        max={
+                            gameData.locations.length > 10
+                                ? 10
+                                : gameData.locations.length
+                        }
+                        pattern="[0-9]*"
+                        value={rounds}
+                        onChange={(event) => {
+                            const value = Math.max(
+                                parseInt(event.target.min),
+                                Math.min(
+                                    parseInt(event.target.max),
+                                    parseInt(event.target.value),
+                                ),
+                            )
+
+                            setRounds(value)
+                        }}
+                    />
                 </div>
                 <div>
                     <label htmlFor="time-limit">{t('home.timeLimit')}</label>
@@ -176,7 +175,7 @@ const MapSettingsModal: React.FC<Props> = ({ gameData, setShowModal }) => {
                         className={homeStyles.playBtn}
                         onClick={() => {
                             navigate(
-                                `/geography-guessing/game/${gameData?.code}`,
+                                `/geography-guessing/game/${gameData.code}`,
                                 {
                                     state: {
                                         canMove,

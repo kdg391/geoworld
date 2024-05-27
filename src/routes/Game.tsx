@@ -174,7 +174,7 @@ const Game = () => {
                                         totalScore: totalScore.toLocaleString(),
                                     })}
                                 </h2>
-                                <div>
+                                <div className="result-actions">
                                     <button
                                         className={styles.replayBtn}
                                         onClick={() => {
@@ -256,7 +256,7 @@ const Game = () => {
                         finishRound()
                     }}
                 >
-                    Guess
+                    {t('game.guess')}
                 </button>
             </div>
 

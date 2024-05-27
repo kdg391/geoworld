@@ -8,12 +8,17 @@ const NotFound = () => {
 
     return (
         <main className={styles.main}>
-            <h1>404 Not Found</h1>
-            <div>
-                <Link to="/geography-guessing/" className={styles.backToHome}>
-                    {t('notFound.backToHome')}
-                </Link>
-            </div>
+            <section>
+                <h1>404 Not Found</h1>
+                <div>
+                    <Link
+                        to="/geography-guessing/"
+                        className={styles.backToHome}
+                    >
+                        {t('notFound.backToHome')}
+                    </Link>
+                </div>
+            </section>
         </main>
     )
 }

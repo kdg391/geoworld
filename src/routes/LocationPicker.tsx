@@ -26,10 +26,10 @@ const LocationPicker = () => {
 
         const map = new google.maps.Map(mapElRef.current!, {
             center: {
-                lat: 36.629169,
-                lng: 127.939914,
+                lat: 0,
+                lng: 0,
             },
-            zoom: 8,
+            zoom: 1,
             zoomControl: true,
             streetViewControl: true,
             scrollwheel: true,
