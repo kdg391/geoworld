@@ -13,7 +13,7 @@ A geography guessing game inspired by GeoGuessr, [GeoHub](https://github.com/ben
 
 ### Fonts
 
-- [Pretendard][https://github.com/orioncactus/pretendard]
+- [Pretendard](https://github.com/orioncactus/pretendard)
 
 ### Images
 
