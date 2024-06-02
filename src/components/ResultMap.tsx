@@ -79,12 +79,14 @@ const ResultMap: React.FC<
 
         if (gameFinished) {
             for (let i = 0; i < guessedLocations.length; i++) {
+                const pinEl = new google.maps.marker.PinElement({
+                    background: '#04d61d',
+                })
+
                 const actual = new google.maps.marker.AdvancedMarkerElement({
                     map: resultMapRef.current,
                     position: actualLocations[i],
-                    content: new google.maps.marker.PinElement({
-                        background: '#04d61d',
-                    }).element,
+                    content: pinEl.element,
                 })
 
                 const guessed = new google.maps.marker.AdvancedMarkerElement({

@@ -6,7 +6,7 @@ import { formatTimeLeft } from '../utils/index.js'
 import styles from './RoundStatus.module.css'
 
 interface Props {
-    finishTimeOut: () => void
+    finishRound: (timedOut: boolean) => void
     mapName: string
     round: number
     rounds: number
@@ -15,7 +15,7 @@ interface Props {
 }
 
 const RoundStatus: React.FC<Props> = ({
-    finishTimeOut,
+    finishRound,
     mapName,
     round,
     rounds,
@@ -46,7 +46,7 @@ const RoundStatus: React.FC<Props> = ({
         if (timeLeft <= 0) {
             clearInterval(interval)
 
-            finishTimeOut()
+            finishRound(true)
         }
 
         return () => {
@@ -64,17 +64,19 @@ const RoundStatus: React.FC<Props> = ({
 
             <div className={styles.roundStatus}>
                 <div>
-                    <span>{t('game.roundStatus.map')}</span>
+                    <span className="label">{t('game.roundStatus.map')}</span>
                     <span>{mapName}</span>
                 </div>
                 <div>
-                    <span>{t('game.roundStatus.round')}</span>
+                    <span className="label">
+                        {t('game.roundStatus.rounds')}
+                    </span>
                     <span>
                         {round + 1} / {rounds}
                     </span>
                 </div>
                 <div>
-                    <span>{t('game.roundStatus.score')}</span>
+                    <span className="label">{t('game.roundStatus.score')}</span>
                     <span>{totalScore.toLocaleString()}</span>
                 </div>
             </div>

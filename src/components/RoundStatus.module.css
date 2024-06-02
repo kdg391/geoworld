@@ -13,16 +13,23 @@
     position: absolute;
     top: 1rem;
     right: 1rem;
-    padding: 8px 16px;
+    padding: 6px 12px;
     gap: 16px;
     display: flex;
     background-color: var(--round-status-bg);
     font-size: 1rem;
-}
+    border-radius: 4px;
 
-.roundStatus > div {
-    display: flex;
-    flex-direction: column;
+    & > div {
+        display: flex;
+        flex-direction: column;
+        padding: 4px 8px;
+    }
+
+    & :global(.label) {
+        font-size: 0.9rem;
+        margin-bottom: 4px;
+    }
 }
 
 .timeLeft {

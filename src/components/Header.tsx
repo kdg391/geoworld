@@ -37,11 +37,11 @@ const Header = () => {
                         <a
                             href="https://github.com/kdg391/geography-guessing"
                             target="_blank"
-                            rel="noreferrer"
+                            rel="noreferrer noopener"
                             className={styles.anchorCenter}
                             title="GitHub"
                         >
-                            <FaGithub />
+                            <FaGithub size={18} />
                         </a>
                     </li>
                 </ul>

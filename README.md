@@ -7,12 +7,19 @@ A geography guessing game inspired by GeoGuessr, [GeoHub](https://github.com/ben
 - <https://github.com/benlikescode/GeoHub>
 - <https://github.com/GeoGuess/GeoGuess>
 - <https://github.com/ErickKS/vite-react-router>
+- <https://gist.github.com/chriseugenerodriguez/659a84b989b3f35cb034a9f9ee1a914f>
 
-## Image Sources
+## Sources
+
+### Fonts
+
+- [Pretendard][https://github.com/orioncactus/pretendard]
+
+### Images
 
 - Icon: <https://www.flaticon.com/free-icon/map_1865269?term=map&page=1&position=33&origin=search&related_id=1865269>
 
-### Maps
+#### Map Thumbnails
 
 - Worldwide: <https://pixabay.com/photos/eyeglasses-world-map-map-8227429/>
 - Australia: <https://pixabay.com/photos/sydney-opera-house-sydney-354375/>

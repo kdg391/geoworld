@@ -19,29 +19,63 @@
     display: flex;
     flex-direction: column;
     background-color: var(--map-settings-modal-wrapper-bg);
-    padding: 1rem 1.5rem;
 }
 
-.mapSettingsModalWrapper p {
-    margin: 0.75rem 0;
-}
-
-.title {
+.modalHeader {
     display: flex;
     align-items: center;
-    gap: 8px;
-    font-size: 1.25rem;
-    margin: 0.75rem 0;
+    justify-content: space-between;
+    background-color: var(--map-settings-modal-wrapper-header-bg);
+    padding: 0.5rem 1.5rem;
+}
+
+.modalHeader h3 {
+    font-size: 1.2rem;
+    margin: 0.25rem 0;
+}
+
+.modalHeader button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    padding: 0;
+}
+
+.mapInfo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.mapIcon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.mapDetails h4,
+.mapDetails p {
+    margin: 0.25rem 0;
+}
+
+.modalContent {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--map-settings-modal-wrapper-content-bg);
+    padding: 1rem 1.5rem;
 }
 
 .setting {
     display: flex;
 }
 
-.buttons {
+.modalActions {
     display: flex;
     justify-content: flex-end;
     gap: 12px;
+    background-color: var(--map-settings-modal-wrapper-actions-bg);
+    padding: 1rem 1.5rem;
 }
 
 .checkBox input[type='checkbox'] {
@@ -145,4 +179,22 @@
 
 .timeLimitRange:focus::-moz-range-track {
     background-color: var(--range-track-bg);
+}
+
+.cancelBtn {
+    padding: 8px 16px;
+    border-radius: 8px;
+    background-color: var(--secondary-color);
+    color: #fff;
+}
+
+.playBtn {
+    background-color: var(--primary-color);
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 8px;
+
+    &:disabled {
+        background-color: var(--secondary-color);
+    }
 }

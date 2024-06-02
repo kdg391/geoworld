@@ -84,6 +84,14 @@ const Footer = () => {
                 : props.isSelected
                 ? 'var(--selector-selected-color)'
                 : 'var(--selector-color)',
+            ':active': {
+                backgroundColor: 'var(--selector-active-bg)',
+                color: 'var(--selector-active-color)',
+            },
+            ':hover': {
+                backgroundColor: 'var(--selector-hovered-bg)',
+                color: 'var(--selector-hovered-color)',
+            },
         }),
         singleValue: (base) => ({
             ...base,
@@ -119,7 +127,7 @@ const Footer = () => {
                             }}
                             formatOptionLabel={(opt) => (
                                 <div className={styles.optionLabel}>
-                                    <span className="label-img">
+                                    <span className={styles.optionLabelImg}>
                                         {opt.icon}
                                     </span>
                                     <span>{opt.label}</span>
@@ -159,7 +167,7 @@ const Footer = () => {
                             }}
                             formatOptionLabel={(opt) => (
                                 <div className={styles.optionLabel}>
-                                    <span className="label-img">
+                                    <span className={styles.optionLabelImg}>
                                         <Suspense>
                                             <Twemoji
                                                 emoji={opt.emoji}
@@ -174,11 +182,13 @@ const Footer = () => {
                             )}
                             menuPortalTarget={document.body}
                             menuPosition="fixed"
-                            styles={{
-                                indicatorSeparator: () => ({
-                                    display: 'none',
-                                }),
-                            }}
+                            styles={
+                                selectStyles as StylesConfig<
+                                    (typeof languageOptions)[number],
+                                    false,
+                                    GroupBase<(typeof languageOptions)[number]>
+                                >
+                            }
                         />
                     </div>
                     <div>
@@ -210,11 +220,15 @@ const Footer = () => {
                             }}
                             menuPortalTarget={document.body}
                             menuPosition="fixed"
-                            styles={{
-                                indicatorSeparator: () => ({
-                                    display: 'none',
-                                }),
-                            }}
+                            styles={
+                                selectStyles as StylesConfig<
+                                    (typeof distanceUnitOptions)[number],
+                                    false,
+                                    GroupBase<
+                                        (typeof distanceUnitOptions)[number]
+                                    >
+                                >
+                            }
                         />
                     </div>
                 </div>

@@ -1,12 +1,12 @@
-:global #hero {
-    padding: 16px 24px;
+:global(#hero) {
+    padding: 1rem 1.75rem;
 }
 
-:global #official-maps {
+:global(#official-maps) {
     width: 100%;
     display: flex;
-    padding: 16px 24px;
-    margin-bottom: 8px;
+    padding: 1rem 1.75rem;
+    margin-bottom: 12px;
 }
 
 .container {
@@ -39,24 +39,4 @@
     .wrapper {
         grid-template-columns: 1fr;
     }
-}
-
-.cancelBtn,
-.playBtn {
-    padding: 8px 16px;
-    border-radius: 8px;
-}
-
-.cancelBtn {
-    background-color: var(--secondary-color);
-    color: #fff;
-}
-
-.playBtn {
-    background-color: var(--primary-color);
-    color: #fff;
-}
-
-.playBtn:disabled {
-    background-color: var(--secondary-color);
 }

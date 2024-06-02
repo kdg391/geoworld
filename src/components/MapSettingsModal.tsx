@@ -1,15 +1,13 @@
 import React, { lazy, Suspense, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { FaX } from 'react-icons/fa6'
 import { useNavigate } from 'react-router-dom'
 
-import {
-    DEFAULT_MAX_ROUNDS,
-    FLAG_ENOJIS,
-    type GameData,
-} from '../utils/constants/index.js'
+import { DEFAULT_MAX_ROUNDS, FLAG_ENOJIS } from '../utils/constants/index.js'
 
 import styles from './MapSettingsModal.module.css'
-import homeStyles from '../routes/Home.module.css'
+
+import type { GameData } from '../types/index.js'
 
 const Twemoji = lazy(() => import('./Twemoji.js'))
 
@@ -35,136 +33,175 @@ const MapSettingsModal: React.FC<Props> = ({ gameData, setShowModal }) => {
     return (
         <div className={styles.mapSettingsModal}>
             <div className={styles.mapSettingsModalWrapper}>
-                <h3 className={styles.title}>
-                    <Suspense>
-                        <Twemoji
-                            emoji={
-                                gameData.code === 'worldwide'
-                                    ? '🌐'
-                                    : FLAG_ENOJIS[gameData.code]
-                            }
-                            width={32}
-                            height={32}
-                            alt={
-                                gameData.code === 'worldwide'
-                                    ? t('worldwide')
-                                    : t(`countries.${gameData.code}`)
-                            }
-                        />
-                    </Suspense>
-                    {gameData.code === 'worldwide'
-                        ? t('worldwide')
-                        : t(`countries.${gameData.code}`)}
-                </h3>
-                <div className={styles.setting}>
-                    <label htmlFor="move">{t('home.move')}</label>
-                    <div className={styles.checkBox}>
-                        <input
-                            type="checkbox"
-                            id="move"
-                            defaultChecked={canMove}
-                            onChange={(event) => {
-                                setCanMove(event.target.checked)
-                            }}
-                        />
-                        <label htmlFor="move">
-                            <span></span>
-                        </label>
-                    </div>
-                </div>
-                <div className={styles.setting}>
-                    <label htmlFor="pan">{t('home.pan')}</label>
-                    <div className={styles.checkBox}>
-                        <input
-                            type="checkbox"
-                            id="pan"
-                            defaultChecked={canPan}
-                            onChange={(event) => {
-                                setCanPan(event.target.checked)
-                            }}
-                        />
-                        <label htmlFor="pan">
-                            <span></span>
-                        </label>
-                    </div>
-                </div>
-                <div className={styles.setting}>
-                    <label htmlFor="zoom">{t('home.zoom')}</label>
-                    <div className={styles.checkBox}>
-                        <input
-                            type="checkbox"
-                            id="zoom"
-                            defaultChecked={canZoom}
-                            onChange={(event) => {
-                                setCanZoom(event.target.checked)
-                            }}
-                        />
-                        <label htmlFor="zoom">
-                            <span></span>
-                        </label>
-                    </div>
-                </div>
-                <div>
-                    <label htmlFor="rounds">{t('home.rounds')}</label>
-
-                    <input
-                        type="number"
-                        id="rounds"
-                        min={1}
-                        max={
-                            gameData.locations.length > 10
-                                ? 10
-                                : gameData.locations.length
-                        }
-                        pattern="[0-9]*"
-                        value={rounds}
-                        onChange={(event) => {
-                            const value = Math.max(
-                                parseInt(event.target.min),
-                                Math.min(
-                                    parseInt(event.target.max),
-                                    parseInt(event.target.value),
-                                ),
-                            )
-
-                            setRounds(value)
-                        }}
-                    />
-                </div>
-                <div>
-                    <label htmlFor="time-limit">{t('home.timeLimit')}</label>
-                </div>
-                <div>
-                    (
-                    {timeLimit === null
-                        ? t('home.noLimit')
-                        : t('home.timeLimitFormat', {
-                              minutes: Math.floor(timeLimit / 60),
-                              seconds: timeLimit % 60,
-                          })}
-                    )
-                </div>
-                <div>
-                    <input
-                        type="range"
-                        id="time-limit"
-                        className={styles.timeLimitRange}
-                        min={0}
-                        max={600}
-                        step={30}
-                        defaultValue={timeLimit === null ? 0 : timeLimit}
-                        onChange={(event) => {
-                            setTimeLimit(
-                                parseInt(event.target.value) === 0
-                                    ? null
-                                    : parseInt(event.target.value),
-                            )
-                        }}
-                    />
-                </div>
-                <div className={styles.buttons}>
+                <div className={styles.modalHeader}>
+                    <h3>Map Settings</h3>
                     <button
-                        className={homeStyles.cancelBtn}
+                        aria-label="Close"
+                        onClick={() => {
+                            setShowModal(false)
+                        }}
+                    >
+                        <FaX size={16} />
+                    </button>
+                </div>
+                <div className={styles.modalContent}>
+                    <div className={styles.mapInfo}>
+                        <div className={styles.mapIcon}>
+                            <Suspense>
+                                <Twemoji
+                                    emoji={
+                                        gameData.code === 'worldwide'
+                                            ? '🌐'
+                                            : FLAG_ENOJIS[gameData.code]
+                                    }
+                                    width={24}
+                                    height={24}
+                                    alt={
+                                        gameData.code === 'worldwide'
+                                            ? t('worldwide')
+                                            : t(`countries.${gameData.code}`)
+                                    }
+                                />
+                            </Suspense>
+                        </div>
+                        <div className={styles.mapDetails}>
+                            <h4>
+                                {gameData.code === 'worldwide'
+                                    ? t('worldwide')
+                                    : t(`countries.${gameData.code}`)}
+                            </h4>
+                            <p>Lorem ipsum dolor sit amet consectetur.</p>
+                        </div>
+                    </div>
+                    <div className={styles.setting}>
+                        <label htmlFor="move">{t('home.move')}</label>
+                        <div className={styles.checkBox}>
+                            <input
+                                type="checkbox"
+                                id="move"
+                                defaultChecked={canMove}
+                                onChange={(event) => {
+                                    setCanMove(event.target.checked)
+                                }}
+                            />
+                            <label htmlFor="move">
+                                <span></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div className={styles.setting}>
+                        <label htmlFor="pan">{t('home.pan')}</label>
+                        <div className={styles.checkBox}>
+                            <input
+                                type="checkbox"
+                                id="pan"
+                                defaultChecked={canPan}
+                                onChange={(event) => {
+                                    setCanPan(event.target.checked)
+                                }}
+                            />
+                            <label htmlFor="pan">
+                                <span></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div className={styles.setting}>
+                        <label htmlFor="zoom">{t('home.zoom')}</label>
+                        <div className={styles.checkBox}>
+                            <input
+                                type="checkbox"
+                                id="zoom"
+                                defaultChecked={canZoom}
+                                onChange={(event) => {
+                                    setCanZoom(event.target.checked)
+                                }}
+                            />
+                            <label htmlFor="zoom">
+                                <span></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div>
+                        <label htmlFor="rounds">{t('home.rounds')}</label>
+
+                        <input
+                            type="number"
+                            id="rounds"
+                            min={1}
+                            max={
+                                gameData.locations.length > 10
+                                    ? 10
+                                    : gameData.locations.length
+                            }
+                            pattern="[0-9]*"
+                            inputMode="numeric"
+                            value={rounds}
+                            onKeyDown={(event) => {
+                                if (event.code === 'Minus') {
+                                    event.preventDefault()
+                                }
+                            }}
+                            onChange={(event) => {
+                                let value = event.target.value
+
+                                if (isNaN(parseInt(value))) return
+
+                                if (value !== '0' && !value.includes('.')) {
+                                    value = value.replace(/^0+/, '')
+                                }
+
+                                const _rounds = Math.max(
+                                    parseInt(event.target.min),
+                                    Math.min(
+                                        parseInt(event.target.max),
+                                        parseInt(value),
+                                    ),
+                                )
+
+                                setRounds(_rounds)
+                            }}
+                        />
+                    </div>
+                    <div>
+                        <div>
+                            <label htmlFor="time-limit">
+                                {t('home.timeLimit')}
+                            </label>
+                            <br />(
+                            {timeLimit === null
+                                ? t('home.noLimit')
+                                : t('home.timeLimitFormat', {
+                                      minutes: Math.floor(timeLimit / 60),
+                                      seconds: timeLimit % 60,
+                                  })}
+                            )
+                        </div>
+                        <div>
+                            <input
+                                type="range"
+                                id="time-limit"
+                                className={styles.timeLimitRange}
+                                min={0}
+                                max={600}
+                                step={30}
+                                defaultValue={
+                                    timeLimit === null ? 0 : timeLimit
+                                }
+                                onChange={(event) => {
+                                    setTimeLimit(
+                                        parseInt(event.target.value) === 0
+                                            ? null
+                                            : parseInt(event.target.value),
+                                    )
+                                }}
+                            />
+                        </div>
+                    </div>
+                </div>
+                <div className={styles.modalActions}>
+                    <button
+                        className={styles.cancelBtn}
+                        aria-label={t('home.cancel')}
                         onClick={() => {
                             setShowModal(false)
                         }}
@@ -172,7 +209,8 @@ const MapSettingsModal: React.FC<Props> = ({ gameData, setShowModal }) => {
                         {t('home.cancel')}
                     </button>
                     <button
-                        className={homeStyles.playBtn}
+                        className={styles.playBtn}
+                        aria-label={t('home.play')}
                         onClick={() => {
                             navigate(
                                 `/geography-guessing/game/${gameData.code}`,

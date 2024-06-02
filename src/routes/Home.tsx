@@ -1,7 +1,9 @@
-import { lazy, Suspense, useState } from 'react'
+import { lazy, Suspense, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { OFFICIAL_MAPS, type GameData } from '../utils/constants/index.js'
+import { OFFICIAL_MAPS } from '../utils/constants/index.js'
+
+import type { GameData } from '../types/index.js'
 
 import styles from './Home.module.css'
 
@@ -16,6 +18,11 @@ const Home = () => {
     const [showModal, setShowModal] = useState(false)
 
     const [gameData, setGameData] = useState<GameData | null>(null)
+
+    useEffect(() => {
+        if (showModal) document.body.style.setProperty('overflow-y', 'hidden')
+        else document.body.style.removeProperty('overflow-y')
+    }, [showModal])
 
     return (
         <main>

@@ -5,15 +5,18 @@ import { Navigate, useLocation, useNavigate, useParams } from 'react-router-dom'
 
 import useSettings from '../hooks/useSettings.js'
 
-import type { CountryCodes } from '../utils/constants/countryBounds.js'
 import { OFFICIAL_MAPS } from '../utils/constants/index.js'
 import {
     calculateDistance,
     calculateRoundScore,
+    calculateScoreFactor,
     shuffleArray,
 } from '../utils/index.js'
 
 import styles from './Game.module.css'
+import COUNTRY_BOUNDS, {
+    type CountryCodes,
+} from '../utils/constants/countryBounds.js'
 
 const GuessMap = lazy(() => import('../components/GuessMap.js'))
 const ResultMap = lazy(() => import('../components/ResultMap.js'))
@@ -45,6 +48,7 @@ const Game = () => {
     const [round, setRound] = useState(0)
     const [roundFinished, setRoundFinished] = useState(false)
     const [gameFinished, setGameFinished] = useState(false)
+    const [timedOut, setTimedOut] = useState(false)
 
     const [totalScore, setTotalScore] = useState(0)
     const [roundScore, setRoundScore] = useState(0)
@@ -82,13 +86,9 @@ const Game = () => {
         const locations = shuffled.slice(0, state.rounds)
 
         setActualLocations(locations)
-
-        if (import.meta.env.DEV) {
-            console.log(locations)
-        }
     }
 
-    const finishRound = () => {
+    const finishRound = (timedOut: boolean) => {
         if (markerPosition) {
             const _distance = calculateDistance(
                 markerPosition,
@@ -96,34 +96,27 @@ const Game = () => {
                 settingsContext?.distanceUnit ?? 'metric',
             )
 
-            const _roundScore = calculateRoundScore(_distance, data.scoreFactor)
+            const scoreFactor =
+                (params.code as CountryCodes | 'worldwide') === 'worldwide'
+                    ? 2000
+                    : calculateScoreFactor(
+                          COUNTRY_BOUNDS[params.code as CountryCodes],
+                      )
+
+            const _roundScore = calculateRoundScore(_distance, scoreFactor)
 
             setDistance(_distance)
             setRoundScore(_roundScore)
             setTotalScore((p) => p + _roundScore)
             setGuessedLocations((locs) => [...locs, markerPosition])
 
+            if (!timedOut) setRoundFinished(true)
+        }
+
+        if (timedOut) {
+            setTimedOut(true)
             setRoundFinished(true)
         }
-    }
-
-    const finishTimeOut = () => {
-        if (markerPosition) {
-            const _distance = calculateDistance(
-                markerPosition,
-                actualLocations[round],
-                settingsContext?.distanceUnit ?? 'metric',
-            )
-
-            const _roundScore = calculateRoundScore(_distance, data.scoreFactor)
-
-            setDistance(_distance)
-            setRoundScore(_roundScore)
-            setTotalScore((s) => s + _roundScore)
-            setGuessedLocations((locs) => [...locs, markerPosition])
-        }
-
-        setRoundFinished(true)
     }
 
     useEffect(() => {
@@ -134,7 +127,7 @@ const Game = () => {
         <main>
             <Suspense>
                 <RoundStatus
-                    finishTimeOut={finishTimeOut}
+                    finishRound={finishRound}
                     mapName={
                         data.code === 'worldwide'
                             ? t('worldwide')
@@ -166,6 +159,8 @@ const Game = () => {
                         />
                     </Suspense>
 
+                    {timedOut && <div>You've timed out!</div>}
+
                     <div className={styles.resultInfo}>
                         {gameFinished ? (
                             <>
@@ -174,7 +169,7 @@ const Game = () => {
                                         totalScore: totalScore.toLocaleString(),
                                     })}
                                 </h2>
-                                <div className="result-actions">
+                                <div className={styles.resultActions}>
                                     <button
                                         className={styles.replayBtn}
                                         onClick={() => {
@@ -236,29 +231,16 @@ const Game = () => {
                 </div>
             </div>
 
-            <div className={styles.guessMapContainer}>
-                <Suspense>
-                    <GuessMap
-                        googleApiLoaded={googleApiLoaded}
-                        code={params.code as CountryCodes}
-                        data={data}
-                        markerPosition={markerPosition}
-                        setMarkerPosition={setMarkerPosition}
-                        round={round}
-                        className={styles.guessMap}
-                    />
-                </Suspense>
-
-                <button
-                    className={styles.guessBtn}
-                    disabled={markerPosition === null}
-                    onClick={() => {
-                        finishRound()
-                    }}
-                >
-                    {t('game.guess')}
-                </button>
-            </div>
+            <Suspense>
+                <GuessMap
+                    code={params.code as CountryCodes}
+                    finishRound={finishRound}
+                    googleApiLoaded={googleApiLoaded}
+                    markerPosition={markerPosition}
+                    setMarkerPosition={setMarkerPosition}
+                    round={round}
+                />
+            </Suspense>
 
             <Suspense>
                 <StreetView

@@ -1,10 +1,11 @@
 import React, { lazy, Suspense } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { FLAG_ENOJIS, type GameData } from '../utils/constants/index.js'
+import { FLAG_ENOJIS } from '../utils/constants/index.js'
+
+import type { GameData } from '../types/index.js'
 
 import styles from './MapCard.module.css'
-import homeStyles from '../routes/Home.module.css'
 
 const Twemoji = lazy(() => import('./Twemoji.js'))
 
@@ -57,7 +58,8 @@ const MapCard: React.FC<GameCardProps> = ({ gameData, onPlayBtnClick }) => {
                     })}
                 </span>
                 <button
-                    className={homeStyles.playBtn}
+                    className={styles.playBtn}
+                    aria-label={t('home.play')}
                     disabled={gameData.locations.length === 0}
                     onClick={onPlayBtnClick}
                 >

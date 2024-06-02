@@ -1,13 +1,8 @@
+import type { GameData } from '../../types/index.js'
+
 export const DEFAULT_MAX_ROUNDS = 5
 
-export interface GameData {
-    code: Codes | 'worldwide'
-    scoreFactor?: number
-    defaultOptions?: google.maps.MapOptions
-    locations: google.maps.LatLngLiteral[]
-}
-
-export const DEFAULT_OPTIONS: google.maps.MapOptions = {
+export const DEFAULT_MAP_OPTIONS: google.maps.MapOptions = {
     center: {
         lat: 0,
         lng: 0,
@@ -82,7 +77,6 @@ export const OFFICIAL_MAPS: GameData[] = [
     },
     {
         code: 'kr',
-        scoreFactor: 72,
         locations: [
             {
                 lat: 37.575720018048926,
@@ -336,7 +330,6 @@ export const OFFICIAL_MAPS: GameData[] = [
     },
     {
         code: 'us',
-        scoreFactor: 918,
         locations: [
             {
                 lat: 40.68863255835635,
@@ -380,7 +373,7 @@ export const OFFICIAL_MAPS: GameData[] = [
 
 export const WORLD_GAME: GameData = {
     code: 'worldwide',
-    locations: OFFICIAL_MAPS.map((r) => r.locations).flat(1),
+    locations: OFFICIAL_MAPS.map((m) => m.locations).flat(1),
 }
 
 OFFICIAL_MAPS.unshift(WORLD_GAME)

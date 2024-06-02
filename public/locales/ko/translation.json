@@ -20,7 +20,7 @@
         },
         "roundStatus": {
             "map": "맵",
-            "round": "라운드",
+            "rounds": "라운드",
             "score": "점수"
         },
         "roundPoints": "+{roundScore} 포인트",

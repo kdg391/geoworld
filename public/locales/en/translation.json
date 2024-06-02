@@ -20,7 +20,7 @@
         },
         "roundStatus": {
             "map": "Map",
-            "round": "Round",
+            "rounds": "Rounds",
             "score": "Score"
         },
         "roundPoints": "+{roundScore} Points",

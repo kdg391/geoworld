@@ -1,6 +1,6 @@
 import { createContext } from 'react'
 
-import type { DistanceUnit } from '../types//index.js'
+import type { DistanceUnit } from '../types/index.js'
 
 interface ContextValue {
     distanceUnit: DistanceUnit

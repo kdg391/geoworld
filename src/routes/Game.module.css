@@ -1,4 +1,4 @@
-:global main {
+:global(main) {
     width: 100%;
     height: 100%;
 }
@@ -43,35 +43,20 @@
     margin: 12px 0;
 }
 
-.resultInfo :global .result-actions {
+.resultActions {
     display: flex;
     gap: 8px;
 }
 
-.guessMapContainer {
-    position: absolute;
-    right: 24px;
-    bottom: 24px;
-    z-index: 4;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    width: 32dvw;
-    height: 36dvh;
-}
-
-.guessMap {
-    width: 100%;
-    height: 100%;
-}
-
-.guessBtn,
 .nextBtn,
 .replayBtn {
     background-color: var(--primary-color);
 }
 
-.guessBtn,
+.exitBtn {
+    background-color: var(--secondary-color);
+}
+
 .nextBtn,
 .replayBtn,
 .exitBtn {
@@ -79,9 +64,4 @@
     padding: 12px 24px;
     color: #fff;
     border-radius: 8px;
-}
-
-.exitBtn,
-.guessBtn:disabled {
-    background-color: var(--secondary-color);
 }

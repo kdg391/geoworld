@@ -1,18 +1,24 @@
-import React, { lazy, Suspense, useEffect, useRef } from 'react'
+import React, { lazy, Suspense, useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { FaMap, FaX } from 'react-icons/fa6'
 
 import COUNTRY_BOUNDS, {
     type CountryCodes,
 } from '../utils/constants/countryBounds.js'
-import { DEFAULT_OPTIONS, type GameData } from '../utils/constants/index.js'
+import { DEFAULT_MAP_OPTIONS } from '../utils/constants/index.js'
+
+import styles from './GuessMap.module.css'
 
 import type GoogleMapType from './GoogleMap.js'
 
 const GoogleMap = lazy(() => import('./GoogleMap.js')) as typeof GoogleMapType
+const GuessMapControls = lazy(() => import('./GuessMapControls.js'))
+const GuessMapZoomControls = lazy(() => import('./GuessMapZoomControls.js'))
 
 interface Props {
-    googleApiLoaded: boolean
     code: CountryCodes | undefined
-    data: GameData
+    finishRound: (timedOut: boolean) => void
+    googleApiLoaded: boolean
     markerPosition:
         | google.maps.LatLngLiteral
         | google.maps.LatLngAltitudeLiteral
@@ -25,26 +31,25 @@ interface Props {
     >
 }
 
-const GuessMap: React.FC<
-    Props &
-        React.DetailedHTMLProps<
-            React.HTMLAttributes<HTMLDivElement>,
-            HTMLDivElement
-        >
-> = ({
-    googleApiLoaded,
+const GuessMap: React.FC<Props> = ({
     code,
-    data,
+    finishRound,
+    googleApiLoaded,
     markerPosition,
     round,
     setMarkerPosition,
-    ...props
 }) => {
     const guessMapRef = useRef<google.maps.Map | null>(null)
 
     const markerRef = useRef<google.maps.marker.AdvancedMarkerElement | null>(
         null,
     )
+
+    const [mapSize, setMapSize] = useState(1)
+    const [isMapPinned, setIsMapPinned] = useState(false)
+    const [mapActive, setMapActive] = useState(false)
+
+    const { t } = useTranslation()
 
     const fitMapBounds = () => {
         if (!guessMapRef.current) return
@@ -61,7 +66,9 @@ const GuessMap: React.FC<
             guessMapRef.current.setCenter(bounds.getCenter())
         } else {
             guessMapRef.current.setCenter(
-                DEFAULT_OPTIONS.center as google.maps.LatLngLiteral,
+                DEFAULT_MAP_OPTIONS.center as
+                    | google.maps.LatLngLiteral
+                    | google.maps.LatLng,
             )
             guessMapRef.current.setZoom(1)
         }
@@ -90,35 +97,102 @@ const GuessMap: React.FC<
     }, [round])
 
     return (
-        <Suspense>
-            <GoogleMap
-                googleApiLoaded={googleApiLoaded}
-                defaultOptions={{
-                    disableDefaultUI: true,
-                    zoomControl: true,
-                    clickableIcons: false,
-                    fullscreenControl: true,
-                    draggableCursor: 'crosshair',
-                    mapId: import.meta.env.VITE_GOOGLE_MAPS_GUESS,
-                    ...data.defaultOptions,
-                }}
-                onMount={(map) => {
-                    guessMapRef.current = map
+        <div
+            className={[
+                styles.guessMapContainer,
+                mapActive ? 'active' : '',
+                mapSize !== 1 ? `size--${mapSize}` : '',
+            ]
+                .filter((c) => c !== '')
+                .join(' ')}
+            onMouseOver={() => {
+                if (isMapPinned) return
 
-                    map.addListener(
-                        'click',
-                        (event: google.maps.MapMouseEvent) => {
-                            setMarkerPosition(event.latLng?.toJSON() ?? null)
+                setMapActive(true)
+            }}
+            onMouseLeave={() => {
+                if (isMapPinned) return
 
-                            if (markerRef.current) {
-                                markerRef.current.position = event.latLng
-                            }
-                        },
-                    )
+                setMapActive(false)
+            }}
+        >
+            <button
+                className={styles.mapBtn}
+                aria-label="Open Map"
+                onClick={() => {
+                    setMapActive(true)
                 }}
-                {...props}
-            />
-        </Suspense>
+            >
+                <FaMap size={24} />
+            </button>
+
+            <button
+                className={styles.closeBtn}
+                aria-label="Close Map"
+                onClick={() => {
+                    setMapActive(false)
+                }}
+            >
+                <FaX />
+            </button>
+
+            <Suspense>
+                <GuessMapControls
+                    isMapPinned={isMapPinned}
+                    mapSize={mapSize}
+                    setIsMapPinned={setIsMapPinned}
+                    setMapSize={setMapSize}
+                />
+            </Suspense>
+
+            <div className={styles.guessMapWrapper}>
+                <Suspense>
+                    <GoogleMap
+                        googleApiLoaded={googleApiLoaded}
+                        defaultOptions={{
+                            disableDefaultUI: true,
+                            zoomControl: false,
+                            clickableIcons: false,
+                            fullscreenControl: false,
+                            draggableCursor: 'crosshair',
+                            mapId: import.meta.env.VITE_GOOGLE_MAPS_GUESS,
+                        }}
+                        onMount={(map) => {
+                            guessMapRef.current = map
+
+                            map.addListener(
+                                'click',
+                                (event: google.maps.MapMouseEvent) => {
+                                    setMarkerPosition(
+                                        event.latLng?.toJSON() ?? null,
+                                    )
+
+                                    if (markerRef.current) {
+                                        markerRef.current.position =
+                                            event.latLng
+                                    }
+                                },
+                            )
+                        }}
+                        className={styles.guessMap}
+                    />
+                </Suspense>
+                <Suspense>
+                    <GuessMapZoomControls map={guessMapRef.current} />
+                </Suspense>
+            </div>
+
+            <button
+                className={styles.guessBtn}
+                aria-label={t('game.guess')}
+                disabled={markerPosition === null}
+                onClick={() => {
+                    finishRound(false)
+                }}
+            >
+                {t('game.guess')}
+            </button>
+        </div>
     )
 }
 

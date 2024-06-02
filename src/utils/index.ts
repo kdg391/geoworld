@@ -1,8 +1,8 @@
 import type { DistanceUnit } from '../types/index.js'
 
 const EARTH_RADIUS = {
-    metric: 6378.137,
     imperial: 3958.8,
+    metric: 6378.137,
 }
 
 const rad = (n: number) => n * (Math.PI / 180)
@@ -29,22 +29,43 @@ export function calculateDistance(
     return d
 }
 
+const DEFAULT_SCORE_FACTOR = 2000
+const MAX_POINTS = 5000
+
 // https://github.com/benlikescode/geohub/blob/main/backend/utils/calculateRoundScore.ts
 export function calculateRoundScore(
     distance: number,
-    scoreFactor = 2000,
-    unit: DistanceUnit = 'metric',
+    scoreFactor = DEFAULT_SCORE_FACTOR,
 ) {
-    if (unit === 'imperial') distance *= 1.60934
-
-    if (distance * 1000 < 25) return 5000
+    if (distance * 1000 < 25) return MAX_POINTS
 
     const power = (distance * -1) / scoreFactor
-    const score = 5000 * Math.pow(Math.E, power)
+    const score = MAX_POINTS * Math.pow(Math.E, power)
 
     if (score < 0) return 0
 
     return Math.round(score)
+}
+
+// https://github.com/benlikescode/geohub/blob/main/backend/utils/calculateMapScoreFactor.ts
+export const calculateScoreFactor = (bounds: number[]) => {
+    const [lng1, lat1, lng2, lat2] = bounds
+
+    const distance = calculateDistance(
+        {
+            lat: lat1,
+            lng: lng1,
+        },
+        {
+            lat: lat2,
+            lng: lng2,
+        },
+        'metric',
+    )
+
+    const scoreFactor = (DEFAULT_SCORE_FACTOR * distance) / 18150
+
+    return scoreFactor
 }
 
 export const formatTimeLeft = (timeLeft: number) => {

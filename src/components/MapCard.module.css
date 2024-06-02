@@ -47,3 +47,14 @@
     font-size: 1.125rem;
     color: #fff;
 }
+
+.playBtn {
+    background-color: var(--primary-color);
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 8px;
+
+    &:disabled {
+        background-color: var(--secondary-color);
+    }
+}

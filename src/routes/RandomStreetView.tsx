@@ -72,8 +72,9 @@ const RandomStreetView = () => {
         svServiceRef.current
             .getPanorama({
                 location,
-                preference: google.maps.StreetViewPreference.NEAREST,
-                // sources: [google.maps.StreetViewSource.OUTDOOR],
+                preference: google.maps.StreetViewPreference.BEST,
+                sources: [google.maps.StreetViewSource.OUTDOOR],
+                radius: 10000,
             })
             .then(({ data }) => {
                 if (data.location) {
@@ -95,7 +96,7 @@ const RandomStreetView = () => {
     }, [])
 
     return (
-        <main>
+        <main className={styles.main}>
             <div className={styles.btnContainer}>
                 <button
                     onClick={() => {
@@ -105,8 +106,8 @@ const RandomStreetView = () => {
                     Open Map
                 </button>
                 <button
-                    onClick={async () => {
-                        await loadPanorama(randomLatLng())
+                    onClick={() => {
+                        loadPanorama(randomLatLng())
                     }}
                 >
                     Get StreetView
