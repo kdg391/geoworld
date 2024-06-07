@@ -51,6 +51,26 @@ const StreetView: React.FC<Props> = ({
 
         svPanoramaRef.current = svPanorama
         svServiceRef.current = svService
+
+        const disablePan = (event: Event) => {
+            event.stopPropagation()
+        }
+
+        setTimeout(() => {
+            if (settings.canPan) return
+
+            if (document.querySelector('.widget-scene')) {
+                document
+                    .querySelector('.widget-scene')
+                    ?.addEventListener('mousedown', disablePan)
+                document
+                    .querySelector('.widget-scene')
+                    ?.addEventListener('touchstart', disablePan)
+                document
+                    .querySelector('.widget-scene')
+                    ?.addEventListener('pointerdown', disablePan)
+            }
+        }, 500)
     }
 
     const loadPanorama = () => {
@@ -150,6 +170,7 @@ const StreetView: React.FC<Props> = ({
             {settings.canMove && (
                 <Suspense>
                     <StreetViewControls
+                        canPan={settings.canPan}
                         onReturnToStartClick={onReturnToStartClick}
                         onUndoClick={onUndoClick}
                     />

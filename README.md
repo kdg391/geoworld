@@ -8,6 +8,8 @@ A geography guessing game inspired by GeoGuessr, [GeoHub](https://github.com/ben
 - <https://github.com/GeoGuess/GeoGuess>
 - <https://github.com/ErickKS/vite-react-router>
 - <https://gist.github.com/chriseugenerodriguez/659a84b989b3f35cb034a9f9ee1a914f>
+- <https://codepen.io/ShadowShahriar/pen/zYPPYrQ>
+- <https://codepen.io/hqdrone/pen/vYGJXZN>
 
 ## Sources
 

@@ -5,20 +5,21 @@
     background-color: var(--footer-bg);
     border-top: 1px solid var(--footer-border);
     padding: 1.25rem 1.75rem;
-}
+    margin-top: 16px;
 
-.footer ul {
-    list-style: none;
-    padding-left: 0;
-}
+    & ul {
+        list-style: none;
+        padding-left: 0;
 
-.footer ul li a {
-    text-decoration: none;
-    color: var(--color);
-}
+        & > li a {
+            text-decoration: none;
+            color: var(--color);
 
-.footer ul li a:hover {
-    text-decoration: underline;
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+    }
 }
 
 .settings {

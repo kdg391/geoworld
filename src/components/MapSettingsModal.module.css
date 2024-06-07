@@ -3,11 +3,11 @@
     position: fixed;
     left: 0;
     right: 0;
-    z-index: 99;
+    z-index: 3;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: var(--map-settings-modal-bg);
+    background-color: var(--map-settings-modal);
     width: 100%;
     height: 100%;
 }
@@ -15,31 +15,30 @@
 .mapSettingsModalWrapper {
     position: relative;
     overflow: hidden;
-    z-index: 100;
+    z-index: 4;
     display: flex;
     flex-direction: column;
-    background-color: var(--map-settings-modal-wrapper-bg);
 }
 
 .modalHeader {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: var(--map-settings-modal-wrapper-header-bg);
+    background-color: var(--map-settings-modal-header);
     padding: 0.5rem 1.5rem;
-}
 
-.modalHeader h3 {
-    font-size: 1.2rem;
-    margin: 0.25rem 0;
-}
+    & > h3 {
+        font-size: 1.2rem;
+        margin: 0.25rem 0;
+    }
 
-.modalHeader button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: transparent;
-    padding: 0;
+    & > button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: transparent;
+        padding: 0;
+    }
 }
 
 .mapInfo {
@@ -62,74 +61,98 @@
 .modalContent {
     display: flex;
     flex-direction: column;
-    background-color: var(--map-settings-modal-wrapper-content-bg);
+    background-color: var(--map-settings-modal-content);
     padding: 1rem 1.5rem;
 }
 
 .setting {
     display: flex;
+    justify-content: space-between;
 }
 
 .modalActions {
     display: flex;
     justify-content: flex-end;
     gap: 12px;
-    background-color: var(--map-settings-modal-wrapper-actions-bg);
+    background-color: var(--map-settings-modal-actions);
     padding: 1rem 1.5rem;
 }
 
-.checkBox input[type='checkbox'] {
-    appearance: none;
-    visibility: hidden;
-    display: none;
-}
-
-.checkBox label {
-    position: relative;
+.checkBox {
     display: inline-block;
-    width: 40px;
-    height: 20px;
-    cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
-    transform: translate3d(0, 0, 0);
-}
-
-.checkBox label:before {
-    content: '';
     position: relative;
-    top: 3px;
-    left: 3px;
-    width: 34px;
-    height: 14px;
-    display: block;
-    background-color: #9a9999;
-    border-radius: 8px;
-    transition: background-color 0.2s ease;
+    cursor: pointer;
+    height: 22px;
+
+    & > input[type='checkbox'] {
+        appearance: none;
+        display: none;
+        visibility: hidden;
+
+        &:checked ~ span {
+            background-color: var(--primary-color);
+
+            &:after {
+                left: 21px;
+            }
+        }
+    }
+
+    span {
+        display: inline-block;
+        height: 22px;
+        width: 40px;
+        background-color: #a2a2a2;
+        transition: background-color 0.25s ease;
+        border-radius: 16px;
+
+        &:after {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 16px;
+            height: 16px;
+            background-color: #fff;
+            border-radius: 50%;
+            transition: left 0.25s ease;
+        }
+    }
 }
 
-.checkBox label span {
-    position: absolute;
-    top: 0;
-    left: 0;
+.roundsInput {
+    appearance: textfield;
+    width: 3rem;
+    background-color: var(--bg);
+    border: 1px solid #333333;
+    outline: 0;
+
+    &:hover,
+    &:focus {
+        appearance: number-input;
+    }
+}
+
+.roundsInput::-webkit-inner-spin-button,
+.roundsInput::-webkit-outer-spin-button {
+    appearance: none;
+    margin: 0;
+}
+
+.roundsBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--bg);
+    border: 1px solid #000;
+    border-radius: 50%;
     width: 20px;
     height: 20px;
-    display: block;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 3px 8px rgba(154, 153, 153, 0.5);
-    transition: all 0.2s ease;
-}
+    padding: 2px;
 
-.checkBox input[type='checkbox']:checked + label:before {
-    background-color: #947ada;
-}
-
-.checkBox input[type='checkbox']:checked + label span {
-    background-color: var(--primary-color);
-    transform: translateX(20px);
-    transition: all 0.2s cubic-bezier(0.8, 0.4, 0.3, 1.25),
-        background-color 0.15s ease;
-    box-shadow: 0 3px 8px rgba(79, 46, 220, 0.2);
+    & > svg {
+        color: var(--color);
+    }
 }
 
 .timeLimitRange {
@@ -137,62 +160,98 @@
     width: 128px;
     height: 16px;
     background-color: transparent;
-}
-
-.timeLimitRange:focus {
-    outline: none;
-}
-
-.timeLimitRange::-webkit-slider-runnable-track {
-    width: 128px;
-    height: 4px;
-    background-color: var(--range-track-bg);
     border: 0;
-    border-radius: 4px;
+    margin: 0;
+
+    &:focus {
+        outline: 0;
+
+        &::-moz-range-track {
+            background-color: var(--range-track);
+        }
+    }
+
+    &:hover {
+        &::-webkit-slider-thumb {
+            cursor: grab;
+        }
+
+        &::-moz-range-thumb {
+            cursor: grab;
+        }
+    }
+
+    &:active {
+        &::-webkit-slider-thumb {
+            cursor: grabbing;
+        }
+
+        &::-moz-range-thumb {
+            cursor: grabbing;
+        }
+    }
+
+    &::-webkit-slider-runnable-track {
+        width: 128px;
+        height: 4px;
+        background-image: linear-gradient(
+            to right,
+            var(--primary-color) 0%,
+            var(--primary-color) var(--value),
+            var(--range-track) var(--value),
+            var(--range-track) 100%
+        );
+        border: 0;
+        border-radius: 4px;
+    }
+
+    &::-webkit-slider-thumb {
+        appearance: none;
+        width: 16px;
+        height: 16px;
+        background-color: var(--range-thumb);
+        border: 0;
+        border-radius: 50%;
+        margin-top: -6px;
+    }
+
+    &::-moz-range-track {
+        width: 128px;
+        height: 4px;
+        background-color: var(--range-track);
+        border: 0;
+        border-radius: 4px;
+    }
+
+    &::-moz-range-thumb {
+        appearance: none;
+        width: 16px;
+        height: 16px;
+        background-color: var(--range-thumb);
+        border: 0;
+        border-radius: 50%;
+    }
+
+    &::-moz-range-progress {
+        height: 4px;
+        background-color: var(--primary-color);
+        border-radius: 4px;
+    }
 }
 
-.timeLimitRange::-webkit-slider-thumb {
-    appearance: none;
-    width: 16px;
-    height: 16px;
-    background-color: var(--primary-color);
-    border: 0;
-    border-radius: 50%;
-    margin-top: -6px;
-}
-
-.timeLimitRange::-moz-range-track {
-    width: 128px;
-    height: 4px;
-    background-color: var(--range-track-bg);
-    border: 0;
-    border-radius: 4px;
-}
-
-.timeLimitRange::-moz-range-thumb {
-    width: 16px;
-    height: 16px;
-    background-color: var(--primary-color);
-    border: 0;
-    border-radius: 50%;
-}
-
-.timeLimitRange:focus::-moz-range-track {
-    background-color: var(--range-track-bg);
+.cancelBtn,
+.playBtn {
+    padding: 8px 16px;
+    border-radius: 8px;
+    color: #fff;
 }
 
 .cancelBtn {
-    padding: 8px 16px;
-    border-radius: 8px;
     background-color: var(--secondary-color);
-    color: #fff;
 }
 
 .playBtn {
     background-color: var(--primary-color);
-    color: #fff;
-    padding: 8px 16px;
-    border-radius: 8px;
 
     &:disabled {
         background-color: var(--secondary-color);

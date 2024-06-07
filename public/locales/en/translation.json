@@ -1,14 +1,20 @@
 {
+    "error": {
+        "title": "An unknown error has occurred."
+    },
     "home": {
+        "hero": "Explore the world's street view",
         "officialMaps": "Official Maps",
-        "locations": "{locations} Locations",
+        "locations_one": "{{count}} Location",
+        "locations_other": "{{count}} Locations",
+        "mapSettings": "Map Settings",
         "move": "Move",
         "pan": "Pan",
         "zoom": "Zoom",
         "rounds": "Rounds",
         "timeLimit": "Time Limit",
         "noLimit": "No Limit",
-        "timeLimitFormat": "{minutes, number, ::unit/minute} {seconds, number, ::unit/second}",
+        "timeLimitFormat": "{{minutes, number(style: unit; unit: minute; unitDisplay: narrow)}} {{seconds, number(style: unit; unit: second; unitDisplay: narrow)}}",
         "cancel": "Cancel",
         "play": "Play"
     },
@@ -23,14 +29,14 @@
             "rounds": "Rounds",
             "score": "Score"
         },
-        "roundPoints": "+{roundScore} Points",
+        "roundPoints": "+{{roundScore}} Points",
         "roundResult": {
-            "imperial": "Your guess was <strong>{distance, number, ::unit/mile .#}</strong> from the correct location",
-            "metric": "Your guess was <strong>{distance, number, ::unit/kilometer .#}</strong> from the correct location"
+            "imperial": "Your guess was <strong>{{distance, number(maximumFractionDigits: 1; style: unit; unit: mile)}}</strong> from the correct location",
+            "metric": "Your guess was <strong>{{distance, number(maximumFractionDigits: 1; style: unit; unit: kilometer)}}</strong> from the correct location"
         },
         "viewResults": "View Results",
         "nextRound": "Next Round",
-        "totalPoints": "Total {totalScore} Points",
+        "totalPoints": "Total {{totalScore}} Points",
         "replay": "Replay",
         "exit": "Exit"
     },
@@ -47,7 +53,7 @@
         "language": "Language",
         "distanceUnit": "Distance Unit",
         "distanceUnits": {
-            "imperial": "Imperial (mi)",
+            "imperial": "Imperial (miles)",
             "metric": "Metric (km)"
         },
         "links": "Links",

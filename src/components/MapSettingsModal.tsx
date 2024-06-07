@@ -1,9 +1,14 @@
-import React, { lazy, Suspense, useState } from 'react'
+import React, { lazy, Suspense, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { FaX } from 'react-icons/fa6'
 import { useNavigate } from 'react-router-dom'
 
-import { DEFAULT_MAX_ROUNDS, FLAG_ENOJIS } from '../utils/constants/index.js'
+import { Minus, Plus, X } from 'lucide-react'
+
+import {
+    DEFAULT_ROUNDS,
+    FLAG_ENOJIS,
+    MAX_ROUNDS,
+} from '../utils/constants/index.js'
 
 import styles from './MapSettingsModal.module.css'
 
@@ -24,24 +29,32 @@ const MapSettingsModal: React.FC<Props> = ({ gameData, setShowModal }) => {
     const [canPan, setCanPan] = useState(true)
     const [canZoom, setCanZoom] = useState(true)
     const [rounds, setRounds] = useState(
-        gameData.locations.length > DEFAULT_MAX_ROUNDS
-            ? DEFAULT_MAX_ROUNDS
+        gameData.locations.length > DEFAULT_ROUNDS
+            ? DEFAULT_ROUNDS
             : gameData.locations.length,
     )
     const [timeLimit, setTimeLimit] = useState<number | null>(null)
+
+    const maxRounds = useMemo(
+        () =>
+            gameData.locations.length > MAX_ROUNDS
+                ? MAX_ROUNDS
+                : gameData.locations.length,
+        [gameData.locations],
+    )
 
     return (
         <div className={styles.mapSettingsModal}>
             <div className={styles.mapSettingsModalWrapper}>
                 <div className={styles.modalHeader}>
-                    <h3>Map Settings</h3>
+                    <h3>{t('home.mapSettings')}</h3>
                     <button
                         aria-label="Close"
                         onClick={() => {
                             setShowModal(false)
                         }}
                     >
-                        <FaX size={16} />
+                        <X size={16} />
                     </button>
                 </div>
                 <div className={styles.modalContent}>
@@ -70,12 +83,12 @@ const MapSettingsModal: React.FC<Props> = ({ gameData, setShowModal }) => {
                                     ? t('worldwide')
                                     : t(`countries.${gameData.code}`)}
                             </h4>
-                            <p>Lorem ipsum dolor sit amet consectetur.</p>
+                            <p>Asdf</p>
                         </div>
                     </div>
                     <div className={styles.setting}>
                         <label htmlFor="move">{t('home.move')}</label>
-                        <div className={styles.checkBox}>
+                        <label htmlFor="move" className={styles.checkBox}>
                             <input
                                 type="checkbox"
                                 id="move"
@@ -84,14 +97,12 @@ const MapSettingsModal: React.FC<Props> = ({ gameData, setShowModal }) => {
                                     setCanMove(event.target.checked)
                                 }}
                             />
-                            <label htmlFor="move">
-                                <span></span>
-                            </label>
-                        </div>
+                            <span></span>
+                        </label>
                     </div>
                     <div className={styles.setting}>
                         <label htmlFor="pan">{t('home.pan')}</label>
-                        <div className={styles.checkBox}>
+                        <label htmlFor="pan" className={styles.checkBox}>
                             <input
                                 type="checkbox"
                                 id="pan"
@@ -100,14 +111,12 @@ const MapSettingsModal: React.FC<Props> = ({ gameData, setShowModal }) => {
                                     setCanPan(event.target.checked)
                                 }}
                             />
-                            <label htmlFor="pan">
-                                <span></span>
-                            </label>
-                        </div>
+                            <span></span>
+                        </label>
                     </div>
                     <div className={styles.setting}>
                         <label htmlFor="zoom">{t('home.zoom')}</label>
-                        <div className={styles.checkBox}>
+                        <label htmlFor="zoom" className={styles.checkBox}>
                             <input
                                 type="checkbox"
                                 id="zoom"
@@ -116,65 +125,86 @@ const MapSettingsModal: React.FC<Props> = ({ gameData, setShowModal }) => {
                                     setCanZoom(event.target.checked)
                                 }}
                             />
-                            <label htmlFor="zoom">
-                                <span></span>
-                            </label>
-                        </div>
+                            <span></span>
+                        </label>
                     </div>
-                    <div>
+                    <div className={styles.setting}>
                         <label htmlFor="rounds">{t('home.rounds')}</label>
 
-                        <input
-                            type="number"
-                            id="rounds"
-                            min={1}
-                            max={
-                                gameData.locations.length > 10
-                                    ? 10
-                                    : gameData.locations.length
-                            }
-                            pattern="[0-9]*"
-                            inputMode="numeric"
-                            value={rounds}
-                            onKeyDown={(event) => {
-                                if (event.code === 'Minus') {
-                                    event.preventDefault()
-                                }
-                            }}
-                            onChange={(event) => {
-                                let value = event.target.value
+                        <div style={{ display: 'flex' }}>
+                            <button
+                                className={styles.roundsBtn}
+                                disabled={rounds <= 1}
+                                onClick={() => {
+                                    if (rounds > 1) {
+                                        setRounds((r) => r - 1)
+                                    }
+                                }}
+                            >
+                                <Minus size={16} />
+                            </button>
 
-                                if (isNaN(parseInt(value))) return
+                            <input
+                                type="number"
+                                id="rounds"
+                                className={styles.roundsInput}
+                                min={1}
+                                max={maxRounds}
+                                pattern="[0-9]*"
+                                inputMode="numeric"
+                                value={rounds}
+                                onKeyDown={(event) => {
+                                    if (event.code === 'Minus') {
+                                        event.preventDefault()
+                                    }
+                                }}
+                                onChange={(event) => {
+                                    let value = event.target.value
 
-                                if (value !== '0' && !value.includes('.')) {
-                                    value = value.replace(/^0+/, '')
-                                }
+                                    if (isNaN(parseInt(value))) return
 
-                                const _rounds = Math.max(
-                                    parseInt(event.target.min),
-                                    Math.min(
+                                    if (value !== '0' && !value.includes('.')) {
+                                        value = value.replace(/^0+/, '')
+                                    }
+
+                                    const _rounds = Math.min(
                                         parseInt(event.target.max),
-                                        parseInt(value),
-                                    ),
-                                )
+                                        Math.max(
+                                            parseInt(event.target.min),
+                                            parseInt(value),
+                                        ),
+                                    )
 
-                                setRounds(_rounds)
-                            }}
-                        />
+                                    setRounds(_rounds)
+                                }}
+                            />
+
+                            <button
+                                className={styles.roundsBtn}
+                                disabled={rounds >= maxRounds}
+                                onClick={() => {
+                                    if (rounds < maxRounds) {
+                                        setRounds((r) => r + 1)
+                                    }
+                                }}
+                            >
+                                <Plus size={16} />
+                            </button>
+                        </div>
                     </div>
                     <div>
                         <div>
                             <label htmlFor="time-limit">
                                 {t('home.timeLimit')}
                             </label>
-                            <br />(
+                            {' ('}
                             {timeLimit === null
                                 ? t('home.noLimit')
                                 : t('home.timeLimitFormat', {
                                       minutes: Math.floor(timeLimit / 60),
                                       seconds: timeLimit % 60,
                                   })}
-                            )
+                            {')'}
                         </div>
                         <div>
                             <input
@@ -184,6 +214,14 @@ const MapSettingsModal: React.FC<Props> = ({ gameData, setShowModal }) => {
                                 min={0}
                                 max={600}
                                 step={30}
+                                style={
+                                    {
+                                        '--value': `${
+                                            (100 / 600) *
+                                            (timeLimit === null ? 0 : timeLimit)
+                                        }%`,
+                                    } as React.CSSProperties
+                                }
                                 defaultValue={
                                     timeLimit === null ? 0 : timeLimit
                                 }

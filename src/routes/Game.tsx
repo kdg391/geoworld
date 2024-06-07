@@ -5,6 +5,9 @@ import { Navigate, useLocation, useNavigate, useParams } from 'react-router-dom'
 
 import useSettings from '../hooks/useSettings.js'
 
+import COUNTRY_BOUNDS, {
+    type CountryCodes,
+} from '../utils/constants/countryBounds.js'
 import { OFFICIAL_MAPS } from '../utils/constants/index.js'
 import {
     calculateDistance,
@@ -14,9 +17,6 @@ import {
 } from '../utils/index.js'
 
 import styles from './Game.module.css'
-import COUNTRY_BOUNDS, {
-    type CountryCodes,
-} from '../utils/constants/countryBounds.js'
 
 const GuessMap = lazy(() => import('../components/GuessMap.js'))
 const ResultMap = lazy(() => import('../components/ResultMap.js'))
@@ -58,7 +58,7 @@ const Game = () => {
         google.maps.LatLngLiteral[]
     >([])
     const [guessedLocations, setGuessedLocations] = useState<
-        google.maps.LatLngLiteral[]
+        (google.maps.LatLngLiteral | null)[]
     >([])
 
     const [markerPosition, setMarkerPosition] = useState<
@@ -89,6 +89,14 @@ const Game = () => {
     }
 
     const finishRound = (timedOut: boolean) => {
+        if (timedOut) {
+            setTimedOut(true)
+            setRoundFinished(true)
+            setGuessedLocations((locs) => [...locs, null])
+
+            return
+        }
+
         if (markerPosition) {
             const _distance = calculateDistance(
                 markerPosition,
@@ -110,11 +118,6 @@ const Game = () => {
             setTotalScore((p) => p + _roundScore)
             setGuessedLocations((locs) => [...locs, markerPosition])
 
-            if (!timedOut) setRoundFinished(true)
-        }
-
-        if (timedOut) {
-            setTimedOut(true)
             setRoundFinished(true)
         }
     }
@@ -149,17 +152,15 @@ const Game = () => {
                 <div className={styles.roundResultWrapper}>
                     <Suspense>
                         <ResultMap
-                            googleApiLoaded={googleApiLoaded}
                             actualLocations={actualLocations}
-                            guessedLocations={guessedLocations}
                             gameFinished={gameFinished}
+                            googleApiLoaded={googleApiLoaded}
+                            guessedLocations={guessedLocations}
                             round={round}
                             roundFinished={roundFinished}
                             className={styles.resultMap}
                         />
                     </Suspense>
-
-                    {timedOut && <div>You've timed out!</div>}
 
                     <div className={styles.resultInfo}>
                         {gameFinished ? (
@@ -192,39 +193,41 @@ const Game = () => {
                             <>
                                 <h2>
                                     {t('game.roundPoints', {
-                                        roundScore: roundScore.toLocaleString(),
+                                        roundScore: timedOut
+                                            ? 0
+                                            : roundScore.toLocaleString(),
                                     })}
                                 </h2>
                                 <p>
-                                    <Trans
-                                        i18nKey={`game.roundResult.${settingsContext?.distanceUnit}`}
-                                        values={{
-                                            distance,
-                                        }}
-                                    />
+                                    {timedOut ? (
+                                        "You've timed out."
+                                    ) : (
+                                        <Trans
+                                            i18nKey={`game.roundResult.${settingsContext?.distanceUnit}`}
+                                            values={{
+                                                distance,
+                                            }}
+                                        />
+                                    )}
                                 </p>
-                                {round === state.rounds - 1 ? (
-                                    <button
-                                        className={styles.nextBtn}
-                                        onClick={() => {
-                                            setRoundFinished(false)
-                                            setGameFinished(true)
-                                        }}
-                                    >
-                                        {t('game.viewResults')}
-                                    </button>
-                                ) : (
-                                    <button
-                                        className={styles.nextBtn}
-                                        onClick={() => {
-                                            setRound((r) => r + 1)
+                                <button
+                                    className={styles.nextBtn}
+                                    onClick={() => {
+                                        setRoundFinished(false)
 
-                                            setRoundFinished(false)
-                                        }}
-                                    >
-                                        {t('game.nextRound')}
-                                    </button>
-                                )}
+                                        if (timedOut) setTimedOut(false)
+
+                                        if (round === state.rounds - 1) {
+                                            setGameFinished(true)
+                                        } else {
+                                            setRound((r) => r + 1)
+                                        }
+                                    }}
+                                >
+                                    {round === state.rounds - 1
+                                        ? t('game.viewResults')
+                                        : t('game.nextRound')}
+                                </button>
                             </>
                         )}
                     </div>

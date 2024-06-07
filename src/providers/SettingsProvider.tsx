@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 
 import SettingsContext from '../contexts/SettingsContext.js'
 
@@ -25,7 +25,7 @@ const SettingsProvider: React.FC<Props> = ({ children }) => {
         } catch {}
     }, [distanceUnit])
 
-    const providerValue = React.useMemo(
+    const providerValue = useMemo(
         () => ({
             distanceUnit,
             setDistanceUnit,

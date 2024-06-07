@@ -44,17 +44,15 @@ const MapCard: React.FC<GameCardProps> = ({ gameData, onPlayBtnClick }) => {
                             }
                         />
                     </Suspense>
-                    <span className={styles.mapName}>
-                        {gameData.code === 'worldwide'
-                            ? t('worldwide')
-                            : t(`countries.${gameData.code}`)}
-                    </span>
+                    {gameData.code === 'worldwide'
+                        ? t('worldwide')
+                        : t(`countries.${gameData.code}`)}
                 </div>
             </div>
             <div className={styles.cardContent}>
                 <span>
                     {t('home.locations', {
-                        locations: gameData.locations.length,
+                        count: gameData.locations.length,
                     })}
                 </span>
                 <button

@@ -1,17 +1,17 @@
+import { Minus, Plus } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
-import { FaMinus, FaPlus } from 'react-icons/fa6'
 
 import styles from './GuessMapZoomControls.module.css'
 
-const MAX_ZOOM = 22
 const MIN_ZOOM = 0
+const MAX_ZOOM = 22
 
 interface Props {
     map: google.maps.Map | null
 }
 
 const MapControls: React.FC<Props> = ({ map }) => {
-    const [zoom, setZoom] = useState(MIN_ZOOM)
+    const [zoom, setZoom] = useState(1)
 
     useEffect(() => {
         if (!map) return
@@ -43,7 +43,7 @@ const MapControls: React.FC<Props> = ({ map }) => {
                     map.setZoom(zoom + 1)
                 }}
             >
-                <FaPlus size={20} />
+                <Plus size={20} />
             </button>
             <button
                 disabled={zoom <= MIN_ZOOM}
@@ -57,7 +57,7 @@ const MapControls: React.FC<Props> = ({ map }) => {
                     map.setZoom(zoom - 1)
                 }}
             >
-                <FaMinus size={20} />
+                <Minus size={20} />
             </button>
         </div>
     )

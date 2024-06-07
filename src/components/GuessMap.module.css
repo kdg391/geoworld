@@ -11,11 +11,12 @@
     opacity: 0.75;
     width: max(var(--width), var(--min-width));
     height: max(var(--height), var(--min-height));
+    max-height: calc(100% - 128px);
 
     --aspect-ratio: 1.25;
-    --active-width: 30vw;
+    --active-width: 30dvw;
     --active-height: calc(var(--active-width) / var(--aspect-ratio));
-    --inactive-width: 16vw;
+    --inactive-width: 16dvw;
     --inactive-height: calc(var(--inactive-width) / var(--aspect-ratio));
     --width: var(--inactive-width);
     --height: var(--inactive-height);
@@ -29,15 +30,15 @@
     }
 
     :global(&.size--0) {
-        --active-width: 16vw;
+        --active-width: 16dvw;
     }
 
     :global(&.size--2) {
-        --active-width: 45vw;
+        --active-width: 45dvw;
     }
 
     :global(&.size--3) {
-        --active-width: 65vw;
+        --active-width: 65dvw;
     }
 }
 
@@ -71,18 +72,18 @@
     display: none;
 }
 
-@media (max-width: 750px) {
+@media only screen and (max-width: 750px) {
     :local(.guessMapContainer):global(.size--0) {
-        --active-width: 24vw;
+        --active-width: 24dvw;
     }
 }
 
-@media (max-width: 600px) {
+@media only screen and (max-width: 600px) {
     .mapBtn {
         position: absolute;
         right: 16px;
         bottom: 24px;
-        z-index: 3;
+        z-index: 2;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -96,15 +97,9 @@
         }
     }
 
-    .closeBtn {
-        display: none;
-    }
-
+    .closeBtn,
+    .guessBtn,
     .guessMap {
-        display: none;
-    }
-
-    .guessBtn {
         display: none;
     }
 
@@ -113,10 +108,12 @@
         bottom: 0;
         opacity: 1;
         width: 100%;
+        display: none;
 
         :global(&.active) {
             width: 100%;
             height: 40dvh;
+            display: flex;
         }
 
         :global(&.active) :local(.guessBtn) {
@@ -144,7 +141,7 @@
             width: 32px;
             height: 32px;
             border-radius: 50%;
-            background-color: var(--bg-color);
+            background-color: var(--bg);
         }
     }
 }

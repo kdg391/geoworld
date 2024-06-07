@@ -1,6 +1,6 @@
-import { lazy, Suspense } from 'react'
+import { Sun, Moon, Laptop } from 'lucide-react'
+import { lazy, Suspense, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { FaComputer, FaMoon, FaSun } from 'react-icons/fa6'
 import { Link } from 'react-router-dom'
 import Select, { GroupBase, type StylesConfig } from 'react-select'
 
@@ -22,17 +22,17 @@ const Footer = () => {
         {
             value: 'light',
             label: t('footer.themes.light'),
-            icon: <FaSun />,
+            icon: <Sun size={20} />,
         },
         {
             value: 'dark',
             label: t('footer.themes.dark'),
-            icon: <FaMoon />,
+            icon: <Moon size={20} />,
         },
         {
             value: 'system',
             label: t('footer.themes.system'),
-            icon: <FaComputer />,
+            icon: <Laptop size={20} />,
         },
     ]
 
@@ -98,6 +98,20 @@ const Footer = () => {
             color: 'var(--color)',
         }),
     }
+
+    useEffect(() => {
+        document.documentElement.setAttribute('lang', i18n.language)
+
+        const onLanguageChanged = (lang: string) => {
+            document.documentElement.setAttribute('lang', lang)
+        }
+
+        i18n.on('languageChanged', onLanguageChanged)
+
+        return () => {
+            i18n.off('languageChanged', onLanguageChanged)
+        }
+    }, [])
 
     return (
         <footer className={styles.footer}>

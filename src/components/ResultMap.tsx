@@ -1,15 +1,14 @@
-import React, { lazy, Suspense, useEffect, useRef, useState } from 'react'
+import React, { lazy, Suspense, useEffect, useRef } from 'react'
 
 import type GoogleMapType from './GoogleMap.js'
 
 const GoogleMap = lazy(() => import('./GoogleMap.js')) as typeof GoogleMapType
-const Marker = lazy(() => import('./Marker.js'))
 
 interface Props {
-    googleApiLoaded: boolean
     actualLocations: google.maps.LatLngLiteral[]
     gameFinished: boolean
-    guessedLocations: google.maps.LatLngLiteral[]
+    googleApiLoaded: boolean
+    guessedLocations: (google.maps.LatLngLiteral | null)[]
     round: number
     roundFinished: boolean
 }
@@ -21,9 +20,9 @@ const ResultMap: React.FC<
             HTMLDivElement
         >
 > = ({
-    googleApiLoaded,
     actualLocations,
     gameFinished,
+    googleApiLoaded,
     guessedLocations,
     round,
     roundFinished,
@@ -31,10 +30,10 @@ const ResultMap: React.FC<
 }) => {
     const resultMapRef = useRef<google.maps.Map | null>(null)
 
-    const [actualMarkers, setActualMarkers] = useState<
-        google.maps.marker.AdvancedMarkerElement[]
-    >([])
-    const [guessedMarkers, setGuessedMarkers] = useState<
+    const actualMarkersRef = useRef<google.maps.marker.AdvancedMarkerElement[]>(
+        [],
+    )
+    const guessedMarkersRef = useRef<
         google.maps.marker.AdvancedMarkerElement[]
     >([])
     const polylinesRef = useRef<google.maps.Polyline[]>([])
@@ -47,11 +46,15 @@ const ResultMap: React.FC<
         if (gameFinished) {
             for (let i = 0; i < guessedLocations.length; i++) {
                 bounds.extend(actualLocations[i])
-                bounds.extend(guessedLocations[i])
+
+                const guess = guessedLocations[i]
+                if (guess !== null) bounds.extend(guess)
             }
         } else {
             bounds.extend(actualLocations[round])
-            bounds.extend(guessedLocations[round])
+
+            const guess = guessedLocations[round]
+            if (guess !== null) bounds.extend(guess)
         }
 
         resultMapRef.current.fitBounds(bounds)
@@ -59,34 +62,30 @@ const ResultMap: React.FC<
     }
 
     const renderMarkers = () => {
-        setActualMarkers((markers) => {
-            for (const marker of markers) {
-                marker.position = null
-                marker.map = null
-            }
+        for (const marker of actualMarkersRef.current) {
+            marker.position = null
+            marker.map = null
+        }
 
-            return []
-        })
+        actualMarkersRef.current = []
 
-        setGuessedMarkers((markers) => {
-            for (const marker of markers) {
-                marker.position = null
-                marker.map = null
-            }
+        for (const marker of guessedMarkersRef.current) {
+            marker.position = null
+            marker.map = null
+        }
 
-            return []
-        })
+        guessedMarkersRef.current = []
 
         if (gameFinished) {
             for (let i = 0; i < guessedLocations.length; i++) {
-                const pinEl = new google.maps.marker.PinElement({
+                const pinBackground = new google.maps.marker.PinElement({
                     background: '#04d61d',
                 })
 
                 const actual = new google.maps.marker.AdvancedMarkerElement({
                     map: resultMapRef.current,
                     position: actualLocations[i],
-                    content: pinEl.element,
+                    content: pinBackground.element,
                 })
 
                 const guessed = new google.maps.marker.AdvancedMarkerElement({
@@ -94,16 +93,18 @@ const ResultMap: React.FC<
                     position: guessedLocations[i],
                 })
 
-                setActualMarkers((markers) => [...markers, actual])
-                setGuessedMarkers((markers) => [...markers, guessed])
+                actualMarkersRef.current.push(actual)
+                guessedMarkersRef.current.push(guessed)
             }
         } else {
+            const pinBackground = new google.maps.marker.PinElement({
+                background: '#04d61d',
+            })
+
             const actual = new google.maps.marker.AdvancedMarkerElement({
                 map: resultMapRef.current,
                 position: actualLocations[round],
-                content: new google.maps.marker.PinElement({
-                    background: '#04d61d',
-                }).element,
+                content: pinBackground.element,
             })
 
             const guessed = new google.maps.marker.AdvancedMarkerElement({
@@ -111,8 +112,8 @@ const ResultMap: React.FC<
                 position: guessedLocations[round],
             })
 
-            setActualMarkers([actual])
-            setGuessedMarkers([guessed])
+            actualMarkersRef.current.push(actual)
+            guessedMarkersRef.current.push(guessed)
         }
     }
 
@@ -145,17 +146,21 @@ const ResultMap: React.FC<
 
         if (gameFinished) {
             for (let i = 0; i < actualLocations.length; i++) {
+                const loc = guessedLocations[i]
+
                 const polyline = new google.maps.Polyline({
                     ...polylineOptions,
-                    path: [actualLocations[i], guessedLocations[i]],
+                    path: [actualLocations[i], ...(loc !== null ? [loc] : [])],
                 })
 
                 polylinesRef.current.push(polyline)
             }
         } else {
+            const loc = guessedLocations[round]
+
             const polyline = new google.maps.Polyline({
                 ...polylineOptions,
-                path: [actualLocations[round], guessedLocations[round]],
+                path: [actualLocations[round], ...(loc !== null ? [loc] : [])],
             })
 
             polylinesRef.current.push(polyline)
@@ -183,36 +188,17 @@ const ResultMap: React.FC<
             <GoogleMap
                 googleApiLoaded={googleApiLoaded}
                 defaultOptions={{
-                    disableDefaultUI: true,
-                    zoomControl: true,
                     clickableIcons: false,
+                    disableDefaultUI: true,
                     gestureHandling: 'greedy',
+                    zoomControl: true,
                     mapId: import.meta.env.VITE_GOOGLE_MAPS_RESULT,
                 }}
                 onMount={(map) => {
                     resultMapRef.current = map
                 }}
                 {...props}
-            >
-                {actualMarkers.map((marker, index) => (
-                    <Marker
-                        key={index}
-                        position={marker.position!}
-                        options={{
-                            map: resultMapRef.current,
-                        }}
-                    />
-                ))}
-                {guessedMarkers.map((marker, index) => (
-                    <Marker
-                        key={index}
-                        position={marker.position!}
-                        options={{
-                            map: resultMapRef.current,
-                        }}
-                    />
-                ))}
-            </GoogleMap>
+            />
         </Suspense>
     )
 }

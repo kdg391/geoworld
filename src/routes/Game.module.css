@@ -34,9 +34,9 @@
     align-items: center;
     justify-content: space-around;
     padding: 1.25rem 0;
-    height: 15rem;
     width: 100%;
-    background-color: var(--modal-wrapper-bg);
+    height: 15rem;
+    background-color: var(--result-modal);
 }
 
 .resultInfo h2 {

@@ -1,3 +1,4 @@
+import { ArrowDown } from 'lucide-react'
 import { lazy, Suspense, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -40,16 +41,16 @@ const Home = () => {
             )}
 
             <section id="hero">
-                <h1>Explore the world's street view</h1>
-                <div>
-                    <p>
-                        Lorem ipsum dolor sit amet consectetur, adipisicing
-                        elit. Nam quidem, unde deleniti dolorum harum tempora
-                        laborum nisi odio amet perferendis praesentium ipsam
-                        minima sint excepturi placeat quas molestiae fuga
-                        consequuntur!
-                    </p>
-                </div>
+                <h1>{t('home.hero')}</h1>
+                <p>
+                    Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                    Nam quidem, unde deleniti dolorum harum tempora laborum nisi
+                    odio amet perferendis excepturi placeat quas molestiae fuga
+                    consequuntur!
+                </p>
+                <a href="#official-maps" role="button" aria-label="Play">
+                    <ArrowDown />
+                </a>
             </section>
 
             <section id="official-maps">

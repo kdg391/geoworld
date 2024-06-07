@@ -16,6 +16,7 @@
         border-radius: 50%;
         background-color: #fff;
         box-shadow: 1px 1px rgba(0, 0, 0, 0.2);
+        padding: 4px;
 
         &:disabled {
             background-color: #adadad;
@@ -28,7 +29,7 @@
     }
 }
 
-@media (max-width: 600px) {
+@media only screen and (max-width: 600px) {
     .guessMapZoomControls {
         display: none;
     }

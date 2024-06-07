@@ -1,8 +1,10 @@
 {
  "name": "Geography Guessing",
+ "short_name": "Geography Guessing",
+ "description": "A geography guessing game inspired by GeoGuessr, GeoHub, and GeoGuess.",
  "start_url": "/geography-guessing/",
- "background_color": "var(--bg-color)",
- "theme_color": "var(--primary-color)",
+ "background_color": "#101010",
+ "theme_color": "#2a57eb",
  "display": "standalone",
  "icons": [
   {

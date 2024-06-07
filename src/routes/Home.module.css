@@ -1,12 +1,37 @@
 :global(#hero) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
     padding: 1rem 1.75rem;
+    height: calc(100dvh - var(--header-height));
+
+    & > h1,
+    & p {
+        text-align: center;
+    }
+
+    & > a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: var(--primary-color);
+        padding: 2px;
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+
+        & > svg {
+            color: #fff;
+        }
+    }
 }
 
 :global(#official-maps) {
-    width: 100%;
     display: flex;
     padding: 1rem 1.75rem;
-    margin-bottom: 12px;
+    scroll-margin-top: var(--header-height);
+    width: 100%;
 }
 
 .container {
@@ -18,25 +43,10 @@
 .wrapper {
     width: 100%;
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    row-gap: 20px;
-    column-gap: 20px;
-}
-
-@media (max-width: 1000px) {
-    .wrapper {
-        grid-template-columns: repeat(3, 1fr);
-    }
-}
-
-@media (max-width: 800px) {
-    .wrapper {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-@media (max-width: 550px) {
-    .wrapper {
-        grid-template-columns: 1fr;
-    }
+    grid-template-columns: repeat(
+        auto-fill,
+        minmax(var(--map-card-width), 1fr)
+    );
+    gap: 24px;
+    --map-card-width: 17.5rem;
 }

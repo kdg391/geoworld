@@ -1,3 +1,13 @@
+[data-theme='light'] {
+    --anchor: #52b9fe;
+    --anchor-hover: #2d88ff;
+}
+
+[data-theme='dark'] {
+    --anchor: #489dff;
+    --anchor-hover: #3796ee;
+}
+
 .main {
     height: 100%;
 }
@@ -13,10 +23,10 @@
 .backToHome {
     text-decoration: none;
     font-size: 1rem;
-    color: #3493ff;
+    color: var(--anchor);
     transition: color 0.2s ease-in;
-}
 
-.backToHome:hover {
-    color: #50a2ff;
+    &:hover {
+        color: var(--anchor-hover);
+    }
 }

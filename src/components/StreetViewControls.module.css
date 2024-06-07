@@ -6,6 +6,10 @@
     display: flex;
     flex-direction: column;
     gap: 12px;
+
+    :global(&.not-pan) {
+        bottom: 36px;
+    }
 }
 
 .returnToStartBtn,

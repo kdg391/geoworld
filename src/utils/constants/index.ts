@@ -1,6 +1,7 @@
 import type { GameData } from '../../types/index.js'
 
-export const DEFAULT_MAX_ROUNDS = 5
+export const MAX_ROUNDS = 10
+export const DEFAULT_ROUNDS = 5
 
 export const DEFAULT_MAP_OPTIONS: google.maps.MapOptions = {
     center: {

@@ -74,7 +74,7 @@ const RandomStreetView = () => {
                 location,
                 preference: google.maps.StreetViewPreference.BEST,
                 sources: [google.maps.StreetViewSource.OUTDOOR],
-                radius: 10000,
+                radius: 10_000,
             })
             .then(({ data }) => {
                 if (data.location) {
