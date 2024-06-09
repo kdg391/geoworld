@@ -1,19 +1,16 @@
+import { Minus, Plus, X } from 'lucide-react'
 import React, { lazy, Suspense, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
-import { Minus, Plus, X } from 'lucide-react'
-
-import {
-    DEFAULT_ROUNDS,
-    FLAG_ENOJIS,
-    MAX_ROUNDS,
-} from '../utils/constants/index.js'
+import { DEFAULT_ROUNDS, FLAG_ENOJIS, MAX_ROUNDS } from '../constants/index.js'
 
 import styles from './MapSettingsModal.module.css'
 
 import type { GameData } from '../types/index.js'
 
+const Slider = lazy(() => import('./Slider.js'))
+const Switch = lazy(() => import('./Switch.js'))
 const Twemoji = lazy(() => import('./Twemoji.js'))
 
 interface Props {
@@ -83,50 +80,44 @@ const MapSettingsModal: React.FC<Props> = ({ gameData, setShowModal }) => {
                                     ? t('worldwide')
                                     : t(`countries.${gameData.code}`)}
                             </h4>
-                            <p>Asdf</p>
+                            <p>Description</p>
                         </div>
                     </div>
                     <div className={styles.setting}>
                         <label htmlFor="move">{t('home.move')}</label>
-                        <label htmlFor="move" className={styles.checkBox}>
-                            <input
-                                type="checkbox"
+                        <Suspense>
+                            <Switch
                                 id="move"
                                 defaultChecked={canMove}
                                 onChange={(event) => {
                                     setCanMove(event.target.checked)
                                 }}
                             />
-                            <span></span>
-                        </label>
+                        </Suspense>
                     </div>
                     <div className={styles.setting}>
                         <label htmlFor="pan">{t('home.pan')}</label>
-                        <label htmlFor="pan" className={styles.checkBox}>
-                            <input
-                                type="checkbox"
+                        <Suspense>
+                            <Switch
                                 id="pan"
                                 defaultChecked={canPan}
                                 onChange={(event) => {
                                     setCanPan(event.target.checked)
                                 }}
                             />
-                            <span></span>
-                        </label>
+                        </Suspense>
                     </div>
                     <div className={styles.setting}>
                         <label htmlFor="zoom">{t('home.zoom')}</label>
-                        <label htmlFor="zoom" className={styles.checkBox}>
-                            <input
-                                type="checkbox"
+                        <Suspense>
+                            <Switch
                                 id="zoom"
                                 defaultChecked={canZoom}
                                 onChange={(event) => {
                                     setCanZoom(event.target.checked)
                                 }}
                             />
-                            <span></span>
-                        </label>
+                        </Suspense>
                     </div>
                     <div className={styles.setting}>
                         <label htmlFor="rounds">{t('home.rounds')}</label>
@@ -207,32 +198,34 @@ const MapSettingsModal: React.FC<Props> = ({ gameData, setShowModal }) => {
                             {')'}
                         </div>
                         <div>
-                            <input
-                                type="range"
-                                id="time-limit"
-                                className={styles.timeLimitRange}
-                                min={0}
-                                max={600}
-                                step={30}
-                                style={
-                                    {
-                                        '--value': `${
-                                            (100 / 600) *
-                                            (timeLimit === null ? 0 : timeLimit)
-                                        }%`,
-                                    } as React.CSSProperties
-                                }
-                                defaultValue={
-                                    timeLimit === null ? 0 : timeLimit
-                                }
-                                onChange={(event) => {
-                                    setTimeLimit(
-                                        parseInt(event.target.value) === 0
-                                            ? null
-                                            : parseInt(event.target.value),
-                                    )
-                                }}
-                            />
+                            <Suspense>
+                                <Slider
+                                    id="time-limit"
+                                    min={0}
+                                    max={600}
+                                    step={30}
+                                    style={
+                                        {
+                                            '--value': `${
+                                                (100 / 600) *
+                                                (timeLimit === null
+                                                    ? 0
+                                                    : timeLimit)
+                                            }%`,
+                                        } as React.CSSProperties
+                                    }
+                                    defaultValue={
+                                        timeLimit === null ? 0 : timeLimit
+                                    }
+                                    onChange={(event) => {
+                                        setTimeLimit(
+                                            parseInt(event.target.value) === 0
+                                                ? null
+                                                : parseInt(event.target.value),
+                                        )
+                                    }}
+                                />
+                            </Suspense>
                         </div>
                     </div>
                 </div>
@@ -250,18 +243,15 @@ const MapSettingsModal: React.FC<Props> = ({ gameData, setShowModal }) => {
                         className={styles.playBtn}
                         aria-label={t('home.play')}
                         onClick={() => {
-                            navigate(
-                                `/geography-guessing/game/${gameData.code}`,
-                                {
-                                    state: {
-                                        canMove,
-                                        canPan,
-                                        canZoom,
-                                        rounds,
-                                        timeLimit,
-                                    },
+                            navigate(`/geoworld/game/${gameData.code}`, {
+                                state: {
+                                    canMove,
+                                    canPan,
+                                    canZoom,
+                                    rounds,
+                                    timeLimit,
                                 },
-                            )
+                            })
                         }}
                     >
                         {t('home.play')}

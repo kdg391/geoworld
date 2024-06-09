@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import { formatTimeLeft } from '../utils/index.js'
 
-import styles from './RoundStatus.module.css'
+import styles from './GameStatus.module.css'
 
 interface Props {
     finishRound: (timedOut: boolean) => void
@@ -14,7 +14,7 @@ interface Props {
     totalScore: number
 }
 
-const RoundStatus: React.FC<Props> = ({
+const GameStatus: React.FC<Props> = ({
     finishRound,
     mapName,
     round,
@@ -55,28 +55,26 @@ const RoundStatus: React.FC<Props> = ({
     }, [timeLeft])
 
     return (
-        <div className={styles.roundStatusContainer}>
+        <div className={styles.gameStatusContainer}>
             {timeLimit !== null && timeLeft !== null && (
                 <div className={styles.timeLeft}>
                     {formatTimeLeft(timeLeft)}
                 </div>
             )}
 
-            <div className={styles.roundStatus}>
+            <div className={styles.gameStatus}>
                 <div>
-                    <span className="label">{t('game.roundStatus.map')}</span>
+                    <span className="label">{t('game.gameStatus.map')}</span>
                     <span>{mapName}</span>
                 </div>
                 <div>
-                    <span className="label">
-                        {t('game.roundStatus.rounds')}
-                    </span>
+                    <span className="label">{t('game.gameStatus.rounds')}</span>
                     <span>
                         {round + 1} / {rounds}
                     </span>
                 </div>
                 <div>
-                    <span className="label">{t('game.roundStatus.score')}</span>
+                    <span className="label">{t('game.gameStatus.score')}</span>
                     <span>{totalScore.toLocaleString()}</span>
                 </div>
             </div>
@@ -84,4 +82,4 @@ const RoundStatus: React.FC<Props> = ({
     )
 }
 
-export default RoundStatus
+export default GameStatus

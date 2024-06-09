@@ -1,9 +1,9 @@
 import { Flag, RotateCcw } from 'lucide-react'
-
-import type React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import styles from './StreetViewControls.module.css'
+
+import type React from 'react'
 
 interface Props {
     canPan: boolean

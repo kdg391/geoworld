@@ -2,7 +2,7 @@ import { Sun, Moon, Laptop } from 'lucide-react'
 import { lazy, Suspense, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
-import Select, { GroupBase, type StylesConfig } from 'react-select'
+import Select, { type GroupBase, type StylesConfig } from 'react-select'
 
 import useSettings from '../hooks/useSettings.js'
 import useTheme from '../hooks/useTheme.js'
@@ -116,7 +116,7 @@ const Footer = () => {
     return (
         <footer className={styles.footer}>
             <div>
-                <h3>Geography Guessing</h3>
+                <h3>GeoWorld</h3>
                 <div className={styles.settings}>
                     <div>
                         <div className={styles.settingTitle}>

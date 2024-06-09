@@ -16,27 +16,27 @@ const RandomStreetView = lazy(() => import('./routes/RandomStreetView.js'))
 
 const router = createBrowserRouter([
     {
-        path: '/geography-guessing/',
+        path: '/geoworld/',
         element: <Home />,
         errorElement: <ErrorPage />,
     },
     {
-        path: '/geography-guessing/game/:code',
+        path: '/geoworld/game/:code',
         element: <Game />,
         errorElement: <ErrorPage />,
     },
     {
-        path: '/geography-guessing/location-picker',
+        path: '/geoworld/location-picker',
         element: <LocationPicker />,
         errorElement: <ErrorPage />,
     },
     {
-        path: '/geography-guessing/random-streetview',
+        path: '/geoworld/random-streetview',
         element: <RandomStreetView />,
         errorElement: <ErrorPage />,
     },
     {
-        path: '/geography-guessing/*',
+        path: '/geoworld/*',
         element: <NotFound />,
     },
 ])

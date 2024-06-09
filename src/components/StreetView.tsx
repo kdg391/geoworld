@@ -52,6 +52,34 @@ const StreetView: React.FC<Props> = ({
         svPanoramaRef.current = svPanorama
         svServiceRef.current = svService
 
+        svPanorama.addListener('position_changed', () => {
+            const pos = svPanoramaRef.current?.getPosition()
+
+            if (!pos) return
+
+            const position = pos.toJSON()
+
+            const compareLocs = (
+                l1?: google.maps.LatLngLiteral,
+                l2?: google.maps.LatLngLiteral,
+            ) => {
+                if (!l1 || !l2) return false
+
+                return l1.lat === l2.lat && l1.lng === l2.lng
+            }
+
+            if (
+                positionHistoryRef.current.length < 1 ||
+                !compareLocs(
+                    position,
+                    positionHistoryRef.current[
+                        positionHistoryRef.current.length - 1
+                    ],
+                )
+            )
+                positionHistoryRef.current.push(position)
+        })
+
         const disablePan = (event: Event) => {
             event.stopPropagation()
         }
@@ -60,15 +88,13 @@ const StreetView: React.FC<Props> = ({
             if (settings.canPan) return
 
             if (document.querySelector('.widget-scene')) {
-                document
-                    .querySelector('.widget-scene')
-                    ?.addEventListener('mousedown', disablePan)
-                document
-                    .querySelector('.widget-scene')
-                    ?.addEventListener('touchstart', disablePan)
-                document
-                    .querySelector('.widget-scene')
-                    ?.addEventListener('pointerdown', disablePan)
+                const widgetScene = document.querySelector(
+                    '.widget-scene',
+                ) as Element
+
+                widgetScene.addEventListener('mousedown', disablePan)
+                widgetScene.addEventListener('touchstart', disablePan)
+                widgetScene.addEventListener('pointerdown', disablePan)
             }
         }, 500)
     }
@@ -125,45 +151,6 @@ const StreetView: React.FC<Props> = ({
     useEffect(() => {
         loadPanorama()
     }, [location])
-
-    useEffect(() => {
-        if (!svPanoramaRef.current) return
-
-        const positionChangeEvent = svPanoramaRef.current.addListener(
-            'position_changed',
-            () => {
-                const pos = svPanoramaRef.current?.getPosition()
-
-                if (!pos) return
-
-                const position = pos.toJSON()
-
-                const compareLocs = (
-                    l1?: google.maps.LatLngLiteral,
-                    l2?: google.maps.LatLngLiteral,
-                ) => {
-                    if (!l1 || !l2) return false
-
-                    return l1.lat === l2.lat && l1.lng === l2.lng
-                }
-
-                if (
-                    positionHistoryRef.current.length < 1 ||
-                    !compareLocs(
-                        position,
-                        positionHistoryRef.current[
-                            positionHistoryRef.current.length - 1
-                        ],
-                    )
-                )
-                    positionHistoryRef.current.push(position)
-            },
-        )
-
-        return () => {
-            positionChangeEvent.remove()
-        }
-    }, [svPanoramaRef.current])
 
     return (
         <>

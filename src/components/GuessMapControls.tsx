@@ -1,7 +1,8 @@
 import { ArrowDown, ArrowUp, Lock, LockOpen } from 'lucide-react'
-import type React from 'react'
 
 import styles from './GuessMapControls.module.css'
+
+import type React from 'react'
 
 const MIN_MAP_SIZE = 0
 const MAX_MAP_SIZE = 3

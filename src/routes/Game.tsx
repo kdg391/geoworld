@@ -5,22 +5,20 @@ import { Navigate, useLocation, useNavigate, useParams } from 'react-router-dom'
 
 import useSettings from '../hooks/useSettings.js'
 
-import COUNTRY_BOUNDS, {
-    type CountryCodes,
-} from '../utils/constants/countryBounds.js'
-import { OFFICIAL_MAPS } from '../utils/constants/index.js'
+// import COUNTRY_BOUNDS from '../constants/countryBounds.js'
+import { OFFICIAL_MAPS, type Codes } from '../constants/index.js'
 import {
     calculateDistance,
     calculateRoundScore,
-    calculateScoreFactor,
+    // calculateScoreFactor,
     shuffleArray,
 } from '../utils/index.js'
 
 import styles from './Game.module.css'
 
+const GameStatus = lazy(() => import('../components/GameStatus.js'))
 const GuessMap = lazy(() => import('../components/GuessMap.js'))
 const ResultMap = lazy(() => import('../components/ResultMap.js'))
-const RoundStatus = lazy(() => import('../components/RoundStatus.js'))
 const StreetView = lazy(() => import('../components/StreetView.js'))
 
 interface State {
@@ -38,7 +36,7 @@ const Game = () => {
     const state = location.state as State | null
 
     if (params.code === undefined || state === null)
-        return <Navigate to="/geography-guessing/" />
+        return <Navigate to="/geoworld/" />
 
     const navigate = useNavigate()
     const { t } = useTranslation()
@@ -104,14 +102,12 @@ const Game = () => {
                 settingsContext?.distanceUnit ?? 'metric',
             )
 
-            const scoreFactor =
-                (params.code as CountryCodes | 'worldwide') === 'worldwide'
-                    ? 2000
-                    : calculateScoreFactor(
-                          COUNTRY_BOUNDS[params.code as CountryCodes],
-                      )
+            // const scoreFactor =
+            //     (params.code as Codes | 'worldwide') === 'worldwide'
+            //         ? 2000
+            //         : calculateScoreFactor(COUNTRY_BOUNDS[params.code as Codes])
 
-            const _roundScore = calculateRoundScore(_distance, scoreFactor)
+            const _roundScore = calculateRoundScore(_distance, 2000)
 
             setDistance(_distance)
             setRoundScore(_roundScore)
@@ -129,7 +125,7 @@ const Game = () => {
     return (
         <main>
             <Suspense>
-                <RoundStatus
+                <GameStatus
                     finishRound={finishRound}
                     mapName={
                         data.code === 'worldwide'
@@ -182,7 +178,7 @@ const Game = () => {
                                     <button
                                         className={styles.exitBtn}
                                         onClick={() => {
-                                            navigate('/geography-guessing/')
+                                            navigate('/geoworld/')
                                         }}
                                     >
                                         {t('game.exit')}
@@ -236,7 +232,7 @@ const Game = () => {
 
             <Suspense>
                 <GuessMap
-                    code={params.code as CountryCodes}
+                    code={params.code as Codes}
                     finishRound={finishRound}
                     googleApiLoaded={googleApiLoaded}
                     markerPosition={markerPosition}

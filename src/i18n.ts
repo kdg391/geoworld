@@ -9,7 +9,7 @@ i18next
     .use(initReactI18next)
     .init({
         backend: {
-            loadPath: '/geography-guessing/locales/{{lng}}/{{ns}}.json',
+            loadPath: '/geoworld/locales/{{lng}}/{{ns}}.json',
         },
         detection: {
             lookupLocalStorage: 'lang',

@@ -10,14 +10,14 @@ const Header = () => {
         <header className={styles.header}>
             <div>
                 <h2>
-                    <Link to="/geography-guessing/">
+                    <Link to="/geoworld/">
                         <img
-                            src="/geography-guessing/icon.png"
+                            src="/geoworld/icon.png"
                             width={20}
                             height={20}
                             alt="logo"
                         />
-                        Geography Guessing
+                        GeoWorld
                     </Link>
                 </h2>
             </div>
@@ -31,7 +31,7 @@ const Header = () => {
                 <ul>
                     <li>
                         <a
-                            href="https://github.com/kdg391/geography-guessing"
+                            href="https://github.com/kdg391/geoworld"
                             target="_blank"
                             rel="noreferrer noopener"
                             className={styles.github}

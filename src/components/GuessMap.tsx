@@ -2,10 +2,8 @@ import { Map, X } from 'lucide-react'
 import React, { lazy, Suspense, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import COUNTRY_BOUNDS, {
-    type CountryCodes,
-} from '../utils/constants/countryBounds.js'
-import { DEFAULT_MAP_OPTIONS } from '../utils/constants/index.js'
+// import COUNTRY_BOUNDS from '../constants/countryBounds.js'
+import { DEFAULT_MAP_OPTIONS, type Codes } from '../constants/index.js'
 
 import styles from './GuessMap.module.css'
 
@@ -16,7 +14,7 @@ const GuessMapControls = lazy(() => import('./GuessMapControls.js'))
 const GuessMapZoomControls = lazy(() => import('./GuessMapZoomControls.js'))
 
 interface Props {
-    code: CountryCodes | undefined
+    code: Codes | undefined
     finishRound: (timedOut: boolean) => void
     googleApiLoaded: boolean
     markerPosition:
@@ -32,7 +30,7 @@ interface Props {
 }
 
 const GuessMap: React.FC<Props> = ({
-    code,
+    // code,
     finishRound,
     googleApiLoaded,
     markerPosition,
@@ -54,7 +52,7 @@ const GuessMap: React.FC<Props> = ({
     const fitMapBounds = () => {
         if (!guessMapRef.current) return
 
-        if (code !== undefined && code in COUNTRY_BOUNDS) {
+        /*if (code !== undefined && code in COUNTRY_BOUNDS) {
             const [lng1, lat1, lng2, lat2] = COUNTRY_BOUNDS[code]
 
             const bounds = new google.maps.LatLngBounds()
@@ -64,14 +62,14 @@ const GuessMap: React.FC<Props> = ({
 
             guessMapRef.current.fitBounds(bounds)
             guessMapRef.current.setCenter(bounds.getCenter())
-        } else {
-            guessMapRef.current.setCenter(
-                DEFAULT_MAP_OPTIONS.center as
-                    | google.maps.LatLngLiteral
-                    | google.maps.LatLng,
-            )
-            guessMapRef.current.setZoom(1)
-        }
+        } else {*/
+        guessMapRef.current.setCenter(
+            DEFAULT_MAP_OPTIONS.center as
+                | google.maps.LatLngLiteral
+                | google.maps.LatLng,
+        )
+        guessMapRef.current.setZoom(1)
+        // }
     }
 
     useEffect(() => {

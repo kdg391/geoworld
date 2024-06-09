@@ -1,4 +1,4 @@
-import type { GameData } from '../../types/index.js'
+import type { GameData } from '../types/index.js'
 
 export const MAX_ROUNDS = 10
 export const DEFAULT_ROUNDS = 5

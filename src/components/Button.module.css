@@ -1,0 +1,13 @@
+.btn {
+    padding: 8px 12px;
+}
+
+.primary {
+    background-color: var(--primary-color);
+    color: #fff;
+}
+
+.secondary {
+    background-color: var(--secondary-color);
+    color: #fff;
+}

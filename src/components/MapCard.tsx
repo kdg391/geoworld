@@ -1,11 +1,11 @@
 import React, { lazy, Suspense } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { FLAG_ENOJIS } from '../utils/constants/index.js'
-
-import type { GameData } from '../types/index.js'
+import { FLAG_ENOJIS } from '../constants/index.js'
 
 import styles from './MapCard.module.css'
+
+import type { GameData } from '../types/index.js'
 
 const Twemoji = lazy(() => import('./Twemoji.js'))
 
@@ -23,7 +23,7 @@ const MapCard: React.FC<GameCardProps> = ({ gameData, onPlayBtnClick }) => {
                 className={styles.mapThumbnail}
                 style={
                     {
-                        '--image-url': `url('/geography-guessing/assets/images/${gameData.code}.avif')`,
+                        '--image-url': `url('/geoworld/assets/images/${gameData.code}.avif')`,
                     } as React.CSSProperties
                 }
             >

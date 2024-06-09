@@ -2,11 +2,11 @@ import { ArrowDown } from 'lucide-react'
 import { lazy, Suspense, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { OFFICIAL_MAPS } from '../utils/constants/index.js'
-
-import type { GameData } from '../types/index.js'
+import { OFFICIAL_MAPS } from '../constants/index.js'
 
 import styles from './Home.module.css'
+
+import type { GameData } from '../types/index.js'
 
 const Footer = lazy(() => import('../components/Footer.js'))
 const Header = lazy(() => import('../components/Header.js'))
@@ -42,12 +42,7 @@ const Home = () => {
 
             <section id="hero">
                 <h1>{t('home.hero')}</h1>
-                <p>
-                    Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                    Nam quidem, unde deleniti dolorum harum tempora laborum nisi
-                    odio amet perferendis excepturi placeat quas molestiae fuga
-                    consequuntur!
-                </p>
+                <p></p>
                 <a href="#official-maps" role="button" aria-label="Play">
                     <ArrowDown />
                 </a>
@@ -71,6 +66,8 @@ const Home = () => {
                     </div>
                 </div>
             </section>
+
+            <section></section>
 
             <Suspense>
                 <Footer />

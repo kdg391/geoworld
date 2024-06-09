@@ -1,84 +1,84 @@
 {
-    "error": {
-        "title": "An unknown error has occurred."
+  "error": {
+    "title": "An unknown error has occurred."
+  },
+  "home": {
+    "hero": "Explore the world's street view",
+    "officialMaps": "Official Maps",
+    "locations_one": "{{count}} Location",
+    "locations_other": "{{count}} Locations",
+    "mapSettings": "Map Settings",
+    "move": "Move",
+    "pan": "Pan",
+    "zoom": "Zoom",
+    "rounds": "Rounds",
+    "timeLimit": "Time Limit",
+    "noLimit": "No Limit",
+    "timeLimitFormat": "{{minutes, number(style: unit; unit: minute; unitDisplay: narrow)}} {{seconds, number(style: unit; unit: second; unitDisplay: narrow)}}",
+    "cancel": "Cancel",
+    "play": "Play"
+  },
+  "game": {
+    "guess": "Guess",
+    "controls": {
+      "returnToStart": "Return to Start",
+      "undo": "Undo"
     },
-    "home": {
-        "hero": "Explore the world's street view",
-        "officialMaps": "Official Maps",
-        "locations_one": "{{count}} Location",
-        "locations_other": "{{count}} Locations",
-        "mapSettings": "Map Settings",
-        "move": "Move",
-        "pan": "Pan",
-        "zoom": "Zoom",
-        "rounds": "Rounds",
-        "timeLimit": "Time Limit",
-        "noLimit": "No Limit",
-        "timeLimitFormat": "{{minutes, number(style: unit; unit: minute; unitDisplay: narrow)}} {{seconds, number(style: unit; unit: second; unitDisplay: narrow)}}",
-        "cancel": "Cancel",
-        "play": "Play"
+    "gameStatus": {
+      "map": "Map",
+      "rounds": "Rounds",
+      "score": "Score"
     },
-    "game": {
-        "guess": "Guess",
-        "controls": {
-            "returnToStart": "Return to Start",
-            "undo": "Undo"
-        },
-        "roundStatus": {
-            "map": "Map",
-            "rounds": "Rounds",
-            "score": "Score"
-        },
-        "roundPoints": "+{{roundScore}} Points",
-        "roundResult": {
-            "imperial": "Your guess was <strong>{{distance, number(maximumFractionDigits: 1; style: unit; unit: mile)}}</strong> from the correct location",
-            "metric": "Your guess was <strong>{{distance, number(maximumFractionDigits: 1; style: unit; unit: kilometer)}}</strong> from the correct location"
-        },
-        "viewResults": "View Results",
-        "nextRound": "Next Round",
-        "totalPoints": "Total {{totalScore}} Points",
-        "replay": "Replay",
-        "exit": "Exit"
+    "roundPoints": "+{{roundScore}} Points",
+    "roundResult": {
+      "imperial": "Your guess was <strong>{{distance, number(maximumFractionDigits: 1; style: unit; unit: mile)}}</strong> from the correct location",
+      "metric": "Your guess was <strong>{{distance, number(maximumFractionDigits: 1; style: unit; unit: kilometer)}}</strong> from the correct location"
     },
-    "header": {
-        "officialMaps": "Official Maps"
+    "viewResults": "View Results",
+    "nextRound": "Next Round",
+    "totalPoints": "Total {{totalScore}} Points",
+    "replay": "Replay",
+    "exit": "Exit"
+  },
+  "header": {
+    "officialMaps": "Official Maps"
+  },
+  "footer": {
+    "theme": "Theme",
+    "themes": {
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System"
     },
-    "footer": {
-        "theme": "Theme",
-        "themes": {
-            "light": "Light",
-            "dark": "Dark",
-            "system": "System"
-        },
-        "language": "Language",
-        "distanceUnit": "Distance Unit",
-        "distanceUnits": {
-            "imperial": "Imperial (miles)",
-            "metric": "Metric (km)"
-        },
-        "links": "Links",
-        "linkTexts": {
-            "locationPicker": "Location Picker",
-            "randomStreetView": "Random Street View"
-        }
+    "language": "Language",
+    "distanceUnit": "Distance Unit",
+    "distanceUnits": {
+        "imperial": "Imperial (miles)",
+        "metric": "Metric (km)"
     },
-    "notFound": {
-        "backToHome": "Back to Home"
-    },
-    "worldwide": "Worldwide",
-    "countries": {
-        "au": "Australia",
-        "ca": "Canada",
-        "cn": "China",
-        "de": "Germany",
-        "fr": "France",
-        "gb": "United Kingdom",
-        "it": "Italy",
-        "jp": "Japan",
-        "kr": "South Korea",
-        "pl": "Poland",
-        "sg": "Singapore",
-        "tw": "Taiwan",
-        "us": "United States"
+    "links": "Links",
+    "linkTexts": {
+      "locationPicker": "Location Picker",
+      "randomStreetView": "Random Street View"
     }
+  },
+  "notFound": {
+    "backToHome": "Back to Home"
+  },
+  "worldwide": "Worldwide",
+  "countries": {
+    "au": "Australia",
+    "ca": "Canada",
+    "cn": "China",
+    "de": "Germany",
+    "fr": "France",
+    "gb": "United Kingdom",
+    "it": "Italy",
+    "jp": "Japan",
+    "kr": "South Korea",
+    "pl": "Poland",
+    "sg": "Singapore",
+    "tw": "Taiwan",
+    "us": "United States"
+  }
 }

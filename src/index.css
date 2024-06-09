@@ -50,38 +50,6 @@
     --scrollbar-thumb-hover: #adadad;
     --scrollbar-thumb-active: #9b9b9b;
     --scrollbar-track: #ddd;
-
-    --header-bg: #f4f4f4;
-    --header-border: rgba(0, 0, 0, 0.15);
-
-    --map-card-bg: #fcfcfc;
-    --map-card-border: rgba(0, 0, 0, 0.15);
-
-    --map-settings-modal: rgba(0, 0, 0, 0.5);
-    --map-settings-modal-header: #ececec;
-    --map-settings-modal-content: #fff;
-    --map-settings-modal-actions: #ececec;
-
-    --range-thumb: #000;
-    --range-track: #787878;
-
-    --round-status: rgba(255, 255, 255, 0.9);
-
-    --result-modal: #fff;
-
-    --footer-bg: #eee;
-    --footer-border: rgba(0, 0, 0, 0.1);
-
-    --selector-active-bg: var(--selector-selected-bg);
-    --selector-active-color: var(--selector-selected-color);
-    --selector-hovered-bg: #e9e9e9;
-    --selector-hovered-color: #000;
-    --selector-focused-bg: #e9e9e9;
-    --selector-focused-color: #000;
-    --selector-selected-bg: #c5e5ff;
-    --selector-selected-color: #000;
-    --selector-bg: #fff;
-    --selector-color: #000;
 }
 
 [data-theme='dark'] {
@@ -94,44 +62,11 @@
     --scrollbar-thumb-hover: #323232;
     --scrollbar-thumb-active: #414141;
     --scrollbar-track: #191919;
-
-    --header-bg: #181818;
-    --header-border: rgba(255, 255, 255, 0.15);
-
-    --map-card-bg: #232323;
-    --map-card-border: rgba(255, 255, 255, 0.05);
-
-    --map-settings-modal: rgba(0, 0, 0, 0.5);
-    --map-settings-modal-header: #333;
-    --map-settings-modal-content: rgb(35, 35, 35);
-    --map-settings-modal-actions: #333;
-
-    --range-thumb: #fff;
-    --range-track: #a2a2a2;
-
-    --round-status: rgba(0, 0, 0, 0.7);
-
-    --result-modal: #272727;
-
-    --footer-bg: #232323;
-    --footer-border: rgba(255, 255, 255, 0.1);
-
-    --selector-active-bg: var(--selector-selected-bg);
-    --selector-active-color: var(--selector-selected-color);
-    --selector-hovered-bg: #454545;
-    --selector-hovered-color: #fff;
-    --selector-focused-bg: #454545;
-    --selector-focused-color: #fff;
-    --selector-selected-bg: #5ea4ff;
-    --selector-selected-color: #fff;
-    --selector-bg: #333;
-    --selector-color: #fff;
 }
 
 @supports (scrollbar-width: thin) and (not selector(::-webkit-scrollbar)) {
     :root {
         scrollbar-width: thin;
-        scrollbar-gutter: auto;
         scrollbar-color: var(--scrollbar-track) var(--scrollbar-thumb);
     }
 }
@@ -164,12 +99,13 @@
 
 html,
 body {
-    width: 100%;
-    min-height: 100dvh;
-    height: 100dvh;
+    height: 100%;
 }
 
 body {
+    width: 100%;
+    min-height: 100dvh;
+    padding: 0;
     margin: 0;
     font-family: 'Pretendard', system-ui, -apple-system, BlinkMacSystemFont,
         'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans',

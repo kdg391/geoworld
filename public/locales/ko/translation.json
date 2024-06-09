@@ -1,83 +1,83 @@
 {
-    "error": {
-        "title": "알 수 없는 오류가 발생했습니다."
+  "error": {
+    "title": "알 수 없는 오류가 발생했습니다."
+  },
+  "home": {
+    "hero": "전 세계의 스트리트 뷰를 탐험하세요",
+    "officialMaps": "공식 맵",
+    "locations": "위치 {{count}}개",
+    "mapSettings": "맵 설정",
+    "move": "이동",
+    "pan": "팬",
+    "zoom": "줌",
+    "rounds": "라운드",
+    "timeLimit": "시간 제한",
+    "noLimit": "제한 없음",
+    "timeLimitFormat": "{{minutes, number(style: unit; unit: minute; unitDisplay: narrow)}} {{seconds, number(style: unit; unit: second; unitDisplay: narrow)}}",
+    "cancel": "취소",
+    "play": "플레이"
+  },
+  "game": {
+    "guess": "Guess",
+    "controls": {
+      "returnToStart": "시작 지점으로 돌아가기",
+      "undo": "되돌리기"
     },
-    "home": {
-        "hero": "전 세계의 스트리트 뷰를 탐험하세요",
-        "officialMaps": "공식 맵",
-        "locations": "위치 {{count}}개",
-        "mapSettings": "맵 설정",
-        "move": "이동",
-        "pan": "팬",
-        "zoom": "줌",
-        "rounds": "라운드",
-        "timeLimit": "시간 제한",
-        "noLimit": "제한 없음",
-        "timeLimitFormat": "{{minutes, number(style: unit; unit: minute; unitDisplay: narrow)}} {{seconds, number(style: unit; unit: second; unitDisplay: narrow)}}",
-        "cancel": "취소",
-        "play": "플레이"
+    "gameStatus": {
+      "map": "맵",
+      "rounds": "라운드",
+      "score": "점수"
     },
-    "game": {
-        "guess": "Guess",
-        "controls": {
-            "returnToStart": "시작 지점으로 돌아가기",
-            "undo": "되돌리기"
-        },
-        "roundStatus": {
-            "map": "맵",
-            "rounds": "라운드",
-            "score": "점수"
-        },
-        "roundPoints": "+{{roundScore}} 포인트",
-        "roundResult": {
-            "imperial": "정답에서 <strong>{{distance, number(maximumFractionDigits: 1; style: unit; unit: mile)}}</strong> 떨어짐",
-            "metric": "정답에서 <strong>{{distance, number(maximumFractionDigits: 1; style: unit; unit: kilometer)}}</strong> 떨어짐"
-        },
-        "viewResults": "결과 보기",
-        "nextRound": "다음 라운드",
-        "totalPoints": "총 {{totalScore}} 포인트",
-        "replay": "다시 플레이",
-        "exit": "나가기"
+    "roundPoints": "+{{roundScore}} 포인트",
+    "roundResult": {
+      "imperial": "정답에서 <strong>{{distance, number(maximumFractionDigits: 1; style: unit; unit: mile)}}</strong> 떨어짐",
+      "metric": "정답에서 <strong>{{distance, number(maximumFractionDigits: 1; style: unit; unit: kilometer)}}</strong> 떨어짐"
     },
-    "header": {
-        "officialMaps": "공식 맵"
+    "viewResults": "결과 보기",
+    "nextRound": "다음 라운드",
+    "totalPoints": "총 {{totalScore}} 포인트",
+    "replay": "다시 플레이",
+    "exit": "나가기"
+  },
+  "header": {
+    "officialMaps": "공식 맵"
+  },
+  "footer": {
+    "theme": "테마",
+    "themes": {
+      "light": "라이트",
+      "dark": "다크",
+      "system": "시스템"
     },
-    "footer": {
-        "theme": "테마",
-        "themes": {
-            "light": "라이트",
-            "dark": "다크",
-            "system": "시스템"
-        },
-        "language": "언어",
-        "distanceUnit": "거리 단위",
-        "distanceUnits": {
-            "imperial": "마일 (miles)",
-            "metric": "미터 (km)"
-        },
-        "links": "링크",
-        "linkTexts": {
-            "locationPicker": "Location Picker",
-            "randomStreetView": "랜덤 스트리트 뷰"
-        }
+    "language": "언어",
+    "distanceUnit": "거리 단위",
+    "distanceUnits": {
+      "imperial": "마일 (miles)",
+      "metric": "미터 (km)"
     },
-    "notFound": {
-        "backToHome": "홈으로 돌아가기"
-    },
-    "worldwide": "월드",
-    "countries": {
-        "au": "오스트레일리아",
-        "ca": "캐나다",
-        "cn": "중국",
-        "de": "독일",
-        "fr": "프랑스",
-        "gb": "영국",
-        "it": "이탈리아",
-        "jp": "일본",
-        "kr": "대한민국",
-        "pl": "폴란드",
-        "sg": "싱가포르",
-        "tw": "대만",
-        "us": "미국"
+    "links": "링크",
+    "linkTexts": {
+      "locationPicker": "Location Picker",
+      "randomStreetView": "랜덤 스트리트 뷰"
     }
+  },
+  "notFound": {
+    "backToHome": "홈으로 돌아가기"
+  },
+  "worldwide": "월드",
+  "countries": {
+    "au": "오스트레일리아",
+    "ca": "캐나다",
+    "cn": "중국",
+    "de": "독일",
+    "fr": "프랑스",
+    "gb": "영국",
+    "it": "이탈리아",
+    "jp": "일본",
+    "kr": "대한민국",
+    "pl": "폴란드",
+    "sg": "싱가포르",
+    "tw": "대만",
+    "us": "미국"
+  }
 }

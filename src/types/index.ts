@@ -1,4 +1,4 @@
-import type { Codes } from '../utils/constants/index.js'
+import type { Codes } from '../constants/index.js'
 
 export type Theme = 'light' | 'dark' | 'system'
 

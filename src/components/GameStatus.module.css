@@ -1,4 +1,12 @@
-.roundStatusContainer {
+[data-theme='light'] {
+    --game-status: rgba(255, 255, 255, 0.9);
+}
+
+[data-theme='dark'] {
+    --game-status: rgba(0, 0, 0, 0.7);
+}
+
+.gameStatusContainer {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -9,14 +17,14 @@
     width: 100%;
 }
 
-.roundStatus {
+.gameStatus {
     position: absolute;
     top: 1rem;
     right: 1rem;
     padding: 6px 12px;
     gap: 16px;
     display: flex;
-    background-color: var(--round-status);
+    background-color: var(--game-status);
     font-size: 1rem;
     border-radius: 4px;
 
@@ -34,7 +42,7 @@
 
 .timeLeft {
     position: relative;
-    background-color: var(--round-status);
+    background-color: var(--game-status);
     padding: 8px 16px;
     max-width: 72px;
     margin-top: 1rem;

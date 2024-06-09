@@ -21,5 +21,5 @@ export default defineConfig({
             },
         },
     },
-    base: '/geography-guessing/',
+    base: '/geoworld/',
 })

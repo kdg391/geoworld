@@ -1,6 +1,6 @@
-# Geography Guessing
+# GeoWorld
 
-A geography guessing game inspired by GeoGuessr, [GeoHub](https://github.com/benlikescode/GeoHub), and [GeoGuess](https://github.com/GeoGuess/GeoGuess).
+GeoWorld is a geography guessing game inspired by GeoGuessr, [GeoHub](https://github.com/benlikescode/GeoHub), and [GeoGuess](https://github.com/GeoGuess/GeoGuess).
 
 ## References
 
