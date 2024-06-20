@@ -1,5 +1,5 @@
 import { Minus, Plus, X } from 'lucide-react'
-import React, { lazy, Suspense, useMemo, useState } from 'react'
+import { lazy, Suspense, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
@@ -7,18 +7,19 @@ import { DEFAULT_ROUNDS, FLAG_ENOJIS, MAX_ROUNDS } from '../constants/index.js'
 
 import styles from './MapSettingsModal.module.css'
 
-import type { GameData } from '../types/index.js'
+import type { MapData } from '../types/index.js'
 
-const Slider = lazy(() => import('./Slider.js'))
-const Switch = lazy(() => import('./Switch.js'))
+const Button = lazy(() => import('./common/Button.js'))
+const Slider = lazy(() => import('./common/Slider.js'))
+const Switch = lazy(() => import('./common/Switch.js'))
 const Twemoji = lazy(() => import('./Twemoji.js'))
 
 interface Props {
-    gameData: GameData
+    mapData: MapData
     setShowModal: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const MapSettingsModal: React.FC<Props> = ({ gameData, setShowModal }) => {
+const MapSettingsModal: React.FC<Props> = ({ mapData, setShowModal }) => {
     const navigate = useNavigate()
     const { t } = useTranslation()
 
@@ -26,25 +27,22 @@ const MapSettingsModal: React.FC<Props> = ({ gameData, setShowModal }) => {
     const [canPan, setCanPan] = useState(true)
     const [canZoom, setCanZoom] = useState(true)
     const [rounds, setRounds] = useState(
-        gameData.locations.length > DEFAULT_ROUNDS
+        mapData.locations.length > DEFAULT_ROUNDS
             ? DEFAULT_ROUNDS
-            : gameData.locations.length,
+            : mapData.locations.length,
     )
     const [timeLimit, setTimeLimit] = useState<number | null>(null)
 
-    const maxRounds = useMemo(
-        () =>
-            gameData.locations.length > MAX_ROUNDS
-                ? MAX_ROUNDS
-                : gameData.locations.length,
-        [gameData.locations],
-    )
+    const maxRounds =
+        mapData.locations.length > MAX_ROUNDS
+            ? MAX_ROUNDS
+            : mapData.locations.length
 
     return (
         <div className={styles.mapSettingsModal}>
             <div className={styles.mapSettingsModalWrapper}>
                 <div className={styles.modalHeader}>
-                    <h3>{t('home.mapSettings')}</h3>
+                    <h3>{t('home.mapSettings.title')}</h3>
                     <button
                         aria-label="Close"
                         onClick={() => {
@@ -60,31 +58,33 @@ const MapSettingsModal: React.FC<Props> = ({ gameData, setShowModal }) => {
                             <Suspense>
                                 <Twemoji
                                     emoji={
-                                        gameData.code === 'worldwide'
+                                        mapData.code === 'worldwide'
                                             ? '🌐'
-                                            : FLAG_ENOJIS[gameData.code]
+                                            : FLAG_ENOJIS[mapData.code]
                                     }
                                     width={24}
                                     height={24}
                                     alt={
-                                        gameData.code === 'worldwide'
+                                        mapData.code === 'worldwide'
                                             ? t('worldwide')
-                                            : t(`countries.${gameData.code}`)
+                                            : t(`countries.${mapData.code}`)
                                     }
                                 />
                             </Suspense>
                         </div>
                         <div className={styles.mapDetails}>
                             <h4>
-                                {gameData.code === 'worldwide'
+                                {mapData.code === 'worldwide'
                                     ? t('worldwide')
-                                    : t(`countries.${gameData.code}`)}
+                                    : t(`countries.${mapData.code}`)}
                             </h4>
                             <p>Description</p>
                         </div>
                     </div>
                     <div className={styles.setting}>
-                        <label htmlFor="move">{t('home.move')}</label>
+                        <label htmlFor="move">
+                            {t('home.mapSettings.move')}
+                        </label>
                         <Suspense>
                             <Switch
                                 id="move"
@@ -96,7 +96,7 @@ const MapSettingsModal: React.FC<Props> = ({ gameData, setShowModal }) => {
                         </Suspense>
                     </div>
                     <div className={styles.setting}>
-                        <label htmlFor="pan">{t('home.pan')}</label>
+                        <label htmlFor="pan">{t('home.mapSettings.pan')}</label>
                         <Suspense>
                             <Switch
                                 id="pan"
@@ -108,7 +108,9 @@ const MapSettingsModal: React.FC<Props> = ({ gameData, setShowModal }) => {
                         </Suspense>
                     </div>
                     <div className={styles.setting}>
-                        <label htmlFor="zoom">{t('home.zoom')}</label>
+                        <label htmlFor="zoom">
+                            {t('home.mapSettings.zoom')}
+                        </label>
                         <Suspense>
                             <Switch
                                 id="zoom"
@@ -120,7 +122,9 @@ const MapSettingsModal: React.FC<Props> = ({ gameData, setShowModal }) => {
                         </Suspense>
                     </div>
                     <div className={styles.setting}>
-                        <label htmlFor="rounds">{t('home.rounds')}</label>
+                        <label htmlFor="rounds">
+                            {t('home.mapSettings.rounds')}
+                        </label>
 
                         <div style={{ display: 'flex' }}>
                             <button
@@ -186,12 +190,12 @@ const MapSettingsModal: React.FC<Props> = ({ gameData, setShowModal }) => {
                     <div>
                         <div>
                             <label htmlFor="time-limit">
-                                {t('home.timeLimit')}
+                                {t('home.mapSettings.roundTime')}
                             </label>
                             {' ('}
                             {timeLimit === null
-                                ? t('home.noLimit')
-                                : t('home.timeLimitFormat', {
+                                ? t('home.mapSettings.noTimeLimit')
+                                : t('home.mapSettings.roundTimeFormat', {
                                       minutes: Math.floor(timeLimit / 60),
                                       seconds: timeLimit % 60,
                                   })}
@@ -230,32 +234,36 @@ const MapSettingsModal: React.FC<Props> = ({ gameData, setShowModal }) => {
                     </div>
                 </div>
                 <div className={styles.modalActions}>
-                    <button
-                        className={styles.cancelBtn}
-                        aria-label={t('home.cancel')}
-                        onClick={() => {
-                            setShowModal(false)
-                        }}
-                    >
-                        {t('home.cancel')}
-                    </button>
-                    <button
-                        className={styles.playBtn}
-                        aria-label={t('home.play')}
-                        onClick={() => {
-                            navigate(`/geoworld/game/${gameData.code}`, {
-                                state: {
-                                    canMove,
-                                    canPan,
-                                    canZoom,
-                                    rounds,
-                                    timeLimit,
-                                },
-                            })
-                        }}
-                    >
-                        {t('home.play')}
-                    </button>
+                    <Suspense>
+                        <Button
+                            variant="secondary"
+                            size="m"
+                            aria-label={t('home.mapSettings.cancel')}
+                            onClick={() => {
+                                setShowModal(false)
+                            }}
+                        >
+                            {t('home.mapSettings.cancel')}
+                        </Button>
+                        <Button
+                            variant="primary"
+                            size="m"
+                            aria-label={t('home.play')}
+                            onClick={() => {
+                                navigate(`/geoworld/game/${mapData.code}`, {
+                                    state: {
+                                        canMove,
+                                        canPan,
+                                        canZoom,
+                                        rounds,
+                                        timeLimit,
+                                    },
+                                })
+                            }}
+                        >
+                            {t('home.play')}
+                        </Button>
+                    </Suspense>
                 </div>
             </div>
         </div>

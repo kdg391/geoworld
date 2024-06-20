@@ -3,18 +3,23 @@
     "title": "알 수 없는 오류가 발생했습니다."
   },
   "home": {
-    "hero": "전 세계의 스트리트 뷰를 탐험하세요",
+    "hero": {
+      "title": "전 세계의 스트리트 뷰를 탐험하세요",
+      "description": "세계 곳곳의 스트리트 뷰를 보고 그 위치가 어디인지 맞히세요."
+    },
     "officialMaps": "공식 맵",
     "locations": "위치 {{count}}개",
-    "mapSettings": "맵 설정",
-    "move": "이동",
-    "pan": "팬",
-    "zoom": "줌",
-    "rounds": "라운드",
-    "timeLimit": "시간 제한",
-    "noLimit": "제한 없음",
-    "timeLimitFormat": "{{minutes, number(style: unit; unit: minute; unitDisplay: narrow)}} {{seconds, number(style: unit; unit: second; unitDisplay: narrow)}}",
-    "cancel": "취소",
+    "mapSettings": {
+      "title": "맵 설정",
+      "move": "이동",
+      "pan": "팬",
+      "zoom": "줌",
+      "rounds": "라운드",
+      "roundTime": "라운드 시간",
+      "noTimeLimit": "시간 제한 없음",
+      "roundTimeFormat": "{{minutes, number(style: unit; unit: minute; unitDisplay: narrow)}} {{seconds, number(style: unit; unit: second; unitDisplay: narrow)}}",
+      "cancel": "취소"
+    },
     "play": "플레이"
   },
   "game": {
@@ -28,14 +33,14 @@
       "rounds": "라운드",
       "score": "점수"
     },
-    "roundPoints": "+{{roundScore}} 포인트",
+    "roundPoints": "+{{count, number}} 포인트",
     "roundResult": {
       "imperial": "정답에서 <strong>{{distance, number(maximumFractionDigits: 1; style: unit; unit: mile)}}</strong> 떨어짐",
       "metric": "정답에서 <strong>{{distance, number(maximumFractionDigits: 1; style: unit; unit: kilometer)}}</strong> 떨어짐"
     },
     "viewResults": "결과 보기",
     "nextRound": "다음 라운드",
-    "totalPoints": "총 {{totalScore}} 포인트",
+    "totalPoints": "총 {{count, number}} 포인트",
     "replay": "다시 플레이",
     "exit": "나가기"
   },

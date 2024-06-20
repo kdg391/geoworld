@@ -1,4 +1,4 @@
-.streetViewControls {
+.street-view-controls {
     position: absolute;
     left: 10px;
     bottom: 96px;
@@ -12,8 +12,8 @@
     }
 }
 
-.returnToStartBtn,
-.undoBtn {
+.return-to-start-btn,
+.undo-btn {
     width: 48px;
     height: 48px;
     border: 1px solid rgba(0, 0, 0, 0.5);

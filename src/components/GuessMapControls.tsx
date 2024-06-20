@@ -1,8 +1,6 @@
-import { ArrowDown, ArrowUp, Lock, LockOpen } from 'lucide-react'
+import { ArrowUpLeft, ArrowDownRight, Lock, LockOpen } from 'lucide-react'
 
 import styles from './GuessMapControls.module.css'
-
-import type React from 'react'
 
 const MIN_MAP_SIZE = 0
 const MAX_MAP_SIZE = 3
@@ -27,7 +25,7 @@ const GuessMapControls: React.FC<Props> = ({
                 setMapSize((s) => (s >= MAX_MAP_SIZE ? s : s + 1))
             }}
         >
-            <ArrowUp className="increase" size={16} />
+            <ArrowUpLeft size={16} />
         </button>
         <button
             disabled={mapSize <= MIN_MAP_SIZE}
@@ -35,7 +33,7 @@ const GuessMapControls: React.FC<Props> = ({
                 setMapSize((s) => (s < MIN_MAP_SIZE ? s : s - 1))
             }}
         >
-            <ArrowDown className="decrease" size={16} />
+            <ArrowDownRight size={16} />
         </button>
         <button
             onClick={() => {

@@ -6,7 +6,7 @@ import { OFFICIAL_MAPS } from '../constants/index.js'
 
 import styles from './Home.module.css'
 
-import type { GameData } from '../types/index.js'
+import type { MapData } from '../types/index.js'
 
 const Footer = lazy(() => import('../components/Footer.js'))
 const Header = lazy(() => import('../components/Header.js'))
@@ -18,7 +18,7 @@ const Home = () => {
 
     const [showModal, setShowModal] = useState(false)
 
-    const [gameData, setGameData] = useState<GameData | null>(null)
+    const [mapData, setMapData] = useState<MapData | null>(null)
 
     useEffect(() => {
         if (showModal) document.body.style.setProperty('overflow-y', 'hidden')
@@ -26,7 +26,7 @@ const Home = () => {
     }, [showModal])
 
     return (
-        <main>
+        <main className={styles.main}>
             <Suspense>
                 <Header />
             </Suspense>
@@ -34,15 +34,15 @@ const Home = () => {
             {showModal && (
                 <Suspense>
                     <MapSettingsModal
-                        gameData={gameData as GameData}
+                        mapData={mapData as MapData}
                         setShowModal={setShowModal}
                     />
                 </Suspense>
             )}
 
             <section id="hero">
-                <h1>{t('home.hero')}</h1>
-                <p></p>
+                <h1>{t('home.hero.title')}</h1>
+                <p>{t('home.hero.description')}</p>
                 <a href="#official-maps" role="button" aria-label="Play">
                     <ArrowDown />
                 </a>
@@ -51,13 +51,13 @@ const Home = () => {
             <section id="official-maps">
                 <div className={styles.container}>
                     <h2>{t('home.officialMaps')}</h2>
-                    <div className={styles.wrapper}>
-                        {OFFICIAL_MAPS.map((g, index) => (
+                    <div className={styles.mapCards}>
+                        {OFFICIAL_MAPS.map((map, index) => (
                             <Suspense key={index}>
                                 <MapCard
-                                    gameData={g}
+                                    mapData={map}
                                     onPlayBtnClick={() => {
-                                        setGameData(g)
+                                        setMapData(map)
                                         setShowModal(true)
                                     }}
                                 />
@@ -66,8 +66,6 @@ const Home = () => {
                     </div>
                 </div>
             </section>
-
-            <section></section>
 
             <Suspense>
                 <Footer />

@@ -1,7 +1,5 @@
 import styles from './Slider.module.css'
 
-import type React from 'react'
-
 const Slider: React.FC<
     React.DetailedHTMLProps<
         React.InputHTMLAttributes<HTMLInputElement>,

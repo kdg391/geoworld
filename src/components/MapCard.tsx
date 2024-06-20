@@ -1,20 +1,21 @@
-import React, { lazy, Suspense } from 'react'
+import { lazy, Suspense } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { FLAG_ENOJIS } from '../constants/index.js'
 
 import styles from './MapCard.module.css'
 
-import type { GameData } from '../types/index.js'
+import type { MapData } from '../types/index.js'
 
+const Button = lazy(() => import('./common/Button.js'))
 const Twemoji = lazy(() => import('./Twemoji.js'))
 
 interface GameCardProps {
-    gameData: GameData
+    mapData: MapData
     onPlayBtnClick: React.MouseEventHandler<HTMLButtonElement>
 }
 
-const MapCard: React.FC<GameCardProps> = ({ gameData, onPlayBtnClick }) => {
+const MapCard: React.FC<GameCardProps> = ({ mapData, onPlayBtnClick }) => {
     const { t } = useTranslation()
 
     return (
@@ -23,7 +24,7 @@ const MapCard: React.FC<GameCardProps> = ({ gameData, onPlayBtnClick }) => {
                 className={styles.mapThumbnail}
                 style={
                     {
-                        '--image-url': `url('/geoworld/assets/images/${gameData.code}.avif')`,
+                        '--image-url': `url('/geoworld/assets/images/${mapData.code}.avif')`,
                     } as React.CSSProperties
                 }
             >
@@ -31,38 +32,41 @@ const MapCard: React.FC<GameCardProps> = ({ gameData, onPlayBtnClick }) => {
                     <Suspense>
                         <Twemoji
                             emoji={
-                                gameData.code === 'worldwide'
+                                mapData.code === 'worldwide'
                                     ? '🌐'
-                                    : FLAG_ENOJIS[gameData.code]
+                                    : FLAG_ENOJIS[mapData.code]
                             }
                             width={28}
                             height={28}
                             alt={
-                                gameData.code === 'worldwide'
+                                mapData.code === 'worldwide'
                                     ? t('worldwide')
-                                    : t(`countries.${gameData.code}`)
+                                    : t(`countries.${mapData.code}`)
                             }
                         />
                     </Suspense>
-                    {gameData.code === 'worldwide'
+                    {mapData.code === 'worldwide'
                         ? t('worldwide')
-                        : t(`countries.${gameData.code}`)}
+                        : t(`countries.${mapData.code}`)}
                 </div>
             </div>
             <div className={styles.cardContent}>
                 <span>
                     {t('home.locations', {
-                        count: gameData.locations.length,
+                        count: mapData.locations.length,
                     })}
                 </span>
-                <button
-                    className={styles.playBtn}
-                    aria-label={t('home.play')}
-                    disabled={gameData.locations.length === 0}
-                    onClick={onPlayBtnClick}
-                >
-                    {t('home.play')}
-                </button>
+                <Suspense>
+                    <Button
+                        variant="primary"
+                        size="m"
+                        aria-label={t('home.play')}
+                        disabled={mapData.locations.length === 0}
+                        onClick={onPlayBtnClick}
+                    >
+                        {t('home.play')}
+                    </Button>
+                </Suspense>
             </div>
         </div>
     )

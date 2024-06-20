@@ -1,4 +1,4 @@
-import type { GameData } from '../types/index.js'
+import type { MapData } from '../types/index.js'
 
 export const MAX_ROUNDS = 10
 export const DEFAULT_ROUNDS = 5
@@ -10,8 +10,7 @@ export const DEFAULT_MAP_OPTIONS: google.maps.MapOptions = {
     },
 }
 
-export type Codes = keyof typeof FLAG_ENOJIS
-
+// flags and languages
 export const FLAG_ENOJIS = {
     au: '🇦🇺',
     ca: '🇨🇦',
@@ -28,9 +27,20 @@ export const FLAG_ENOJIS = {
     us: '🇺🇸',
 }
 
+export const LANGUAGES = ['en', 'ko'] as const
+
+export const LANGUAGE_NAMES = {
+    en: 'English',
+    ko: '한국어',
+}
+
+export const LANGUAGE_FLAGS = {
+    en: FLAG_ENOJIS.us,
+    ko: FLAG_ENOJIS.kr,
+}
+
 // Official Maps
-// todo: change to geojson
-export const OFFICIAL_MAPS: GameData[] = [
+export const OFFICIAL_MAPS: MapData[] = [
     {
         code: 'au',
         locations: [
@@ -372,9 +382,9 @@ export const OFFICIAL_MAPS: GameData[] = [
     },
 ]
 
-export const WORLD_GAME: GameData = {
+const WORLD_MAP: MapData = {
     code: 'worldwide',
     locations: OFFICIAL_MAPS.map((m) => m.locations).flat(1),
 }
 
-OFFICIAL_MAPS.unshift(WORLD_GAME)
+OFFICIAL_MAPS.unshift(WORLD_MAP)

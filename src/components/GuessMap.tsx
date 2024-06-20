@@ -1,20 +1,23 @@
 import { Map, X } from 'lucide-react'
-import React, { lazy, Suspense, useEffect, useRef, useState } from 'react'
+import { lazy, Suspense, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 // import COUNTRY_BOUNDS from '../constants/countryBounds.js'
-import { DEFAULT_MAP_OPTIONS, type Codes } from '../constants/index.js'
+import { DEFAULT_MAP_OPTIONS } from '../constants/index.js'
+
+import { classNames } from '../utils/index.js'
 
 import styles from './GuessMap.module.css'
 
 import type GoogleMapType from './GoogleMap.js'
+import type { CountryCodes } from '../types/index.js'
 
 const GoogleMap = lazy(() => import('./GoogleMap.js')) as typeof GoogleMapType
 const GuessMapControls = lazy(() => import('./GuessMapControls.js'))
 const GuessMapZoomControls = lazy(() => import('./GuessMapZoomControls.js'))
 
 interface Props {
-    code: Codes | undefined
+    code: CountryCodes | undefined
     finishRound: (timedOut: boolean) => void
     googleApiLoaded: boolean
     markerPosition:
@@ -97,13 +100,11 @@ const GuessMap: React.FC<Props> = ({
     return (
         <>
             <div
-                className={[
+                className={classNames(
                     styles.guessMapContainer,
                     mapActive ? 'active' : '',
                     mapSize !== 1 ? `size--${mapSize}` : '',
-                ]
-                    .filter((c) => c !== '')
-                    .join(' ')}
+                )}
                 onMouseOver={() => {
                     if (isMapPinned) return
 

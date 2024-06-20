@@ -1,4 +1,4 @@
-.guessMapZoomControls {
+.guess-map-zoom-controls {
     display: flex;
     flex-direction: column;
     gap: 6px;
@@ -30,7 +30,7 @@
 }
 
 @media only screen and (max-width: 600px) {
-    .guessMapZoomControls {
+    .guess-map-zoom-controls {
         display: none;
     }
 }

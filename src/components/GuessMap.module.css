@@ -1,4 +1,4 @@
-.guessMapContainer {
+.guess-map-container {
     position: absolute;
     right: 24px;
     bottom: 24px;
@@ -42,23 +42,23 @@
     }
 }
 
-.guessMapWrapper {
+.guess-map-wrapper {
     position: relative;
 }
 
-.guessMap,
-.guessMapWrapper {
+.guess-map,
+.guess-map-wrapper {
     width: 100%;
     height: 100%;
 }
 
-.guessBtn {
+.guess-btn {
     margin-top: 8px;
     text-transform: uppercase;
 
     background-color: var(--primary-color);
     font-size: 1rem;
-    padding: 12px 24px;
+    padding: 0.75rem 1.5rem;
     color: #fff;
     border-radius: 8px;
 
@@ -67,19 +67,19 @@
     }
 }
 
-.mapBtn,
-.closeBtn {
+.map-btn,
+.close-btn {
     display: none;
 }
 
 @media only screen and (max-width: 750px) {
-    :local(.guessMapContainer):global(.size--0) {
+    .guess-map-container:global(.size--0) {
         --active-width: 24dvw;
     }
 }
 
 @media only screen and (max-width: 600px) {
-    .mapBtn {
+    .map-btn {
         position: absolute;
         right: 16px;
         bottom: 24px;
@@ -89,6 +89,7 @@
         justify-content: center;
         width: 64px;
         height: 64px;
+        padding: 2px;
         border-radius: 50%;
         background-color: var(--primary-color);
 
@@ -97,13 +98,13 @@
         }
     }
 
-    .closeBtn,
-    .guessBtn,
-    .guessMap {
+    .close-btn,
+    .guess-btn,
+    .guess-map {
         display: none;
     }
 
-    .guessMapContainer {
+    .guess-map-container {
         left: 0;
         bottom: 0;
         opacity: 1;
@@ -114,34 +115,36 @@
             width: 100%;
             height: 40dvh;
             display: flex;
-        }
 
-        :global(&.active) :local(.guessBtn) {
-            display: inline-block;
-            border-radius: 0;
-            margin-top: 0;
-        }
+            & .guess-btn {
+                display: inline-block;
+                border-radius: 0;
+                margin-top: 0;
+                padding: 1rem 1.5rem;
+            }
 
-        :global(&.active) :local(.guessMap) {
-            display: block;
-        }
+            & .guess-map {
+                display: block;
+            }
 
-        :global(&.active) :local(.mapBtn) {
-            display: none;
-        }
+            & + .map-btn {
+                display: none;
+            }
 
-        :global(&.active) :local(.closeBtn) {
-            position: absolute;
-            top: 16px;
-            right: 16px;
-            z-index: 4;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background-color: var(--bg);
+            & .close-btn {
+                position: absolute;
+                top: 16px;
+                right: 16px;
+                z-index: 4;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 32px;
+                height: 32px;
+                padding: 2px;
+                border-radius: 50%;
+                background-color: var(--bg);
+            }
         }
     }
 }

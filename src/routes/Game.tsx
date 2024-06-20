@@ -6,7 +6,7 @@ import { Navigate, useLocation, useNavigate, useParams } from 'react-router-dom'
 import useSettings from '../hooks/useSettings.js'
 
 // import COUNTRY_BOUNDS from '../constants/countryBounds.js'
-import { OFFICIAL_MAPS, type Codes } from '../constants/index.js'
+import { OFFICIAL_MAPS } from '../constants/index.js'
 import {
     calculateDistance,
     calculateRoundScore,
@@ -16,6 +16,9 @@ import {
 
 import styles from './Game.module.css'
 
+import type { CountryCodes } from '../types/index.js'
+
+const Button = lazy(() => import('../components/common/Button.js'))
 const GameStatus = lazy(() => import('../components/GameStatus.js'))
 const GuessMap = lazy(() => import('../components/GuessMap.js'))
 const ResultMap = lazy(() => import('../components/ResultMap.js'))
@@ -65,7 +68,7 @@ const Game = () => {
 
     const settingsContext = useSettings()
 
-    const data = OFFICIAL_MAPS.find((g) => g.code === params.code)!
+    const data = OFFICIAL_MAPS.find((m) => m.code === params.code)!
 
     const init = async () => {
         const loader = new Loader({
@@ -145,53 +148,52 @@ const Game = () => {
                     display: roundFinished || gameFinished ? 'flex' : 'none',
                 }}
             >
-                <div className={styles.roundResultWrapper}>
-                    <Suspense>
-                        <ResultMap
-                            actualLocations={actualLocations}
-                            gameFinished={gameFinished}
-                            googleApiLoaded={googleApiLoaded}
-                            guessedLocations={guessedLocations}
-                            round={round}
-                            roundFinished={roundFinished}
-                            className={styles.resultMap}
-                        />
-                    </Suspense>
+                <Suspense>
+                    <ResultMap
+                        actualLocations={actualLocations}
+                        gameFinished={gameFinished}
+                        googleApiLoaded={googleApiLoaded}
+                        guessedLocations={guessedLocations}
+                        round={round}
+                        roundFinished={roundFinished}
+                    />
+                </Suspense>
 
-                    <div className={styles.resultInfo}>
-                        {gameFinished ? (
+                <div className={styles.resultInfo}>
+                    {(gameFinished || roundFinished) &&
+                        (gameFinished ? (
                             <>
                                 <h2>
                                     {t('game.totalPoints', {
-                                        totalScore: totalScore.toLocaleString(),
+                                        count: totalScore,
                                     })}
                                 </h2>
                                 <div className={styles.resultActions}>
-                                    <button
-                                        className={styles.replayBtn}
-                                        onClick={() => {
-                                            navigate(0)
-                                        }}
-                                    >
-                                        {t('game.replay')}
-                                    </button>
-                                    <button
-                                        className={styles.exitBtn}
-                                        onClick={() => {
-                                            navigate('/geoworld/')
-                                        }}
-                                    >
-                                        {t('game.exit')}
-                                    </button>
+                                    <Suspense>
+                                        <Button
+                                            variant="primary"
+                                            onClick={() => {
+                                                navigate(0)
+                                            }}
+                                        >
+                                            {t('game.replay')}
+                                        </Button>
+                                        <Button
+                                            variant="secondary"
+                                            onClick={() => {
+                                                navigate('/geoworld/')
+                                            }}
+                                        >
+                                            {t('game.exit')}
+                                        </Button>
+                                    </Suspense>
                                 </div>
                             </>
                         ) : (
                             <>
                                 <h2>
                                     {t('game.roundPoints', {
-                                        roundScore: timedOut
-                                            ? 0
-                                            : roundScore.toLocaleString(),
+                                        count: timedOut ? 0 : roundScore,
                                     })}
                                 </h2>
                                 <p>
@@ -206,38 +208,40 @@ const Game = () => {
                                         />
                                     )}
                                 </p>
-                                <button
-                                    className={styles.nextBtn}
-                                    onClick={() => {
-                                        setRoundFinished(false)
+                                <Suspense>
+                                    <Button
+                                        variant="primary"
+                                        className={styles.nextBtn}
+                                        onClick={() => {
+                                            setRoundFinished(false)
 
-                                        if (timedOut) setTimedOut(false)
+                                            if (timedOut) setTimedOut(false)
 
-                                        if (round === state.rounds - 1) {
-                                            setGameFinished(true)
-                                        } else {
-                                            setRound((r) => r + 1)
-                                        }
-                                    }}
-                                >
-                                    {round === state.rounds - 1
-                                        ? t('game.viewResults')
-                                        : t('game.nextRound')}
-                                </button>
+                                            if (round === state.rounds - 1) {
+                                                setGameFinished(true)
+                                            } else {
+                                                setRound((r) => r + 1)
+                                            }
+                                        }}
+                                    >
+                                        {round === state.rounds - 1
+                                            ? t('game.viewResults')
+                                            : t('game.nextRound')}
+                                    </Button>
+                                </Suspense>
                             </>
-                        )}
-                    </div>
+                        ))}
                 </div>
             </div>
 
             <Suspense>
                 <GuessMap
-                    code={params.code as Codes}
+                    code={params.code as CountryCodes}
                     finishRound={finishRound}
                     googleApiLoaded={googleApiLoaded}
                     markerPosition={markerPosition}
-                    setMarkerPosition={setMarkerPosition}
                     round={round}
+                    setMarkerPosition={setMarkerPosition}
                 />
             </Suspense>
 

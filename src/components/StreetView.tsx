@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useEffect, useRef } from 'react'
+import { lazy, Suspense, useEffect, useRef } from 'react'
 
 import styles from './StreetView.module.css'
 

@@ -8,7 +8,7 @@
     --map-card-border: rgba(255, 255, 255, 0.05);
 }
 
-.mapCard {
+.map-card {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -18,7 +18,7 @@
     border-radius: 4px;
 }
 
-.mapThumbnail {
+.map-thumbnail {
     display: flex;
     align-items: flex-end;
     justify-content: center;
@@ -26,14 +26,14 @@
     max-height: 144px;
     aspect-ratio: 16 / 9;
     object-fit: cover;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
     background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.8)),
         var(--image-url);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
-.cardContent {
+.card-content {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -45,22 +45,11 @@
     }
 }
 
-.mapNameWrapper {
+.map-name-wrapper {
     display: flex;
     align-items: center;
     gap: 8px;
     margin-bottom: 8px;
     font-size: 1.125rem;
     color: #fff;
-}
-
-.playBtn {
-    background-color: var(--primary-color);
-    color: #fff;
-    padding: 8px 16px;
-    border-radius: 8px;
-
-    &:disabled {
-        background-color: var(--secondary-color);
-    }
 }

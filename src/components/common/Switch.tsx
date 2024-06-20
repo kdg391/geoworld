@@ -1,7 +1,5 @@
 import styles from './Switch.module.css'
 
-import type React from 'react'
-
 interface Props {
     defaultChecked?: boolean
     id?: string

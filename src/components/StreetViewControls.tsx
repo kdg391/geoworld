@@ -1,9 +1,9 @@
 import { Flag, RotateCcw } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
-import styles from './StreetViewControls.module.css'
+import { classNames } from '../utils/index.js'
 
-import type React from 'react'
+import styles from './StreetViewControls.module.css'
 
 interface Props {
     canPan: boolean
@@ -20,9 +20,10 @@ const StreetViewControls: React.FC<Props> = ({
 
     return (
         <div
-            className={[styles.streetViewControls, !canPan ? 'not-pan' : '']
-                .filter((c) => c !== '')
-                .join(' ')}
+            className={classNames(
+                styles.streetViewControls,
+                !canPan ? 'not-pan' : '',
+            )}
         >
             <button
                 className={styles.returnToStartBtn}

@@ -1,4 +1,4 @@
-.guessMapControls {
+.guess-map-controls {
     display: flex;
     gap: 8px;
     padding: 6px 8px;
@@ -22,17 +22,10 @@
 
         & > svg {
             color: #000;
-
-            :global(&.increase),
-            :global(&.decrease) {
-                rotate: 315deg;
-            }
         }
     }
-}
 
-@media only screen and (max-width: 600px) {
-    .guessMapControls {
+    @media only screen and (max-width: 600px) {
         display: none;
     }
 }

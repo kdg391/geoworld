@@ -1,12 +1,12 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GeoWorld</title>
-    <meta name="description" content="GeoWorld is a geography guessing game inspired by GeoGuessr, GeoHub, and GeoGuess.">
+    <meta name="description" content="GeoWorld is a geography guessing game.">
     <meta property="og:title" content="GeoWorld">
-    <meta property="og:description" content="GeoWorld is a geography guessing game inspired by GeoGuessr, GeoHub, and GeoGuess.">
+    <meta property="og:description" content="GeoWorld is a geography guessing game.">
     <meta property="og:site_name" content="GeoWorld">
     <meta property="og:type" content="website">
     <link rel="shortcut icon" href="/favicon.ico">
@@ -40,8 +40,7 @@
 
             history.replaceState(null, null, location.pathname.slice(0, -1) + decoded + location.hash)
         }
-    </script>
-    <script>
+
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('./service-worker.js')

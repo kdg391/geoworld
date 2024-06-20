@@ -1,11 +1,23 @@
 [data-theme='light'] {
     --header-bg: #f4f4f4;
     --header-border: rgba(0, 0, 0, 0.15);
+
+    --header-selected: #e9e9e9;
+
+    --nav-border: rgba(0, 0, 0, 0.1);
+
+    --ds-selected: #eaeaea;
 }
 
 [data-theme='dark'] {
     --header-bg: #181818;
     --header-border: rgba(255, 255, 255, 0.15);
+
+    --header-selected: #202020;
+
+    --nav-border: rgba(255, 255, 255, 0.1);
+
+    --ds-selected: #333;
 }
 
 .header {
@@ -15,12 +27,14 @@
     z-index: 2;
     display: flex;
     align-items: center;
-    gap: 16px;
-    padding: 12px 1.25rem;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.75rem 1.5rem;
     width: 100%;
     height: var(--header-height);
     background-color: var(--header-bg);
     border-bottom: 1px solid var(--header-border);
+    transition: background-color 0.25s;
 
     & h2 {
         margin: 0;
@@ -43,10 +57,15 @@
         color: inherit;
     }
 
-    & > nav {
+    & .nav-wrapper {
         display: flex;
-        justify-content: space-between;
-        flex-grow: 1;
+        align-items: center;
+        flex: 1;
+        gap: 1rem;
+    }
+
+    & nav {
+        flex: 1;
 
         & > ul {
             list-style: none;
@@ -54,25 +73,154 @@
             padding: 0;
             display: flex;
             align-items: center;
-            gap: 24px;
+            gap: 1rem;
         }
     }
 }
 
-.github {
+.github-link {
+    display: flex;
+
+    & > svg {
+        fill: var(--color);
+    }
+}
+
+.theme-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    margin: 0;
+
+    & > li {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        padding: 0.5rem 0.75rem;
+
+        :global(&.selected) {
+            font-weight: 600;
+        }
+    }
+}
+
+.theme-button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: transparent;
+    cursor: pointer;
+    padding: 0.25rem;
+    border-radius: 4px;
+
+    & > div {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+}
+
+.theme-select {
+    position: relative;
     display: flex;
 }
 
-.icon {
-    fill: var(--color);
+:global(& .arrow),
+.backdrop,
+.menu {
+    display: none;
 }
 
-@media only screen and (max-width: 400px) {
-    .header .links {
-        display: none;
+@media screen and (max-width: 600px) {
+    .menu {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2px;
+        background-color: transparent;
     }
 
-    .header nav {
-        justify-content: flex-end;
+    .header {
+        & .nav-wrapper {
+            display: none;
+        }
+
+        :global(&.active) {
+            & .nav-wrapper {
+                display: flex;
+                flex-direction: column;
+                align-items: initial;
+                flex: 0;
+                position: absolute;
+                left: 0;
+                top: var(--header-height);
+                width: 100%;
+                gap: 0;
+            }
+
+            & nav,
+            & .theme-select,
+            & .social-links {
+                background-color: var(--header-bg);
+            }
+
+            & .theme-select {
+                padding: 1rem 1.5rem;
+            }
+
+            & .theme-button {
+                padding: 0;
+                justify-content: initial;
+            }
+
+            & .theme-dropdown {
+                left: 0;
+                right: auto;
+            }
+
+            :global(& .arrow) {
+                display: block;
+            }
+
+            & nav {
+                flex: 0;
+
+                & > ul {
+                    flex-direction: column;
+                    align-items: initial;
+                    gap: 0;
+
+                    & li {
+                        border-bottom: 1px solid var(--nav-border);
+                    }
+
+                    & a {
+                        display: block;
+                        padding: 1.25rem 1.5rem;
+
+                        &:hover {
+                            background-color: var(--header-selected);
+                            text-decoration: none;
+                        }
+                    }
+                }
+            }
+
+            & .social-links {
+                padding: 1rem 1.5rem;
+                display: flex;
+                justify-content: center;
+            }
+
+            & .backdrop {
+                display: block;
+                height: 100dvh;
+                background-color: rgba(0, 0, 0, 0.7);
+            }
+        }
     }
 }

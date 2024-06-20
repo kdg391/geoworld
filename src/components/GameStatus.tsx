@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { formatTimeLeft } from '../utils/index.js'
@@ -68,7 +68,11 @@ const GameStatus: React.FC<Props> = ({
                     <span>{mapName}</span>
                 </div>
                 <div>
-                    <span className="label">{t('game.gameStatus.rounds')}</span>
+                    <span className="label">
+                        {t('game.gameStatus.rounds', {
+                            count: rounds,
+                        })}
+                    </span>
                     <span>
                         {round + 1} / {rounds}
                     </span>

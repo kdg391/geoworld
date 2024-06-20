@@ -8,6 +8,7 @@ import './i18n.js'
 
 const ErrorPage = lazy(() => import('./components/ErrorPage.js'))
 
+const About = lazy(() => import('./routes/About.js'))
 const Game = lazy(() => import('./routes/Game.js'))
 const Home = lazy(() => import('./routes/Home.js'))
 const LocationPicker = lazy(() => import('./routes/LocationPicker.js'))
@@ -33,6 +34,11 @@ const router = createBrowserRouter([
     {
         path: '/geoworld/random-streetview',
         element: <RandomStreetView />,
+        errorElement: <ErrorPage />,
+    },
+    {
+        path: '/geoworld/about',
+        element: <About />,
         errorElement: <ErrorPage />,
     },
     {

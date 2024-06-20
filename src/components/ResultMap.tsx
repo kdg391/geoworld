@@ -1,6 +1,8 @@
-import React, { lazy, Suspense, useEffect, useRef } from 'react'
+import { lazy, Suspense, useEffect, useRef } from 'react'
 
 import type GoogleMapType from './GoogleMap.js'
+
+import styles from './ResultMap.module.css'
 
 const GoogleMap = lazy(() => import('./GoogleMap.js')) as typeof GoogleMapType
 
@@ -13,20 +15,13 @@ interface Props {
     roundFinished: boolean
 }
 
-const ResultMap: React.FC<
-    Props &
-        React.DetailedHTMLProps<
-            React.HTMLAttributes<HTMLDivElement>,
-            HTMLDivElement
-        >
-> = ({
+const ResultMap: React.FC<Props> = ({
     actualLocations,
     gameFinished,
     googleApiLoaded,
     guessedLocations,
     round,
     roundFinished,
-    ...props
 }) => {
     const resultMapRef = useRef<google.maps.Map | null>(null)
 
@@ -197,7 +192,7 @@ const ResultMap: React.FC<
                 onMount={(map) => {
                     resultMapRef.current = map
                 }}
-                {...props}
+                className={styles.resultMap}
             />
         </Suspense>
     )

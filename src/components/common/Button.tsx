@@ -1,10 +1,9 @@
 import styles from './Button.module.css'
 
-import type React from 'react'
-
 interface Props {
     className?: string
-    type?: 'primary' | 'secondary'
+    size?: 'm' | 'l'
+    variant: 'primary' | 'secondary'
 }
 
 const Button: React.FC<
@@ -13,9 +12,11 @@ const Button: React.FC<
         HTMLButtonElement
     > &
         Props
-> = ({ className, type = 'primary', ...props }) => (
+> = ({ className = '', size = 'l', variant, ...props }) => (
     <button
-        className={[styles.btn, styles[type], className].join(' ')}
+        className={[styles.button, styles[variant], size, className]
+            .filter((c) => c !== '')
+            .join(' ')}
         {...props}
     ></button>
 )

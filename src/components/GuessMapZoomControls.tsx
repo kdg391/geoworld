@@ -1,5 +1,5 @@
 import { Minus, Plus } from 'lucide-react'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import styles from './GuessMapZoomControls.module.css'
 

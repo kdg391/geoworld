@@ -86,3 +86,6 @@ export const shuffleArray = (arr: any[]) => {
 
     return newArr
 }
+
+export const classNames = (...args: string[]) =>
+    args.filter((c) => c !== '').join(' ')

@@ -1,7 +1,5 @@
 import styles from './ResultLayout.module.css'
 
-import type React from 'react'
-
 interface Props {
     round: number
     rounds: number

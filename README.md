@@ -20,6 +20,7 @@ GeoWorld is a geography guessing game inspired by GeoGuessr, [GeoHub](https://gi
 ### Images
 
 - Icon: <https://www.flaticon.com/free-icon/map_1865269?term=map&page=1&position=33&origin=search&related_id=1865269>
+- Home Background: <https://pixabay.com/photos/jersey-city-river-waterfront-city-4147501/>
 
 #### Map Thumbnails
 

@@ -3,19 +3,24 @@
     "title": "An unknown error has occurred."
   },
   "home": {
-    "hero": "Explore the world's street view",
+    "hero": {
+      "title": "Explore the world's street view",
+      "description": "Look at street views of locations around the world and guess where they are."
+    },
     "officialMaps": "Official Maps",
     "locations_one": "{{count}} Location",
     "locations_other": "{{count}} Locations",
-    "mapSettings": "Map Settings",
-    "move": "Move",
-    "pan": "Pan",
-    "zoom": "Zoom",
-    "rounds": "Rounds",
-    "timeLimit": "Time Limit",
-    "noLimit": "No Limit",
-    "timeLimitFormat": "{{minutes, number(style: unit; unit: minute; unitDisplay: narrow)}} {{seconds, number(style: unit; unit: second; unitDisplay: narrow)}}",
-    "cancel": "Cancel",
+    "mapSettings": {
+      "title": "Map Settings",
+      "move": "Move",
+      "pan": "Pan",
+      "zoom": "Zoom",
+      "rounds": "Rounds",
+      "roundTime": "Round Time",
+      "noTimeLimit": "No Time Limit",
+      "roundTimeFormat": "{{minutes, number(style: unit; unit: minute; unitDisplay: narrow)}} {{seconds, number(style: unit; unit: second; unitDisplay: narrow)}}",
+      "cancel": "Cancel"
+    },
     "play": "Play"
   },
   "game": {
@@ -26,17 +31,20 @@
     },
     "gameStatus": {
       "map": "Map",
-      "rounds": "Rounds",
+      "rounds_one": "Round",
+      "rounds_other": "Rounds",
       "score": "Score"
     },
-    "roundPoints": "+{{roundScore}} Points",
+    "roundPoints_one": "+{{count, number}} Point",
+    "roundPoints_other": "+{{count, number}} Points",
     "roundResult": {
       "imperial": "Your guess was <strong>{{distance, number(maximumFractionDigits: 1; style: unit; unit: mile)}}</strong> from the correct location",
       "metric": "Your guess was <strong>{{distance, number(maximumFractionDigits: 1; style: unit; unit: kilometer)}}</strong> from the correct location"
     },
     "viewResults": "View Results",
     "nextRound": "Next Round",
-    "totalPoints": "Total {{totalScore}} Points",
+    "totalPoints_one": "Total {{count, number}} Point",
+    "totalPoints_other": "Total {{count, number}} Points",
     "replay": "Replay",
     "exit": "Exit"
   },

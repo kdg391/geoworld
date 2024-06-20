@@ -1,8 +1,8 @@
-.checkBox {
+.check-box {
     display: inline-block;
     position: relative;
     cursor: pointer;
-    height: 22px;
+    height: 24px;
 
     & > input[type='checkbox'] {
         appearance: none;
@@ -13,24 +13,24 @@
             background-color: var(--primary-color);
 
             &:after {
-                left: 21px;
+                left: 28px;
             }
         }
     }
 
     span {
         display: inline-block;
-        height: 22px;
-        width: 40px;
-        background-color: #a2a2a2;
+        height: 24px;
+        width: 48px;
+        background-color: #9b9b9b;
         transition: background-color 0.25s ease;
-        border-radius: 16px;
+        border-radius: 12px;
 
         &:after {
             content: '';
             position: absolute;
-            top: 3px;
-            left: 3px;
+            top: 4px;
+            left: 4px;
             width: 16px;
             height: 16px;
             background-color: #fff;

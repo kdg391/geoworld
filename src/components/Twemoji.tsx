@@ -1,7 +1,5 @@
 import twemoji from 'twemoji'
 
-import type React from 'react'
-
 interface Props {
     emoji: string
 }

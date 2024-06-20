@@ -6,7 +6,7 @@
     --game-status: rgba(0, 0, 0, 0.7);
 }
 
-.gameStatusContainer {
+.game-status-container {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -17,7 +17,7 @@
     width: 100%;
 }
 
-.gameStatus {
+.game-status {
     position: absolute;
     top: 1rem;
     right: 1rem;
@@ -40,7 +40,7 @@
     }
 }
 
-.timeLeft {
+.time-left {
     position: relative;
     background-color: var(--game-status);
     padding: 8px 16px;
