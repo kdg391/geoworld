@@ -40,18 +40,25 @@ const Home = () => {
                 </Suspense>
             )}
 
-            <section id="hero">
-                <h1>{t('home.hero.title')}</h1>
-                <p>{t('home.hero.description')}</p>
-                <a href="#official-maps" role="button" aria-label="Play">
-                    <ArrowDown />
-                </a>
+            <section className={styles.hero}>
+                <img
+                    src="/geoworld/assets/background.avif"
+                    alt="Background Image"
+                    className={styles['bg-image']}
+                />
+                <div className={styles['hero-content']}>
+                    <h1>{t('home.hero.title')}</h1>
+                    <p>{t('home.hero.description')}</p>
+                    <a href="#official-maps" role="button" aria-label="Play">
+                        <ArrowDown />
+                    </a>
+                </div>
             </section>
 
-            <section id="official-maps">
+            <section id="official-maps" className={styles['official-maps']}>
                 <div className={styles.container}>
                     <h2>{t('home.officialMaps')}</h2>
-                    <div className={styles.mapCards}>
+                    <div className={styles['map-cards']}>
                         {OFFICIAL_MAPS.map((map, index) => (
                             <Suspense key={index}>
                                 <MapCard

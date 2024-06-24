@@ -1,7 +1,8 @@
 import { useContext } from 'react'
 
-import ThemeContext from '../contexts/ThemeContext.js'
+import ThemeContext, { type ContextValue } from '../contexts/ThemeContext.js'
 
-const useTheme = () => useContext(ThemeContext)
+const useTheme = () =>
+    useContext(ThemeContext) ?? ({ setTheme() {}, theme: null } as ContextValue)
 
 export default useTheme

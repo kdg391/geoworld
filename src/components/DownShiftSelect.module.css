@@ -10,17 +10,28 @@
     --ds-indicator: #9b9b9b;
 }
 
-.downShift {
+.downshift {
     position: relative;
+
+    :global(&.open) {
+        & :global(.chevron) {
+            color: var(--ds-indicator);
+        }
+
+        & .downshift-dropdown {
+            display: flex;
+        }
+    }
 }
 
-.downShiftDropdown {
+.downshift-dropdown {
     position: absolute;
     left: 0;
-    display: flex;
+    display: none;
     flex-direction: column;
     padding: 0;
     margin: 0;
+    min-width: 10rem;
 
     & > li {
         display: flex;
@@ -30,14 +41,19 @@
         cursor: pointer;
         padding: 0.5rem 0.75rem;
         width: 100%;
+        background-color: var(--ds);
 
         :global(&.selected) {
             font-weight: 600;
         }
+
+        :global(&.focused) {
+            background-color: var(--ds-selected);
+        }
     }
 }
 
-.downShiftButton {
+.downshift-button {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -45,6 +61,7 @@
     cursor: pointer;
     padding: 0.5rem 0.75rem;
     border-radius: 4px;
+    min-width: 10rem;
 
     & > div {
         display: flex;

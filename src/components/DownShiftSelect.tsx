@@ -49,10 +49,10 @@ const DownShiftSelect: React.FC<Props> = ({
     return (
         <>
             {label && <label {...getLabelProps()}>{label}</label>}
-            <div className={styles.downShift}>
+            <div className={classNames(styles.downshift, isOpen ? 'open' : '')}>
                 <div
                     {...getToggleButtonProps({
-                        className: styles.downShiftButton,
+                        className: styles['downshift-button'],
                     })}
                 >
                     <div>
@@ -60,30 +60,15 @@ const DownShiftSelect: React.FC<Props> = ({
                         <span>{selectedItem?.label}</span>
                     </div>
                     {menuPlacement === 'top' ? (
-                        <ChevronUp
-                            size={16}
-                            style={{
-                                color: isOpen
-                                    ? 'inherit'
-                                    : 'var(--ds-indicator)',
-                            }}
-                        />
+                        <ChevronUp size={16} className="chevron" />
                     ) : (
-                        <ChevronDown
-                            size={16}
-                            style={{
-                                color: isOpen
-                                    ? 'inherit'
-                                    : 'var(--ds-indicator)',
-                            }}
-                        />
+                        <ChevronDown size={16} className="chevron" />
                     )}
                 </div>
                 <ul
                     {...getMenuProps({
-                        className: styles.downShiftDropdown,
+                        className: styles['downshift-dropdown'],
                         style: {
-                            display: isOpen ? 'flex' : 'none',
                             [cssPosition[menuPlacement]]: '100%',
                         },
                     })}
@@ -95,7 +80,7 @@ const DownShiftSelect: React.FC<Props> = ({
                                   {...getItemProps({
                                       className: classNames(
                                           highlightedIndex === index
-                                              ? 'hovered'
+                                              ? 'focused'
                                               : '',
                                           selectedItem?.value === item.value
                                               ? 'selected'
@@ -103,12 +88,6 @@ const DownShiftSelect: React.FC<Props> = ({
                                       ),
                                       index,
                                       item,
-                                      style: {
-                                          backgroundColor:
-                                              highlightedIndex === index
-                                                  ? 'var(--ds-selected)'
-                                                  : 'var(--ds)',
-                                      },
                                   })}
                               >
                                   {item?.icon}

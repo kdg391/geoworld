@@ -32,7 +32,7 @@ const LANGUAGE_OPTIONS = LANGUAGES.map((lang) => ({
 }))
 
 const Footer = () => {
-    const settingsContext = useSettings()
+    const { distanceUnit, setDistanceUnit } = useSettings()
     const { i18n, t } = useTranslation()
 
     const distanceUnitOptions = [
@@ -90,16 +90,14 @@ const Footer = () => {
                             <DownShiftSelect
                                 defaultSelectedItem={
                                     distanceUnitOptions.find(
-                                        (opt) =>
-                                            opt.value ===
-                                            settingsContext?.distanceUnit,
+                                        (opt) => opt.value === distanceUnit,
                                     )!
                                 }
                                 label={t('footer.distanceUnit')}
                                 items={distanceUnitOptions}
                                 menuPlacement="top"
                                 onSelectedItemChange={({ selectedItem }) => {
-                                    settingsContext?.setDistanceUnit(
+                                    setDistanceUnit(
                                         selectedItem.value as DistanceUnit,
                                     )
                                 }}

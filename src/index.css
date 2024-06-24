@@ -104,7 +104,7 @@ body {
 
 body {
     width: 100%;
-    min-height: 100dvh;
+    min-height: 100svh;
     padding: 0;
     margin: 0;
     font-family: 'Pretendard', system-ui, -apple-system, BlinkMacSystemFont,
@@ -113,11 +113,6 @@ body {
     background-color: var(--bg);
     color: var(--color);
     font-size: 1rem;
-    transition: background-color 0.25s;
-
-    @media (prefers-reduced-motion) {
-        transition: none;
-    }
 }
 
 button,

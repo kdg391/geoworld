@@ -8,30 +8,42 @@
     --gradient-2: rgba(0, 0, 0, 0.75);
 }
 
-:global(#hero) {
+.bg-image {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center center;
+    inset: 0px;
+}
+
+.hero {
+    height: calc(100svh - var(--header-height));
+    position: relative;
+}
+
+.hero-content {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    height: calc(100dvh - var(--header-height));
-    background-image: linear-gradient(var(--gradient-1), var(--gradient-2)),
-        url(/geoworld/assets/background.avif);
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    object-fit: cover;
+    z-index: 1;
+    height: 100%;
+    position: relative;
+    background-image: linear-gradient(var(--gradient-1), var(--gradient-2));
+    padding: 1.25rem 1.75rem;
 
-    & > h1,
+    & h1,
     & p {
         word-break: keep-all;
         text-align: center;
     }
 
-    & > h1 {
+    & h1 {
         font-size: 1.5rem;
     }
 
-    & > a {
+    & a {
         display: flex;
         align-items: center;
         justify-content: center;
@@ -47,13 +59,10 @@
     }
 }
 
-:global(#official-maps) {
+.official-maps {
     display: flex;
     scroll-margin-top: var(--header-height);
     width: 100%;
-}
-
-.main > section {
     padding: 1.25rem 1.75rem;
 }
 

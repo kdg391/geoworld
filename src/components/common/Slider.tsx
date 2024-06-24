@@ -1,3 +1,5 @@
+import { classNames } from '../../utils/index.js'
+
 import styles from './Slider.module.css'
 
 const Slider: React.FC<
@@ -5,10 +7,10 @@ const Slider: React.FC<
         React.InputHTMLAttributes<HTMLInputElement>,
         HTMLInputElement
     >
-> = ({ className, ...props }) => (
+> = ({ className = '', ...props }) => (
     <input
         type="range"
-        className={[styles.sliderRange, className].join(' ')}
+        className={classNames(styles['slider-range'], className)}
         {...props}
     />
 )

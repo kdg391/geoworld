@@ -7,7 +7,7 @@ GeoWorld is a geography guessing game inspired by GeoGuessr, [GeoHub](https://gi
 - <https://github.com/benlikescode/GeoHub>
 - <https://github.com/GeoGuess/GeoGuess>
 - <https://github.com/ErickKS/vite-react-router>
-- <https://gist.github.com/chriseugenerodriguez/659a84b989b3f35cb034a9f9ee1a914f>
+- <https://github.com/mihai-craita/countries_center_box>
 - <https://codepen.io/ShadowShahriar/pen/zYPPYrQ>
 - <https://codepen.io/hqdrone/pen/vYGJXZN>
 

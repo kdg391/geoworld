@@ -13,16 +13,16 @@
             background-color: var(--primary-color);
 
             &:after {
-                left: 28px;
+                transform: translateX(24px);
             }
         }
     }
 
-    span {
+    & > span {
         display: inline-block;
         height: 24px;
         width: 48px;
-        background-color: #9b9b9b;
+        background-color: #787878;
         transition: background-color 0.25s ease;
         border-radius: 12px;
 
@@ -35,7 +35,7 @@
             height: 16px;
             background-color: #fff;
             border-radius: 50%;
-            transition: left 0.25s ease;
+            transition: transform 0.25s ease;
         }
     }
 }

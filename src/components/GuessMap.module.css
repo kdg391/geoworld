@@ -14,9 +14,9 @@
     max-height: calc(100% - 128px);
 
     --aspect-ratio: 1.25;
-    --active-width: 30dvw;
+    --active-width: 30vw;
     --active-height: calc(var(--active-width) / var(--aspect-ratio));
-    --inactive-width: 16dvw;
+    --inactive-width: 16vw;
     --inactive-height: calc(var(--inactive-width) / var(--aspect-ratio));
     --width: var(--inactive-width);
     --height: var(--inactive-height);
@@ -30,15 +30,15 @@
     }
 
     :global(&.size--0) {
-        --active-width: 16dvw;
+        --active-width: 16vw;
     }
 
     :global(&.size--2) {
-        --active-width: 45dvw;
+        --active-width: 45vw;
     }
 
     :global(&.size--3) {
-        --active-width: 65dvw;
+        --active-width: 65vw;
     }
 }
 
@@ -74,7 +74,7 @@
 
 @media only screen and (max-width: 750px) {
     .guess-map-container:global(.size--0) {
-        --active-width: 24dvw;
+        --active-width: 24vw;
     }
 }
 
@@ -113,7 +113,7 @@
 
         :global(&.active) {
             width: 100%;
-            height: 40dvh;
+            height: 50svh;
             display: flex;
 
             & .guess-btn {

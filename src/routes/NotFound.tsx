@@ -11,7 +11,7 @@ const NotFound = () => {
             <section>
                 <h1>404 Not Found</h1>
                 <div>
-                    <Link to="/geoworld/" className={styles.backToHome}>
+                    <Link to="/geoworld/" className={styles['back-to-home']}>
                         {t('notFound.backToHome')}
                     </Link>
                 </div>

@@ -1,5 +1,7 @@
 import { lazy, Suspense, useEffect, useRef } from 'react'
 
+import useGoogleApi from '../hooks/useGoogleApi.js'
+
 import styles from './StreetView.module.css'
 
 const StreetViewControls = lazy(() => import('./StreetViewControls.js'))
@@ -11,22 +13,19 @@ interface GameSettings {
 }
 
 interface Props {
-    googleApiLoaded: boolean
     location: google.maps.LatLngLiteral
     settings: GameSettings
 }
 
-const StreetView: React.FC<Props> = ({
-    googleApiLoaded,
-    location,
-    settings,
-}) => {
+const StreetView: React.FC<Props> = ({ location, settings }) => {
     const svPanoramaElRef = useRef<HTMLDivElement | null>(null)
 
     const svPanoramaRef = useRef<google.maps.StreetViewPanorama | null>(null)
     const svServiceRef = useRef<google.maps.StreetViewService | null>(null)
 
     const positionHistoryRef = useRef<google.maps.LatLngLiteral[]>([])
+
+    const { isLoaded } = useGoogleApi()
 
     const init = () => {
         const svPanorama = new google.maps.StreetViewPanorama(
@@ -80,9 +79,7 @@ const StreetView: React.FC<Props> = ({
                 positionHistoryRef.current.push(position)
         })
 
-        const disablePan = (event: Event) => {
-            event.stopPropagation()
-        }
+        loadPanorama()
 
         setTimeout(() => {
             if (settings.canPan) return
@@ -91,6 +88,10 @@ const StreetView: React.FC<Props> = ({
                 const widgetScene = document.querySelector(
                     '.widget-scene',
                 ) as Element
+
+                const disablePan = (event: Event) => {
+                    event.stopPropagation()
+                }
 
                 widgetScene.addEventListener('mousedown', disablePan)
                 widgetScene.addEventListener('touchstart', disablePan)
@@ -102,6 +103,8 @@ const StreetView: React.FC<Props> = ({
     const loadPanorama = () => {
         if (!svPanoramaRef.current) return
         if (!svServiceRef.current) return
+
+        if (!location) return
 
         svServiceRef.current
             .getPanorama({
@@ -143,10 +146,10 @@ const StreetView: React.FC<Props> = ({
     }
 
     useEffect(() => {
-        if (!googleApiLoaded) return
+        if (!isLoaded) return
 
         init()
-    }, [googleApiLoaded])
+    }, [isLoaded])
 
     useEffect(() => {
         loadPanorama()
@@ -163,7 +166,7 @@ const StreetView: React.FC<Props> = ({
                     />
                 </Suspense>
             )}
-            <div ref={svPanoramaElRef} className={styles.streetView}></div>
+            <div ref={svPanoramaElRef} className={styles['street-view']}></div>
         </>
     )
 }

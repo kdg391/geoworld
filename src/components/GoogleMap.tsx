@@ -1,9 +1,10 @@
-import { useEffect, useRef } from 'react'
+import { memo, useEffect, useRef } from 'react'
+
+import useGoogleApi from '../hooks/useGoogleApi.js'
 
 interface Props {
-    googleApiLoaded: boolean
     defaultOptions?: google.maps.MapOptions
-    onMount: (map: google.maps.Map) => void
+    onLoaded: (map: google.maps.Map) => void
     children?: React.ReactNode
 }
 
@@ -13,21 +14,23 @@ const GoogleMap: React.FC<
             React.HTMLAttributes<HTMLDivElement>,
             HTMLDivElement
         >
-> = ({ googleApiLoaded, defaultOptions, onMount, ...props }) => {
+> = ({ defaultOptions, onLoaded, ...props }) => {
     const mapElRef = useRef<HTMLDivElement | null>(null)
 
+    const { isLoaded } = useGoogleApi()
+
     useEffect(() => {
-        if (!googleApiLoaded) return
+        if (!isLoaded) return
 
         const map = new google.maps.Map(
             mapElRef.current as HTMLDivElement,
             defaultOptions,
         )
 
-        onMount(map)
-    }, [googleApiLoaded])
+        onLoaded(map)
+    }, [isLoaded])
 
     return <div ref={mapElRef} {...props}></div>
 }
 
-export default GoogleMap
+export default memo(GoogleMap)

@@ -7,7 +7,7 @@ interface Props {
 }
 
 const Switch: React.FC<Props> = ({ defaultChecked, id, onChange }) => (
-    <label htmlFor={id} className={styles.checkBox}>
+    <label htmlFor={id} className={styles['check-box']}>
         <input
             type="checkbox"
             id={id}

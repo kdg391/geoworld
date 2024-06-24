@@ -1,3 +1,5 @@
+import { classNames } from '../../utils/index.js'
+
 import styles from './Button.module.css'
 
 interface Props {
@@ -14,9 +16,7 @@ const Button: React.FC<
         Props
 > = ({ className = '', size = 'l', variant, ...props }) => (
     <button
-        className={[styles.button, styles[variant], size, className]
-            .filter((c) => c !== '')
-            .join(' ')}
+        className={classNames(styles.button, styles[variant], size, className)}
         {...props}
     ></button>
 )

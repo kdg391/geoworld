@@ -48,20 +48,13 @@ export function calculateRoundScore(
 }
 
 // https://github.com/benlikescode/geohub/blob/main/backend/utils/calculateMapScoreFactor.ts
-export const calculateScoreFactor = (bounds: number[]) => {
-    const [lng1, lat1, lng2, lat2] = bounds
+export const calculateScoreFactor = (bounds: {
+    min: google.maps.LatLngLiteral
+    max: google.maps.LatLngLiteral
+}) => {
+    const { min, max } = bounds
 
-    const distance = calculateDistance(
-        {
-            lat: lat1,
-            lng: lng1,
-        },
-        {
-            lat: lat2,
-            lng: lng2,
-        },
-        'metric',
-    )
+    const distance = calculateDistance(min, max, 'metric')
 
     const scoreFactor = (DEFAULT_SCORE_FACTOR * distance) / 18150
 

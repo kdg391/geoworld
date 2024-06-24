@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
+import GoogleApiProvider from './providers/GoogleApiProvider.js'
 import SettingsProvider from './providers/SettingsProvider.js'
 import ThemeProvider from './providers/ThemeProvider.js'
 
@@ -50,9 +51,11 @@ const router = createBrowserRouter([
 const App = () => (
     <ThemeProvider>
         <SettingsProvider>
-            <Suspense>
-                <RouterProvider router={router} />
-            </Suspense>
+            <GoogleApiProvider>
+                <Suspense>
+                    <RouterProvider router={router} />
+                </Suspense>
+            </GoogleApiProvider>
         </SettingsProvider>
     </ThemeProvider>
 )

@@ -55,14 +55,14 @@ const GameStatus: React.FC<Props> = ({
     }, [timeLeft])
 
     return (
-        <div className={styles.gameStatusContainer}>
+        <div className={styles['game-status-container']}>
             {timeLimit !== null && timeLeft !== null && (
-                <div className={styles.timeLeft}>
+                <div className={styles['timer-container']}>
                     {formatTimeLeft(timeLeft)}
                 </div>
             )}
 
-            <div className={styles.gameStatus}>
+            <div className={styles['game-status']}>
                 <div>
                     <span className="label">{t('game.gameStatus.map')}</span>
                     <span>{mapName}</span>

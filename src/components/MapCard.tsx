@@ -19,16 +19,19 @@ const MapCard: React.FC<GameCardProps> = ({ mapData, onPlayBtnClick }) => {
     const { t } = useTranslation()
 
     return (
-        <div className={styles.mapCard}>
-            <div
-                className={styles.mapThumbnail}
-                style={
-                    {
-                        '--image-url': `url('/geoworld/assets/images/${mapData.code}.avif')`,
-                    } as React.CSSProperties
-                }
-            >
-                <div className={styles.mapNameWrapper}>
+        <div className={styles['map-card']}>
+            <div className={styles['map-thumbnail']}>
+                <img
+                    src={`/geoworld/assets/images/${mapData.code}.avif`}
+                    alt={`${
+                        mapData.code === 'worldwide'
+                            ? t('worldwide')
+                            : t(`countries.${mapData.code}`)
+                    } Image`}
+                    className={styles['map-thumbnail-img']}
+                />
+                <div className={styles['map-thumbnail-backdrop']}></div>
+                <div className={styles['map-name-wrapper']}>
                     <Suspense>
                         <Twemoji
                             emoji={
@@ -50,7 +53,7 @@ const MapCard: React.FC<GameCardProps> = ({ mapData, onPlayBtnClick }) => {
                         : t(`countries.${mapData.code}`)}
                 </div>
             </div>
-            <div className={styles.cardContent}>
+            <div className={styles['card-content']}>
                 <span>
                     {t('home.locations', {
                         count: mapData.locations.length,

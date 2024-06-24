@@ -39,9 +39,9 @@ const MapSettingsModal: React.FC<Props> = ({ mapData, setShowModal }) => {
             : mapData.locations.length
 
     return (
-        <div className={styles.mapSettingsModal}>
-            <div className={styles.mapSettingsModalWrapper}>
-                <div className={styles.modalHeader}>
+        <div className={styles['map-settings-modal']}>
+            <div className={styles['map-settings-modal-wrapper']}>
+                <div className={styles['modal-header']}>
                     <h3>{t('home.mapSettings.title')}</h3>
                     <button
                         aria-label="Close"
@@ -52,9 +52,9 @@ const MapSettingsModal: React.FC<Props> = ({ mapData, setShowModal }) => {
                         <X size={16} />
                     </button>
                 </div>
-                <div className={styles.modalContent}>
-                    <div className={styles.mapInfo}>
-                        <div className={styles.mapIcon}>
+                <div className={styles['modal-content']}>
+                    <div className={styles['map-info']}>
+                        <div className={styles['map-icon']}>
                             <Suspense>
                                 <Twemoji
                                     emoji={
@@ -72,7 +72,7 @@ const MapSettingsModal: React.FC<Props> = ({ mapData, setShowModal }) => {
                                 />
                             </Suspense>
                         </div>
-                        <div className={styles.mapDetails}>
+                        <div className={styles['map-details']}>
                             <h4>
                                 {mapData.code === 'worldwide'
                                     ? t('worldwide')
@@ -128,7 +128,7 @@ const MapSettingsModal: React.FC<Props> = ({ mapData, setShowModal }) => {
 
                         <div style={{ display: 'flex' }}>
                             <button
-                                className={styles.roundsBtn}
+                                className={styles['rounds-btn']}
                                 disabled={rounds <= 1}
                                 onClick={() => {
                                     if (rounds > 1) {
@@ -142,7 +142,7 @@ const MapSettingsModal: React.FC<Props> = ({ mapData, setShowModal }) => {
                             <input
                                 type="number"
                                 id="rounds"
-                                className={styles.roundsInput}
+                                className={styles['rounds-input']}
                                 min={1}
                                 max={maxRounds}
                                 pattern="[0-9]*"
@@ -175,7 +175,7 @@ const MapSettingsModal: React.FC<Props> = ({ mapData, setShowModal }) => {
                             />
 
                             <button
-                                className={styles.roundsBtn}
+                                className={styles['rounds-btn']}
                                 disabled={rounds >= maxRounds}
                                 onClick={() => {
                                     if (rounds < maxRounds) {
@@ -233,7 +233,7 @@ const MapSettingsModal: React.FC<Props> = ({ mapData, setShowModal }) => {
                         </div>
                     </div>
                 </div>
-                <div className={styles.modalActions}>
+                <div className={styles['modal-actions']}>
                     <Suspense>
                         <Button
                             variant="secondary"

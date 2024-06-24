@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 import SettingsContext from '../contexts/SettingsContext.js'
 
@@ -22,7 +22,9 @@ const SettingsProvider: React.FC<Props> = ({ children }) => {
 
         try {
             localStorage.setItem('distanceUnit', distanceUnit)
-        } catch {}
+        } catch {
+            // empty
+        }
     }, [distanceUnit])
 
     const providerValue = useMemo(

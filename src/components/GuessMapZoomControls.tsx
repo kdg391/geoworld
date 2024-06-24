@@ -30,7 +30,7 @@ const MapControls: React.FC<Props> = ({ map }) => {
     }, [map])
 
     return (
-        <div className={styles.guessMapZoomControls}>
+        <div className={styles['guess-map-zoom-controls']}>
             <button
                 disabled={zoom >= MAX_ZOOM}
                 onClick={() => {

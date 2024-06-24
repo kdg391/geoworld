@@ -21,19 +21,19 @@ const StreetViewControls: React.FC<Props> = ({
     return (
         <div
             className={classNames(
-                styles.streetViewControls,
+                styles['street-view-controls'],
                 !canPan ? 'not-pan' : '',
             )}
         >
             <button
-                className={styles.returnToStartBtn}
+                className={styles['return-to-start-btn']}
                 title={t('game.controls.returnToStart')}
                 onClick={onReturnToStartClick}
             >
                 <Flag size={16} />
             </button>
             <button
-                className={styles.undoBtn}
+                className={styles['undo-btn']}
                 title={t('game.controls.undo')}
                 onClick={onUndoClick}
             >

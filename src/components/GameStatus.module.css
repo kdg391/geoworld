@@ -22,7 +22,7 @@
     top: 1rem;
     right: 1rem;
     padding: 6px 12px;
-    gap: 16px;
+    gap: 1rem;
     display: flex;
     background-color: var(--game-status);
     font-size: 1rem;
@@ -35,16 +35,42 @@
     }
 
     & :global(.label) {
-        font-size: 0.9rem;
+        font-size: 0.875rem;
         margin-bottom: 4px;
     }
 }
 
-.time-left {
+.timer-container {
     position: relative;
     background-color: var(--game-status);
-    padding: 8px 16px;
-    max-width: 72px;
+    padding: 0.5rem 1rem;
+    width: 5rem;
     margin-top: 1rem;
-    border-radius: 16px;
+    border-radius: 1rem;
+    text-align: center;
+}
+
+@media screen and (max-width: 400px) {
+    .game-status > div:first-child {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 750px) {
+    .game-status-container {
+        align-items: flex-start;
+    }
+
+    .game-status {
+        font-size: 0.875rem;
+
+        & :global(.label) {
+            font-size: 0.75rem;
+        }
+    }
+
+    .timer-container {
+        font-size: 0.875rem;
+        margin-left: 1rem;
+    }
 }

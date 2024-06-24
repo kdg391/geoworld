@@ -2,8 +2,8 @@ import { createContext } from 'react'
 
 import type { DistanceUnit } from '../types/index.js'
 
-interface ContextValue {
-    distanceUnit: DistanceUnit
+export interface ContextValue {
+    distanceUnit: DistanceUnit | null
     setDistanceUnit: React.Dispatch<React.SetStateAction<DistanceUnit>>
 }
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import ThemeContext from '../contexts/ThemeContext.js'
 
@@ -13,23 +13,39 @@ const ThemeProvider: React.FC<Props> = ({ children }) => {
         () => (localStorage.getItem('theme') as Theme | null) ?? 'system',
     )
 
-    useEffect(() => {
-        const media = window.matchMedia('(prefers-color-scheme: light)')
-
-        const onChange = (event: MediaQueryListEvent) => {
+    const onMediaChange = useCallback(
+        (event: MediaQueryListEvent) => {
             if (theme === 'system') {
-                document.body.setAttribute(
+                document.documentElement.setAttribute(
                     'data-theme',
                     event.matches ? 'light' : 'dark',
                 )
             }
+        },
+        [theme],
+    )
+
+    useEffect(() => {
+        const media = window.matchMedia('(prefers-color-scheme: light)')
+
+        media.addEventListener('change', onMediaChange)
+
+        return () => media.removeEventListener('change', onMediaChange)
+    }, [onMediaChange])
+
+    useEffect(() => {
+        const onStorageChange = (event: StorageEvent) => {
+            if (event.key !== 'theme') return
+
+            const value = event.newValue ?? 'system'
+            if (!['light', 'dark', 'system'].includes(value)) return
+
+            setTheme(value as Theme)
         }
 
-        media.addEventListener('change', onChange)
+        window.addEventListener('storage', onStorageChange)
 
-        return () => {
-            media.removeEventListener('change', onChange)
-        }
+        return () => window.addEventListener('storage', onStorageChange)
     }, [])
 
     useEffect(() => {
@@ -48,19 +64,24 @@ const ThemeProvider: React.FC<Props> = ({ children }) => {
         } else {
             try {
                 localStorage.setItem('theme', theme)
-            } catch {}
+            } catch {
+                // empty
+            }
         }
 
-        document.body.setAttribute('data-theme', newTheme)
+        document.documentElement.setAttribute('data-theme', newTheme)
     }, [theme])
 
+    const providerValue = useMemo(
+        () => ({
+            theme,
+            setTheme,
+        }),
+        [theme],
+    )
+
     return (
-        <ThemeContext.Provider
-            value={{
-                theme,
-                setTheme,
-            }}
-        >
+        <ThemeContext.Provider value={providerValue}>
             {children}
         </ThemeContext.Provider>
     )

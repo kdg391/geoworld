@@ -1,7 +1,10 @@
-import { Loader } from '@googlemaps/js-api-loader'
-import { useEffect, useRef, useState } from 'react'
+import { lazy, Suspense, useEffect, useRef, useState } from 'react'
+
+import useGoogleApi from '../hooks/useGoogleApi.js'
 
 import styles from './RandomStreetView.module.css'
+
+const GoogleMap = lazy(() => import('../components/GoogleMap.js'))
 
 const randomLatLng = (): google.maps.LatLngLiteral => {
     const lat = Math.random() * 180 - 90
@@ -14,35 +17,17 @@ const randomLatLng = (): google.maps.LatLngLiteral => {
 }
 
 const RandomStreetView = () => {
-    const mapElRef = useRef<HTMLDivElement | null>(null)
+    const [showMap, setShowMap] = useState(false)
+
     const svPanoramaElRef = useRef<HTMLDivElement | null>(null)
 
     const mapRef = useRef<google.maps.Map | null>(null)
     const svPanoramaRef = useRef<google.maps.StreetViewPanorama | null>(null)
     const svServiceRef = useRef<google.maps.StreetViewService | null>(null)
 
-    const [showMap, setShowMap] = useState(false)
+    const { isLoaded, loadApi } = useGoogleApi()
 
-    const init = async () => {
-        const loader = new Loader({
-            apiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
-            version: 'weekly',
-        })
-
-        await loader.importLibrary('maps')
-        await loader.importLibrary('streetView')
-
-        const map = new google.maps.Map(mapElRef.current as HTMLDivElement, {
-            center: {
-                lat: 0,
-                lng: 0,
-            },
-            zoom: 1,
-            disableDefaultUI: true,
-            clickableIcons: false,
-            streetViewControl: true,
-        })
-
+    const init = (map: google.maps.Map) => {
         const svPanorama = new google.maps.StreetViewPanorama(
             svPanoramaElRef.current as HTMLDivElement,
             {
@@ -92,12 +77,12 @@ const RandomStreetView = () => {
     }
 
     useEffect(() => {
-        init()
-    }, [])
+        if (!isLoaded) loadApi()
+    }, [isLoaded])
 
     return (
         <main className={styles.main}>
-            <div className={styles.btnContainer}>
+            <div className={styles['btn-container']}>
                 <button
                     onClick={() => {
                         setShowMap(!showMap)
@@ -115,12 +100,26 @@ const RandomStreetView = () => {
             </div>
 
             <div
-                className={styles.mapContainer}
+                className={styles['map-container']}
                 style={{
                     display: showMap ? 'flex' : 'none',
                 }}
             >
-                <div ref={mapElRef} className={styles.map} />
+                <Suspense>
+                    <GoogleMap
+                        defaultOptions={{
+                            center: {
+                                lat: 0,
+                                lng: 0,
+                            },
+                            zoom: 1,
+                            disableDefaultUI: true,
+                            clickableIcons: false,
+                            streetViewControl: true,
+                        }}
+                        onLoaded={(map) => init(map)}
+                    />
+                </Suspense>
             </div>
 
             <div ref={svPanoramaElRef} className={styles.pano} />

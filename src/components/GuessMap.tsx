@@ -2,8 +2,10 @@ import { Map, X } from 'lucide-react'
 import { lazy, Suspense, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-// import COUNTRY_BOUNDS from '../constants/countryBounds.js'
+import COUNTRY_BOUNDS from '../constants/country-bounds.json'
 import { DEFAULT_MAP_OPTIONS } from '../constants/index.js'
+
+import useGoogleApi from '../hooks/useGoogleApi.js'
 
 import { classNames } from '../utils/index.js'
 
@@ -19,7 +21,6 @@ const GuessMapZoomControls = lazy(() => import('./GuessMapZoomControls.js'))
 interface Props {
     code: CountryCodes | undefined
     finishRound: (timedOut: boolean) => void
-    googleApiLoaded: boolean
     markerPosition:
         | google.maps.LatLngLiteral
         | google.maps.LatLngAltitudeLiteral
@@ -33,9 +34,8 @@ interface Props {
 }
 
 const GuessMap: React.FC<Props> = ({
-    // code,
+    code,
     finishRound,
-    googleApiLoaded,
     markerPosition,
     round,
     setMarkerPosition,
@@ -50,33 +50,36 @@ const GuessMap: React.FC<Props> = ({
     const [isMapPinned, setIsMapPinned] = useState(false)
     const [mapActive, setMapActive] = useState(false)
 
+    const { isLoaded } = useGoogleApi()
+
     const { t } = useTranslation()
 
     const fitMapBounds = () => {
         if (!guessMapRef.current) return
 
-        /*if (code !== undefined && code in COUNTRY_BOUNDS) {
-            const [lng1, lat1, lng2, lat2] = COUNTRY_BOUNDS[code]
+        if (code !== undefined && code in COUNTRY_BOUNDS) {
+            // @ts-ignore
+            const { min, max } = COUNTRY_BOUNDS[code]
 
             const bounds = new google.maps.LatLngBounds()
 
-            bounds.extend(new google.maps.LatLng(lat1, lng1))
-            bounds.extend(new google.maps.LatLng(lat2, lng2))
+            bounds.extend(min)
+            bounds.extend(max)
 
             guessMapRef.current.fitBounds(bounds)
             guessMapRef.current.setCenter(bounds.getCenter())
-        } else {*/
-        guessMapRef.current.setCenter(
-            DEFAULT_MAP_OPTIONS.center as
-                | google.maps.LatLngLiteral
-                | google.maps.LatLng,
-        )
-        guessMapRef.current.setZoom(1)
-        // }
+        } else {
+            guessMapRef.current.setCenter(
+                DEFAULT_MAP_OPTIONS.center as
+                    | google.maps.LatLngLiteral
+                    | google.maps.LatLng,
+            )
+            guessMapRef.current.setZoom(1)
+        }
     }
 
     useEffect(() => {
-        if (!googleApiLoaded) return
+        if (!isLoaded) return
 
         const marker = new google.maps.marker.AdvancedMarkerElement({
             map: guessMapRef.current,
@@ -85,7 +88,7 @@ const GuessMap: React.FC<Props> = ({
         markerRef.current = marker
 
         fitMapBounds()
-    }, [googleApiLoaded])
+    }, [isLoaded])
 
     useEffect(() => {
         fitMapBounds()
@@ -101,7 +104,7 @@ const GuessMap: React.FC<Props> = ({
         <>
             <div
                 className={classNames(
-                    styles.guessMapContainer,
+                    styles['guess-map-container'],
                     mapActive ? 'active' : '',
                     mapSize !== 1 ? `size--${mapSize}` : '',
                 )}
@@ -117,7 +120,7 @@ const GuessMap: React.FC<Props> = ({
                 }}
             >
                 <button
-                    className={styles.closeBtn}
+                    className={styles['close-btn']}
                     aria-label="Close Map"
                     onClick={() => {
                         setMapActive(false)
@@ -135,10 +138,9 @@ const GuessMap: React.FC<Props> = ({
                     />
                 </Suspense>
 
-                <div className={styles.guessMapWrapper}>
+                <div className={styles['guess-map-wrapper']}>
                     <Suspense>
                         <GoogleMap
-                            googleApiLoaded={googleApiLoaded}
                             defaultOptions={{
                                 clickableIcons: false,
                                 disableDefaultUI: true,
@@ -147,7 +149,7 @@ const GuessMap: React.FC<Props> = ({
                                 mapId: import.meta.env.VITE_GOOGLE_MAPS_GUESS,
                                 zoomControl: false,
                             }}
-                            onMount={(map) => {
+                            onLoaded={(map) => {
                                 guessMapRef.current = map
 
                                 map.addListener(
@@ -164,7 +166,7 @@ const GuessMap: React.FC<Props> = ({
                                     },
                                 )
                             }}
-                            className={styles.guessMap}
+                            className={styles['guess-map']}
                         />
                     </Suspense>
                     <Suspense>
@@ -173,7 +175,7 @@ const GuessMap: React.FC<Props> = ({
                 </div>
 
                 <button
-                    className={styles.guessBtn}
+                    className={styles['guess-btn']}
                     aria-label={t('game.guess')}
                     disabled={markerPosition === null}
                     onClick={() => {
@@ -185,7 +187,7 @@ const GuessMap: React.FC<Props> = ({
             </div>
 
             <button
-                className={styles.mapBtn}
+                className={styles['map-btn']}
                 aria-label="Open Map"
                 onClick={() => {
                     setMapActive(true)

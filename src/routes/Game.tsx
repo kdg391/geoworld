@@ -1,16 +1,17 @@
-import { Loader } from '@googlemaps/js-api-loader'
 import { lazy, Suspense, useEffect, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { Navigate, useLocation, useNavigate, useParams } from 'react-router-dom'
 
+import COUNTRY_BOUNDS from '../constants/country-bounds.json'
+import { OFFICIAL_MAPS } from '../constants/index.js'
+
+import useGoogleApi from '../hooks/useGoogleApi.js'
 import useSettings from '../hooks/useSettings.js'
 
-// import COUNTRY_BOUNDS from '../constants/countryBounds.js'
-import { OFFICIAL_MAPS } from '../constants/index.js'
 import {
     calculateDistance,
     calculateRoundScore,
-    // calculateScoreFactor,
+    calculateScoreFactor,
     shuffleArray,
 } from '../utils/index.js'
 
@@ -44,7 +45,7 @@ const Game = () => {
     const navigate = useNavigate()
     const { t } = useTranslation()
 
-    const [googleApiLoaded, setGoogleApiLoaded] = useState(false)
+    const { isLoaded, loadApi } = useGoogleApi()
 
     const [round, setRound] = useState(0)
     const [roundFinished, setRoundFinished] = useState(false)
@@ -66,22 +67,12 @@ const Game = () => {
         google.maps.LatLngLiteral | google.maps.LatLngAltitudeLiteral | null
     >(null)
 
-    const settingsContext = useSettings()
+    const { distanceUnit } = useSettings()
 
     const data = OFFICIAL_MAPS.find((m) => m.code === params.code)!
 
     const init = async () => {
-        const loader = new Loader({
-            apiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
-            version: 'weekly',
-        })
-
-        await loader.importLibrary('core')
-        await loader.importLibrary('maps')
-        await loader.importLibrary('marker')
-        await loader.importLibrary('streetView')
-
-        setGoogleApiLoaded(true)
+        if (!isLoaded) await loadApi()
 
         const shuffled = shuffleArray(data.locations)
         const locations = shuffled.slice(0, state.rounds)
@@ -102,15 +93,18 @@ const Game = () => {
             const _distance = calculateDistance(
                 markerPosition,
                 actualLocations[round],
-                settingsContext?.distanceUnit ?? 'metric',
+                distanceUnit ?? 'metric',
             )
 
-            // const scoreFactor =
-            //     (params.code as Codes | 'worldwide') === 'worldwide'
-            //         ? 2000
-            //         : calculateScoreFactor(COUNTRY_BOUNDS[params.code as Codes])
+            const scoreFactor =
+                (params.code as CountryCodes | 'worldwide') === 'worldwide'
+                    ? 2000
+                    : calculateScoreFactor(
+                          // @ts-ignore
+                          COUNTRY_BOUNDS[params.code],
+                      )
 
-            const _roundScore = calculateRoundScore(_distance, 2000)
+            const _roundScore = calculateRoundScore(_distance, scoreFactor)
 
             setDistance(_distance)
             setRoundScore(_roundScore)
@@ -143,7 +137,7 @@ const Game = () => {
             </Suspense>
 
             <div
-                className={styles.roundResultContainer}
+                className={styles['round-result-container']}
                 style={{
                     display: roundFinished || gameFinished ? 'flex' : 'none',
                 }}
@@ -152,14 +146,13 @@ const Game = () => {
                     <ResultMap
                         actualLocations={actualLocations}
                         gameFinished={gameFinished}
-                        googleApiLoaded={googleApiLoaded}
                         guessedLocations={guessedLocations}
                         round={round}
                         roundFinished={roundFinished}
                     />
                 </Suspense>
 
-                <div className={styles.resultInfo}>
+                <div className={styles['result-info']}>
                     {(gameFinished || roundFinished) &&
                         (gameFinished ? (
                             <>
@@ -168,7 +161,7 @@ const Game = () => {
                                         count: totalScore,
                                     })}
                                 </h2>
-                                <div className={styles.resultActions}>
+                                <div className={styles['result-actions']}>
                                     <Suspense>
                                         <Button
                                             variant="primary"
@@ -201,7 +194,7 @@ const Game = () => {
                                         "You've timed out."
                                     ) : (
                                         <Trans
-                                            i18nKey={`game.roundResult.${settingsContext?.distanceUnit}`}
+                                            i18nKey={`game.roundResult.${distanceUnit}`}
                                             values={{
                                                 distance,
                                             }}
@@ -211,7 +204,7 @@ const Game = () => {
                                 <Suspense>
                                     <Button
                                         variant="primary"
-                                        className={styles.nextBtn}
+                                        className={styles['next-btn']}
                                         onClick={() => {
                                             setRoundFinished(false)
 
@@ -238,7 +231,6 @@ const Game = () => {
                 <GuessMap
                     code={params.code as CountryCodes}
                     finishRound={finishRound}
-                    googleApiLoaded={googleApiLoaded}
                     markerPosition={markerPosition}
                     round={round}
                     setMarkerPosition={setMarkerPosition}
@@ -247,7 +239,6 @@ const Game = () => {
 
             <Suspense>
                 <StreetView
-                    googleApiLoaded={googleApiLoaded}
                     location={actualLocations[round]}
                     settings={{
                         canMove: state.canMove,

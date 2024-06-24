@@ -1,42 +1,24 @@
-import { Loader } from '@googlemaps/js-api-loader'
-import { useEffect, useRef, useState } from 'react'
+import { lazy, Suspense, useEffect, useRef, useState } from 'react'
+
+import useGoogleApi from '../hooks/useGoogleApi.js'
 
 import styles from './LocationPicker.module.css'
+
+const GoogleMap = lazy(() => import('../components/GoogleMap.js'))
 
 const LocationPicker = () => {
     const [position, setPosition] = useState<google.maps.LatLngLiteral | null>(
         null,
     )
 
-    const mapElRef = useRef<HTMLDivElement | null>(null)
     const svPanoramaElRef = useRef<HTMLDivElement | null>(null)
 
-    const mapRef = useRef<google.maps.Map | null>(null)
     const svPanoramaRef = useRef<google.maps.StreetViewPanorama | null>(null)
     const svServiceRef = useRef<google.maps.StreetViewService | null>(null)
 
-    const init = async () => {
-        const loader = new Loader({
-            apiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
-            version: 'weekly',
-        })
+    const { isLoaded, loadApi } = useGoogleApi()
 
-        await loader.importLibrary('maps')
-        await loader.importLibrary('streetView')
-
-        const map = new google.maps.Map(mapElRef.current!, {
-            center: {
-                lat: 0,
-                lng: 0,
-            },
-            zoom: 1,
-            zoomControl: true,
-            streetViewControl: true,
-            scrollwheel: true,
-            clickableIcons: false,
-            draggableCursor: 'crosshair',
-        })
-
+    const init = (map: google.maps.Map) => {
         const svPanorama = new google.maps.StreetViewPanorama(
             svPanoramaElRef.current as HTMLDivElement,
         )
@@ -48,7 +30,6 @@ const LocationPicker = () => {
         const svLayer = new google.maps.StreetViewCoverageLayer()
         svLayer.setMap(map)
 
-        mapRef.current = map
         svPanoramaRef.current = svPanorama
         svServiceRef.current = svService
 
@@ -83,8 +64,8 @@ const LocationPicker = () => {
     }
 
     useEffect(() => {
-        init()
-    }, [])
+        if (!isLoaded) loadApi()
+    }, [isLoaded])
 
     return (
         <main className={styles.main}>
@@ -105,7 +86,24 @@ const LocationPicker = () => {
                 </button>
             </div>
             <div className={styles.container}>
-                <div ref={mapElRef} className={styles.map}></div>
+                <Suspense>
+                    <GoogleMap
+                        defaultOptions={{
+                            center: {
+                                lat: 0,
+                                lng: 0,
+                            },
+                            zoom: 1,
+                            zoomControl: true,
+                            streetViewControl: true,
+                            scrollwheel: true,
+                            clickableIcons: false,
+                            draggableCursor: 'crosshair',
+                        }}
+                        onLoaded={(map) => init(map)}
+                        className={styles.map}
+                    />
+                </Suspense>
                 <div ref={svPanoramaElRef} className={styles.pano}></div>
             </div>
         </main>

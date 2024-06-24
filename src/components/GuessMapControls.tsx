@@ -18,7 +18,7 @@ const GuessMapControls: React.FC<Props> = ({
     setIsMapPinned,
     setMapSize,
 }) => (
-    <div className={styles.guessMapControls}>
+    <div className={styles['guess-map-controls']}>
         <button
             disabled={mapSize >= MAX_MAP_SIZE}
             onClick={() => {
@@ -30,7 +30,7 @@ const GuessMapControls: React.FC<Props> = ({
         <button
             disabled={mapSize <= MIN_MAP_SIZE}
             onClick={() => {
-                setMapSize((s) => (s < MIN_MAP_SIZE ? s : s - 1))
+                setMapSize((s) => (s <= MIN_MAP_SIZE ? s : s - 1))
             }}
         >
             <ArrowDownRight size={16} />

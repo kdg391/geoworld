@@ -1,4 +1,14 @@
-import twemoji from 'twemoji'
+const toCodePoint = (str: string) => {
+    const r = []
+
+    for (const s of str) {
+        const c = s.codePointAt(0) as number
+
+        r.push(c.toString(16))
+    }
+
+    return r.join('-')
+}
 
 interface Props {
     emoji: string
@@ -11,7 +21,7 @@ const Twemoji: React.FC<
             HTMLImageElement
         >
 > = ({ emoji, ...props }) => {
-    const code = twemoji.convert.toCodePoint(emoji)
+    const code = toCodePoint(emoji)
 
     return (
         <img

@@ -3,7 +3,7 @@
     height: 100%;
 }
 
-.mapContainer {
+.map-container {
     display: flex;
     z-index: 4;
     position: absolute;
@@ -23,7 +23,7 @@
     height: 100%;
 }
 
-.btnContainer {
+.btn-container {
     position: absolute;
     top: 8px;
     right: 8px;

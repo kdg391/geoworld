@@ -9,7 +9,6 @@ const GoogleMap = lazy(() => import('./GoogleMap.js')) as typeof GoogleMapType
 interface Props {
     actualLocations: google.maps.LatLngLiteral[]
     gameFinished: boolean
-    googleApiLoaded: boolean
     guessedLocations: (google.maps.LatLngLiteral | null)[]
     round: number
     roundFinished: boolean
@@ -18,7 +17,6 @@ interface Props {
 const ResultMap: React.FC<Props> = ({
     actualLocations,
     gameFinished,
-    googleApiLoaded,
     guessedLocations,
     round,
     roundFinished,
@@ -181,7 +179,6 @@ const ResultMap: React.FC<Props> = ({
     return (
         <Suspense>
             <GoogleMap
-                googleApiLoaded={googleApiLoaded}
                 defaultOptions={{
                     clickableIcons: false,
                     disableDefaultUI: true,
@@ -189,10 +186,10 @@ const ResultMap: React.FC<Props> = ({
                     zoomControl: true,
                     mapId: import.meta.env.VITE_GOOGLE_MAPS_RESULT,
                 }}
-                onMount={(map) => {
+                onLoaded={(map) => {
                     resultMapRef.current = map
                 }}
-                className={styles.resultMap}
+                className={styles['result-map']}
             />
         </Suspense>
     )
