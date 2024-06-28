@@ -1,4 +1,4 @@
-import { lazy, Suspense } from 'react'
+import { Suspense, lazy } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { FLAG_ENOJIS } from '../constants/index.js'

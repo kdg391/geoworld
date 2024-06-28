@@ -1,5 +1,5 @@
 import { Map, X } from 'lucide-react'
-import { lazy, Suspense, useEffect, useRef, useState } from 'react'
+import { Suspense, lazy, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import COUNTRY_BOUNDS from '../constants/country-bounds.json'
@@ -58,6 +58,7 @@ const GuessMap: React.FC<Props> = ({
         if (!guessMapRef.current) return
 
         if (code !== undefined && code in COUNTRY_BOUNDS) {
+            // eslint-disable-next-line
             // @ts-ignore
             const { min, max } = COUNTRY_BOUNDS[code]
 

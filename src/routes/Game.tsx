@@ -1,6 +1,6 @@
-import { lazy, Suspense, useEffect, useState } from 'react'
-import { Trans, useTranslation } from 'react-i18next'
-import { Navigate, useLocation, useNavigate, useParams } from 'react-router-dom'
+import { Suspense, lazy, useCallback, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { Link, useLocation, useParams } from 'react-router-dom'
 
 import COUNTRY_BOUNDS from '../constants/country-bounds.json'
 import { OFFICIAL_MAPS } from '../constants/index.js'
@@ -19,10 +19,11 @@ import styles from './Game.module.css'
 
 import type { CountryCodes } from '../types/index.js'
 
-const Button = lazy(() => import('../components/common/Button.js'))
+const FinalRoundResult = lazy(() => import('../components/FinalRoundResult.js'))
 const GameStatus = lazy(() => import('../components/GameStatus.js'))
 const GuessMap = lazy(() => import('../components/GuessMap.js'))
 const ResultMap = lazy(() => import('../components/ResultMap.js'))
+const RoundResult = lazy(() => import('../components/RoundResult.js'))
 const StreetView = lazy(() => import('../components/StreetView.js'))
 
 interface State {
@@ -36,16 +37,7 @@ interface State {
 const Game = () => {
     const location = useLocation()
     const params = useParams()
-
-    const state = location.state as State | null
-
-    if (params.code === undefined || state === null)
-        return <Navigate to="/geoworld/" />
-
-    const navigate = useNavigate()
     const { t } = useTranslation()
-
-    const { isLoaded, loadApi } = useGoogleApi()
 
     const [round, setRound] = useState(0)
     const [roundFinished, setRoundFinished] = useState(false)
@@ -67,57 +59,73 @@ const Game = () => {
         google.maps.LatLngLiteral | google.maps.LatLngAltitudeLiteral | null
     >(null)
 
+    const { isLoaded, loadApi } = useGoogleApi()
     const { distanceUnit } = useSettings()
 
-    const data = OFFICIAL_MAPS.find((m) => m.code === params.code)!
-
-    const init = async () => {
-        if (!isLoaded) await loadApi()
-
-        const shuffled = shuffleArray(data.locations)
-        const locations = shuffled.slice(0, state.rounds)
-
-        setActualLocations(locations)
-    }
-
-    const finishRound = (timedOut: boolean) => {
-        if (timedOut) {
-            setTimedOut(true)
-            setRoundFinished(true)
-            setGuessedLocations((locs) => [...locs, null])
-
-            return
-        }
-
-        if (markerPosition) {
-            const _distance = calculateDistance(
-                markerPosition,
-                actualLocations[round],
-                distanceUnit ?? 'metric',
-            )
-
-            const scoreFactor =
-                (params.code as CountryCodes | 'worldwide') === 'worldwide'
-                    ? 2000
-                    : calculateScoreFactor(
-                          // @ts-ignore
-                          COUNTRY_BOUNDS[params.code],
-                      )
-
-            const _roundScore = calculateRoundScore(_distance, scoreFactor)
-
-            setDistance(_distance)
-            setRoundScore(_roundScore)
-            setTotalScore((p) => p + _roundScore)
-            setGuessedLocations((locs) => [...locs, markerPosition])
-
-            setRoundFinished(true)
-        }
-    }
+    const data = OFFICIAL_MAPS.find((m) => m.code === params.code)
+    const state = location.state as State | null
 
     useEffect(() => {
+        if (!data || !state) return
+
+        const init = async () => {
+            if (!isLoaded) await loadApi()
+
+            const shuffled = shuffleArray(data.locations)
+            const locations = shuffled.slice(0, state?.rounds)
+
+            setActualLocations(locations)
+        }
+
         init()
     }, [])
+
+    const finishRound = useCallback(
+        (timedOut: boolean) => {
+            if (timedOut) {
+                setTimedOut(true)
+                setRoundFinished(true)
+                setGuessedLocations((locs) => [...locs, null])
+
+                return
+            }
+
+            if (markerPosition) {
+                const _distance = calculateDistance(
+                    markerPosition,
+                    actualLocations[round],
+                    distanceUnit ?? 'metric',
+                )
+
+                const scoreFactor =
+                    (params.code as CountryCodes | 'worldwide') === 'worldwide'
+                        ? 2000
+                        : calculateScoreFactor(
+                              // eslint-disable-next-line
+                              // @ts-ignore
+                              COUNTRY_BOUNDS[params.code],
+                          )
+
+                const _roundScore = calculateRoundScore(_distance, scoreFactor)
+
+                setDistance(_distance)
+                setRoundScore(_roundScore)
+                setTotalScore((p) => p + _roundScore)
+                setGuessedLocations((locs) => [...locs, markerPosition])
+
+                setRoundFinished(true)
+            }
+        },
+        [actualLocations, distanceUnit, markerPosition, params.code, round],
+    )
+
+    if (params.code === undefined || state === null || data === undefined)
+        return (
+            <div>
+                <h1>Map Not Found</h1>
+                <Link to="/geoworld/">Go to Home</Link>
+            </div>
+        )
 
     return (
         <main>
@@ -137,7 +145,7 @@ const Game = () => {
             </Suspense>
 
             <div
-                className={styles['round-result-container']}
+                className={styles['result-container']}
                 style={{
                     display: roundFinished || gameFinished ? 'flex' : 'none',
                 }}
@@ -152,77 +160,22 @@ const Game = () => {
                     />
                 </Suspense>
 
-                <div className={styles['result-info']}>
+                <div className={styles['result-wrapper']}>
                     {(gameFinished || roundFinished) &&
                         (gameFinished ? (
-                            <>
-                                <h2>
-                                    {t('game.totalPoints', {
-                                        count: totalScore,
-                                    })}
-                                </h2>
-                                <div className={styles['result-actions']}>
-                                    <Suspense>
-                                        <Button
-                                            variant="primary"
-                                            onClick={() => {
-                                                navigate(0)
-                                            }}
-                                        >
-                                            {t('game.replay')}
-                                        </Button>
-                                        <Button
-                                            variant="secondary"
-                                            onClick={() => {
-                                                navigate('/geoworld/')
-                                            }}
-                                        >
-                                            {t('game.exit')}
-                                        </Button>
-                                    </Suspense>
-                                </div>
-                            </>
+                            <FinalRoundResult totalScore={totalScore} />
                         ) : (
-                            <>
-                                <h2>
-                                    {t('game.roundPoints', {
-                                        count: timedOut ? 0 : roundScore,
-                                    })}
-                                </h2>
-                                <p>
-                                    {timedOut ? (
-                                        "You've timed out."
-                                    ) : (
-                                        <Trans
-                                            i18nKey={`game.roundResult.${distanceUnit}`}
-                                            values={{
-                                                distance,
-                                            }}
-                                        />
-                                    )}
-                                </p>
-                                <Suspense>
-                                    <Button
-                                        variant="primary"
-                                        className={styles['next-btn']}
-                                        onClick={() => {
-                                            setRoundFinished(false)
-
-                                            if (timedOut) setTimedOut(false)
-
-                                            if (round === state.rounds - 1) {
-                                                setGameFinished(true)
-                                            } else {
-                                                setRound((r) => r + 1)
-                                            }
-                                        }}
-                                    >
-                                        {round === state.rounds - 1
-                                            ? t('game.viewResults')
-                                            : t('game.nextRound')}
-                                    </Button>
-                                </Suspense>
-                            </>
+                            <RoundResult
+                                distance={distance}
+                                round={round}
+                                roundScore={roundScore}
+                                rounds={state.rounds}
+                                setGameFinished={setGameFinished}
+                                setRound={setRound}
+                                setRoundFinished={setRoundFinished}
+                                setTimedOut={setTimedOut}
+                                timedOut={timedOut}
+                            />
                         ))}
                 </div>
             </div>

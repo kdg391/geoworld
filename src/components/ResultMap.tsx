@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useRef } from 'react'
+import { Suspense, lazy, useEffect, useRef } from 'react'
 
 import type GoogleMapType from './GoogleMap.js'
 

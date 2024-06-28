@@ -1,6 +1,6 @@
 [data-theme='light'] {
-    --gradient-1: rgba(255, 255, 255, 0.95);
-    --gradient-2: rgba(255, 255, 255, 0.55);
+    --gradient-1: #fff;
+    --gradient-2: rgba(255, 255, 255, 0.6);
 }
 
 [data-theme='dark'] {

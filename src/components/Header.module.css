@@ -1,5 +1,5 @@
 [data-theme='light'] {
-    --header-bg: #f4f4f4;
+    --header-bg: #fff;
     --header-border: rgba(0, 0, 0, 0.15);
 
     --header-selected: #e9e9e9;
@@ -37,7 +37,7 @@
 
     & h2 {
         margin: 0;
-        font-size: 1.15rem;
+        font-size: 1.125rem;
 
         & a {
             display: flex;
@@ -130,13 +130,15 @@
     justify-content: space-between;
     background-color: transparent;
     cursor: pointer;
-    padding: 0.25rem;
     border-radius: 4px;
 
     & > div {
         display: flex;
         align-items: center;
-        gap: 8px;
+
+        & > span {
+            display: none;
+        }
     }
 }
 
@@ -183,14 +185,19 @@
                 padding: 1rem 1.5rem;
             }
 
-            & .theme-button {
-                padding: 0;
-                justify-content: initial;
-            }
-
             & .theme-dropdown {
                 left: 0;
                 right: auto;
+            }
+
+            .theme-button {
+                & > div {
+                    gap: 8px;
+
+                    & > span {
+                        display: inline-block;
+                    }
+                }
             }
 
             & .arrow {

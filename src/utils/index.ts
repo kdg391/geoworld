@@ -69,7 +69,7 @@ export const formatTimeLeft = (timeLeft: number) => {
 }
 
 // https://stackoverflow.com/a/12646864
-export const shuffleArray = (arr: any[]) => {
+export const shuffleArray = <T>(arr: T[]) => {
     const newArr = [...arr]
 
     for (let i = newArr.length - 1; i > 0; i--) {
@@ -82,3 +82,15 @@ export const shuffleArray = (arr: any[]) => {
 
 export const classNames = (...args: string[]) =>
     args.filter((c) => c !== '').join(' ')
+
+export const toCodePoint = (str: string) => {
+    const r = []
+
+    for (const s of str) {
+        const c = s.codePointAt(0) as number
+
+        r.push(c.toString(16))
+    }
+
+    return r.join('-')
+}

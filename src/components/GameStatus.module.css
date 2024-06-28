@@ -42,12 +42,31 @@
 
 .timer-container {
     position: relative;
-    background-color: var(--game-status);
-    padding: 0.5rem 1rem;
-    width: 5rem;
+    width: 3.125rem;
+    height: 3.125rem;
     margin-top: 1rem;
-    border-radius: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--game-status);
+    border-radius: 50%;
+}
+
+.timer-text {
     text-align: center;
+    font-size: 14px;
+}
+
+.timer-svg {
+    position: absolute;
+    left: 0;
+    top: 0;
+
+    & > circle {
+        stroke: #ffb246;
+        fill: transparent;
+        stroke-width: 2px;
+    }
 }
 
 @media screen and (max-width: 400px) {

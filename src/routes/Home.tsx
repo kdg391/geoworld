@@ -1,5 +1,5 @@
 import { ArrowDown } from 'lucide-react'
-import { lazy, Suspense, useEffect, useState } from 'react'
+import { Suspense, lazy, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { OFFICIAL_MAPS } from '../constants/index.js'

@@ -1,26 +1,3 @@
-[data-theme='light'] {
-    --result-modal: #fff;
-}
-
-[data-theme='dark'] {
-    --result-modal: #272727;
-}
-
-:global(main) {
-    width: 100%;
-    height: 100%;
-}
-
-.result-container {
-    position: absolute;
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    height: 100%;
-    z-index: 5;
-    text-align: center;
-}
-
 .result-wrapper {
     display: flex;
     flex-direction: column;

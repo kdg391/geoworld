@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect } from 'react'
+import { Suspense, lazy, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
@@ -6,14 +6,15 @@ import useSettings from '../hooks/useSettings.js'
 
 import styles from './Footer.module.css'
 
-import type { DistanceUnit } from '../types/index.js'
 import {
     LANGUAGE_FLAGS,
     LANGUAGE_NAMES,
     LANGUAGES,
 } from '../constants/index.js'
 
-const DownShiftSelect = lazy(() => import('./DownShiftSelect.js'))
+import type { DistanceUnit } from '../types/index.js'
+
+const DownShiftSelect = lazy(() => import('./common/DownShiftSelect.js'))
 const Twemoji = lazy(() => import('./Twemoji.js'))
 
 const LANGUAGE_OPTIONS = LANGUAGES.map((lang) => ({

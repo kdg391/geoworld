@@ -62,6 +62,7 @@ const HeaderThemeSelect: React.FC = () => {
                 {...getToggleButtonProps({
                     className: styles['theme-button'],
                 })}
+                title={t('footer.theme')}
             >
                 <div>
                     {selectedItem?.icon}

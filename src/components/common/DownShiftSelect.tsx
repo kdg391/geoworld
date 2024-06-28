@@ -1,7 +1,7 @@
 import { useSelect, type UseSelectSelectedItemChange } from 'downshift'
 import { ChevronDown, ChevronUp } from 'lucide-react'
 
-import { classNames } from '../utils/index.js'
+import { classNames } from '../../utils/index.js'
 
 import styles from './DownShiftSelect.module.css'
 
@@ -13,7 +13,7 @@ const cssPosition = {
 interface Item {
     value: string
     label: string
-    [key: string]: any
+    [key: string]: string | React.ReactNode
 }
 
 interface Props {

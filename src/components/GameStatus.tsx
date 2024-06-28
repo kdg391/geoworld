@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { formatTimeLeft } from '../utils/index.js'
@@ -26,9 +26,7 @@ const GameStatus: React.FC<Props> = ({
 
     const [timeLeft, setTimeLeft] = useState<number | null>(null)
 
-    useEffect(() => {
-        setTimeLeft(timeLimit)
-    }, [])
+    const pathRef = useRef<SVGCircleElement | null>(null)
 
     useEffect(() => {
         if (timeLimit !== null) {
@@ -42,6 +40,15 @@ const GameStatus: React.FC<Props> = ({
         const interval = setInterval(() => {
             setTimeLeft((prev) => (prev as number) - 1)
         }, 1000)
+
+        if (pathRef.current) {
+            const circumference = 2 * Math.PI * 24
+
+            pathRef.current.style.strokeDasharray = String(circumference)
+            pathRef.current.style.strokeDashoffset = String(
+                circumference * (1 - timeLeft / (timeLimit as number)),
+            )
+        }
 
         if (timeLeft <= 0) {
             clearInterval(interval)
@@ -58,7 +65,23 @@ const GameStatus: React.FC<Props> = ({
         <div className={styles['game-status-container']}>
             {timeLimit !== null && timeLeft !== null && (
                 <div className={styles['timer-container']}>
-                    {formatTimeLeft(timeLeft)}
+                    <div className={styles['timer-text']}>
+                        {formatTimeLeft(timeLeft)}
+                    </div>
+                    <svg
+                        width="100%"
+                        height="100%"
+                        className={styles['timer-svg']}
+                    >
+                        <circle
+                            cx="25"
+                            cy="25"
+                            r="24"
+                            width="100%"
+                            height="100%"
+                            ref={pathRef}
+                        />
+                    </svg>
                 </div>
             )}
 

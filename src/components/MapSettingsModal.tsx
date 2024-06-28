@@ -1,5 +1,5 @@
 import { Minus, Plus, X } from 'lucide-react'
-import { lazy, Suspense, useState } from 'react'
+import { Suspense, lazy, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 

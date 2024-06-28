@@ -26,8 +26,8 @@ const Header = () => {
                     <Link to="/geoworld/">
                         <img
                             src="/geoworld/assets/icons/icon.avif"
-                            width={20}
-                            height={20}
+                            width={18}
+                            height={18}
                             alt="Logo"
                         />
                         GeoWorld
@@ -44,7 +44,10 @@ const Header = () => {
                     </ul>
                 </nav>
 
-                <HeaderThemeSelect />
+                <Suspense>
+                    <HeaderThemeSelect />
+                </Suspense>
+
                 <div className={styles['social-links']}>
                     <a
                         href="https://github.com/kdg391/geoworld"

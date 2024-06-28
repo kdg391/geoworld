@@ -14,7 +14,7 @@ const GoogleMap: React.FC<
             React.HTMLAttributes<HTMLDivElement>,
             HTMLDivElement
         >
-> = ({ defaultOptions, onLoaded, ...props }) => {
+> = memo(({ defaultOptions, onLoaded, ...props }) => {
     const mapElRef = useRef<HTMLDivElement | null>(null)
 
     const { isLoaded } = useGoogleApi()
@@ -31,6 +31,6 @@ const GoogleMap: React.FC<
     }, [isLoaded])
 
     return <div ref={mapElRef} {...props}></div>
-}
+})
 
-export default memo(GoogleMap)
+export default GoogleMap
