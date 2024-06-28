@@ -1,3 +1,11 @@
+[data-theme='light'] {
+    --result-modal: #fff;
+}
+
+[data-theme='dark'] {
+    --result-modal: #272727;
+}
+
 .result-wrapper {
     display: flex;
     flex-direction: column;
