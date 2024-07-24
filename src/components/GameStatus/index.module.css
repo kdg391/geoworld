@@ -1,0 +1,87 @@
+.game-status-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 3;
+  width: 100%;
+}
+
+.game-status {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  padding: 6px 12px;
+  gap: 1rem;
+  display: flex;
+  background-color: var(--game-status);
+  font-size: 1rem;
+  border-radius: 4px;
+
+  & > div {
+    display: flex;
+    flex-direction: column;
+    padding: 4px 8px;
+  }
+}
+
+.game-status-label {
+  font-size: 0.875rem;
+  margin-bottom: 4px;
+}
+
+.timer-container {
+  position: relative;
+  width: 3rem;
+  height: 3rem;
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--game-status);
+  border-radius: 50%;
+}
+
+.timer-text {
+  text-align: center;
+  font-size: 14px;
+}
+
+.timer-svg {
+  position: absolute;
+  left: 0;
+  top: 0;
+
+  & > circle {
+    stroke: #ff9924;
+    fill: transparent;
+    stroke-width: 2px;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .game-status > div:first-child {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 750px) {
+  .game-status-container {
+    align-items: flex-start;
+  }
+
+  .game-status {
+    font-size: 0.875rem;
+
+    & :global(.label) {
+      font-size: 0.75rem;
+    }
+  }
+
+  .timer-container {
+    font-size: 0.875rem;
+    margin-left: 1rem;
+  }
+}

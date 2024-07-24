@@ -1,0 +1,17 @@
+[data-theme='light'] {
+  --form-bg: #fff;
+  --form-border: rgba(0, 0, 0, 0.15);
+  --form-label: #676767;
+  --input-bg: #f8f8f8;
+  --input-border: rgba(0, 0, 0, 0.15);
+  --input-placeholder: #757575;
+}
+
+[data-theme='dark'] {
+  --form-bg: #151515;
+  --form-border: rgba(255, 255, 255, 0.15);
+  --form-label: #c2c2c2;
+  --input-bg: #191919;
+  --input-border: rgba(255, 255, 255, 0.15);
+  --input-placeholder: #848484;
+}

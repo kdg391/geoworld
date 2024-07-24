@@ -1,0 +1,29 @@
+.main {
+  width: 100%;
+  height: 100%;
+}
+
+.result-container {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  z-index: 5;
+  text-align: center;
+}
+
+.result-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  padding: 1.25rem 0.75rem;
+  width: 100%;
+  min-height: 12.5rem;
+  background-color: var(--result-modal);
+
+  & > h2 {
+    margin: 12px 0;
+  }
+}

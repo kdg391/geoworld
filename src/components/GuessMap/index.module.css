@@ -1,0 +1,153 @@
+.guess-map-container {
+  position: absolute;
+  right: 24px;
+  bottom: 24px;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+
+  transition:
+    opacity 0.1s ease,
+    width 0.1s ease,
+    height 0.1s ease;
+  max-width: 100%;
+  opacity: 0.75;
+  width: max(var(--width), var(--min-width));
+  height: max(var(--height), var(--min-height));
+  max-height: calc(100% - 128px);
+
+  --aspect-ratio: 1.25;
+  --active-width: 30vw;
+  --active-height: calc(var(--active-width) / var(--aspect-ratio));
+  --inactive-width: 16vw;
+  --inactive-height: calc(var(--inactive-width) / var(--aspect-ratio));
+  --width: var(--inactive-width);
+  --height: var(--inactive-height);
+  --min-width: 12.5rem;
+  --min-height: calc(var(--min-width) / var(--aspect-ratio));
+
+  &:global(.active) {
+    --width: var(--active-width);
+    --height: var(--active-height);
+    opacity: 1;
+  }
+
+  &:global(.size--0) {
+    --active-width: 16vw;
+  }
+
+  &:global(.size--2) {
+    --active-width: 45vw;
+  }
+
+  &:global(.size--3) {
+    --active-width: 65vw;
+  }
+}
+
+.guess-map-wrapper {
+  position: relative;
+}
+
+.guess-map,
+.guess-map-wrapper {
+  width: 100%;
+  height: 100%;
+}
+
+.guess-btn {
+  margin-top: 8px;
+  text-transform: uppercase;
+
+  background-color: var(--primary-color);
+  font-size: 1rem;
+  padding: 0.75rem 1.5rem;
+  color: #fff;
+  border-radius: 8px;
+
+  &:disabled {
+    background-color: var(--secondary-color);
+  }
+}
+
+.map-btn,
+.close-btn {
+  display: none;
+}
+
+@media only screen and (max-width: 750px) {
+  .guess-map-container:global(.size--0) {
+    --active-width: 24vw;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .map-btn {
+    position: absolute;
+    right: 16px;
+    bottom: 24px;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    padding: 2px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+
+    & > svg {
+      color: #fff;
+    }
+  }
+
+  .close-btn,
+  .guess-btn,
+  .guess-map {
+    display: none;
+  }
+
+  .guess-map-container {
+    left: 0;
+    bottom: 0;
+    opacity: 1;
+    width: 100%;
+    display: none;
+
+    &:global(.active) {
+      width: 100%;
+      height: 50svh;
+      display: flex;
+
+      & .guess-btn {
+        display: inline-block;
+        border-radius: 0;
+        margin-top: 0;
+        padding: 1rem 1.5rem;
+      }
+
+      & .guess-map {
+        display: block;
+      }
+
+      & + .map-btn {
+        display: none;
+      }
+
+      & .close-btn {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        z-index: 4;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        padding: 2px;
+        border-radius: 50%;
+        background-color: var(--bg);
+      }
+    }
+  }
+}

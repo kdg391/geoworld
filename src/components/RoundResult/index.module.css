@@ -1,0 +1,19 @@
+.result-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  padding: 1.25rem 0.75rem;
+  width: 100%;
+  min-height: 12.5rem;
+  background-color: var(--result-modal);
+
+  & > h2 {
+    margin: 12px 0;
+  }
+}
+
+.result-actions {
+  display: flex;
+  gap: 8px;
+}

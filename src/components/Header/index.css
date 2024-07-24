@@ -1,0 +1,21 @@
+[data-theme='light'] {
+  --header-bg: #fff;
+  --header-border: rgba(0, 0, 0, 0.15);
+
+  --header-selected: #e9e9e9;
+
+  --nav-border: rgba(0, 0, 0, 0.1);
+
+  --ds-selected: #eaeaea;
+}
+
+[data-theme='dark'] {
+  --header-bg: #181818;
+  --header-border: rgba(255, 255, 255, 0.15);
+
+  --header-selected: #202020;
+
+  --nav-border: rgba(255, 255, 255, 0.1);
+
+  --ds-selected: #333;
+}

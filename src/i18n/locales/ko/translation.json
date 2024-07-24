@@ -1,0 +1,97 @@
+{
+  "auth": {
+    "email": "이메일",
+    "password": "비밀번호",
+    "confirmPassword": "비밀번호 확인",
+    "signUp": "가입하기",
+    "signIn": "로그인",
+    "signUpTitle": "계정 만들기",
+    "forgotPassword": "비밀번호를 잊으셨나요?",
+    "alreadyAccount": "이미 계정이 있으신가요?",
+    "doNotHaveAccount": "계정이 없으신가요?",
+    "resetPassword": "비밀번호 초기화",
+    "updatePassword": "비밀번호 업데이트"
+  },
+  "finalRoundResult": {
+    "points_one": "{{count, number}} 포인트",
+    "points_other": "{{count, number}} 포인트",
+    "replay": "다시 플레이",
+    "exit": "나가기"
+  },
+  "footer": {
+    "language": "언어",
+    "termsOfService": "서비스 이용 약관",
+    "privacyPolicy": "개인정보 처리 방침"
+  },
+  "gameStatus": {
+    "map": "맵",
+    "round": "라운드",
+    "score": "점수"
+  },
+  "guessMap": {
+    "openMap": "지도 열기",
+    "closeMap": "지도 닫기"
+  },
+  "header": {
+    "maps": "맵",
+    "theme": "테마",
+    "themes": {
+      "light": "라이트",
+      "dark": "다크",
+      "system": "시스템"
+    }
+  },
+  "mapCard": {
+    "locations_one": "위치 {{count}}개",
+    "locations_other": "위치 {{count}}개",
+    "play": "플레이"
+  },
+  "mapSettings": {
+    "title": "맵 설정",
+    "move": "이동",
+    "pan": "팬",
+    "zoom": "줌",
+    "rounds": "라운드",
+    "roundTime": "라운드 시간",
+    "noTimeLimit": "시간 제한 없음",
+    "roundTimeFormat": "{{minutes, number(style: unit; unit: minute; unitDisplay: narrow)}} {{seconds, number(style: unit; unit: second; unitDisplay: narrow)}}",
+    "cancel": "취소",
+    "play": "플레이"
+  },
+  "streetViewControls": {
+    "returnToStart": "시작 지점으로 돌아가기",
+    "undo": "되돌리기"
+  },
+  "roundResult": {
+    "points_one": "+{{count, number}} 포인트",
+    "points_other": "+{{count, number}} 포인트",
+    "distance": {
+      "imperial": "정확한 위치에서 <strong>{{distance, number(maximumFractionDigits: 1; style: unit; unit: mile)}}</strong> 떨어짐",
+      "metric": "정확한 위치에서 <strong>{{distance, number(maximumFractionDigits: 1; style: unit; unit: kilometer)}}</strong> 떨어짐"
+    },
+    "timedOut": "시간이 초과되었습니다.",
+    "viewResults": "결과 보기",
+    "nextRound": "다음 라운드"
+  },
+  "world": "월드",
+  "country": {
+    "au": "오스트레일리아",
+    "ca": "캐나다",
+    "cn": "중국",
+    "de": "독일",
+    "dk": "덴마크",
+    "fr": "프랑스",
+    "gb": "영국",
+    "it": "이탈리아",
+    "jp": "일본",
+    "kr": "대한민국",
+    "pl": "폴란드",
+    "sg": "싱가포르",
+    "tw": "대만",
+    "us": "미국"
+  },
+  "mapType": {
+    "community": "커뮤니티",
+    "official": "공식"
+  }
+}

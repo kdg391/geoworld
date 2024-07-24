@@ -1,0 +1,39 @@
+.container {
+  display: flex;
+  gap: 4px;
+  position: relative;
+}
+
+.display-name {
+  cursor: pointer;
+  user-select: none;
+}
+
+.dropdown {
+  display: none;
+
+  &:global(.active) {
+    position: absolute;
+    top: 24px;
+    right: 4px;
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 128px;
+
+    & li {
+      display: flex;
+      background-color: var(--user-info-dropdown);
+      cursor: pointer;
+      padding: 6px 8px;
+      align-items: center;
+      gap: 4px;
+
+      &:hover {
+        background-color: var(--user-info-dropdown-hovered);
+      }
+    }
+  }
+}

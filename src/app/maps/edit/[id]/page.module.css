@@ -1,0 +1,20 @@
+.header {
+  height: 50px;
+}
+
+.main {
+  height: calc(100% - 50px - 50px);
+}
+
+.container {
+  display: flex;
+  height: 100%;
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+  }
+}
+
+.street-view {
+  flex: 1;
+}

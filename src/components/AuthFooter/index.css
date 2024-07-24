@@ -1,0 +1,7 @@
+[data-theme='light'] {
+  --auth-footer-link: rgb(59, 60, 62);
+}
+
+[data-theme='dark'] {
+  --auth-footer-link: rgb(209, 213, 219);
+}

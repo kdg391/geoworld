@@ -1,0 +1,41 @@
+.switch {
+  display: inline-block;
+  position: relative;
+  cursor: pointer;
+  height: 24px;
+
+  & > input[type='checkbox'] {
+    appearance: none;
+    display: none;
+    visibility: hidden;
+
+    &:checked ~ span {
+      background-color: var(--primary-color);
+
+      &:after {
+        transform: translateX(24px);
+      }
+    }
+  }
+
+  & > span {
+    display: inline-block;
+    height: 24px;
+    width: 48px;
+    background-color: #787878;
+    transition: background-color 0.25s ease;
+    border-radius: 12px;
+
+    &:after {
+      content: '';
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      width: 16px;
+      height: 16px;
+      background-color: #fff;
+      border-radius: 50%;
+      transition: transform 0.25s ease;
+    }
+  }
+}

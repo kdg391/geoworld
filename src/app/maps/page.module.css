@@ -1,0 +1,7 @@
+.maps {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(var(--map-card-width), 1fr));
+  gap: 24px;
+  --map-card-width: 17.5rem;
+}

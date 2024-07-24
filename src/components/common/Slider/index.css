@@ -1,0 +1,9 @@
+[data-theme='light'] {
+  --range-thumb: #000;
+  --range-track: #787878;
+}
+
+[data-theme='dark'] {
+  --range-thumb: #fff;
+  --range-track: #a2a2a2;
+}

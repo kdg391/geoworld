@@ -1,0 +1,9 @@
+[data-theme='light'] {
+  --user-info-dropdown: #f1f1f1;
+  --user-info-dropdown-hovered: #e4e4e4;
+}
+
+[data-theme='dark'] {
+  --user-info-dropdown: #333;
+  --user-info-dropdown-hovered: #555;
+}

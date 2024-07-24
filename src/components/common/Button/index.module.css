@@ -1,0 +1,31 @@
+.button {
+  border-radius: 8px;
+  color: #fff;
+  font-size: 1rem;
+
+  &:global(.size--m) {
+    padding: 0.5rem 1rem;
+  }
+
+  &:global(.size--l) {
+    padding: 12px 24px;
+  }
+}
+
+.primary {
+  background-color: var(--primary-color);
+  transition: background-color 0.1s ease;
+
+  &:hover {
+    background-color: #3971ff;
+  }
+}
+
+.primary:disabled,
+.secondary {
+  background-color: var(--secondary-color);
+
+  &:hover {
+    background-color: #505050;
+  }
+}
