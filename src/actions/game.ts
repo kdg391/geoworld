@@ -158,7 +158,7 @@ export const updateGame = async (
           distance,
           points: score,
           timedOut: data.timedOut,
-          // timedOutWithGuess: data.timedOut && !data.guessedLocation
+          timedOutWithGuess: data.timedOut && !data.guessedLocation,
         },
       ],
       guessed_locations: [...gameData.guessed_locations, data.guessedLocation],

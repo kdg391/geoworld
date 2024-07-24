@@ -60,6 +60,7 @@ export interface GuessedRound {
   }
   points: number
   timedOut: boolean
+  timedOutWithGuess: boolean
 }
 
 type GameState = 'started' | 'finished'

@@ -1,7 +1,6 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
-// import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
 
 import { createClient } from '../utils/supabase/server.js'
@@ -38,7 +37,9 @@ export const signUp = async (_: SignUpFormState, formData: FormData) => {
     password: validated.data.password,
     email_confirm: true,
     user_metadata: {
-      username: validated.data.email.trim().split('@')[0],
+      display_name: validated.data.email.trim().split('@')[0],
+      is_admin: false,
+      public: true,
     },
   })
 
@@ -87,14 +88,6 @@ export const signOut = async () => {
   'use server'
   const supabase = createClient()
   await supabase.auth.signOut()
-
-  /*const referrer = headers().get('x-next-pathname')
-
-  revalidatePath('/', 'layout')
-
-  if (referrer) redirect(referrer)
-
-  redirect('/sign-in')*/
 }
 
 export const resetPassword = async (
