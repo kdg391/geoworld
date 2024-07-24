@@ -7,7 +7,10 @@ import { useCallback, useEffect, useState } from 'react'
 import { getGame, updateGame } from '../../../actions/game.js'
 import { getMap } from '../../../actions/map.js'
 
-import { OFFICIAL_MAP_COUNTRY_CODES } from '../../../constants/index.js'
+import {
+  OFFICIAL_MAP_COUNTRY_CODES,
+  OFFICIAL_MAP_WORLD_ID,
+} from '../../../constants/index.js'
 
 import useGoogleApi from '../../../hooks/useGoogleApi.js'
 
@@ -141,7 +144,9 @@ const Game = ({ params }: Props) => {
           finishRound={finishRound}
           mapName={
             mapData.type === 'official'
-              ? t(`countries.${OFFICIAL_MAP_COUNTRY_CODES[mapData.id]}`)
+              ? mapData.id === OFFICIAL_MAP_WORLD_ID
+                ? t('world')
+                : t(`country.${OFFICIAL_MAP_COUNTRY_CODES[mapData.id]}`)
               : mapData.name
           }
           round={gameData.round}
