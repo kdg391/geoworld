@@ -64,11 +64,7 @@ const PasswordForm = () => {
           <p style={{ color: 'red' }}>{state.errors.confirmPassword}</p>
         )}
 
-        <SubmitButton
-          type="submit"
-          formAction={action}
-          pendingText="Changing Password..."
-        >
+        <SubmitButton type="submit" formAction={action}>
           Change Password
         </SubmitButton>
       </form>

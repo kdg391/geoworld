@@ -22,7 +22,7 @@ const Admin = async () => {
   if (!pData || pErr) return redirect('/')
   if (!pData.is_admin) return redirect('/')
 
-  const { data: mapData, error: mErr } = await getOfficialMaps()
+  const { data: mapData, error: mErr } = await getOfficialMaps(0)
 
   if (!mapData || mErr) return redirect('/')
 

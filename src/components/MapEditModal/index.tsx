@@ -1,15 +1,23 @@
 'use client'
 
+import dynamic from 'next/dynamic'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
 import { createCommunityMap } from '../../actions/map.js'
 
-import styles from './index.module.css'
+import { useTranslation } from '../../i18n/client.js'
+
+// import styles from './index.module.css'
 import '../MapSettingsModal/index.css'
+
+const Button = dynamic(() => import('../common/Button/index.js'))
+const Modal = dynamic(() => import('../Modal/index.js'))
+const Switch = dynamic(() => import('../common/Switch/index.js'))
 
 interface Props {
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>
+  showModal: boolean
   userId: string
 }
 
@@ -17,16 +25,19 @@ export interface State {
   errors: {} | null
 }
 
-const MapEditModal = ({ setShowModal, userId }: Props) => {
+const MapEditModal = ({ setShowModal, showModal, userId }: Props) => {
   const router = useRouter()
 
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
+  const [isPublic, setIsPublic] = useState(true)
+
+  const { t } = useTranslation('translation')
 
   return (
-    <div className={styles['map-edit-modal']}>
-      <div className={styles['map-edit-modal-wrapper']}>
-        <h2>Create Map</h2>
+    <Modal isOpen={showModal}>
+      <h2>Create Map</h2>
+      <div>
         <div>
           <label htmlFor="name">Name</label>
           <input
@@ -49,27 +60,39 @@ const MapEditModal = ({ setShowModal, userId }: Props) => {
           />
         </div>
         <div>
-          <button onClick={() => setShowModal((o) => !o)}>Cancel</button>
-          <button
-            onClick={async () => {
-              const { data: mapData, errors } = await createCommunityMap({
-                name: name.trim(),
-                description:
-                  description.trim() === '' ? null : description.trim(),
-                creator: userId,
-                public: true, // todo
-              })
-
-              if (!mapData || errors) return
-
-              router.push(`/maps/edit/${mapData.id}`)
-            }}
-          >
-            Create
-          </button>
+          <label htmlFor="is-public">Public</label>
+          <Switch
+            id="is-public"
+            defaultChecked={isPublic}
+            onChange={(event) => setIsPublic(event.target.checked)}
+          />
         </div>
       </div>
-    </div>
+      <div>
+        <Button variant="gray" size="m" onClick={() => setShowModal((o) => !o)}>
+          {t('cancel')}
+        </Button>
+        <Button
+          variant="primary"
+          size="m"
+          onClick={async () => {
+            const { data: mapData, errors } = await createCommunityMap({
+              name: name.trim(),
+              description:
+                description.trim() === '' ? null : description.trim(),
+              creator: userId,
+              isPublic,
+            })
+
+            if (!mapData || errors) return
+
+            router.push(`/maps/edit/${mapData.id}`)
+          }}
+        >
+          Create
+        </Button>
+      </div>
+    </Modal>
   )
 }
 

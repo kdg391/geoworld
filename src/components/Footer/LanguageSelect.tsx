@@ -3,10 +3,10 @@
 import dynamic from 'next/dynamic'
 
 import {
-  LANGUAGES,
-  LANGUAGE_FLAGS,
-  LANGUAGE_NAMES,
-} from '../../constants/index.js'
+  LOCALE_FLAGS,
+  LOCALE_NAMES,
+  SUPPORTED_LOCALES,
+} from '../../constants/i18n.js'
 
 import { useTranslation } from '../../i18n/client.js'
 import { setLocale } from '../../i18n/server.js'
@@ -16,13 +16,13 @@ import type { Locales } from '../../types/index.js'
 const Select = dynamic(() => import('../common/Select/index.js'))
 const Twemoji = dynamic(() => import('../Twemoji.js'))
 
-const LANGUAGE_OPTIONS = LANGUAGES.map((lang) => ({
+const LANGUAGE_OPTIONS = SUPPORTED_LOCALES.map((lang) => ({
   value: lang,
-  label: LANGUAGE_NAMES[lang],
+  label: LOCALE_NAMES[lang],
   icon: (
     <Twemoji
-      emoji={LANGUAGE_FLAGS[lang]}
-      alt={LANGUAGE_NAMES[lang]}
+      emoji={LOCALE_FLAGS[lang]}
+      alt={LOCALE_NAMES[lang]}
       width={16}
       height={16}
     />

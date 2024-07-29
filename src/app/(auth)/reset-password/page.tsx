@@ -18,6 +18,7 @@ const ResetPassword = async ({
   if (!searchParams.code) return redirect('/')
 
   const supabase = createClient()
+
   try {
     await supabase.auth.exchangeCodeForSession(searchParams.code)
   } catch {

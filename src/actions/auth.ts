@@ -37,9 +37,7 @@ export const signUp = async (_: SignUpFormState, formData: FormData) => {
     password: validated.data.password,
     email_confirm: true,
     user_metadata: {
-      display_name: validated.data.email.trim().split('@')[0],
-      is_admin: false,
-      public: true,
+      display_name: validated.data.email.trim().split('@')[0].slice(0, 20),
     },
   })
 
@@ -153,3 +151,5 @@ export const updatePassword = async (
 
   return redirect('/sign-in')
 }
+
+export const deleteAccount = async () => {}

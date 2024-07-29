@@ -59,14 +59,14 @@
   margin-top: 8px;
   text-transform: uppercase;
 
-  background-color: var(--primary-color);
+  background-color: var(--primary);
   font-size: 1rem;
   padding: 0.75rem 1.5rem;
   color: #fff;
   border-radius: 8px;
 
   &:disabled {
-    background-color: var(--secondary-color);
+    background-color: var(--gray);
   }
 }
 
@@ -94,7 +94,7 @@
     height: 64px;
     padding: 2px;
     border-radius: 50%;
-    background-color: var(--primary-color);
+    background-color: var(--primary);
 
     & > svg {
       color: #fff;

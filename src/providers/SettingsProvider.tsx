@@ -11,6 +11,8 @@ interface Props {
 }
 
 const getDistanceUnit = () => {
+  if (typeof window === 'undefined') return 'metric'
+
   let distanceUnit
 
   try {

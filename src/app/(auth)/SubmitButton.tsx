@@ -8,10 +8,16 @@ import type { ComponentProps } from 'react'
 const Button = dynamic(() => import('../../components/common/Button/index.js'))
 
 type Props = ComponentProps<'button'> & {
+  full?: boolean
   pendingText?: string
 }
 
-const SubmitButton = ({ children, pendingText, ...props }: Props) => {
+const SubmitButton = ({
+  children,
+  full = false,
+  pendingText,
+  ...props
+}: Props) => {
   'use client'
   const { pending, action } = useFormStatus()
 
@@ -19,13 +25,16 @@ const SubmitButton = ({ children, pendingText, ...props }: Props) => {
 
   return (
     <Button
+      full={full}
+      size="m"
       variant="primary"
       type="submit"
       disabled={isPending}
       aria-disabled={isPending}
+      isLoading={isPending}
       {...props}
     >
-      {isPending ? pendingText : children}
+      {pendingText && isPending ? pendingText : children}
     </Button>
   )
 }

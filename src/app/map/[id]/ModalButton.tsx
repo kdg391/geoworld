@@ -4,8 +4,13 @@ import dynamic from 'next/dynamic'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
+import { useTranslation } from '../../../i18n/client.js'
+
 import type { Map } from '../../../types/index.js'
 
+const Button = dynamic(
+  () => import('../../../components/common/Button/index.js'),
+)
 const MapSettingsModal = dynamic(
   () => import('../../../components/MapSettingsModal/index.js'),
 )
@@ -21,6 +26,8 @@ const ModalButton = ({
 
   const [showModal, setShowModal] = useState(false)
 
+  const { t } = useTranslation('translation')
+
   useEffect(() => {
     if (showModal) document.body.style.setProperty('overflow-y', 'hidden')
     else document.body.style.removeProperty('overflow-y')
@@ -28,15 +35,17 @@ const ModalButton = ({
 
   return (
     <>
-      {showModal && (
-        <MapSettingsModal
-          mapData={mapData}
-          setShowModal={setShowModal}
-          userId={userId}
-        />
-      )}
+      <MapSettingsModal
+        mapData={mapData}
+        setShowModal={setShowModal}
+        showModal={showModal}
+        userId={userId}
+      />
 
-      <button
+      <Button
+        variant="primary"
+        size="m"
+        disabled={mapData.locations_count === 0}
         onClick={() => {
           if (!userId) {
             router.push('/sign-in')
@@ -46,8 +55,8 @@ const ModalButton = ({
           setShowModal((s) => !s)
         }}
       >
-        Play
-      </button>
+        {t('play')}
+      </Button>
     </>
   )
 }

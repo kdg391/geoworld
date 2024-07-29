@@ -4,6 +4,8 @@ import GoogleApiProvider from '../../../providers/GoogleApiProvider.js'
 
 import { createClient } from '../../../utils/supabase/server.js'
 
+import styles from './page.module.css'
+
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -21,5 +23,9 @@ export default async function Layout({
 
   if (!uData.user || uErr) redirect('/sign-in')
 
-  return <GoogleApiProvider>{children}</GoogleApiProvider>
+  return (
+    <GoogleApiProvider>
+      <main className={styles.main}>{children}</main>
+    </GoogleApiProvider>
+  )
 }

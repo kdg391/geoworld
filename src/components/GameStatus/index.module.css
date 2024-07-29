@@ -55,7 +55,7 @@
   top: 0;
 
   & > circle {
-    stroke: #ff9924;
+    stroke: var(--secondary);
     fill: transparent;
     stroke-width: 2px;
   }

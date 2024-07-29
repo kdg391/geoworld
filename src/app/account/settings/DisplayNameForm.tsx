@@ -30,11 +30,7 @@ const DisplayNameForm = ({ displayName }: { displayName: string }) => {
           defaultValue={displayName ?? ''}
         />
 
-        <SubmitButton
-          type="submit"
-          formAction={action}
-          pendingText="Changing Display Name..."
-        >
+        <SubmitButton type="submit" formAction={action}>
           Change Display Name
         </SubmitButton>
       </form>

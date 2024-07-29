@@ -38,7 +38,9 @@ const StreetView = dynamic(
 )
 
 interface Props {
-  params: { id: string }
+  params: {
+    id: string
+  }
 }
 
 const Game = ({ params }: Props) => {
@@ -110,35 +112,29 @@ const Game = ({ params }: Props) => {
 
   if (mapData === null)
     return (
-      <main className={styles.main}>
-        <section>
-          <h1>Map Not Found</h1>
-          <Link href="/">Go to Home</Link>
-        </section>
-      </main>
+      <section>
+        <h1>Map Not Found</h1>
+        <Link href="/">Go to Home</Link>
+      </section>
     )
 
   if (gameData === null)
     return (
-      <main className={styles.main}>
-        <section>
-          <h1>Game Not Found</h1>
-          <Link href="/">Go to Home</Link>
-        </section>
-      </main>
+      <section>
+        <h1>Game Not Found</h1>
+        <Link href="/">Go to Home</Link>
+      </section>
     )
 
   if (!mapData || !gameData)
     return (
-      <main className={styles.main}>
-        <section>
-          <h1>Loading...</h1>
-        </section>
-      </main>
+      <section>
+        <h1>Loading...</h1>
+      </section>
     )
 
   return (
-    <main className={styles.main}>
+    <>
       {view === 'game' && (
         <GameStatus
           finishRound={finishRound}
@@ -218,7 +214,7 @@ const Game = ({ params }: Props) => {
         }}
         view={view}
       />
-    </main>
+    </>
   )
 }
 

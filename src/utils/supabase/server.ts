@@ -5,7 +5,7 @@ export function createClient(secret = false) {
   const cookieStore = cookies()
 
   return createServerClient(
-    process.env.SUPABASE_URL!,
+    process.env.SUPABASE_URL as string,
     secret ? process.env.SUPABASE_SECRET_KEY! : process.env.SUPABASE_ANON_KEY!,
     {
       cookies: {

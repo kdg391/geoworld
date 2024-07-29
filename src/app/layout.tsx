@@ -110,7 +110,7 @@ export const metadata: Metadata = {
     },
     {
       rel: 'icon',
-      url: '/assets/icons/favicon-192x192.png',
+      url: '/assets/icons/android-icon-192x192.png',
       type: 'image/png',
       sizes: '192x192',
     },

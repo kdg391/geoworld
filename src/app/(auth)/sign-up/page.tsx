@@ -39,11 +39,7 @@ const SignUp = async () => {
           wordBreak: 'break-word',
           maxWidth: '20rem',
         }}
-      >
-        By continuing, you agree to the{' '}
-        <Link href="/terms-of-service">Terms of Service</Link> and{' '}
-        <Link href="/privacy-policy">Privacy Policy</Link>
-      </p>
+      ></p>
     </>
   )
 }

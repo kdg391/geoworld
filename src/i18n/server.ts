@@ -3,11 +3,13 @@
 import { createInstance } from 'i18next'
 import resourcesToBackend from 'i18next-resources-to-backend'
 import { initReactI18next } from 'react-i18next/initReactI18next'
-import { cookies } from 'next/headers'
+import { cookies, headers } from 'next/headers'
 
-import { FALLBACK_LOCALE, LANGUAGE_COOKIE } from './settings.js'
-
-import { LANGUAGES } from '../constants/index.js'
+import {
+  DEFAULT_LOCALE,
+  LANGUAGE_COOKIE,
+  SUPPORTED_LOCALES,
+} from '../constants/i18n.js'
 
 import type { Locales } from '../types/index.js'
 
@@ -22,8 +24,8 @@ async function initI18next(lng: Locales, namespace: string | string[]) {
       ),
     )
     .init({
-      supportedLngs: LANGUAGES,
-      fallbackLng: FALLBACK_LOCALE,
+      supportedLngs: SUPPORTED_LOCALES,
+      fallbackLng: DEFAULT_LOCALE,
       lng,
       ns: namespace,
     })
@@ -31,17 +33,23 @@ async function initI18next(lng: Locales, namespace: string | string[]) {
   return i18nInstance
 }
 
-export async function createTranslation(ns: string | string[]) {
+export async function createTranslation(ns: string) {
   const lang = await getLocale()
   const i18nextInstance = await initI18next(lang, ns)
 
   return {
-    t: i18nextInstance.getFixedT(lang, Array.isArray(ns) ? ns[0] : ns),
+    t: i18nextInstance.getFixedT(lang, ns),
   }
 }
 
 export async function getLocale() {
-  return (cookies().get(LANGUAGE_COOKIE)?.value ?? FALLBACK_LOCALE) as Locales
+  let locale = cookies().get(LANGUAGE_COOKIE)?.value
+
+  if (!locale) {
+    locale = headers().get('x-next-locale') ?? DEFAULT_LOCALE
+  }
+
+  return locale as Locales
 }
 
 export async function setLocale(locale: Locales) {

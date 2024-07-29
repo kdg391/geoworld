@@ -56,11 +56,7 @@ const Form = () => {
         {state.errors?.password && <p>{state.errors.password}</p>}
       </div>
       {state.errors?.message && <p>{state.errors.message}</p>}
-      <SubmitButton
-        formAction={action}
-        pendingText="Signing In..."
-        className={styles.button}
-      >
+      <SubmitButton formAction={action} full className={styles.button}>
         {t('auth.signIn')}
       </SubmitButton>
     </form>

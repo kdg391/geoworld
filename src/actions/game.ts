@@ -1,8 +1,8 @@
 'use server'
 
-import { calculateDistance, calculateRoundScore } from '../utils/game.js'
+import { OFFICIAL_MAP_WORLD_ID } from '../constants/index.js'
 
-import { shuffleArray } from '../utils/index.js'
+import { calculateDistance, calculateRoundScore } from '../utils/game.js'
 
 import { createClient } from '../utils/supabase/server.js'
 
@@ -31,20 +31,19 @@ export const createGame = async ({
       error: validated.error.flatten().fieldErrors,
     }
 
-  const { data: allLocations, error: lErr } = await supabase
-    .from('locations')
+  const { data: locations, error: lErr } = await supabase
+    .rpc('get_random_locations', {
+      p_map_id: mapData.id === OFFICIAL_MAP_WORLD_ID ? null : mapData.id,
+      p_count: settings.rounds,
+    })
     .select('*')
-    .eq('map_id', mapData.id)
     .returns<Location[]>()
 
-  if (!allLocations || lErr)
+  if (!locations || lErr)
     return {
       data: null,
       error: lErr?.message ?? null,
     }
-
-  const shuffled = shuffleArray(allLocations)
-  const locations = shuffled.slice(0, settings.rounds)
 
   const { data, error } = await supabase
     .from('games')
@@ -158,7 +157,7 @@ export const updateGame = async (
           distance,
           points: score,
           timedOut: data.timedOut,
-          timedOutWithGuess: data.timedOut && !data.guessedLocation,
+          timedOutWithGuess: data.timedOut && data.guessedLocation !== null,
         },
       ],
       guessed_locations: [...gameData.guessed_locations, data.guessedLocation],

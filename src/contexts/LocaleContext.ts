@@ -1,9 +1,9 @@
 import { createContext } from 'react'
 
-import { FALLBACK_LOCALE } from '../i18n/settings.js'
+import { DEFAULT_LOCALE } from '../constants/i18n.js'
 
 import type { Locales } from '../types/index.js'
 
-const LocaleContext = createContext<Locales>(FALLBACK_LOCALE)
+const LocaleContext = createContext<Locales>(DEFAULT_LOCALE)
 
 export default LocaleContext

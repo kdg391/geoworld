@@ -1,13 +1,9 @@
 [data-theme='light'] {
-  --map-settings-modal: rgba(0, 0, 0, 0.5);
   --map-settings-modal-header: #ececec;
-  --map-settings-modal-content: #fff;
   --map-settings-modal-actions: #ececec;
 }
 
 [data-theme='dark'] {
-  --map-settings-modal: rgba(0, 0, 0, 0.5);
   --map-settings-modal-header: #333;
-  --map-settings-modal-content: rgb(35, 35, 35);
   --map-settings-modal-actions: #333;
 }

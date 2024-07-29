@@ -7,12 +7,7 @@ const AuthHeader = () => (
   <header className={styles.header}>
     <h2 className={styles.title}>
       <Link href="/" className={styles['title-link']}>
-        <Image
-          src="/assets/icons/icon.avif"
-          alt="Icon"
-          width={18}
-          height={18}
-        />
+        <Image src="/assets/icons/icon.svg" alt="Icon" width={18} height={18} />
         <span>GeoWorld</span>
       </Link>
     </h2>

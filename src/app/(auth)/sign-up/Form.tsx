@@ -70,11 +70,7 @@ const Form = () => {
         {state.errors?.confirmPassword && <p>{state.errors.confirmPassword}</p>}
       </div>
       {state.errors?.message && <p>{state.errors.message}</p>}
-      <SubmitButton
-        formAction={action}
-        pendingText="Signing Up..."
-        className={styles['button']}
-      >
+      <SubmitButton formAction={action} full className={styles['button']}>
         {t('auth.signUp')}
       </SubmitButton>
     </form>

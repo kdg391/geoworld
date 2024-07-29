@@ -1,8 +1,8 @@
 .downshift {
   position: relative;
 
-  :global &.open {
-    :global & .chevron {
+  &:global(.open) {
+    & :global(.chevron) {
       color: var(--ds-indicator);
     }
 
@@ -31,11 +31,11 @@
     width: 100%;
     background-color: var(--ds);
 
-    :global &.selected {
+    &:global(.selected) {
       font-weight: 600;
     }
 
-    :global &.focused {
+    &:global(.focused) {
       background-color: var(--ds-selected);
     }
   }

@@ -16,11 +16,7 @@ const NotSignedIn = () => {
 
   return (
     <div className={styles.notSigned}>
-      <Button
-        variant="secondary"
-        size="m"
-        onClick={() => router.push('/sign-in')}
-      >
+      <Button variant="gray" size="m" onClick={() => router.push('/sign-in')}>
         {t('auth.signIn')}
       </Button>
       <Button

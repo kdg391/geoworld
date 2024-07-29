@@ -27,6 +27,7 @@ interface Props {
 
 const MapCard = ({ mapData }: Props) => {
   const router = useRouter()
+
   const { t } = useTranslation('translation')
 
   return (
@@ -34,9 +35,7 @@ const MapCard = ({ mapData }: Props) => {
       <div className={styles['map-thumbnail']}>
         {/* <Image
           src={`/assets/images/${mapData.code}.avif`}
-          alt={`${
-            mapData.code === 'worldwide' ? 'Worldwide' : mapData.code
-          } Image`}
+          alt="thumbnail"
           fill
           sizes="100%"
           className={styles['map-thumbnail-img']}
@@ -50,8 +49,8 @@ const MapCard = ({ mapData }: Props) => {
                   ? WORLD_EMOJI
                   : FLAG_ENOJIS[OFFICIAL_MAP_COUNTRY_CODES[mapData.id]]
               }
-              width={28}
-              height={28}
+              width={24}
+              height={24}
               alt={
                 mapData.id === OFFICIAL_MAP_WORLD_ID
                   ? t('world')
@@ -70,16 +69,18 @@ const MapCard = ({ mapData }: Props) => {
       </div>
       <div className={styles['card-content']}>
         <span>
-          {t('mapCard.locations', { count: mapData.locations_count })}
+          {t('locations', {
+            count: mapData.locations_count,
+          })}
         </span>
         <Button
           variant="primary"
           size="m"
-          aria-label={t('mapCard.play')}
+          aria-label={t('play')}
           disabled={mapData.locations_count === 0}
           onClick={() => router.push(`/map/${mapData.id}`)}
         >
-          {t('mapCard.play')}
+          {t('play')}
         </Button>
       </div>
     </div>

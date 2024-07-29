@@ -43,7 +43,7 @@ const Form = () => {
         {state.errors?.email && <p>{state.errors.email}</p>}
       </div>
       {state.errors?.message && <p>{state.errors.message}</p>}
-      <SubmitButton formAction={action} className={styles.button}>
+      <SubmitButton formAction={action} full className={styles.button}>
         {t('auth.resetPassword')}
       </SubmitButton>
     </form>

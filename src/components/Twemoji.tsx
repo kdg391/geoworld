@@ -14,7 +14,7 @@ const Twemoji = ({ emoji, width, height, alt }: Props) => {
 
   return (
     <Image
-      src={`/assets/flags/${code}.svg`}
+      src={`/assets/emojis/${code}.svg`}
       alt={alt}
       width={width}
       height={height}

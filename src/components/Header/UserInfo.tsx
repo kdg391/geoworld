@@ -11,6 +11,8 @@ import { getUser } from '../../actions/user.js'
 
 import { ONE_DAY } from '../../constants/index.js'
 
+import { useTranslation } from '../../i18n/client.js'
+
 import { classNames } from '../../utils/index.js'
 
 import styles from './UserInfo.module.css'
@@ -29,6 +31,8 @@ const UserInfo = () => {
 
   const containerRef = useRef<HTMLDivElement | null>(null)
   const dropdownRef = useRef<HTMLUListElement | null>(null)
+
+  const { t } = useTranslation('translation')
 
   useEffect(() => {
     const init = async () => {
@@ -107,11 +111,11 @@ const UserInfo = () => {
       >
         <li onClick={() => router.push(`/user/${profile.id}`)}>
           <UserRound size={18} />
-          Profile
+          {t('header.profile')}
         </li>
         <li onClick={() => router.push('/account/settings')}>
           <Settings size={18} />
-          Settings
+          {t('header.settings')}
         </li>
         <li
           onClick={async () => {
@@ -128,7 +132,7 @@ const UserInfo = () => {
           }}
         >
           <LogOut size={18} />
-          Sign Out
+          {t('header.signOut')}
         </li>
       </ul>
     </div>

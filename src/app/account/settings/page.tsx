@@ -33,11 +33,6 @@ const Settings = async () => {
       <EmailForm email={user.email} />
       <DisplayNameForm displayName={profileData.display_name} />
       <PasswordForm />
-
-      <div>
-        <button disabled>Delete Account</button>
-        <span>(to be supported)</span>
-      </div>
     </section>
   )
 }

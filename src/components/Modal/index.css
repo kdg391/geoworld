@@ -1,0 +1,9 @@
+[data-theme='light'] {
+  --modal: rgba(0, 0, 0, 0.5);
+  --modal-content: #fff;
+}
+
+[data-theme='dark'] {
+  --modal: rgba(0, 0, 0, 0.5);
+  --modal-content: rgb(35, 35, 35);
+}

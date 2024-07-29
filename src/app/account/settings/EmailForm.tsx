@@ -4,6 +4,7 @@ import dynamic from 'next/dynamic'
 import { useFormState } from 'react-dom'
 
 import { changeEmail } from './actions.js'
+import { useTranslation } from '../../../i18n/client.js'
 
 const SubmitButton = dynamic(() => import('../../(auth)/SubmitButton.js'))
 
@@ -19,10 +20,12 @@ const EmailForm = ({ email }: { email: string | undefined }) => {
     error: null,
   })
 
+  const { t } = useTranslation('translation')
+
   return (
     <>
       <form action={action}>
-        <label htmlFor="email">Email</label>
+        <label htmlFor="email">{t('auth.email')}</label>
         <input
           type="email"
           id="email"
@@ -30,11 +33,7 @@ const EmailForm = ({ email }: { email: string | undefined }) => {
           defaultValue={email ?? ''}
         />
 
-        <SubmitButton
-          type="submit"
-          formAction={action}
-          pendingText="Changing Email..."
-        >
+        <SubmitButton type="submit" formAction={action}>
           Change Email
         </SubmitButton>
       </form>

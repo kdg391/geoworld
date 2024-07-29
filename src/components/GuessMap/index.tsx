@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from 'react'
 
 import COUNTRY_BOUNDS from '../../constants/country-bounds.json' with { type: 'json' }
 import {
-  DEFAULT_MAP_OPTIONS,
+  DEFAULT_MAP_CENTER,
   OFFICIAL_MAP_WORLD_ID,
   OFFICIAL_MAP_COUNTRY_CODES,
 } from '../../constants/index.js'
@@ -50,7 +50,7 @@ const GuessMap = ({
   )
 
   const [mapSize, setMapSize] = useState(1)
-  const [mapPinned, setMapPinned] = useState(false)
+  const [isMapPinned, setIsMapPinned] = useState(false)
   const [mapActive, setMapActive] = useState(false)
 
   const { t } = useTranslation('translation')
@@ -60,9 +60,11 @@ const GuessMap = ({
 
     if (mapData.id !== OFFICIAL_MAP_WORLD_ID) {
       const { min, max } =
-        mapData.type === 'community'
-          ? mapData.bounds
-          : COUNTRY_BOUNDS[OFFICIAL_MAP_COUNTRY_CODES[mapData.id]]
+        mapData.type === 'official' &&
+        OFFICIAL_MAP_COUNTRY_CODES[mapData.id] in COUNTRY_BOUNDS
+          ? // @ts-ignore
+            COUNTRY_BOUNDS[OFFICIAL_MAP_COUNTRY_CODES[mapData.id]]
+          : mapData.bounds
 
       const latLngBounds = new google.maps.LatLngBounds()
 
@@ -72,9 +74,7 @@ const GuessMap = ({
       guessMapRef.current.fitBounds(latLngBounds)
       guessMapRef.current.setCenter(latLngBounds.getCenter())
     } else {
-      guessMapRef.current.setCenter(
-        DEFAULT_MAP_OPTIONS.center as google.maps.LatLngLiteral,
-      )
+      guessMapRef.current.setCenter(DEFAULT_MAP_CENTER)
       guessMapRef.current.setZoom(1)
     }
   }
@@ -120,13 +120,13 @@ const GuessMap = ({
           mapSize !== 1 ? `size--${mapSize}` : '',
         )}
         onMouseOver={() => {
-          if (mapPinned) return
+          if (isMapPinned) return
           if (window.innerWidth <= 600) return
 
           setMapActive(true)
         }}
         onMouseLeave={() => {
-          if (mapPinned) return
+          if (isMapPinned) return
           if (window.innerWidth <= 600) return
 
           setMapActive(false)
@@ -141,9 +141,9 @@ const GuessMap = ({
         </button>
 
         <GuessMapControls
-          mapPinned={mapPinned}
+          isMapPinned={isMapPinned}
           mapSize={mapSize}
-          setMapPinned={setMapPinned}
+          setIsMapPinned={setIsMapPinned}
           setMapSize={setMapSize}
         />
 

@@ -1,0 +1,22 @@
+.map-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  background-color: var(--map-card-bg);
+  border: 1px solid var(--map-card-border);
+  border-radius: 8px;
+  position: relative;
+}
+
+.card-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 1rem;
+  width: 100%;
+
+  & > span {
+    font-size: 0.9rem;
+  }
+}

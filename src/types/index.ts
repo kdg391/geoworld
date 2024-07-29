@@ -1,6 +1,7 @@
-import type { LANGUAGES, OFFICIAL_COUNTRY_CODES } from '../constants/index.js'
+import type { OFFICIAL_COUNTRY_CODES } from '../constants/index.js'
+import type { SUPPORTED_LOCALES } from '../constants/i18n.js'
 
-export type Locales = (typeof LANGUAGES)[number]
+export type Locales = (typeof SUPPORTED_LOCALES)[number]
 
 export type Theme = 'light' | 'dark' | 'system'
 
@@ -19,9 +20,10 @@ export interface GameData {
 
 export interface Profile {
   id: string
+  // username: string
   display_name: string
   is_admin: boolean
-  public: boolean
+  is_public: boolean
 }
 
 export interface Map {
@@ -31,13 +33,13 @@ export interface Map {
   name: string
   description: string | null
   creator: string
-  public: boolean
+  is_public: boolean
   locations_count: number
   score_factor: number
   bounds: {
     min: google.maps.LatLngLiteral
     max: google.maps.LatLngLiteral
-  }
+  } | null
 }
 
 export interface ControlSettings {
@@ -79,15 +81,19 @@ export interface Game {
   mode: GameMode
 }
 
-export interface Location {
-  id: string
-  map_id: string
-  user_id: string
+export interface Coords {
   lat: number
   lng: number
   heading: number
   pitch: number
   zoom: number
   pano_id: string
-  streak_location_code?: string
 }
+
+export type Location = {
+  id: string
+  created_at: string
+  map_id: string
+  user_id: string
+  streak_location_code: string | null
+} & Coords

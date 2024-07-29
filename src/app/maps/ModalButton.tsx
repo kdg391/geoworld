@@ -2,7 +2,6 @@
 
 import dynamic from 'next/dynamic'
 import { useEffect, useState } from 'react'
-import { createPortal } from 'react-dom'
 
 const Button = dynamic(() => import('../../components/common/Button/index.js'))
 const MapEditModal = dynamic(
@@ -19,13 +18,17 @@ const ModalButton = ({ userId }: { userId: string }) => {
 
   return (
     <>
-      {showModal &&
-        createPortal(
-          <MapEditModal setShowModal={setShowModal} userId={userId} />,
-          document.body,
-        )}
+      <MapEditModal
+        setShowModal={setShowModal}
+        showModal={showModal}
+        userId={userId}
+      />
 
-      <Button variant="primary" onClick={() => setShowModal((o) => !o)}>
+      <Button
+        variant="primary"
+        size="m"
+        onClick={() => setShowModal((o) => !o)}
+      >
         Create new map
       </Button>
     </>

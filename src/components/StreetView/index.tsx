@@ -53,21 +53,21 @@ const StreetView = ({ location, settings, view }: Props) => {
     svPanoramaRef.current = svPanorama
     svServiceRef.current = svService
 
+    const compareLocs = (
+      l1?: google.maps.LatLngLiteral,
+      l2?: google.maps.LatLngLiteral,
+    ) => {
+      if (!l1 || !l2) return false
+
+      return l1.lat === l2.lat && l1.lng === l2.lng
+    }
+
     svPanorama.addListener('position_changed', () => {
       const pos = svPanoramaRef.current?.getPosition()
 
       if (!pos) return
 
       const position = pos.toJSON()
-
-      const compareLocs = (
-        l1?: google.maps.LatLngLiteral,
-        l2?: google.maps.LatLngLiteral,
-      ) => {
-        if (!l1 || !l2) return false
-
-        return l1.lat === l2.lat && l1.lng === l2.lng
-      }
 
       if (
         positionHistoryRef.current.length < 1 ||
@@ -109,16 +109,16 @@ const StreetView = ({ location, settings, view }: Props) => {
         location,
       })
       .then(({ data }) => {
-        if (data.location) {
-          svPanoramaRef.current?.setPano(data.location.pano)
-          svPanoramaRef.current?.setPov({
-            heading: 0,
-            pitch: 0,
-          })
-          svPanoramaRef.current?.setZoom(0)
+        if (!data.location) return
 
-          positionHistoryRef.current = []
-        }
+        svPanoramaRef.current?.setPano(data.location.pano)
+        svPanoramaRef.current?.setPov({
+          heading: 0,
+          pitch: 0,
+        })
+        svPanoramaRef.current?.setZoom(0)
+
+        positionHistoryRef.current = []
       })
       .catch(console.error)
   }

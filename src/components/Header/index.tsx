@@ -6,18 +6,19 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
+import { useTranslation } from '../../i18n/client.js'
+
 import { classNames } from '../../utils/index.js'
 
 import styles from './index.module.css'
 import './index.css'
 
-const ThemeSelect = dynamic(() => import('./ThemeSelect.js'), {
-  ssr: false,
-})
 const UserInfo = dynamic(() => import('./UserInfo.js'))
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+
+  const { t } = useTranslation('translation')
 
   useEffect(() => {
     if (isMenuOpen) document.body.style.setProperty('overflow-y', 'hidden')
@@ -30,7 +31,7 @@ const Header = () => {
         <h2>
           <Link href="/" scroll={false}>
             <Image
-              src="/assets/icons/icon.avif"
+              src="/assets/icons/icon.svg"
               width={18}
               height={18}
               alt="Logo"
@@ -45,13 +46,11 @@ const Header = () => {
           <ul className={styles.links}>
             <li>
               <Link href="/maps" scroll={false}>
-                Maps
+                {t('header.maps')}
               </Link>
             </li>
           </ul>
         </nav>
-
-        <ThemeSelect />
 
         <UserInfo />
 
@@ -63,7 +62,7 @@ const Header = () => {
 
       <button
         className={styles.menu}
-        aria-label="Menu"
+        aria-label={t('header.menu')}
         onClick={() => setIsMenuOpen((o) => !o)}
       >
         {isMenuOpen ? <X size={18} /> : <Menu size={18} />}

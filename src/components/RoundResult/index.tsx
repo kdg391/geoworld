@@ -5,9 +5,9 @@ import { Trans } from 'react-i18next'
 
 import { getGame } from '../../actions/game.js'
 
-import { useTranslation } from '../../i18n/client.js'
-
 import useSettings from '../../hooks/useSettings.js'
+
+import { useTranslation } from '../../i18n/client.js'
 
 import styles from './index.module.css'
 import './index.css'
@@ -36,6 +36,7 @@ const RoundResult = ({
   setView,
 }: Props) => {
   const { distanceUnit } = useSettings()
+
   const { t } = useTranslation('translation')
 
   return (

@@ -8,9 +8,6 @@ import { createTranslation } from '../../i18n/server.js'
 import styles from './index.module.css'
 import './index.css'
 
-const DistanceUnitSelect = dynamic(() => import('./DistanceUnitSelect.js'), {
-  ssr: false,
-})
 const GitHub = dynamic(() => import('../icons/GitHub.js'))
 const LanguageSelect = dynamic(() => import('./LanguageSelect.js'))
 
@@ -22,12 +19,6 @@ const Footer = async () => {
       <div>
         <h3>GeoWorld</h3>
         <div className={styles.settings}>
-          <div style={{ display: 'none' }}>
-            <DistanceUnitSelect />
-          </div>
-          <div>
-            <LanguageSelect />
-          </div>
           <div className={styles['social-links']}>
             <a
               href="https://github.com/kdg391/geoworld"
@@ -39,6 +30,9 @@ const Footer = async () => {
               <GitHub size={18} />
             </a>
           </div>
+          <div>
+            <LanguageSelect />
+          </div>
         </div>
       </div>
       <div>
@@ -48,10 +42,7 @@ const Footer = async () => {
             <Link href="/about">About</Link>
           </li>
           <li>
-            <Link href="/location-picker">Location Picker</Link>
-          </li>
-          <li>
-            <Link href="/random-streetview">Random Street View</Link>
+            <Link href="/random">{t('footer.randomStreetView')}</Link>
           </li>
         </ul>
       </div>
@@ -63,6 +54,9 @@ const Footer = async () => {
           </li>
           <li>
             <Link href="/privacy-policy">{t('footer.privacyPolicy')}</Link>
+          </li>
+          <li>
+            <Link href="/cookie-policy">{t('footer.cookiePolicy')}</Link>
           </li>
         </ul>
       </div>

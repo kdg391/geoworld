@@ -6,8 +6,12 @@
   color-scheme: light dark;
   scroll-behavior: smooth;
 
-  --primary-color: #3260f9;
-  --secondary-color: #4a4a4a;
+  --primary: #3260f9;
+  --primary-hover: #3870fe;
+  --secondary: #ff8341;
+  --secondary-hover: #ff9359;
+  --gray: #4a4a4a;
+  --gray-hover: #505050;
 
   --header-h: 60px;
 }

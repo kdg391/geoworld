@@ -50,7 +50,7 @@ const FinalRoundResult = ({ mapData, settings, totalScore, userId }: Props) => {
         >
           {t('finalRoundResult.replay')}
         </Button>
-        <Button variant="secondary" size="l" onClick={() => router.push('/')}>
+        <Button variant="gray" size="l" onClick={() => router.push('/')}>
           {t('finalRoundResult.exit')}
         </Button>
       </div>

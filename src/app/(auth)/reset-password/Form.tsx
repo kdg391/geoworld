@@ -31,7 +31,7 @@ const Form = () => {
     <form action={action} className={styles.form}>
       <div>
         <label htmlFor="password" className={styles.label}>
-          New Password
+          {t('auth.newPassword')}
         </label>
         <input
           type="password"
@@ -56,7 +56,7 @@ const Form = () => {
         {state.errors?.confirmPassword && <p>{state.errors.confirmPassword}</p>}
       </div>
       {state.errors?.message && <p>{state.errors.message}</p>}
-      <SubmitButton formAction={action} className={styles.button}>
+      <SubmitButton formAction={action} full className={styles.button}>
         {t('auth.updatePassword')}
       </SubmitButton>
     </form>

@@ -1,9 +1,7 @@
 import z from 'zod'
 
 export const emailValidation = z
-  .string({
-    message: 'The email must be a string.',
-  })
+  .string()
   .min(1, 'The email has to be filled.')
   .email('This is not a valid email.')
 

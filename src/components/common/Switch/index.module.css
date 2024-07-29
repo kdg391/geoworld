@@ -10,7 +10,7 @@
     visibility: hidden;
 
     &:checked ~ span {
-      background-color: var(--primary-color);
+      background-color: var(--primary);
 
       &:after {
         transform: translateX(24px);

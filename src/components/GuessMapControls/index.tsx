@@ -8,16 +8,16 @@ const MIN_MAP_SIZE = 0
 const MAX_MAP_SIZE = 3
 
 interface Props {
-  mapPinned: boolean
+  isMapPinned: boolean
   mapSize: number
-  setMapPinned: React.Dispatch<React.SetStateAction<boolean>>
+  setIsMapPinned: React.Dispatch<React.SetStateAction<boolean>>
   setMapSize: React.Dispatch<React.SetStateAction<number>>
 }
 
 const GuessMapControls = ({
-  mapPinned,
+  isMapPinned,
   mapSize,
-  setMapPinned,
+  setIsMapPinned,
   setMapSize,
 }: Props) => (
   <div className={styles['guess-map-controls']}>
@@ -33,8 +33,8 @@ const GuessMapControls = ({
     >
       <ArrowDownRight size={16} />
     </button>
-    <button onClick={() => setMapPinned((p) => !p)}>
-      {mapPinned ? <Lock size={16} /> : <LockOpen size={16} />}
+    <button onClick={() => setIsMapPinned((p) => !p)}>
+      {isMapPinned ? <Lock size={16} /> : <LockOpen size={16} />}
     </button>
   </div>
 )

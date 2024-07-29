@@ -9,9 +9,11 @@ import {
 import resourcesToBackend from 'i18next-resources-to-backend'
 import LanguageDetector from 'i18next-browser-languagedetector'
 
-import { LANGUAGE_COOKIE, getOptions } from './settings.js'
-
-import { LANGUAGES } from '../constants/index.js'
+import {
+  DEFAULT_LOCALE,
+  LANGUAGE_COOKIE,
+  SUPPORTED_LOCALES,
+} from '../constants/i18n.js'
 
 import useLocale from '../hooks/useLocale.js'
 
@@ -28,14 +30,17 @@ i18next
     ),
   )
   .init({
-    ...getOptions(),
+    debug: !runsOnServerSide && process.env.NODE_ENV === 'development',
+    supportedLngs: SUPPORTED_LOCALES,
+    fallbackLng: DEFAULT_LOCALE,
+    ns: 'translation',
     lng: undefined,
     detection: {
       caches: ['cookie'],
-      order: ['cookie', 'navigator'],
+      order: ['cookie'],
       lookupCookie: LANGUAGE_COOKIE,
     },
-    preload: runsOnServerSide ? LANGUAGES : [],
+    preload: runsOnServerSide ? SUPPORTED_LOCALES : [],
   })
 
 export function useTranslation(ns: string) {

@@ -20,14 +20,12 @@ export const formatTimeLeft = (timeLeft: number) => {
   return `${mins}:${secs}`
 }
 
-// https://stackoverflow.com/a/12646864
-export const shuffleArray = <T>(arr: T[]) => {
-  const newArr = [...arr]
+export const randomLatLng = (): google.maps.LatLngLiteral => {
+  const lat = Math.random() * 180 - 90
+  const lng = Math.random() * 360 - 180
 
-  for (let i = newArr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1))
-    ;[newArr[i], newArr[j]] = [newArr[j], newArr[i]]
+  return {
+    lat,
+    lng,
   }
-
-  return newArr
 }
