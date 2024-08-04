@@ -50,7 +50,7 @@ export const changeEmail = async (_: EmailFormState, formData: FormData) => {
       },
     }
 
-  /*if (user.email_confirmed_at) {
+  if (user.email_confirmed_at) {
     const emailConfirmedAt = new Date(user.email_confirmed_at).getTime()
 
     if (Date.now() - emailConfirmedAt < ONE_DAY * 7 * 1000)
@@ -60,7 +60,7 @@ export const changeEmail = async (_: EmailFormState, formData: FormData) => {
           message: 'The email can be changed one week after the last change.',
         },
       }
-  }*/
+  }
 
   const validated = await changingEmailValidation.safeParseAsync({
     oldEmail: user.email,

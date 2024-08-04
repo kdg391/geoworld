@@ -42,14 +42,14 @@ export const signUp = async (_: SignUpFormState, formData: FormData) => {
   if (data?.username === validated.data.username)
     return {
       errors: {
-        username: 'The username already exists.',
+        username: ['The username already exists.'],
       },
     }
 
   if (uErr)
     return {
       errors: {
-        username: uErr.message,
+        username: [uErr.message],
       },
     }
 
