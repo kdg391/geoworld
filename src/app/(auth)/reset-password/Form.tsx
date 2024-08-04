@@ -10,6 +10,9 @@ import { useTranslation } from '../../../i18n/client.js'
 import styles from '../page.module.css'
 
 const SubmitButton = dynamic(() => import('../SubmitButton.js'))
+const TextInput = dynamic(
+  () => import('../../../components/common/TextInput/index.js'),
+)
 
 export interface FormState {
   errors: {
@@ -21,7 +24,8 @@ export interface FormState {
 
 const Form = () => {
   'use client'
-  const { t } = useTranslation('translation')
+
+  const { t } = useTranslation('auth')
 
   const [state, action] = useFormState<FormState, FormData>(updatePassword, {
     errors: null,
@@ -31,33 +35,26 @@ const Form = () => {
     <form action={action} className={styles.form}>
       <div>
         <label htmlFor="password" className={styles.label}>
-          {t('auth.newPassword')}
+          {t('newPassword')}
         </label>
-        <input
-          type="password"
-          id="password"
-          name="password"
-          required
-          className={styles.input}
-        />
+        <TextInput type="password" id="password" name="password" required />
         {state.errors?.password && <p>{state.errors.password}</p>}
       </div>
       <div>
         <label htmlFor="confirm-password" className={styles.label}>
-          {t('auth.confirmPassword')}
+          {t('confirmPassword')}
         </label>
-        <input
+        <TextInput
           type="password"
           id="confirm-password"
           name="confirm-password"
           required
-          className={styles.input}
         />
         {state.errors?.confirmPassword && <p>{state.errors.confirmPassword}</p>}
       </div>
       {state.errors?.message && <p>{state.errors.message}</p>}
-      <SubmitButton formAction={action} full className={styles.button}>
-        {t('auth.updatePassword')}
+      <SubmitButton full formAction={action} className={styles.button}>
+        {t('updatePassword')}
       </SubmitButton>
     </form>
   )

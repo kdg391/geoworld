@@ -2,7 +2,7 @@
 
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/navigation'
-import { memo } from 'react'
+import { memo, useState } from 'react'
 
 import { createGame } from '../../actions/game.js'
 
@@ -23,7 +23,26 @@ interface Props {
 
 const FinalRoundResult = ({ mapData, settings, totalScore, userId }: Props) => {
   const router = useRouter()
-  const { t } = useTranslation('translation')
+
+  const [isLoading, setIsLoading] = useState(false)
+
+  const { t } = useTranslation('game')
+
+  const onReplayClick = async () => {
+    setIsLoading(true)
+
+    const { data: gameData, error } = await createGame({
+      mapData,
+      settings,
+      userId,
+    })
+
+    setIsLoading(false)
+
+    if (!gameData || error) return
+
+    router.push(`/game/${gameData.id}`)
+  }
 
   return (
     <>
@@ -36,17 +55,8 @@ const FinalRoundResult = ({ mapData, settings, totalScore, userId }: Props) => {
         <Button
           variant="primary"
           size="l"
-          onClick={async () => {
-            const { data: gameData, error } = await createGame({
-              mapData,
-              settings,
-              userId,
-            })
-
-            if (!gameData || error) return
-
-            router.push(`/game/${gameData.id}`)
-          }}
+          isLoading={isLoading}
+          onClick={onReplayClick}
         >
           {t('finalRoundResult.replay')}
         </Button>

@@ -1,0 +1,32 @@
+{
+  "finalRoundResult": {
+    "points_one": "{{count, number}} Point",
+    "points_other": "{{count, number}} Points",
+    "replay": "Replay",
+    "exit": "Exit"
+  },
+  "guessMap": {
+    "closeMap": "Close Map",
+    "openMap": "Open Map"
+  },
+  "roundResult": {
+    "points_one": "+{{count, number}} Point",
+    "points_other": "+{{count, number}} Points",
+    "distance": {
+      "imperial": "Your guess was <strong>{{distance, number(maximumFractionDigits: 1; style: unit; unit: mile)}}</strong> from the correct location",
+      "metric": "Your guess was <strong>{{distance, number(maximumFractionDigits: 1; style: unit; unit: kilometer)}}</strong> from the correct location"
+    },
+    "timedOut": "You've timed out.",
+    "viewResults": "View Results",
+    "nextRound": "Next Round"
+  },
+  "status": {
+    "map": "Map",
+    "round": "Round",
+    "score": "Score"
+  },
+  "svControls": {
+    "returnToStart": "Return to Start",
+    "undo": "Undo"
+  }
+}

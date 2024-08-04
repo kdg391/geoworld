@@ -11,6 +11,7 @@ import type { Coords, Location, Map, Profile } from '../types/index.js'
 
 export const getRandomCommunityMaps = async (limit: number) => {
   'use server'
+
   const supabase = createClient()
 
   const { data, error } = await supabase
@@ -29,6 +30,7 @@ export const getRandomCommunityMaps = async (limit: number) => {
 
 export const getRandomOfficialMaps = async (limit: number) => {
   'use server'
+
   const supabase = createClient()
 
   const { data, error } = await supabase
@@ -49,6 +51,7 @@ const PAGE_PER_MAPS = 20
 
 export const getCommunityMaps = async (page: number) => {
   'use server'
+
   const supabase = createClient()
 
   const { data, error } = await supabase
@@ -61,12 +64,14 @@ export const getCommunityMaps = async (page: number) => {
 
   return {
     data,
+    hasMore: data ? data.length > PAGE_PER_MAPS : false,
     error: error?.message ?? null,
   }
 }
 
 export const getOfficialMaps = async (page: number) => {
   'use server'
+
   const supabase = createClient()
 
   const { data, error } = await supabase
@@ -75,16 +80,21 @@ export const getOfficialMaps = async (page: number) => {
     .eq('type', 'official')
     .eq('is_public', true)
     .range(page * PAGE_PER_MAPS, (page + 1) * PAGE_PER_MAPS - 1)
+    .order('name', {
+      ascending: true,
+    })
     .returns<Map[]>()
 
   return {
     data,
+    hasMore: data ? data.length > PAGE_PER_MAPS : false,
     error: error?.message ?? null,
   }
 }
 
 export const getMap = async (id: string) => {
   'use server'
+
   const supabase = createClient()
 
   const { data, error } = await supabase
@@ -106,6 +116,7 @@ export const createCommunityMap = async (data: {
   isPublic: boolean
 }) => {
   'use server'
+
   const supabase = createClient()
 
   const validated = await createMapValidation.safeParseAsync(data)
@@ -118,7 +129,7 @@ export const createCommunityMap = async (data: {
 
   const { data: mData, error: mErr } = await supabase
     .from('maps')
-    .insert<Omit<Map, 'id' | 'created_at'>>({
+    .insert<Omit<Map, 'id' | 'created_at' | 'updated_at'>>({
       type: 'community',
       name: validated.data.name,
       description: validated.data.description,
@@ -149,6 +160,7 @@ export const updateMap = async (
   },
 ) => {
   'use server'
+
   const supabase = createClient()
 
   const { data: uData, error: uErr } = await supabase.auth.getUser()
@@ -298,6 +310,7 @@ export const updateMap = async (
 
 export const deleteMap = async (id: string) => {
   'use server'
+
   const supabase = createClient()
 
   const { data: uData, error: uErr } = await supabase.auth.getUser()
@@ -363,6 +376,7 @@ export const deleteMap = async (id: string) => {
 
 export const getLocations = async (mapId: string) => {
   'use server'
+
   const supabase = createClient()
 
   const { data, error } = await supabase

@@ -1,0 +1,10 @@
+{
+  "title": "맵 설정",
+  "move": "이동",
+  "pan": "팬",
+  "zoom": "줌",
+  "rounds": "라운드",
+  "roundTime": "라운드 시간",
+  "noTimeLimit": "시간 제한 없음",
+  "roundTimeFormat": "{{minutes, number(style: unit; unit: minute; unitDisplay: narrow)}} {{seconds, number(style: unit; unit: second; unitDisplay: narrow)}}"
+}

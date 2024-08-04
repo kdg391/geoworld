@@ -9,11 +9,13 @@ import styles from '../page.module.css'
 const Form = dynamic(() => import('./Form.js'))
 
 const ForgotPassword = async () => {
-  const { t } = await createTranslation('translation')
+  'use server'
+
+  const { t } = await createTranslation('auth')
 
   return (
     <div className={styles['form-container']}>
-      <h1 className={styles['form-title']}>{t('auth.forgotPassword')}</h1>
+      <h1 className={styles['form-title']}>{t('forgotPassword')}</h1>
 
       <Form />
     </div>

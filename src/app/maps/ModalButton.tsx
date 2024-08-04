@@ -9,25 +9,25 @@ const MapEditModal = dynamic(
 )
 
 const ModalButton = ({ userId }: { userId: string }) => {
-  const [showModal, setShowModal] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   useEffect(() => {
-    if (showModal) document.body.style.setProperty('overflow-y', 'hidden')
+    if (isModalOpen) document.body.style.setProperty('overflow-y', 'hidden')
     else document.body.style.removeProperty('overflow-y')
-  }, [showModal])
+  }, [isModalOpen])
 
   return (
     <>
       <MapEditModal
-        setShowModal={setShowModal}
-        showModal={showModal}
+        isModalOpen={isModalOpen}
+        setIsModalOpen={setIsModalOpen}
         userId={userId}
       />
 
       <Button
         variant="primary"
         size="m"
-        onClick={() => setShowModal((o) => !o)}
+        onClick={() => setIsModalOpen((o) => !o)}
       >
         Create new map
       </Button>

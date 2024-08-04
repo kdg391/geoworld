@@ -51,7 +51,6 @@ const Edit = ({ params }: Props) => {
       const { data: uData, error: uErr } = await getUser()
 
       if (!uData.user || uErr) {
-        //
         setMapData(null)
         return
       }
@@ -172,7 +171,7 @@ const Edit = ({ params }: Props) => {
     setShowPreviewMap(false)
   }
 
-  const handleUpdateLocation = () => {
+  const onUpdateClick = () => {
     if (!selectedLocation) return
 
     setHaveLocationsChanged(true)
@@ -264,7 +263,7 @@ const Edit = ({ params }: Props) => {
             variant="primary"
             size="m"
             disabled={selectedLocation === null}
-            onClick={() => handleUpdateLocation()}
+            onClick={() => onUpdateClick()}
           >
             Update
           </Button>

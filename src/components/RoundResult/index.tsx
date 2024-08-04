@@ -37,7 +37,7 @@ const RoundResult = ({
 }: Props) => {
   const { distanceUnit } = useSettings()
 
-  const { t } = useTranslation('translation')
+  const { t } = useTranslation('game')
 
   return (
     <>
@@ -52,6 +52,7 @@ const RoundResult = ({
         ) : (
           <Trans
             i18nKey={`roundResult.distance.${distanceUnit ?? 'metric'}`}
+            t={t}
             values={{
               distance: guessedRound.distance[distanceUnit ?? 'metric'],
             }}

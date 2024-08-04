@@ -13,17 +13,6 @@
   background-color: var(--header-bg);
   border-bottom: 1px solid var(--header-border);
 
-  & h2 {
-    margin: 0;
-    font-size: 1.125rem;
-
-    & a {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-  }
-
   & ul a:hover {
     text-decoration: underline;
   }
@@ -49,13 +38,21 @@
   }
 }
 
+.title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.125rem;
+  font-weight: bold;
+}
+
 .arrow,
 .backdrop,
 .menu {
   display: none;
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 640px) {
   .menu {
     display: flex;
     align-items: center;

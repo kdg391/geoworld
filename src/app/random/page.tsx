@@ -88,17 +88,15 @@ const RandomStreetView = () => {
       <div className={styles['btn-container']}>
         <Button
           variant="primary"
-          size="m"
+          size="s"
           onClick={() => setShowMap((s) => !s)}
         >
           Toggle Map
         </Button>
         <Button
           variant="primary"
-          size="m"
-          onClick={() => {
-            loadPanorama(randomLatLng())
-          }}
+          size="s"
+          onClick={() => loadPanorama(randomLatLng())}
         >
           Get Street View
         </Button>

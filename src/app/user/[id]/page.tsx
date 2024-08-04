@@ -2,7 +2,15 @@ import Link from 'next/link'
 
 import { getProfile } from '../../../actions/profile.js'
 
-const User = async ({ params }: { params: { id: string } }) => {
+interface Params {
+  params: {
+    id: string
+  }
+}
+
+const User = async ({ params }: Params) => {
+  if (params.id.startsWith('@')) return // todo
+
   const { data: pData, error: pErr } = await getProfile(params.id)
 
   if (!pData || pErr)
@@ -16,6 +24,7 @@ const User = async ({ params }: { params: { id: string } }) => {
   return (
     <section>
       <h1>{pData.display_name}</h1>
+      <p>@{pData.username}</p>
     </section>
   )
 }

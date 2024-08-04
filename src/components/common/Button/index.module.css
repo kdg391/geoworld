@@ -5,10 +5,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 4px;
+  gap: 8px;
 
   &:global(.full) {
     width: 100%;
+  }
+
+  &:global(.size--s) {
+    padding: 0.25rem 0.75rem;
   }
 
   &:global(.size--m) {

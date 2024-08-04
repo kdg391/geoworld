@@ -27,12 +27,12 @@ const UserInfo = () => {
 
   const [loading, setLoading] = useState(true)
   const [profile, setProfile] = useState<Profile | null>(null)
-  const [dropdownOpen, setDropdownOpen] = useState(false)
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
 
   const containerRef = useRef<HTMLDivElement | null>(null)
   const dropdownRef = useRef<HTMLUListElement | null>(null)
 
-  const { t } = useTranslation('translation')
+  const { t } = useTranslation('header')
 
   useEffect(() => {
     const init = async () => {
@@ -65,6 +65,7 @@ const UserInfo = () => {
           JSON.stringify({
             id: pData.id,
             display_name: pData.display_name,
+            username: pData.username,
           }),
         )
         localStorage.setItem('profileCacheUpdated', String(Date.now()))
@@ -77,15 +78,12 @@ const UserInfo = () => {
   }, [])
 
   useEffect(() => {
-    if (!dropdownRef.current) return
-    if (!containerRef.current) return
-
     const onClick = (event: MouseEvent) => {
       if (
         containerRef.current &&
         !containerRef.current.contains(event.target as HTMLUListElement)
       ) {
-        setDropdownOpen(false)
+        setIsDropdownOpen(false)
       }
     }
 
@@ -97,42 +95,42 @@ const UserInfo = () => {
   if (loading) return
   if (!profile) return <NotSignedIn />
 
+  const onSignOutClick = async () => {
+    try {
+      if (localStorage.getItem('profileCache'))
+        localStorage.removeItem('profileCache')
+      if (localStorage.getItem('profileCacheUpdated'))
+        localStorage.removeItem('profileCacheUpdated')
+
+      await signOut()
+    } finally {
+      router.refresh()
+    }
+  }
+
   return (
     <div className={styles.container} ref={containerRef}>
       <span
         className={styles['display-name']}
-        onClick={() => setDropdownOpen((o) => !o)}
+        onClick={() => setIsDropdownOpen((o) => !o)}
       >
         {profile.display_name}
       </span>
       <ul
-        className={classNames(styles.dropdown, dropdownOpen ? 'active' : '')}
+        className={classNames(styles.dropdown, isDropdownOpen ? 'active' : '')}
         ref={dropdownRef}
       >
         <li onClick={() => router.push(`/user/${profile.id}`)}>
           <UserRound size={18} />
-          {t('header.profile')}
+          {t('profile')}
         </li>
-        <li onClick={() => router.push('/account/settings')}>
+        <li onClick={() => router.push('/settings/profile')}>
           <Settings size={18} />
-          {t('header.settings')}
+          {t('settings')}
         </li>
-        <li
-          onClick={async () => {
-            try {
-              if (localStorage.getItem('profileCache'))
-                localStorage.removeItem('profileCache')
-              if (localStorage.getItem('profileCacheUpdated'))
-                localStorage.removeItem('profileCacheUpdated')
-
-              await signOut()
-
-              router.refresh()
-            } catch {}
-          }}
-        >
+        <li onClick={onSignOutClick}>
           <LogOut size={18} />
-          {t('header.signOut')}
+          {t('signOut')}
         </li>
       </ul>
     </div>

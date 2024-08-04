@@ -15,6 +15,8 @@ const ResetPassword = async ({
 }: {
   searchParams: { code?: string }
 }) => {
+  'use server'
+
   if (!searchParams.code) return redirect('/')
 
   const supabase = createClient()
@@ -25,11 +27,11 @@ const ResetPassword = async ({
     redirect('/')
   }
 
-  const { t } = await createTranslation('translation')
+  const { t } = await createTranslation('auth')
 
   return (
     <div className={styles['form-container']}>
-      <h1 className={styles['form-title']}>{t('auth.resetPassword')}</h1>
+      <h1 className={styles['form-title']}>{t('resetPassword')}</h1>
 
       <Form />
     </div>

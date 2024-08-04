@@ -8,6 +8,8 @@ import { getProfile } from '../../actions/profile.js'
 import { createClient } from '../../utils/supabase/server.js'
 
 const Admin = async () => {
+  'use server'
+
   const supabase = createClient()
 
   const {

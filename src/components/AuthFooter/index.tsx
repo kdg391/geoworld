@@ -6,7 +6,7 @@ import styles from './index.module.css'
 import './index.css'
 
 const AuthFooter = async () => {
-  const { t } = await createTranslation('translation')
+  const { t } = await createTranslation('footer')
 
   return (
     <footer className={styles.footer}>
@@ -14,10 +14,10 @@ const AuthFooter = async () => {
       <nav>
         <ul className={styles.links}>
           <li>
-            <Link href="/terms-of-service">{t('footer.terms')}</Link>
+            <Link href="/terms">{t('terms')}</Link>
           </li>
           <li>
-            <Link href="/privacy-policy">{t('footer.privacy')}</Link>
+            <Link href="/privacy">{t('privacy')}</Link>
           </li>
         </ul>
       </nav>

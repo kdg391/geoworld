@@ -33,20 +33,20 @@ const Switch = dynamic(() => import('../../components/common/Switch/index.js'))
 const Twemoji = dynamic(() => import('../../components/Twemoji.js'))
 
 interface Props {
+  isModalOpen: boolean
   mapData: Map
-  setShowModal: React.Dispatch<React.SetStateAction<boolean>>
-  showModal: boolean
+  setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>
   userId?: string
 }
 
 const MapSettingsModal = ({
+  isModalOpen,
   mapData,
-  setShowModal,
-  showModal,
+  setIsModalOpen,
   userId,
 }: Props) => {
   const router = useRouter()
-  const { t } = useTranslation('translation')
+  const { t } = useTranslation('map-settings')
 
   const [canMove, setCanMove] = useState(true)
   const [canPan, setCanPan] = useState(true)
@@ -64,10 +64,10 @@ const MapSettingsModal = ({
     mapData.locations_count > MAX_ROUNDS ? MAX_ROUNDS : mapData.locations_count
 
   return (
-    <Modal isOpen={showModal}>
+    <Modal isOpen={isModalOpen} setIsOpen={setIsModalOpen}>
       <div className={styles['modal-header']}>
-        <h3>{t('mapSettings.title')}</h3>
-        <button aria-label="Close" onClick={() => setShowModal(false)}>
+        <h3>{t('title')}</h3>
+        <button aria-label="Close" onClick={() => setIsModalOpen(false)}>
           <X size={16} />
         </button>
       </div>
@@ -85,8 +85,10 @@ const MapSettingsModal = ({
                 height={24}
                 alt={
                   mapData.id === OFFICIAL_MAP_WORLD_ID
-                    ? t('world')
-                    : t(`country.${OFFICIAL_MAP_COUNTRY_CODES[mapData.id]}`)
+                    ? t('translation:world')
+                    : t(
+                        `translation:country.${OFFICIAL_MAP_COUNTRY_CODES[mapData.id]}`,
+                      )
                 }
               />
             )}
@@ -95,15 +97,17 @@ const MapSettingsModal = ({
             <h4>
               {mapData.type === 'official'
                 ? mapData.id === OFFICIAL_MAP_WORLD_ID
-                  ? t('world')
-                  : t(`country.${OFFICIAL_MAP_COUNTRY_CODES[mapData.id]}`)
+                  ? t('translation:world')
+                  : t(
+                      `translation:country.${OFFICIAL_MAP_COUNTRY_CODES[mapData.id]}`,
+                    )
                 : mapData.name}
             </h4>
             {mapData.description && <p>{mapData.description}</p>}
           </div>
         </div>
         <div className={styles.setting}>
-          <label htmlFor="move">{t('mapSettings.move')}</label>
+          <label htmlFor="move">{t('move')}</label>
           <Switch
             id="move"
             defaultChecked={canMove}
@@ -111,7 +115,7 @@ const MapSettingsModal = ({
           />
         </div>
         <div className={styles.setting}>
-          <label htmlFor="pan">{t('mapSettings.pan')}</label>
+          <label htmlFor="pan">{t('pan')}</label>
           <Switch
             id="pan"
             defaultChecked={canPan}
@@ -119,7 +123,7 @@ const MapSettingsModal = ({
           />
         </div>
         <div className={styles.setting}>
-          <label htmlFor="zoom">{t('mapSettings.zoom')}</label>
+          <label htmlFor="zoom">{t('zoom')}</label>
           <Switch
             id="zoom"
             defaultChecked={canZoom}
@@ -127,7 +131,7 @@ const MapSettingsModal = ({
           />
         </div>
         <div className={styles.setting}>
-          <label htmlFor="rounds">{t('mapSettings.rounds')}</label>
+          <label htmlFor="rounds">{t('rounds')}</label>
 
           <div style={{ display: 'flex' }}>
             <button
@@ -192,11 +196,11 @@ const MapSettingsModal = ({
         </div>
         <div>
           <div>
-            <label htmlFor="time-limit">{t('mapSettings.roundTime')}</label>
+            <label htmlFor="time-limit">{t('roundTime')}</label>
             {' ('}
             {timeLimit === null
-              ? t('mapSettings.noTimeLimit')
-              : t('mapSettings.roundTimeFormat', {
+              ? t('noTimeLimit')
+              : t('roundTimeFormat', {
                   minutes: Math.floor(timeLimit / 60),
                   seconds: timeLimit % 60,
                 })}
@@ -232,7 +236,7 @@ const MapSettingsModal = ({
           variant="gray"
           size="m"
           aria-label={t('cancel')}
-          onClick={() => setShowModal(false)}
+          onClick={() => setIsModalOpen(false)}
         >
           {t('cancel')}
         </Button>

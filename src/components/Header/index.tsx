@@ -18,7 +18,7 @@ const UserInfo = dynamic(() => import('./UserInfo.js'))
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
-  const { t } = useTranslation('translation')
+  const { t } = useTranslation('header')
 
   useEffect(() => {
     if (isMenuOpen) document.body.style.setProperty('overflow-y', 'hidden')
@@ -28,17 +28,15 @@ const Header = () => {
   return (
     <header className={classNames(styles.header, isMenuOpen ? 'active' : '')}>
       <div>
-        <h2>
-          <Link href="/" scroll={false}>
-            <Image
-              src="/assets/icons/icon.svg"
-              width={18}
-              height={18}
-              alt="Logo"
-            />
-            GeoWorld
-          </Link>
-        </h2>
+        <Link href="/" scroll={false} className={styles.title}>
+          <Image
+            src="/assets/icons/icon.svg"
+            width={18}
+            height={18}
+            alt="Logo"
+          />
+          GeoWorld
+        </Link>
       </div>
 
       <div className={styles['nav-wrapper']}>
@@ -46,7 +44,7 @@ const Header = () => {
           <ul className={styles.links}>
             <li>
               <Link href="/maps" scroll={false}>
-                {t('header.maps')}
+                {t('maps')}
               </Link>
             </li>
           </ul>
@@ -62,7 +60,7 @@ const Header = () => {
 
       <button
         className={styles.menu}
-        aria-label={t('header.menu')}
+        aria-label={t('menu')}
         onClick={() => setIsMenuOpen((o) => !o)}
       >
         {isMenuOpen ? <X size={18} /> : <Menu size={18} />}

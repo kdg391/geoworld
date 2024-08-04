@@ -1,4 +1,9 @@
 .notSigned {
   display: flex;
-  gap: 8px;
+  align-items: center;
+  gap: 1rem;
+
+  & a:hover {
+    text-decoration: underline;
+  }
 }

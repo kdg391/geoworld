@@ -1,0 +1,32 @@
+{
+  "finalRoundResult": {
+    "points_one": "{{count, number}} 포인트",
+    "points_other": "{{count, number}} 포인트",
+    "replay": "다시 플레이",
+    "exit": "나가기"
+  },
+  "guessMap": {
+    "closeMap": "지도 닫기",
+    "openMap": "지도 열기"
+  },
+  "roundResult": {
+    "points_one": "+{{count, number}} 포인트",
+    "points_other": "+{{count, number}} 포인트",
+    "distance": {
+      "imperial": "정확한 위치에서 <strong>{{distance, number(maximumFractionDigits: 1; style: unit; unit: mile)}}</strong> 떨어짐",
+      "metric": "정확한 위치에서 <strong>{{distance, number(maximumFractionDigits: 1; style: unit; unit: kilometer)}}</strong> 떨어짐"
+    },
+    "timedOut": "시간이 초과되었습니다.",
+    "viewResults": "결과 보기",
+    "nextRound": "다음 라운드"
+  },
+  "status": {
+    "map": "맵",
+    "round": "라운드",
+    "score": "점수"
+  },
+  "svControls": {
+    "returnToStart": "시작 지점으로 돌아가기",
+    "undo": "되돌리기"
+  }
+}

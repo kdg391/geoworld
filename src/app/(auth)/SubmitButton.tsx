@@ -9,16 +9,19 @@ const Button = dynamic(() => import('../../components/common/Button/index.js'))
 
 type Props = ComponentProps<'button'> & {
   full?: boolean
+  size?: 's' | 'm' | 'l'
   pendingText?: string
 }
 
 const SubmitButton = ({
   children,
   full = false,
+  size = 'm',
   pendingText,
   ...props
 }: Props) => {
   'use client'
+
   const { pending, action } = useFormStatus()
 
   const isPending = pending && action === props.formAction
@@ -26,9 +29,10 @@ const SubmitButton = ({
   return (
     <Button
       full={full}
-      size="m"
+      size={size}
       variant="primary"
       type="submit"
+      key={Math.random()}
       disabled={isPending}
       aria-disabled={isPending}
       isLoading={isPending}

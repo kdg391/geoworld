@@ -26,7 +26,7 @@ const GameStatus = ({
   timeLimit,
   totalScore,
 }: Props) => {
-  const { t } = useTranslation('translation')
+  const { t } = useTranslation('game')
 
   const [timeLeft, setTimeLeft] = useState<number | null>(timeLimit)
 
@@ -77,14 +77,12 @@ const GameStatus = ({
 
       <div className={styles['game-status']}>
         <div>
-          <span className={styles['game-status-label']}>
-            {t('gameStatus.map')}
-          </span>
+          <span className={styles['game-status-label']}>{t('status.map')}</span>
           <span>{mapName}</span>
         </div>
         <div>
           <span className={styles['game-status-label']}>
-            {t('gameStatus.round')}
+            {t('status.round')}
           </span>
           <span>
             {round + 1} / {rounds}
@@ -92,7 +90,7 @@ const GameStatus = ({
         </div>
         <div>
           <span className={styles['game-status-label']}>
-            {t('gameStatus.score')}
+            {t('status.score')}
           </span>
           <span>{totalScore.toLocaleString()}</span>
         </div>

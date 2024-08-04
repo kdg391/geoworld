@@ -7,39 +7,34 @@ import { createTranslation } from '../../../i18n/server.js'
 
 import styles from '../page.module.css'
 
+const Caption = dynamic(() => import('./caption.js'))
 const Form = dynamic(() => import('./Form.js'))
 
 const SignUp = async () => {
   'use server'
-  const { t } = await createTranslation('translation')
+
+  const { t } = await createTranslation('auth')
 
   return (
     <>
       <div className={styles['form-container']}>
-        <h1 className={styles['form-title']}>{t('auth.signUpTitle')}</h1>
+        <h1 className={styles['form-title']}>{t('signUpTitle')}</h1>
 
         <Form />
 
         <p>
-          <span>{t('auth.alreadyAccount')}</span>
+          <span>{t('alreadyAccount')}</span>
           <Link
             href="/sign-in"
             style={{
               marginLeft: '4px',
             }}
           >
-            {t('auth.signIn')}
+            {t('signIn')}
           </Link>
         </p>
       </div>
-      <p
-        style={{
-          fontSize: '0.875rem',
-          textAlign: 'center',
-          wordBreak: 'break-word',
-          maxWidth: '20rem',
-        }}
-      ></p>
+      <Caption />
     </>
   )
 }

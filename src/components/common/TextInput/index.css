@@ -1,0 +1,11 @@
+[data-theme='light'] {
+  --input-bg: #f8f8f8;
+  --input-border: rgba(0, 0, 0, 0.15);
+  --input-placeholder: #7e7e7e;
+}
+
+[data-theme='dark'] {
+  --input-bg: #191919;
+  --input-border: rgba(255, 255, 255, 0.15);
+  --input-placeholder: #848484;
+}

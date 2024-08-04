@@ -9,10 +9,13 @@ import styles from './index.module.css'
 import './index.css'
 
 const GitHub = dynamic(() => import('../icons/GitHub.js'))
-const LanguageSelect = dynamic(() => import('./LanguageSelect.js'))
+const LanguageSelect = dynamic(() => import('../LanguageSelect/index.js'))
+const ThemeSelect = dynamic(() => import('../ThemeSelect/index.js'), {
+  ssr: false,
+})
 
 const Footer = async () => {
-  const { t } = await createTranslation('translation')
+  const { t } = await createTranslation('footer')
 
   return (
     <footer className={styles.footer}>
@@ -31,6 +34,9 @@ const Footer = async () => {
             </a>
           </div>
           <div>
+            <ThemeSelect />
+          </div>
+          <div>
             <LanguageSelect />
           </div>
         </div>
@@ -42,7 +48,7 @@ const Footer = async () => {
             <Link href="/about">About</Link>
           </li>
           <li>
-            <Link href="/random">{t('footer.randomStreetView')}</Link>
+            <Link href="/random">{t('randomStreetView')}</Link>
           </li>
         </ul>
       </div>
@@ -50,13 +56,10 @@ const Footer = async () => {
         <h4>Legal</h4>
         <ul className={styles.links}>
           <li>
-            <Link href="/terms-of-service">{t('footer.termsOfService')}</Link>
+            <Link href="/terms">{t('termsOfService')}</Link>
           </li>
           <li>
-            <Link href="/privacy-policy">{t('footer.privacyPolicy')}</Link>
-          </li>
-          <li>
-            <Link href="/cookie-policy">{t('footer.cookiePolicy')}</Link>
+            <Link href="/privacy">{t('privacyPolicy')}</Link>
           </li>
         </ul>
       </div>

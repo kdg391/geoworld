@@ -35,7 +35,7 @@ const SettingsProvider = ({ children }: Props) => {
     try {
       localStorage.setItem('distanceUnit', distanceUnit)
     } catch {
-      // empty
+      //
     }
   }, [distanceUnit])
 

@@ -11,26 +11,27 @@ const Form = dynamic(() => import('./Form.js'))
 
 const SignIn = async () => {
   'use server'
-  const { t } = await createTranslation('translation')
+
+  const { t } = await createTranslation('auth')
 
   return (
     <div className={styles['form-container']}>
-      <h1 className={styles['form-title']}>{t('auth.signIn')}</h1>
+      <h1 className={styles['form-title']}>{t('signIn')}</h1>
 
       <Form />
 
       <p>
-        <Link href="/forgot-password">{t('auth.forgotPassword')}</Link>
+        <Link href="/forgot-password">{t('forgotPassword')}</Link>
       </p>
       <p>
-        <span>{t('auth.doNotHaveAccount')}</span>
+        <span>{t('doNotHaveAccount')}</span>
         <Link
           href="/sign-up"
           style={{
             marginLeft: '4px',
           }}
         >
-          {t('auth.signUp')}
+          {t('signUp')}
         </Link>
       </p>
     </div>

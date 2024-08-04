@@ -1,84 +1,15 @@
 {
-  "auth": {
-    "email": "이메일",
-    "password": "비밀번호",
-    "confirmPassword": "비밀번호 확인",
-    "newPassword": "새 비밀번호",
-    "signUp": "가입하기",
-    "signIn": "로그인",
-    "signUpTitle": "계정 만들기",
-    "forgotPassword": "비밀번호를 잊으셨나요?",
-    "alreadyAccount": "이미 계정이 있으신가요?",
-    "doNotHaveAccount": "계정이 없으신가요?",
-    "resetPassword": "비밀번호 초기화",
-    "updatePassword": "비밀번호 업데이트",
-    "caption": "계속하시면 <0>서비스 이용 약관</0> 및 <1>개인 정보 보호 정책</1>에 동의하는 것으로 간주합니다."
-  },
-  "finalRoundResult": {
-    "points_one": "{{count, number}} 포인트",
-    "points_other": "{{count, number}} 포인트",
-    "replay": "다시 플레이",
-    "exit": "나가기"
-  },
-  "footer": {
-    "cookie": "쿠키",
-    "cookiePolicy": "쿠키 정책",
-    "distanceUnit": "거리 단위",
-    "language": "언어",
-    "randomStreetView": "랜덤 스트리트 뷰",
-    "terms": "이용 약관",
-    "termsOfService": "서비스 이용 약관",
-    "theme": "테마",
-    "privacy": "개인 정보",
-    "privacyPolicy": "개인 정보 보호 정책"
-  },
-  "gameStatus": {
-    "map": "맵",
-    "round": "라운드",
-    "score": "점수"
-  },
-  "guessMap": {
-    "openMap": "지도 열기",
-    "closeMap": "지도 닫기"
-  },
-  "header": {
-    "maps": "맵",
-    "menu": "메뉴",
-    "profile": "프로필",
-    "settings": "설정",
-    "signOut": "로그아웃"
-  },
-  "mapSettings": {
-    "title": "맵 설정",
-    "move": "이동",
-    "pan": "팬",
-    "zoom": "줌",
-    "rounds": "라운드",
-    "roundTime": "라운드 시간",
-    "noTimeLimit": "시간 제한 없음",
-    "roundTimeFormat": "{{minutes, number(style: unit; unit: minute; unitDisplay: narrow)}} {{seconds, number(style: unit; unit: second; unitDisplay: narrow)}}"
-  },
-  "svControls": {
-    "returnToStart": "시작 지점으로 돌아가기",
-    "undo": "되돌리기"
-  },
-  "roundResult": {
-    "points_one": "+{{count, number}} 포인트",
-    "points_other": "+{{count, number}} 포인트",
-    "distance": {
-      "imperial": "정확한 위치에서 <strong>{{distance, number(maximumFractionDigits: 1; style: unit; unit: mile)}}</strong> 떨어짐",
-      "metric": "정확한 위치에서 <strong>{{distance, number(maximumFractionDigits: 1; style: unit; unit: kilometer)}}</strong> 떨어짐"
-    },
-    "timedOut": "시간이 초과되었습니다.",
-    "viewResults": "결과 보기",
-    "nextRound": "다음 라운드"
-  },
   "cancel": "취소",
   "communityMaps": "커뮤니티 맵",
+  "getStarted": "시작하기",
   "locations_one": "위치 {{count, number}}개",
   "locations_other": "위치 {{count, number}}개",
+  "map": "맵",
   "officialMaps": "공식 맵",
   "play": "플레이",
+  "privacyPolicy": "개인 정보 보호 정책",
+  "termsOfService": "서비스 이용 약관",
+  "viewOtherMaps": "다른 맵 보기",
   "country": {
     "ad": "안도라",
     "ae": "아랍에미리트",

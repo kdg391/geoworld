@@ -19,7 +19,7 @@ const StreetViewControls: React.FC<Props> = ({
   onReturnToStartClick,
   onUndoClick,
 }) => {
-  const { t } = useTranslation('translation')
+  const { t } = useTranslation('game')
 
   return (
     <div

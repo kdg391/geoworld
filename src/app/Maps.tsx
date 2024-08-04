@@ -1,6 +1,5 @@
 'use client'
 
-import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
@@ -15,16 +14,14 @@ import styles from './page.module.css'
 
 import type { Map } from '../types/index.js'
 
-const MapCard = dynamic(() => import('../components/MapCard/index.js'))
-const SkeletonMapCard = dynamic(
-  () => import('../components/MapCard/Skeleton.js'),
-)
+import MapCard from '../components/MapCard/index.js'
+import SkeletonMapCard from '../components/MapCard/Skeleton.js'
 
 const Maps = () => {
-  const { t } = useTranslation('translation')
-
   const [communityMaps, setCommunityMaps] = useState<Map[] | null>()
   const [officialMaps, setOfficialMaps] = useState<Map[] | null>()
+
+  const { t } = useTranslation('translation')
 
   useEffect(() => {
     const init = async () => {
@@ -60,16 +57,18 @@ const Maps = () => {
         ) : (
           <>
             <div className={styles['map-cards']}>
-              {!officialMaps
-                ? Array.from({ length: 4 }).map((_, i) => (
-                    <SkeletonMapCard key={i} />
-                  ))
-                : officialMaps.map((map) => (
+              {officialMaps
+                ? officialMaps.map((map) => (
                     <MapCard key={map.id} mapData={map} />
+                  ))
+                : Array.from({ length: 4 }).map((_, i) => (
+                    <SkeletonMapCard key={i} />
                   ))}
             </div>
 
-            {officialMaps && <Link href="/maps">View other maps</Link>}
+            {officialMaps && (
+              <Link href="/maps/official">{t('viewOtherMaps')}</Link>
+            )}
           </>
         )}
       </div>
@@ -81,16 +80,18 @@ const Maps = () => {
         ) : (
           <>
             <div className={styles['map-cards']}>
-              {!communityMaps
-                ? Array.from({ length: 4 }).map((_, i) => (
-                    <SkeletonMapCard key={i} />
-                  ))
-                : communityMaps.map((map) => (
+              {communityMaps
+                ? communityMaps.map((map) => (
                     <MapCard key={map.id} mapData={map} />
+                  ))
+                : Array.from({ length: 4 }).map((_, i) => (
+                    <SkeletonMapCard key={i} />
                   ))}
             </div>
 
-            {communityMaps && <Link href="/maps">View other maps</Link>}
+            {communityMaps && (
+              <Link href="/maps/community">{t('viewOtherMaps')}</Link>
+            )}
           </>
         )}
       </div>

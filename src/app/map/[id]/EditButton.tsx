@@ -1,5 +1,6 @@
 'use client'
 
+import { SquarePen } from 'lucide-react'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/navigation'
 
@@ -17,12 +18,17 @@ const EditButton = ({ mapId }: Props) => {
   const router = useRouter()
 
   return (
-    <div>
+    <div
+      style={{
+        display: 'flex',
+      }}
+    >
       <Button
         variant="primary"
         size="m"
         onClick={() => router.push(`/map/${mapId}/edit`)}
       >
+        <SquarePen size={16} />
         Edit
       </Button>
       <Button

@@ -20,6 +20,7 @@ export const createGame = async ({
   userId: string
 }) => {
   'use server'
+
   const supabase = createClient()
 
   const settingsValidation = gameSettingsValidation(mapData.locations_count)
@@ -72,6 +73,7 @@ export const createGame = async ({
 
 export const getGame = async (id: string) => {
   'use server'
+
   const supabase = createClient()
 
   const { data, error } = await supabase
@@ -95,6 +97,7 @@ export const updateGame = async (
   },
 ) => {
   'use server'
+
   const supabase = createClient()
 
   const { data: uData, error: uErr } = await supabase.auth.getUser()

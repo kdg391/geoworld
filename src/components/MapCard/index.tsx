@@ -33,13 +33,13 @@ const MapCard = ({ mapData }: Props) => {
   return (
     <div className={styles['map-card']}>
       <div className={styles['map-thumbnail']}>
-        {/* <Image
-          src={`/assets/images/${mapData.code}.avif`}
+        {/*<Image
+          src={`/assets/images/${mapData.id}.avif`}
           alt="thumbnail"
           fill
           sizes="100%"
           className={styles['map-thumbnail-img']}
-        /> */}
+        />*/}
         <div className={styles['map-thumbnail-backdrop']}></div>
         <div className={styles['map-name-wrapper']}>
           {mapData.type === 'official' && (
@@ -67,12 +67,7 @@ const MapCard = ({ mapData }: Props) => {
           </span>
         </div>
       </div>
-      <div className={styles['card-content']}>
-        <span>
-          {t('locations', {
-            count: mapData.locations_count,
-          })}
-        </span>
+      <div className={styles['map-actions']}>
         <Button
           variant="primary"
           size="m"

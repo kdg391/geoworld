@@ -1,0 +1,7 @@
+[data-theme='light'] {
+  --map-stat-bg: #e7e7e7;
+}
+
+[data-theme='dark'] {
+  --map-stat-bg: #434343;
+}

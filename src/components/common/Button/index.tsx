@@ -10,7 +10,7 @@ interface Props {
   className?: string
   full?: boolean
   isLoading?: boolean
-  size?: 'm' | 'l'
+  size?: 's' | 'm' | 'l'
   variant: 'primary' | 'secondary' | 'danger' | 'success' | 'gray'
 }
 

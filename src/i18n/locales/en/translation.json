@@ -1,84 +1,15 @@
 {
-  "auth": {
-    "email": "Email",
-    "password": "Password",
-    "confirmPassword": "Confirm Password",
-    "newPassword": "New Password",
-    "signUp": "Sign Up",
-    "signIn": "Sign In",
-    "signUpTitle": "Create an Account",
-    "forgotPassword": "Forgot Password?",
-    "alreadyAccount": "Already have an account?",
-    "doNotHaveAccount": "Don't have an account?",
-    "resetPassword": "Reset Password",
-    "updatePassword": "Update Password",
-    "caption": "By continuing, you agree to the <0>Terms of Service</0> and <1>Privacy Policy</1>."
-  },
-  "finalRoundResult": {
-    "points_one": "{{count, number}} Point",
-    "points_other": "{{count, number}} Points",
-    "replay": "Replay",
-    "exit": "Exit"
-  },
-  "footer": {
-    "cookie": "Cookie",
-    "cookiePolicy": "Cookie Policy",
-    "distanceUnit": "Distance Unit",
-    "language": "Language",
-    "randomStreetView": "Random Street View",
-    "terms": "Terms",
-    "termsOfService": "Terms of Service",
-    "theme": "Theme",
-    "privacy": "Privacy",
-    "privacyPolicy": "Privacy Policy"
-  },
-  "gameStatus": {
-    "map": "Map",
-    "round": "Round",
-    "score": "Score"
-  },
-  "guessMap": {
-    "openMap": "Open Map",
-    "closeMap": "Close Map"
-  },
-  "header": {
-    "maps": "Maps",
-    "menu": "Menu",
-    "profile": "Profile",
-    "settings": "Settings",
-    "signOut": "Sign Out"
-  },
-  "mapSettings": {
-    "title": "Map Settings",
-    "move": "Move",
-    "pan": "Pan",
-    "zoom": "Zoom",
-    "rounds": "Rounds",
-    "roundTime": "Round Time",
-    "noTimeLimit": "No Time Limit",
-    "roundTimeFormat": "{{minutes, number(style: unit; unit: minute; unitDisplay: narrow)}} {{seconds, number(style: unit; unit: second; unitDisplay: narrow)}}"
-  },
-  "svControls": {
-    "returnToStart": "Return to Start",
-    "undo": "Undo"
-  },
-  "roundResult": {
-    "points_one": "+{{count, number}} Point",
-    "points_other": "+{{count, number}} Points",
-    "distance": {
-      "imperial": "Your guess was <strong>{{distance, number(maximumFractionDigits: 1; style: unit; unit: mile)}}</strong> from the correct location",
-      "metric": "Your guess was <strong>{{distance, number(maximumFractionDigits: 1; style: unit; unit: kilometer)}}</strong> from the correct location"
-    },
-    "timedOut": "You've timed out.",
-    "viewResults": "View Results",
-    "nextRound": "Next Round"
-  },
   "cancel": "Cancel",
   "communityMaps": "Community Maps",
+  "getStarted": "Get Started",
   "locations_one": "{{count, number}} Location",
   "locations_other": "{{count, number}} Locations",
+  "map": "Map",
   "officialMaps": "Official Maps",
   "play": "Play",
+  "privacyPolicy": "Privacy Policy",
+  "termsOfService": "Terms of Service",
+  "viewOtherMaps": "View other maps",
   "country": {
     "ad": "Andorra",
     "ae": "United Arab Emirates",

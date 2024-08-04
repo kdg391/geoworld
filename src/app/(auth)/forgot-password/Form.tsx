@@ -10,6 +10,9 @@ import { useTranslation } from '../../../i18n/client.js'
 import styles from '../page.module.css'
 
 const SubmitButton = dynamic(() => import('../SubmitButton.js'))
+const TextInput = dynamic(
+  () => import('../../../components/common/TextInput/index.js'),
+)
 
 export interface FormState {
   errors: {
@@ -20,7 +23,8 @@ export interface FormState {
 
 const Form = () => {
   'use client'
-  const { t } = useTranslation('translation')
+
+  const { t } = useTranslation('auth')
 
   const [state, action] = useFormState<FormState, FormData>(resetPassword, {
     errors: null,
@@ -30,21 +34,20 @@ const Form = () => {
     <form action={action} className={styles.form}>
       <div>
         <label htmlFor="email" className={styles.label}>
-          {t('auth.email')}
+          {t('email')}
         </label>
-        <input
+        <TextInput
           type="email"
           id="email"
           name="email"
           placeholder="me@example.com"
           required
-          className={styles.input}
         />
         {state.errors?.email && <p>{state.errors.email}</p>}
       </div>
       {state.errors?.message && <p>{state.errors.message}</p>}
-      <SubmitButton formAction={action} full className={styles.button}>
-        {t('auth.resetPassword')}
+      <SubmitButton full formAction={action} className={styles.button}>
+        {t('resetPassword')}
       </SubmitButton>
     </form>
   )

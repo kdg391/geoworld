@@ -20,7 +20,7 @@ export interface GameData {
 
 export interface Profile {
   id: string
-  // username: string
+  username: string
   display_name: string
   is_admin: boolean
   is_public: boolean
@@ -29,6 +29,7 @@ export interface Profile {
 export interface Map {
   id: string
   created_at: string
+  updated_at: string
   type: 'community' | 'official'
   name: string
   description: string | null

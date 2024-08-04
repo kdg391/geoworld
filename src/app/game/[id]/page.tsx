@@ -44,7 +44,7 @@ interface Props {
 }
 
 const Game = ({ params }: Props) => {
-  const { t } = useTranslation('translation')
+  const { t } = useTranslation('game')
 
   const [mapData, setMapData] = useState<Map | null>()
   const [gameData, setGameData] = useState<Game | null>()
@@ -141,8 +141,10 @@ const Game = ({ params }: Props) => {
           mapName={
             mapData.type === 'official'
               ? mapData.id === OFFICIAL_MAP_WORLD_ID
-                ? t('world')
-                : t(`country.${OFFICIAL_MAP_COUNTRY_CODES[mapData.id]}`)
+                ? t('translation:world')
+                : t(
+                    `translation:country.${OFFICIAL_MAP_COUNTRY_CODES[mapData.id]}`,
+                  )
               : mapData.name
           }
           round={gameData.round}

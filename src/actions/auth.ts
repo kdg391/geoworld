@@ -19,10 +19,11 @@ import type { FormState as SignUpFormState } from '../app/(auth)/sign-up/Form.js
 
 export const signUp = async (_: SignUpFormState, formData: FormData) => {
   'use server'
+
   const validated = await signUpValidation.safeParseAsync({
     email: formData.get('email'),
     password: formData.get('password'),
-    confirmPassword: formData.get('confirm-password'),
+    username: formData.get('username'),
   })
 
   if (!validated.success)
@@ -32,12 +33,33 @@ export const signUp = async (_: SignUpFormState, formData: FormData) => {
 
   const supabase = createClient(true)
 
+  const { data, error: uErr } = await supabase
+    .from('profiles')
+    .select('username')
+    .eq('username', validated.data.username)
+    .maybeSingle()
+
+  if (data?.username === validated.data.username)
+    return {
+      errors: {
+        username: 'The username already exists.',
+      },
+    }
+
+  if (uErr)
+    return {
+      errors: {
+        username: uErr.message,
+      },
+    }
+
   const { error } = await supabase.auth.admin.createUser({
-    email: validated.data.email.trim(),
+    email: validated.data.email,
     password: validated.data.password,
     email_confirm: true,
     user_metadata: {
-      display_name: validated.data.email.trim().split('@')[0].slice(0, 20),
+      display_name: validated.data.username,
+      username: validated.data.username,
     },
   })
 
@@ -54,6 +76,7 @@ export const signUp = async (_: SignUpFormState, formData: FormData) => {
 
 export const signIn = async (_: SignInFormState, formData: FormData) => {
   'use server'
+
   const validated = await signInValidation.safeParseAsync({
     email: formData.get('email'),
     password: formData.get('password'),
@@ -84,6 +107,7 @@ export const signIn = async (_: SignInFormState, formData: FormData) => {
 
 export const signOut = async () => {
   'use server'
+
   const supabase = createClient()
   await supabase.auth.signOut()
 }
@@ -93,6 +117,7 @@ export const resetPassword = async (
   formData: FormData,
 ) => {
   'use server'
+
   const validated = await resetPasswordValidation.safeParseAsync({
     email: formData.get('email'),
   })
@@ -118,7 +143,7 @@ export const resetPassword = async (
       },
     }
 
-  return redirect('/forgot-password/done')
+  return redirect('/')
 }
 
 export const updatePassword = async (
@@ -126,6 +151,7 @@ export const updatePassword = async (
   formData: FormData,
 ) => {
   'use server'
+
   const validated = await updatePasswordValidation.safeParseAsync({
     password: formData.get('password'),
     confirmPassword: formData.get('confirm-password'),
@@ -152,4 +178,4 @@ export const updatePassword = async (
   return redirect('/sign-in')
 }
 
-export const deleteAccount = async () => {}
+export const deleteAccount = async (_: any, formData: FormData) => {}

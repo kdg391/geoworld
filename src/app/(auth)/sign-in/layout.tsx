@@ -1,11 +1,17 @@
 import { redirect } from 'next/navigation'
 
+import { createTranslation } from '../../../i18n/server.js'
+
 import { createClient } from '../../../utils/supabase/server.js'
 
 import type { Metadata } from 'next'
 
-export const metadata: Metadata = {
-  title: 'Sign In - GeoWorld',
+export const generateMetadata = async (): Promise<Metadata> => {
+  const { t } = await createTranslation('auth')
+
+  return {
+    title: `${t('signIn')} - GeoWorld`,
+  }
 }
 
 export default async function Layout({

@@ -10,19 +10,23 @@ import { useTranslation } from '../../../i18n/client.js'
 import styles from '../page.module.css'
 
 const SubmitButton = dynamic(() => import('../SubmitButton.js'))
+const TextInput = dynamic(
+  () => import('../../../components/common/TextInput/index.js'),
+)
 
 export interface FormState {
   errors: {
+    username?: string[]
     email?: string[]
     password?: string[]
-    confirmPassword?: string[]
     message?: string
   } | null
 }
 
 const Form = () => {
   'use client'
-  const { t } = useTranslation('translation')
+
+  const { t } = useTranslation('auth')
   const [state, action] = useFormState<FormState, FormData>(signUp, {
     errors: null,
   })
@@ -30,48 +34,43 @@ const Form = () => {
   return (
     <form action={action} className={styles.form}>
       <div>
-        <label htmlFor="email" className={styles.label}>
-          {t('auth.email')}
+        <label htmlFor="username" className={styles.label}>
+          {t('username')}
         </label>
-        <input
+        <TextInput
+          type="text"
+          id="username"
+          name="username"
+          minLength={1}
+          maxLength={20}
+          pattern="([a-zA-Z])[a-zA-Z0-9_]*"
+          required
+        />
+        {state.errors?.username && <p>{state.errors.username}</p>}
+      </div>
+      <div>
+        <label htmlFor="email" className={styles.label}>
+          {t('email')}
+        </label>
+        <TextInput
           type="email"
           id="email"
           name="email"
           placeholder="me@example.com"
           required
-          className={styles.input}
         />
         {state.errors?.email && <p>{state.errors.email}</p>}
       </div>
       <div>
         <label htmlFor="password" className={styles.label}>
-          {t('auth.password')}
+          {t('password')}
         </label>
-        <input
-          type="password"
-          id="password"
-          name="password"
-          required
-          className={styles.input}
-        />
+        <TextInput type="password" id="password" name="password" required />
         {state.errors?.password && <p>{state.errors.password}</p>}
       </div>
-      <div>
-        <label htmlFor="confirm-password" className={styles.label}>
-          {t('auth.confirmPassword')}
-        </label>
-        <input
-          type="password"
-          id="confirm-password"
-          name="confirm-password"
-          required
-          className={styles.input}
-        />
-        {state.errors?.confirmPassword && <p>{state.errors.confirmPassword}</p>}
-      </div>
       {state.errors?.message && <p>{state.errors.message}</p>}
-      <SubmitButton formAction={action} full className={styles['button']}>
-        {t('auth.signUp')}
+      <SubmitButton full formAction={action} className={styles['button']}>
+        {t('signUp')}
       </SubmitButton>
     </form>
   )

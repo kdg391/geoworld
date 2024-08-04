@@ -53,7 +53,7 @@ const GuessMap = ({
   const [isMapPinned, setIsMapPinned] = useState(false)
   const [mapActive, setMapActive] = useState(false)
 
-  const { t } = useTranslation('translation')
+  const { t } = useTranslation('game')
 
   const fitMapBounds = () => {
     if (!guessMapRef.current) return
