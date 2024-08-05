@@ -51,7 +51,6 @@ const EditMap = ({ addNewLocation, locations, setSelectedLocation }: Props) => {
     if (!mapRef.current) return
 
     for (const marker of markers.current) {
-      marker.position = null
       marker.map = null
     }
 

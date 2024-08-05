@@ -13,7 +13,6 @@ import '../MapSettingsModal/index.css'
 
 const Button = dynamic(() => import('../common/Button/index.js'))
 const Modal = dynamic(() => import('../Modal/index.js'))
-const Switch = dynamic(() => import('../common/Switch/index.js'))
 const TextInput = dynamic(() => import('../common/TextInput/index.js'))
 
 interface Props {
@@ -31,7 +30,6 @@ const MapEditModal = ({ isModalOpen, setIsModalOpen, userId }: Props) => {
 
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
-  const [isPublic, setIsPublic] = useState(true)
 
   const [isLoading, setIsLoading] = useState(false)
 
@@ -41,10 +39,9 @@ const MapEditModal = ({ isModalOpen, setIsModalOpen, userId }: Props) => {
     setIsLoading(true)
 
     const { data: mapData, errors } = await createCommunityMap({
-      name: name.trim(),
+      name,
       description: description.trim() === '' ? null : description.trim(),
       creator: userId,
-      isPublic,
     })
 
     setIsLoading(false)
@@ -77,14 +74,6 @@ const MapEditModal = ({ isModalOpen, setIsModalOpen, userId }: Props) => {
             name="description"
             value={description}
             onChange={(event) => setDescription(event.target.value)}
-          />
-        </div>
-        <div>
-          <label htmlFor="is-public">Public</label>
-          <Switch
-            id="is-public"
-            defaultChecked={isPublic}
-            onChange={(event) => setIsPublic(event.target.checked)}
           />
         </div>
       </div>

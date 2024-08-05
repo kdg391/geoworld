@@ -34,6 +34,7 @@ i18next
     supportedLngs: SUPPORTED_LOCALES,
     fallbackLng: DEFAULT_LOCALE,
     ns: 'translation',
+    defaultNS: 'translation',
     lng: undefined,
     detection: {
       caches: ['cookie'],

@@ -1,0 +1,6 @@
+.caption {
+  font-size: 0.875rem;
+  text-align: center;
+  word-break: keep-all;
+  max-width: 20rem;
+}

@@ -8,8 +8,8 @@ export const createMapValidation = z.object({
     .max(20, 'The name cannot be more than 20 characters.'),
   description: z
     .string()
+    .trim()
     .max(60, 'The description cannot be less than 60 characters.')
     .nullable(),
-  creator: z.string(),
-  isPublic: z.boolean(),
+  creator: z.string().uuid(),
 })

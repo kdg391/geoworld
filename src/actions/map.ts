@@ -58,13 +58,13 @@ export const getCommunityMaps = async (page: number) => {
     .from('maps')
     .select('*')
     .eq('type', 'community')
-    .eq('is_public', true)
+    .eq('is_published', true)
     .range(page * PAGE_PER_MAPS, (page + 1) * PAGE_PER_MAPS - 1)
     .returns<Map[]>()
 
   return {
     data,
-    hasMore: data ? data.length > PAGE_PER_MAPS : false,
+    hasMore: data ? data.length >= PAGE_PER_MAPS : false,
     error: error?.message ?? null,
   }
 }
@@ -78,7 +78,7 @@ export const getOfficialMaps = async (page: number) => {
     .from('maps')
     .select('*')
     .eq('type', 'official')
-    .eq('is_public', true)
+    .eq('is_published', true)
     .range(page * PAGE_PER_MAPS, (page + 1) * PAGE_PER_MAPS - 1)
     .order('name', {
       ascending: true,
@@ -87,7 +87,7 @@ export const getOfficialMaps = async (page: number) => {
 
   return {
     data,
-    hasMore: data ? data.length > PAGE_PER_MAPS : false,
+    hasMore: data ? data.length >= PAGE_PER_MAPS : false,
     error: error?.message ?? null,
   }
 }
@@ -113,7 +113,6 @@ export const createCommunityMap = async (data: {
   name: string
   description: string | null
   creator: string
-  isPublic: boolean
 }) => {
   'use server'
 
@@ -134,9 +133,10 @@ export const createCommunityMap = async (data: {
       name: validated.data.name,
       description: validated.data.description,
       creator: validated.data.creator,
-      is_public: validated.data.isPublic,
+      is_published: false,
 
       //
+      average_score: 0,
       locations_count: 0,
       score_factor: 0,
       bounds: null,
@@ -156,6 +156,7 @@ export const updateMap = async (
   id: string,
   data: {
     name?: string
+    is_published?: boolean
     locations?: Coords[]
   },
 ) => {

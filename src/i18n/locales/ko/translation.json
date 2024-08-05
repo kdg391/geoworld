@@ -1,14 +1,14 @@
 {
-  "cancel": "취소",
   "communityMaps": "커뮤니티 맵",
   "getStarted": "시작하기",
-  "locations_one": "위치 {{count, number}}개",
-  "locations_other": "위치 {{count, number}}개",
   "map": "맵",
+  "maps": "맵",
   "officialMaps": "공식 맵",
   "play": "플레이",
   "privacyPolicy": "개인 정보 보호 정책",
+  "randomStreetView": "랜덤 스트리트 뷰",
   "termsOfService": "서비스 이용 약관",
+  "user": "유저",
   "viewOtherMaps": "다른 맵 보기",
   "country": {
     "ad": "안도라",

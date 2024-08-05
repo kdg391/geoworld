@@ -1,11 +1,6 @@
-import styles from './index.module.css'
+import styles from './Skeleton.module.css'
 import './index.css'
 
-const SkeletonMapCard = () => (
-  <div className={styles['map-card']}>
-    <div className={styles['map-thumbnail']}></div>
-    <div className={styles['card-content']}></div>
-  </div>
-)
+const SkeletonMapCard = () => <div className={styles['map-card']}></div>
 
 export default SkeletonMapCard

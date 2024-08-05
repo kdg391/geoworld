@@ -15,7 +15,7 @@ const ThemeSelect = dynamic(() => import('../ThemeSelect/index.js'), {
 })
 
 const Footer = async () => {
-  const { t } = await createTranslation('footer')
+  const { t } = await createTranslation('translation')
 
   return (
     <footer className={styles.footer}>

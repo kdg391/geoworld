@@ -43,16 +43,22 @@ const Form = () => {
           placeholder="me@example.com"
           required
         />
-        {state.errors?.email && <p>{state.errors.email}</p>}
+        {state.errors?.email && (
+          <p className={styles['error-msg']}>{state.errors.email}</p>
+        )}
       </div>
       <div>
         <label htmlFor="password" className={styles.label}>
           {t('password')}
         </label>
         <TextInput type="password" id="password" name="password" required />
-        {state.errors?.password && <p>{state.errors.password}</p>}
+        {state.errors?.password && (
+          <p className={styles['error-msg']}>{state.errors.password}</p>
+        )}
       </div>
-      {state.errors?.message && <p>{state.errors.message}</p>}
+      {state.errors?.message && (
+        <p className={styles['error-msg']}>{state.errors.message}</p>
+      )}
       <SubmitButton full formAction={action} className={styles.button}>
         {t('signIn')}
       </SubmitButton>

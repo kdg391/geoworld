@@ -1,6 +1,7 @@
 import Link from 'next/link'
+import { redirect } from 'next/navigation'
 
-import { getProfile } from '../../../actions/profile.js'
+import { getProfile, getProfileByUsername } from '../../../actions/profile.js'
 
 interface Params {
   params: {
@@ -9,7 +10,21 @@ interface Params {
 }
 
 const User = async ({ params }: Params) => {
-  if (params.id.startsWith('@')) return // todo
+  const id = decodeURIComponent(params.id)
+
+  if (id.startsWith('@')) {
+    const { data: pData, error: pErr } = await getProfileByUsername(id.slice(1))
+
+    if (!pData || pErr)
+      return (
+        <section>
+          <h1>User Not Found</h1>
+          <Link href="/">Go to Home</Link>
+        </section>
+      )
+
+    redirect(`/user/${pData.id}`)
+  }
 
   const { data: pData, error: pErr } = await getProfile(params.id)
 

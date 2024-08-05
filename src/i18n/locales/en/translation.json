@@ -1,14 +1,14 @@
 {
-  "cancel": "Cancel",
   "communityMaps": "Community Maps",
   "getStarted": "Get Started",
-  "locations_one": "{{count, number}} Location",
-  "locations_other": "{{count, number}} Locations",
   "map": "Map",
+  "maps": "Maps",
   "officialMaps": "Official Maps",
   "play": "Play",
   "privacyPolicy": "Privacy Policy",
+  "randomStreetView": "Random Street View",
   "termsOfService": "Terms of Service",
+  "user": "User",
   "viewOtherMaps": "View other maps",
   "country": {
     "ad": "Andorra",

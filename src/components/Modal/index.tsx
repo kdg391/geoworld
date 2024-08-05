@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
+import { createPortal } from 'react-dom'
 
 import styles from './index.module.css'
 import './index.css'
@@ -13,6 +14,11 @@ interface Props {
 
 const Modal = ({ children, isOpen, setIsOpen }: Props) => {
   const elRef = useRef<HTMLDivElement | null>(null)
+
+  useEffect(() => {
+    if (isOpen) document.body.style.setProperty('overflow-y', 'hidden')
+    else document.body.style.removeProperty('overflow-y')
+  }, [isOpen])
 
   useEffect(() => {
     const onClick = (event: MouseEvent) => {
@@ -28,10 +34,11 @@ const Modal = ({ children, isOpen, setIsOpen }: Props) => {
 
   if (!isOpen) return
 
-  return (
+  return createPortal(
     <div ref={elRef} className={styles.modal}>
       <div className={styles['modal-content']}>{children}</div>
-    </div>
+    </div>,
+    document.body,
   )
 }
 

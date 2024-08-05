@@ -26,6 +26,7 @@ export const OFFICIAL_COUNTRY_CODES = [
   'fr', // France
   'gb', // United Kingdom
   'hk', // Hong Kong
+  'id', // Indonesia
   'it', // Italy
   'jp', // Japan
   'kh', // Cambodia
@@ -60,6 +61,7 @@ export const FLAG_ENOJIS: Record<
   fr: '🇫🇷',
   gb: '🇬🇧',
   hk: '🇭🇰',
+  id: '🇮🇩',
   it: '🇮🇹',
   jp: '🇯🇵',
   kh: '🇰🇭',
@@ -94,6 +96,7 @@ export const OFFICIAL_MAP_COUNTRY_CODES: Record<
   'c311ae84-f897-48e7-bf25-3189811e51e8': 'fr',
   '4a779607-3ed6-487c-8331-0624cee83874': 'gb',
   'c7491504-7daf-4200-bd96-0cb43934fa1f': 'hk',
+  '31ca7eec-53e2-4a75-ae10-0f7cc6219541': 'id',
   '646d9a6c-6bd0-4b85-9881-b8cb69a7f3c7': 'it',
   '82f85bac-dfb0-4d54-bd65-6b7abd9de027': 'jp',
   '90d1fef4-eaed-429b-8af0-f161d98acbb1': 'kh',

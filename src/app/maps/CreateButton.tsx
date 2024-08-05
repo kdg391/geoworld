@@ -1,20 +1,19 @@
 'use client'
 
 import dynamic from 'next/dynamic'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 const Button = dynamic(() => import('../../components/common/Button/index.js'))
 const MapEditModal = dynamic(
   () => import('../../components/MapEditModal/index.js'),
 )
 
-const ModalButton = ({ userId }: { userId: string }) => {
-  const [isModalOpen, setIsModalOpen] = useState(false)
+interface Props {
+  userId: string
+}
 
-  useEffect(() => {
-    if (isModalOpen) document.body.style.setProperty('overflow-y', 'hidden')
-    else document.body.style.removeProperty('overflow-y')
-  }, [isModalOpen])
+const CreateButton = ({ userId }: Props) => {
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   return (
     <>
@@ -35,4 +34,4 @@ const ModalButton = ({ userId }: { userId: string }) => {
   )
 }
 
-export default ModalButton
+export default CreateButton

@@ -20,17 +20,17 @@ const ThemeSelect = () => {
   const themeOptions = [
     {
       value: 'light',
-      label: t('theme.light'),
+      label: t('translation:theme.light'),
       icon: <Sun size={18} />,
     },
     {
       value: 'dark',
-      label: t('theme.dark'),
+      label: t('translation:theme.dark'),
       icon: <Moon size={18} />,
     },
     {
       value: 'system',
-      label: t('theme.system'),
+      label: t('translation:theme.system'),
       icon: <Laptop size={18} />,
     },
   ]

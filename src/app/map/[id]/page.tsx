@@ -2,8 +2,10 @@
 
 import { Earth, Heart, Scale, UsersRound } from 'lucide-react'
 import dynamic from 'next/dynamic'
+import Link from 'next/link'
 
 import { getMap } from '../../../actions/map.js'
+import { getProfile } from '../../../actions/profile.js'
 
 import {
   FLAG_ENOJIS,
@@ -24,12 +26,15 @@ const Header = dynamic(() => import('../../../components/Header/index.js'))
 const PlayButton = dynamic(() => import('./PlayButton.js'))
 const Twemoji = dynamic(() => import('../../../components/Twemoji.js'))
 
-const Map = async ({ params }: { params: { id: string } }) => {
-  const { t } = await createTranslation('translation')
+interface Props {
+  params: {
+    id: string
+  }
+}
 
-  const supabase = createClient()
+const Map = async ({ params }: Props) => {
+  const { t } = await createTranslation(['translation', 'map'])
 
-  const { data: userData } = await supabase.auth.getUser()
   const { data: mapData, error: mErr } = await getMap(params.id)
 
   if (!mapData || mErr)
@@ -37,6 +42,21 @@ const Map = async ({ params }: { params: { id: string } }) => {
       <main>
         <section>
           <h1>Map Not Found</h1>
+        </section>
+      </main>
+    )
+
+  const supabase = createClient()
+
+  const { data: userData } = await supabase.auth.getUser()
+
+  const { data: creator, error: cErr } = await getProfile(mapData.creator)
+
+  if (!creator || cErr)
+    return (
+      <main>
+        <section>
+          <h1>{"Can't load the creator data"}</h1>
         </section>
       </main>
     )
@@ -70,7 +90,12 @@ const Map = async ({ params }: { params: { id: string } }) => {
             <p>{t(`mapType.${mapData.type}`)}</p>
             <p>{mapData.description}</p>
             <div>
-              <span>Created by {mapData.creator}</span>
+              <span>
+                Created by{' '}
+                <Link href={`/user/${mapData.creator}`}>
+                  {creator.display_name}
+                </Link>
+              </span>
             </div>
             <p>Updated {new Date(mapData.updated_at).toLocaleDateString()}</p>
           </div>
@@ -78,8 +103,8 @@ const Map = async ({ params }: { params: { id: string } }) => {
             <div className={styles.card}>
               <Scale size={24} />
               <div>
-                <div>0</div>
-                <div>Average Score</div>
+                <div>{mapData.average_score.toLocaleString()}</div>
+                <div>{t('averageScore')}</div>
               </div>
             </div>
             <div className={styles.card}>
@@ -93,7 +118,11 @@ const Map = async ({ params }: { params: { id: string } }) => {
               <Earth size={24} />
               <div>
                 <div>{mapData.locations_count.toLocaleString()}</div>
-                <div>Locations</div>
+                <div>
+                  {t('locations', {
+                    count: mapData.locations_count,
+                  })}
+                </div>
               </div>
             </div>
             <div className={styles.card}>

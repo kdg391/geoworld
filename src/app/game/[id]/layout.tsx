@@ -8,8 +8,10 @@ import styles from './page.module.css'
 
 import type { Metadata } from 'next'
 
-export const metadata: Metadata = {
-  title: 'Game - GeoWorld',
+export const generateMetadata = async (): Promise<Metadata> => {
+  return {
+    title: 'Game - GeoWorld',
+  }
 }
 
 export default async function Layout({

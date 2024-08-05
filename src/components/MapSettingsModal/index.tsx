@@ -63,6 +63,33 @@ const MapSettingsModal = ({
   const maxRounds =
     mapData.locations_count > MAX_ROUNDS ? MAX_ROUNDS : mapData.locations_count
 
+  const onPlayClick = async () => {
+    if (!userId) {
+      router.push('/sign-in')
+      return
+    }
+
+    setIsLoading(true)
+
+    const { data: gameData, error } = await createGame({
+      mapData,
+      settings: {
+        canMove,
+        canPan,
+        canZoom,
+        rounds,
+        timeLimit,
+      },
+      userId,
+    })
+
+    if (!gameData || error) return
+
+    setIsLoading(false)
+
+    router.push(`/game/${gameData.id}`)
+  }
+
   return (
     <Modal isOpen={isModalOpen} setIsOpen={setIsModalOpen}>
       <div className={styles['modal-header']}>
@@ -245,32 +272,7 @@ const MapSettingsModal = ({
           size="m"
           isLoading={isLoading}
           aria-label={t('play')}
-          onClick={async () => {
-            if (!userId) {
-              router.push('/sign-in')
-              return
-            }
-
-            setIsLoading(true)
-
-            const { data: gameData, error } = await createGame({
-              mapData,
-              settings: {
-                canMove,
-                canPan,
-                canZoom,
-                rounds,
-                timeLimit,
-              },
-              userId,
-            })
-
-            if (!gameData || error) return
-
-            setIsLoading(false)
-
-            router.push(`/game/${gameData.id}`)
-          }}
+          onClick={onPlayClick}
         >
           {t('play')}
         </Button>

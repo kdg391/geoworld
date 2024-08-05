@@ -20,3 +20,20 @@ export const getProfile = async (id: string) => {
     error: error?.message ?? null,
   }
 }
+
+export const getProfileByUsername = async (username: string) => {
+  'use server'
+
+  const supabase = createClient()
+
+  const { data, error } = await supabase
+    .from('profiles')
+    .select('*')
+    .eq('username', username)
+    .single<Profile>()
+
+  return {
+    data,
+    error: error?.message ?? null,
+  }
+}

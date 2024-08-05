@@ -2,7 +2,7 @@
 
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 import { useTranslation } from '../../../i18n/client.js'
 
@@ -26,11 +26,6 @@ const PlayButton = ({ mapData, userId }: Props) => {
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   const { t } = useTranslation('translation')
-
-  useEffect(() => {
-    if (isModalOpen) document.body.style.setProperty('overflow-y', 'hidden')
-    else document.body.style.removeProperty('overflow-y')
-  }, [isModalOpen])
 
   return (
     <>

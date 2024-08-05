@@ -28,12 +28,13 @@ async function initI18next(lng: Locales, namespace: string | string[]) {
       fallbackLng: DEFAULT_LOCALE,
       lng,
       ns: namespace,
+      defaultNS: 'translation',
     })
 
   return i18nInstance
 }
 
-export async function createTranslation(ns: string) {
+export async function createTranslation(ns: string | string[]) {
   const lang = await getLocale()
   const i18nextInstance = await initI18next(lang, ns)
 

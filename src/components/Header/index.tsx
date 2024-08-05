@@ -44,7 +44,7 @@ const Header = () => {
           <ul className={styles.links}>
             <li>
               <Link href="/maps" scroll={false}>
-                {t('maps')}
+                {t('translation:maps')}
               </Link>
             </li>
           </ul>

@@ -38,7 +38,9 @@ const Form = () => {
           {t('newPassword')}
         </label>
         <TextInput type="password" id="password" name="password" required />
-        {state.errors?.password && <p>{state.errors.password}</p>}
+        {state.errors?.password && (
+          <p className={styles['error-msg']}>{state.errors.password}</p>
+        )}
       </div>
       <div>
         <label htmlFor="confirm-password" className={styles.label}>
@@ -50,9 +52,13 @@ const Form = () => {
           name="confirm-password"
           required
         />
-        {state.errors?.confirmPassword && <p>{state.errors.confirmPassword}</p>}
+        {state.errors?.confirmPassword && (
+          <p className={styles['error-msg']}>{state.errors.confirmPassword}</p>
+        )}
       </div>
-      {state.errors?.message && <p>{state.errors.message}</p>}
+      {state.errors?.message && (
+        <p className={styles['error-msg']}>{state.errors.message}</p>
+      )}
       <SubmitButton full formAction={action} className={styles.button}>
         {t('updatePassword')}
       </SubmitButton>

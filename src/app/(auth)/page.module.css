@@ -26,9 +26,8 @@
   margin-top: 8px;
 }
 
-.caption {
+.error-msg {
+  color: #ff5757;
+  margin: 8px 0;
   font-size: 0.875rem;
-  text-align: center;
-  word-break: keep-all;
-  max-width: 20rem;
 }

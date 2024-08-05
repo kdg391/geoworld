@@ -57,6 +57,7 @@ export const createGame = async ({
       guessed_rounds: [],
       map_id: mapData.id,
       round: 0,
+      total_score: 0,
       settings,
       user_id: userId,
       state: 'started',
@@ -126,6 +127,12 @@ export const updateGame = async (
       error: gErr,
     }
 
+  if (gameData.state === 'finished')
+    return {
+      data: null,
+      error: 'This game is finished.',
+    }
+
   const distance = {
     imperial: data.guessedLocation
       ? calculateDistance(
@@ -164,14 +171,67 @@ export const updateGame = async (
         },
       ],
       guessed_locations: [...gameData.guessed_locations, data.guessedLocation],
+      total_score: gameData.total_score + score,
       state: isFinalRound ? 'finished' : 'started',
     })
     .eq('id', id)
     .select()
     .single<Game>()
 
+  if (isFinalRound) {
+    data.mapData.average_score
+  }
+
   return {
     data: updatedData,
     error: updatedErr?.message ?? null,
+  }
+}
+
+export const deleteGame = async (id: string) => {
+  'use server'
+
+  const supabase = createClient()
+
+  const { data: uData, error: uErr } = await supabase.auth.getUser()
+
+  if (!uData.user || uErr)
+    return {
+      data: null,
+      error: uErr?.message ?? null,
+    }
+
+  const { data: gameData, error: gErr } = await supabase
+    .from('games')
+    .select('*')
+    .eq('id', id)
+    .single<Game>()
+
+  if (!gameData || gErr)
+    return {
+      data: null,
+      error: gErr?.message ?? null,
+    }
+
+  if (gameData.user_id !== uData.user.id)
+    return {
+      data: null,
+      error: gErr,
+    }
+
+  const { error: deletedErr } = await supabase
+    .from('games')
+    .delete()
+    .eq('id', id)
+
+  if (deletedErr)
+    return {
+      data: null,
+      error: deletedErr?.message ?? null,
+    }
+
+  return {
+    data: true,
+    error: null,
   }
 }

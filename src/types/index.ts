@@ -34,7 +34,8 @@ export interface Map {
   name: string
   description: string | null
   creator: string
-  is_public: boolean
+  is_published: boolean
+  average_score: number
   locations_count: number
   score_factor: number
   bounds: {
@@ -77,6 +78,7 @@ export interface Game {
   round: number
   guessed_locations: (google.maps.LatLngLiteral | null)[]
   guessed_rounds: GuessedRound[]
+  total_score: number
   settings: GameSettings
   state: GameState
   mode: GameMode

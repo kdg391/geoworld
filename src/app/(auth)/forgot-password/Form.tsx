@@ -43,9 +43,13 @@ const Form = () => {
           placeholder="me@example.com"
           required
         />
-        {state.errors?.email && <p>{state.errors.email}</p>}
+        {state.errors?.email && (
+          <p className={styles['error-msg']}>{state.errors.email}</p>
+        )}
       </div>
-      {state.errors?.message && <p>{state.errors.message}</p>}
+      {state.errors?.message && (
+        <p className={styles['error-msg']}>{state.errors.message}</p>
+      )}
       <SubmitButton full formAction={action} className={styles.button}>
         {t('resetPassword')}
       </SubmitButton>

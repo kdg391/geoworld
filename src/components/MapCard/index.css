@@ -2,7 +2,7 @@
   --map-card-bg: #fcfcfc;
   --map-card-border: rgba(0, 0, 0, 0.15);
   --map-card-gradient: linear-gradient(
-    rgba(199, 199, 199, 0.5),
+    rgba(200, 200, 200, 0.5),
     var(--map-card-bg) 90%
   );
 }
