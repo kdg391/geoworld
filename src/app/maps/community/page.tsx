@@ -51,14 +51,15 @@ const Community = () => {
               <SkeletonMapCard key={i} />
             ))}
       </div>
-      <Button
-        variant="primary"
-        size="s"
-        disabled={!hasMore}
-        onClick={() => setPage((p) => p + 1)}
-      >
-        Load more
-      </Button>
+      {hasMore && (
+        <Button
+          variant="primary"
+          size="s"
+          onClick={() => setPage((p) => p + 1)}
+        >
+          Load more
+        </Button>
+      )}
     </section>
   )
 }

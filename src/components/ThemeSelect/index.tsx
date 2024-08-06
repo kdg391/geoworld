@@ -15,6 +15,7 @@ import type { Theme } from '../../types/index.js'
 
 const ThemeSelect = () => {
   const { setTheme, theme } = useTheme()
+
   const { t } = useTranslation('footer')
 
   const themeOptions = [

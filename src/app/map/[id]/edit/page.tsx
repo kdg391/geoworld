@@ -224,6 +224,8 @@ const Edit = ({ params }: Props) => {
       locations,
     })
 
+    console.log(mErr)
+
     if (!mData || mErr) return
 
     router.push('/')

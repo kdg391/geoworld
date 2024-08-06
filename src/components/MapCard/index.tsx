@@ -18,7 +18,8 @@ import './index.css'
 
 import type { Map } from '../../types/index.js'
 
-const Button = dynamic(() => import('../common/Button/index.js'))
+import Button from '../common/Button/index.js'
+
 const Twemoji = dynamic(() => import('../Twemoji.js'))
 
 interface Props {

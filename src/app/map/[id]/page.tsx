@@ -104,14 +104,14 @@ const Map = async ({ params }: Props) => {
               <Scale size={24} />
               <div>
                 <div>{mapData.average_score.toLocaleString()}</div>
-                <div>{t('averageScore')}</div>
+                <div>{t('avgScore')}</div>
               </div>
             </div>
             <div className={styles.card}>
               <UsersRound size={24} />
               <div>
                 <div>0</div>
-                <div>Explorers</div>
+                <div>{t('explorers')}</div>
               </div>
             </div>
             <div className={styles.card}>
@@ -129,7 +129,7 @@ const Map = async ({ params }: Props) => {
               <Heart size={24} />
               <div>
                 <div>0</div>
-                <div>Likes</div>
+                <div>{t('likes')}</div>
               </div>
             </div>
           </div>

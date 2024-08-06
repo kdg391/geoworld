@@ -109,6 +109,7 @@ export const signOut = async () => {
   'use server'
 
   const supabase = createClient()
+
   await supabase.auth.signOut()
 }
 

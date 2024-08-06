@@ -3,7 +3,8 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
-import styles from './layout.module.css'
+import styles from './Aside.module.css'
+import './Aside.css'
 
 const Aside = () => {
   const pathname = usePathname()

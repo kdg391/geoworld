@@ -1,33 +1,18 @@
 'use server'
 
 import { redirect } from 'next/navigation'
-import { z } from 'zod'
 
 import { createClient } from '../../../utils/supabase/server.js'
+
+import {
+  displayNameValidation,
+  usernameValidation,
+} from '../../../utils/validations/profile.js'
 
 import type { Profile } from '../../../types/index.js'
 
 import type { FormState as DisplayNameFormState } from './DisplayNameForm.js'
 import type { FormState as UsernameFormState } from './UsernameForm.js'
-
-const displayNameValidation = z
-  .object({
-    oldName: z.string(),
-    newName: z
-      .string()
-      .trim()
-      .min(1, 'The display name has to be filled.')
-      .max(20, 'The display name must be at least 20 characters.'),
-  })
-  .superRefine(({ oldName, newName }, ctx) => {
-    if (oldName === newName) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: 'The display name is the same as before.',
-        path: ['newName'],
-      })
-    }
-  })
 
 export const changeDisplayName = async (
   _: DisplayNameFormState,
@@ -79,25 +64,6 @@ export const changeDisplayName = async (
     },
   }
 }
-
-const usernameValidation = z
-  .object({
-    oldName: z.string(),
-    newName: z
-      .string()
-      .trim()
-      .min(1, 'The username has to be filled.')
-      .max(20, 'The username must be at least 20 characters.'),
-  })
-  .superRefine(({ oldName, newName }, ctx) => {
-    if (oldName === newName) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: 'The username is the same as before.',
-        path: ['newName'],
-      })
-    }
-  })
 
 export const changeUsername = async (
   _: UsernameFormState,

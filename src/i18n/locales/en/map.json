@@ -1,5 +1,7 @@
 {
-  "averageScore": "Average Score",
+  "avgScore": "Average Score",
+  "explorers": "Explorers",
+  "likes": "Likes",
   "locations_one": "Location",
   "locations_other": "Locations"
 }

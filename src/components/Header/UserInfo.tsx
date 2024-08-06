@@ -96,15 +96,15 @@ const UserInfo = () => {
   if (!profile) return <NotSignedIn />
 
   const onSignOutClick = async () => {
-    try {
-      if (localStorage.getItem('profileCache'))
-        localStorage.removeItem('profileCache')
-      if (localStorage.getItem('profileCacheUpdated'))
-        localStorage.removeItem('profileCacheUpdated')
+    if (localStorage.getItem('profileCache'))
+      localStorage.removeItem('profileCache')
+    if (localStorage.getItem('profileCacheUpdated'))
+      localStorage.removeItem('profileCacheUpdated')
 
+    try {
       await signOut()
     } finally {
-      router.refresh()
+      location.reload()
     }
   }
 
@@ -120,11 +120,23 @@ const UserInfo = () => {
         className={classNames(styles.dropdown, isDropdownOpen ? 'active' : '')}
         ref={dropdownRef}
       >
-        <li onClick={() => router.push(`/user/${profile.id}`)}>
+        <li
+          onClick={() =>
+            router.push(`/user/${profile.id}`, {
+              scroll: false,
+            })
+          }
+        >
           <UserRound size={18} />
           {t('profile')}
         </li>
-        <li onClick={() => router.push('/settings/profile')}>
+        <li
+          onClick={() =>
+            router.push('/settings/profile', {
+              scroll: false,
+            })
+          }
+        >
           <Settings size={18} />
           {t('settings')}
         </li>

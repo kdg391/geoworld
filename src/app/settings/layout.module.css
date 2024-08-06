@@ -1,24 +1,4 @@
 .main {
   display: flex;
-}
-
-.aside {
-  & ul {
-    display: flex;
-    flex-direction: column;
-    margin: 0;
-
-    & li {
-      display: flex;
-
-      & a {
-        padding: 0.5rem 0.75rem;
-        flex: 1;
-
-        &:global(.view) {
-          background-color: light-dark(#eee, #333);
-        }
-      }
-    }
-  }
+  min-height: calc(100% - var(--header-h));
 }
