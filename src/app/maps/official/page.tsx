@@ -52,13 +52,15 @@ const Official = () => {
             ))}
       </div>
       {hasMore && (
-        <Button
-          variant="primary"
-          size="s"
-          onClick={() => setPage((p) => p + 1)}
-        >
-          Load more
-        </Button>
+        <div className={styles['btn-wrapper']}>
+          <Button
+            variant="primary"
+            size="s"
+            onClick={() => setPage((p) => p + 1)}
+          >
+            Load more
+          </Button>
+        </div>
       )}
     </section>
   )

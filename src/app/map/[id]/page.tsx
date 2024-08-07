@@ -76,16 +76,12 @@ const Map = async ({ params }: Props) => {
                       ? WORLD_EMOJI
                       : FLAG_ENOJIS[OFFICIAL_MAP_COUNTRY_CODES[mapData.id]]
                   }
-                  alt="Flag"
+                  alt={mapData.name}
                   width={24}
                   height={24}
                 />
               )}
-              {mapData.type === 'official'
-                ? mapData.id === OFFICIAL_MAP_WORLD_ID
-                  ? t('world')
-                  : t(`country.${OFFICIAL_MAP_COUNTRY_CODES[mapData.id]}`)
-                : mapData.name}
+              {mapData.name}
             </h1>
             <p>{t(`mapType.${mapData.type}`)}</p>
             <p>{mapData.description}</p>

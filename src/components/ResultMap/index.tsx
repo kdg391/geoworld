@@ -15,7 +15,6 @@ interface Props {
   actualLocations: google.maps.LatLngLiteral[]
   guessedLocations: (google.maps.LatLngLiteral | null)[]
   round: number
-  rounds: number
   view: GameView | null
 }
 
@@ -23,7 +22,6 @@ const ResultMap = ({
   actualLocations,
   guessedLocations,
   round,
-  rounds,
   view,
 }: Props) => {
   const resultMapRef = useRef<google.maps.Map | null>(null)
@@ -63,14 +61,12 @@ const ResultMap = ({
 
   const renderMarkers = () => {
     for (const marker of actualMarkersRef.current) {
-      marker.position = null
       marker.map = null
     }
 
     actualMarkersRef.current = []
 
     for (const marker of guessedMarkersRef.current) {
-      marker.position = null
       marker.map = null
     }
 

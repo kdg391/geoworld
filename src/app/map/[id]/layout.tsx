@@ -1,13 +1,8 @@
-import type { Metadata } from 'next'
-
 import { getMap } from '../../../actions/map.js'
 
-import {
-  OFFICIAL_MAP_COUNTRY_CODES,
-  OFFICIAL_MAP_WORLD_ID,
-} from '../../../constants/index.js'
-
 import { createTranslation } from '../../../i18n/server.js'
+
+import type { Metadata } from 'next'
 
 interface Props {
   params: {
@@ -29,15 +24,8 @@ export const generateMetadata = async ({
       title: `${t('map')} - GeoWorld`,
     }
 
-  const mapName =
-    mapData.type === 'official'
-      ? mapData.id === OFFICIAL_MAP_WORLD_ID
-        ? t('world')
-        : t(`country.${OFFICIAL_MAP_COUNTRY_CODES[mapData.id]}`)
-      : mapData.name
-
   return {
-    title: `${mapName} - ${t('map')} - GeoWorld`,
+    title: `${mapData.name} - ${t('map')} - GeoWorld`,
   }
 }
 

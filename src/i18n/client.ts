@@ -51,7 +51,7 @@ export function useTranslation(ns: string) {
   const { i18n } = translator
 
   // Run content is being rendered on server side
-  if (runsOnServerSide && lng && i18n.resolvedLanguage !== lng) {
+  if (runsOnServerSide && i18n.resolvedLanguage !== lng) {
     i18n.changeLanguage(lng)
   } else {
     // Use our custom implementation when running on client side

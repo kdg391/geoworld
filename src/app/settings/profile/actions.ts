@@ -51,7 +51,7 @@ export const changeDisplayName = async (
   const { data, error } = await supabase
     .from('profiles')
     .update({
-      display_name: validated.data.newName.trim(),
+      display_name: validated.data.newName,
     })
     .eq('id', user.id)
     .select()

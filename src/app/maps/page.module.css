@@ -1,7 +1,5 @@
-.main {
-  height: calc(100% - var(--header-h));
-}
-
 .section {
   padding: 1rem 1.5rem;
+  margin: 0 auto;
+  max-width: 80rem;
 }

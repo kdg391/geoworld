@@ -1,6 +1,6 @@
 'use client'
 
-import { LogOut, Settings, UserRound } from 'lucide-react'
+import { LogOut, Map, Settings, UserRound } from 'lucide-react'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
@@ -129,6 +129,16 @@ const UserInfo = () => {
         >
           <UserRound size={18} />
           {t('profile')}
+        </li>
+        <li
+          onClick={() =>
+            router.push('/me/maps', {
+              scroll: false,
+            })
+          }
+        >
+          <Map size={18} />
+          My Maps
         </li>
         <li
           onClick={() =>

@@ -1,5 +1,12 @@
 'use server'
 
+import {
+  OFFICIAL_MAP_COUNTRY_CODES,
+  OFFICIAL_MAP_WORLD_ID,
+} from '../constants/index.js'
+
+import { createTranslation } from '../i18n/server.js'
+
 import { calculateMapBounds, calculateScoreFactor } from '../utils/game.js'
 import { getCountryFromCoordinates } from '../utils/map.js'
 
@@ -40,6 +47,19 @@ export const getRandomOfficialMaps = async (limit: number) => {
     })
     .select('*')
     .returns<Map[]>()
+
+  if (data) {
+    const { t } = await createTranslation('translation')
+
+    for (const map of data) {
+      map.name =
+        map.id === OFFICIAL_MAP_WORLD_ID
+          ? t('world')
+          : map.id in OFFICIAL_MAP_COUNTRY_CODES
+            ? t(`country.${OFFICIAL_MAP_COUNTRY_CODES[map.id]}`)
+            : map.name
+    }
+  }
 
   return {
     data,
@@ -85,6 +105,19 @@ export const getOfficialMaps = async (page: number) => {
     })
     .returns<Map[]>()
 
+  if (data) {
+    const { t } = await createTranslation('translation')
+
+    for (const map of data) {
+      map.name =
+        map.id === OFFICIAL_MAP_WORLD_ID
+          ? t('world')
+          : map.id in OFFICIAL_MAP_COUNTRY_CODES
+            ? t(`country.${OFFICIAL_MAP_COUNTRY_CODES[map.id]}`)
+            : map.name
+    }
+  }
+
   return {
     data,
     hasMore: data ? data.length >= PAGE_PER_MAPS : false,
@@ -102,6 +135,17 @@ export const getMap = async (id: string) => {
     .select('*')
     .eq('id', id)
     .single<Map>()
+
+  if (data?.type === 'official') {
+    const { t } = await createTranslation('translation')
+
+    data.name =
+      data.id === OFFICIAL_MAP_WORLD_ID
+        ? t('world')
+        : data.id in OFFICIAL_MAP_COUNTRY_CODES
+          ? t(`country.${OFFICIAL_MAP_COUNTRY_CODES[data.id]}`)
+          : data.name
+  }
 
   return {
     data,

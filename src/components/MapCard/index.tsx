@@ -52,20 +52,10 @@ const MapCard = ({ mapData }: Props) => {
               }
               width={24}
               height={24}
-              alt={
-                mapData.id === OFFICIAL_MAP_WORLD_ID
-                  ? t('world')
-                  : t(`country.${OFFICIAL_MAP_COUNTRY_CODES[mapData.id]}`)
-              }
+              alt={mapData.name}
             />
           )}
-          <span>
-            {mapData.type === 'official'
-              ? mapData.id === OFFICIAL_MAP_WORLD_ID
-                ? t('world')
-                : t(`country.${OFFICIAL_MAP_COUNTRY_CODES[mapData.id]}`)
-              : mapData.name}
-          </span>
+          <span>{mapData.name}</span>
         </div>
       </div>
       <div className={styles['map-actions']}>

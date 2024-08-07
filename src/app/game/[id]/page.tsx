@@ -7,14 +7,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { getGame, updateGame } from '../../../actions/game.js'
 import { getMap } from '../../../actions/map.js'
 
-import {
-  OFFICIAL_MAP_COUNTRY_CODES,
-  OFFICIAL_MAP_WORLD_ID,
-} from '../../../constants/index.js'
-
 import useGoogleApi from '../../../hooks/useGoogleApi.js'
-
-import { useTranslation } from '../../../i18n/client.js'
 
 import styles from './page.module.css'
 
@@ -44,8 +37,6 @@ interface Props {
 }
 
 const Game = ({ params }: Props) => {
-  const { t } = useTranslation('game')
-
   const [mapData, setMapData] = useState<Map | null>()
   const [gameData, setGameData] = useState<Game | null>()
 
@@ -138,19 +129,11 @@ const Game = ({ params }: Props) => {
       {view === 'game' && (
         <GameStatus
           finishRound={finishRound}
-          mapName={
-            mapData.type === 'official'
-              ? mapData.id === OFFICIAL_MAP_WORLD_ID
-                ? t('translation:world')
-                : t(
-                    `translation:country.${OFFICIAL_MAP_COUNTRY_CODES[mapData.id]}`,
-                  )
-              : mapData.name
-          }
+          mapName={mapData.name}
           round={gameData.round}
           rounds={gameData.settings.rounds}
           timeLimit={gameData.settings.timeLimit}
-          totalScore={gameData.guessed_rounds.reduce((a, b) => a + b.points, 0)}
+          totalScore={gameData.total_score}
         />
       )}
 
@@ -165,7 +148,6 @@ const Game = ({ params }: Props) => {
           actualLocations={gameData.actual_locations}
           guessedLocations={gameData.guessed_locations}
           round={gameData.round}
-          rounds={gameData.settings.rounds}
           view={view}
         />
 
@@ -188,10 +170,7 @@ const Game = ({ params }: Props) => {
             <FinalRoundResult
               mapData={mapData}
               settings={gameData.settings}
-              totalScore={gameData.guessed_rounds.reduce(
-                (a, b) => a + b.points,
-                0,
-              )}
+              totalScore={gameData.total_score}
               userId={gameData.user_id}
             />
           )}

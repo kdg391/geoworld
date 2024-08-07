@@ -52,6 +52,7 @@ export const OFFICIAL_COUNTRY_CODES = [
   'mo', // Macau
   'mx', // Mexico
   'my', // Malaysia
+  'nl', // Netherlands
   'no', // Norway
   'nz', // New Zealand
   'pe', // Peru
@@ -120,6 +121,7 @@ export const FLAG_ENOJIS: Record<
   mo: '🇲🇴',
   mx: '🇲🇽',
   my: '🇲🇾',
+  nl: '🇳🇱',
   no: '🇳🇴',
   nz: '🇳🇿',
   pe: '🇵🇪',
@@ -188,6 +190,7 @@ export const OFFICIAL_MAP_COUNTRY_CODES: Record<
   'fa5b7a28-bcba-4fc7-9526-6a5355cad8cf': 'mo',
   '54634743-007f-4970-8f68-2062c128dbcd': 'mx',
   '366cdc87-9f50-4648-86e8-b5564ce1744f': 'my',
+  '5a7dc181-b266-4f3d-9ec6-461cb4285021': 'nl',
   '56852ba0-bff8-4731-ad6b-8d89abe9e0ac': 'no',
   '0cce108b-98c8-4669-82a2-427ad095cd20': 'nz',
   'ea4b2235-0507-48e4-a97e-06b1aba8fa20': 'pe',

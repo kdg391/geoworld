@@ -79,16 +79,13 @@
         gap: 0;
       }
 
-      & nav {
-        background-color: var(--header-bg);
-      }
-
       & .arrow {
         display: block;
       }
 
       & nav {
         flex: 0;
+        background-color: var(--header-bg);
 
         & > ul {
           flex-direction: column;

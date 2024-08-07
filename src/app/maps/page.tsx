@@ -5,13 +5,9 @@ import { getCommunityMaps, getOfficialMaps } from '../../actions/map.js'
 
 import { createTranslation } from '../../i18n/server.js'
 
-import { createClient } from '../../utils/supabase/server.js'
-
 import styles from './page.module.css'
 import homeStyles from '../page.module.css'
 
-const CreateButton = dynamic(() => import('./CreateButton.js'))
-const Header = dynamic(() => import('../../components/Header/index.js'))
 const MapCard = dynamic(() => import('../../components/MapCard/index.js'))
 
 const Maps = async () => {
@@ -23,44 +19,29 @@ const Maps = async () => {
 
   if (!communityMaps || cErr) return
 
-  const supabase = createClient()
-
-  const { data: uData, error: uErr } = await supabase.auth.getUser()
-
   const { t } = await createTranslation('translation')
 
   return (
-    <>
-      <Header />
-
-      <main className={styles.main}>
-        <section className={styles.section}>
-          <div>
-            {(uData.user || !uErr) && (
-              <CreateButton userId={uData.user?.id as string} />
-            )}
-          </div>
-          <div>
-            <h2>{t('officialMaps')}</h2>
-            <div className={homeStyles['map-cards']}>
-              {officialMaps.map((map) => (
-                <MapCard key={map.id} mapData={map} />
-              ))}
-            </div>
-            <Link href="/maps/official">More official maps</Link>
-          </div>
-          <div>
-            <h2>{t('communityMaps')}</h2>
-            <div className={homeStyles['map-cards']}>
-              {communityMaps.map((map) => (
-                <MapCard key={map.id} mapData={map} />
-              ))}
-            </div>
-            <Link href="/maps/community">More community maps</Link>
-          </div>
-        </section>
-      </main>
-    </>
+    <section className={styles.section}>
+      <div>
+        <h2>{t('officialMaps')}</h2>
+        <div className={homeStyles['map-cards']}>
+          {officialMaps.map((map) => (
+            <MapCard key={map.id} mapData={map} />
+          ))}
+        </div>
+        <Link href="/maps/official">More official maps</Link>
+      </div>
+      <div>
+        <h2>{t('communityMaps')}</h2>
+        <div className={homeStyles['map-cards']}>
+          {communityMaps.map((map) => (
+            <MapCard key={map.id} mapData={map} />
+          ))}
+        </div>
+        <Link href="/maps/community">More community maps</Link>
+      </div>
+    </section>
   )
 }
 

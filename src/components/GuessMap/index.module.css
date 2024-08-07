@@ -75,13 +75,13 @@
   display: none;
 }
 
-@media only screen and (max-width: 750px) {
+@media only screen and (max-width: 768px) {
   .guess-map-container:global(.size--0) {
     --active-width: 24vw;
   }
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 640px) {
   .map-btn {
     position: absolute;
     right: 16px;

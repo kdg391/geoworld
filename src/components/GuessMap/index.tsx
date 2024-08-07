@@ -121,13 +121,13 @@ const GuessMap = ({
         )}
         onMouseOver={() => {
           if (isMapPinned) return
-          if (window.innerWidth <= 600) return
+          if (window.innerWidth <= 640) return
 
           setMapActive(true)
         }}
         onMouseLeave={() => {
           if (isMapPinned) return
-          if (window.innerWidth <= 600) return
+          if (window.innerWidth <= 640) return
 
           setMapActive(false)
         }}
