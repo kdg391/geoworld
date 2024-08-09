@@ -37,6 +37,7 @@ const RandomStreetView = () => {
       {
         addressControl: false,
         fullscreenControl: false,
+        motionTracking: false,
       },
     )
     svPanoramaRef.current = svPanorama

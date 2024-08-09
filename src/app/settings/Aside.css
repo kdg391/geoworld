@@ -1,5 +1,9 @@
 [data-theme='light'] {
+  --aside-hover: var(--gray-100);
+  --aside-view: var(--gray-150);
 }
 
 [data-theme='dark'] {
+  --aside-hover: var(--gray-850);
+  --aside-view: var(--gray-800);
 }

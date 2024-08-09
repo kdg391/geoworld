@@ -1,7 +1,4 @@
 .map-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   width: 100%;
   background-color: var(--map-card-bg);
   border: 1px solid var(--map-card-border);

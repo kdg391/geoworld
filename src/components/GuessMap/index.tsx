@@ -51,7 +51,7 @@ const GuessMap = ({
 
   const [mapSize, setMapSize] = useState(1)
   const [isMapPinned, setIsMapPinned] = useState(false)
-  const [mapActive, setMapActive] = useState(false)
+  const [mapActive, setIsMapActive] = useState(false)
 
   const { t } = useTranslation('game')
 
@@ -103,6 +103,7 @@ const GuessMap = ({
     if (!guessMapRef.current) return
 
     fitMapBounds()
+    setIsMapActive(false)
 
     if (markerRef.current) {
       markerRef.current.position = null
@@ -123,19 +124,19 @@ const GuessMap = ({
           if (isMapPinned) return
           if (window.innerWidth <= 640) return
 
-          setMapActive(true)
+          setIsMapActive(true)
         }}
         onMouseLeave={() => {
           if (isMapPinned) return
           if (window.innerWidth <= 640) return
 
-          setMapActive(false)
+          setIsMapActive(false)
         }}
       >
         <button
           className={styles['close-btn']}
           aria-label={t('guessMap.closeMap')}
-          onClick={() => setMapActive(false)}
+          onClick={() => setIsMapActive(false)}
         >
           <X />
         </button>
@@ -154,7 +155,7 @@ const GuessMap = ({
               disableDefaultUI: true,
               draggableCursor: 'crosshair',
               fullscreenControl: false,
-              mapId: process.env.NEXT_PUBLIC_GOOGLE_MAPS_RESULT,
+              mapId: process.env.NEXT_PUBLIC_GOOGLE_MAPS_MAP,
               zoomControl: false,
             }}
             onLoaded={(map) => init(map)}
@@ -177,7 +178,7 @@ const GuessMap = ({
       <button
         className={styles['map-btn']}
         aria-label={t('guessMap.openMap')}
-        onClick={() => setMapActive(true)}
+        onClick={() => setIsMapActive(true)}
       >
         <MapIcon size={24} />
       </button>

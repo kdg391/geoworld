@@ -7,10 +7,13 @@ import { createClient } from '../../../utils/supabase/server.js'
 import styles from './page.module.css'
 
 import type { Metadata } from 'next'
+import { createTranslation } from '../../../i18n/server.js'
 
 export const generateMetadata = async (): Promise<Metadata> => {
+  const { t } = await createTranslation('translation')
+
   return {
-    title: 'Game - GeoWorld',
+    title: `${t('game')} - GeoWorld`,
   }
 }
 

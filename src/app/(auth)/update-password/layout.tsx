@@ -6,7 +6,7 @@ export const generateMetadata = async (): Promise<Metadata> => {
   const { t } = await createTranslation('auth')
 
   return {
-    title: `${t('resetPassword')} - GeoWorld`,
+    title: `${t('updatePassword')} - GeoWorld`,
   }
 }
 

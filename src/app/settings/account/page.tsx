@@ -5,6 +5,8 @@ import { redirect } from 'next/navigation'
 
 import { createClient } from '../../../utils/supabase/server.js'
 
+import styles from '../layout.module.css'
+
 const EmailForm = dynamic(() => import('./EmailForm.js'))
 const PasswordForm = dynamic(() => import('./PasswordForm.js'))
 
@@ -21,7 +23,7 @@ const Account = async () => {
   if (!user || error) return redirect('/sign-in')
 
   return (
-    <section>
+    <section className={styles.section}>
       <h2>Email</h2>
       <div>
         <EmailForm email={user.email} />

@@ -52,6 +52,11 @@ export const createGame = async ({
       actual_locations: locations.map((loc) => ({
         lat: loc.lat,
         lng: loc.lng,
+        heading: loc.heading,
+        pitch: loc.pitch,
+        zoom: loc.zoom,
+        pano_id: loc.pano_id,
+        streak_location_code: loc.streak_location_code,
       })),
       guessed_locations: [],
       guessed_rounds: [],

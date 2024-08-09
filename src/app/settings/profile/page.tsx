@@ -5,6 +5,8 @@ import { getProfile } from '../../../actions/profile.js'
 
 import { createClient } from '../../../utils/supabase/server.js'
 
+import styles from '../layout.module.css'
+
 const DisplayNameForm = dynamic(() => import('./DisplayNameForm.js'))
 const UsernameForm = dynamic(() => import('./UsernameForm.js'))
 
@@ -25,7 +27,7 @@ const Profile = async () => {
   if (!pData || pErr) return redirect('/sign-in')
 
   return (
-    <section>
+    <section className={styles.section}>
       <h2>Profile</h2>
       <div>
         <DisplayNameForm displayName={pData.display_name} />

@@ -12,6 +12,7 @@ import useGoogleApi from '../../../hooks/useGoogleApi.js'
 import styles from './page.module.css'
 
 import type { Game, GameView, Map } from '../../../types/index.js'
+import Loading from './Loading.js'
 
 const FinalRoundResult = dynamic(
   () => import('../../../components/FinalRoundResult/index.js'),
@@ -117,12 +118,7 @@ const Game = ({ params }: Props) => {
       </section>
     )
 
-  if (!mapData || !gameData)
-    return (
-      <section>
-        <h1>Loading...</h1>
-      </section>
-    )
+  if (!mapData || !gameData) return <Loading />
 
   return (
     <>
