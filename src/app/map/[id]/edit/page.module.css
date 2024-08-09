@@ -1,4 +1,3 @@
-.header,
 .footer {
   height: 50px;
   display: flex;
@@ -7,24 +6,20 @@
 }
 
 .main {
-  height: calc(100% - 50px - 50px);
+  height: calc(100% - 50px);
 }
 
 .container {
   display: flex;
   height: 100%;
 
-  @media (max-width: 600px) {
+  @media (max-width: 640px) {
     flex-direction: column;
   }
 }
 
 .street-view {
   flex: 1;
-}
-
-.footer {
-  justify-content: space-between;
 }
 
 .footer-actions {

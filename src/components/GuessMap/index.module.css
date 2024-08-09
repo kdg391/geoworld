@@ -43,6 +43,22 @@
   &:global(.size--3) {
     --active-width: 65vw;
   }
+
+  @media only screen and (max-width: 768px) {
+    --active-width: 40vw;
+
+    &:global(.size--0) {
+      --active-width: 30vw;
+    }
+
+    &:global(.size--2) {
+      --active-width: 50vw;
+    }
+
+    &:global(.size--3) {
+      --active-width: 65vw;
+    }
+  }
 }
 
 .guess-map-wrapper {
@@ -66,19 +82,13 @@
   border-radius: 8px;
 
   &:disabled {
-    background-color: var(--gray);
+    background-color: var(--gray-650);
   }
 }
 
 .map-btn,
 .close-btn {
   display: none;
-}
-
-@media only screen and (max-width: 768px) {
-  .guess-map-container:global(.size--0) {
-    --active-width: 24vw;
-  }
 }
 
 @media only screen and (max-width: 640px) {

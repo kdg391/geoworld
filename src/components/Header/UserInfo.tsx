@@ -2,7 +2,7 @@
 
 import { LogOut, Map, Settings, UserRound } from 'lucide-react'
 import dynamic from 'next/dynamic'
-import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 
 import { signOut } from '../../actions/auth.js'
@@ -10,6 +10,8 @@ import { getProfile } from '../../actions/profile.js'
 import { getUser } from '../../actions/user.js'
 
 import { ONE_DAY } from '../../constants/index.js'
+
+import useClickOutside from '../../hooks/useClickOutside.js'
 
 import { useTranslation } from '../../i18n/client.js'
 
@@ -23,14 +25,11 @@ import type { Profile } from '../../types/index.js'
 const NotSignedIn = dynamic(() => import('./NotSignedIn.js'))
 
 const UserInfo = () => {
-  const router = useRouter()
-
-  const [loading, setLoading] = useState(true)
-  const [profile, setProfile] = useState<Profile | null>(null)
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
-
   const containerRef = useRef<HTMLDivElement | null>(null)
-  const dropdownRef = useRef<HTMLUListElement | null>(null)
+
+  const [isLoading, setIsLoading] = useState(true)
+  const [profile, setProfile] = useState<Profile | null>(null)
+  const [isDropdownOpen, setIsDropdownOpen] = useClickOutside(containerRef)
 
   const { t } = useTranslation('header')
 
@@ -74,25 +73,10 @@ const UserInfo = () => {
       }
     }
 
-    init().then(() => setLoading(false))
+    init().then(() => setIsLoading(false))
   }, [])
 
-  useEffect(() => {
-    const onClick = (event: MouseEvent) => {
-      if (
-        containerRef.current &&
-        !containerRef.current.contains(event.target as HTMLUListElement)
-      ) {
-        setIsDropdownOpen(false)
-      }
-    }
-
-    window.addEventListener('click', onClick)
-
-    return () => window.removeEventListener('click', onClick)
-  }, [])
-
-  if (loading) return
+  if (isLoading) return
   if (!profile) return <NotSignedIn />
 
   const onSignOutClick = async () => {
@@ -118,41 +102,30 @@ const UserInfo = () => {
       </span>
       <ul
         className={classNames(styles.dropdown, isDropdownOpen ? 'active' : '')}
-        ref={dropdownRef}
       >
-        <li
-          onClick={() =>
-            router.push(`/user/${profile.id}`, {
-              scroll: false,
-            })
-          }
-        >
-          <UserRound size={18} />
-          {t('profile')}
+        <li>
+          <Link href={`/user/${profile.id}`}>
+            <UserRound size={18} />
+            {t('profile')}
+          </Link>
         </li>
-        <li
-          onClick={() =>
-            router.push('/me/maps', {
-              scroll: false,
-            })
-          }
-        >
-          <Map size={18} />
-          My Maps
+        <li>
+          <Link href="/me/maps">
+            <Map size={18} />
+            My Maps
+          </Link>
         </li>
-        <li
-          onClick={() =>
-            router.push('/settings/profile', {
-              scroll: false,
-            })
-          }
-        >
-          <Settings size={18} />
-          {t('settings')}
+        <li>
+          <Link href="/settings/profile">
+            <Settings size={18} />
+            {t('settings')}
+          </Link>
         </li>
-        <li onClick={onSignOutClick}>
-          <LogOut size={18} />
-          {t('signOut')}
+        <li>
+          <div onClick={onSignOutClick}>
+            <LogOut size={18} />
+            {t('signOut')}
+          </div>
         </li>
       </ul>
     </div>

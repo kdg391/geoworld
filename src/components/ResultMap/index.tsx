@@ -177,10 +177,6 @@ const ResultMap = ({
     fitMapBounds()
   }, [isLoaded, actualLocations, guessedLocations, view])
 
-  useEffect(() => {
-    //
-  }, [])
-
   return (
     <GoogleMap
       defaultOptions={{
@@ -188,7 +184,7 @@ const ResultMap = ({
         disableDefaultUI: true,
         gestureHandling: 'greedy',
         zoomControl: true,
-        mapId: process.env.NEXT_PUBLIC_GOOGLE_MAPS_RESULT,
+        mapId: process.env.NEXT_PUBLIC_GOOGLE_MAPS_MAP,
       }}
       onLoaded={(map) => {
         resultMapRef.current = map

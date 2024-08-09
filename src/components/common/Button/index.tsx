@@ -11,7 +11,7 @@ interface Props {
   full?: boolean
   isLoading?: boolean
   size?: 's' | 'm' | 'l'
-  variant: 'primary' | 'secondary' | 'danger' | 'success' | 'gray'
+  variant?: 'primary' | 'secondary' | 'danger' | 'success' | 'gray'
 }
 
 const Button = ({
@@ -33,7 +33,7 @@ const Button = ({
       full ? 'full' : '',
       isLoading ? 'is-loading' : '',
       size ? `size--${size}` : '',
-      variant,
+      variant ?? '',
       className,
     )}
     {...props}

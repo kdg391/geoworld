@@ -37,7 +37,7 @@ const Home = async () => {
         </section>
 
         <section id="maps" className={styles.maps}>
-          <div className={styles.container}>
+          <div className={styles['maps-container']}>
             <Maps />
           </div>
         </section>

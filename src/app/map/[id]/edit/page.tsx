@@ -16,6 +16,7 @@ import type { Coords, Map } from '../../../../types/index.js'
 const Button = dynamic(
   () => import('../../../../components/common/Button/index.js'),
 )
+const Dropdown = dynamic(() => import('./Dropdown.js'))
 const EditMap = dynamic(() => import('../../../../components/EditMap/index.js'))
 
 interface Props {
@@ -33,7 +34,6 @@ const Edit = ({ params }: Props) => {
   const [locations, setLocations] = useState<Coords[]>([])
   const [selectedLocation, setSelectedLocation] = useState<Coords | null>(null)
   const [haveLocationsChanged, setHaveLocationsChanged] = useState(false)
-  const [showPreviewMap, setShowPreviewMap] = useState(false)
 
   const position = useRef<google.maps.LatLngLiteral | null>(null)
   const heading = useRef<number>(0)
@@ -110,21 +110,20 @@ const Edit = ({ params }: Props) => {
       if (!pos) return
 
       position.current = pos.toJSON()
-      loadPanorama()
     })
 
-    // svPanorama.addListener('pov_changed', () => {
-    //   const pov = svPanorama.getPov()
+    svPanorama.addListener('pov_changed', () => {
+      const pov = svPanorama.getPov()
 
-    //   heading.current = pov.heading
-    //   pitch.current = pov.pitch
-    // })
+      heading.current = pov.heading
+      pitch.current = pov.pitch
+    })
 
-    // svPanorama.addListener('zoom_changed', () => {
-    //   const _zoom = svPanorama.getZoom()
+    svPanorama.addListener('zoom_changed', () => {
+      const _zoom = svPanorama.getZoom()
 
-    //   zoom.current = _zoom
-    // })
+      zoom.current = _zoom
+    })
   }
 
   const loadPanorama = () => {
@@ -155,9 +154,9 @@ const Edit = ({ params }: Props) => {
     const newLoc = {
       ...loc,
       pano_id: panoId,
-      heading: heading.current,
-      pitch: pitch.current,
-      zoom: zoom.current,
+      heading: 0,
+      pitch: 0,
+      zoom: 0,
     }
 
     setLocations((prev) => [...prev, newLoc])
@@ -168,14 +167,12 @@ const Edit = ({ params }: Props) => {
     setHaveLocationsChanged(true)
     setLocations([])
     setSelectedLocation(null)
-    setShowPreviewMap(false)
   }
 
   const onUpdateClick = () => {
     if (!selectedLocation) return
 
     setHaveLocationsChanged(true)
-    setShowPreviewMap(false)
 
     const updatedLocations = [...locations]
     const indexOfSelected = updatedLocations.indexOf(selectedLocation)
@@ -185,17 +182,9 @@ const Edit = ({ params }: Props) => {
       updatedLocations[indexOfSelected].lng = position.current.lng
     }
 
-    if (heading.current) {
-      updatedLocations[indexOfSelected].heading = heading.current
-    }
-
-    if (pitch.current) {
-      updatedLocations[indexOfSelected].pitch = pitch.current
-    }
-
-    if (zoom.current) {
-      updatedLocations[indexOfSelected].zoom = zoom.current
-    }
+    updatedLocations[indexOfSelected].heading = heading.current
+    updatedLocations[indexOfSelected].pitch = pitch.current
+    updatedLocations[indexOfSelected].zoom = zoom.current
 
     if (panoId.current) {
       updatedLocations[indexOfSelected].pano_id = panoId.current
@@ -207,7 +196,6 @@ const Edit = ({ params }: Props) => {
 
   const handleRemoveLocation = () => {
     setHaveLocationsChanged(true)
-    setShowPreviewMap(false)
 
     if (!selectedLocation) {
       return setLocations((prev) => prev.slice(0, -1))
@@ -217,14 +205,12 @@ const Edit = ({ params }: Props) => {
     setSelectedLocation(null)
   }
 
-  const update = async () => {
+  const onSaveMapClick = async () => {
     if (!mapData) return
 
     const { data: mData, error: mErr } = await updateMap(mapData.id, {
       locations,
     })
-
-    console.log(mErr)
 
     if (!mData || mErr) return
 
@@ -236,17 +222,6 @@ const Edit = ({ params }: Props) => {
 
   return (
     <>
-      <div className={styles.header}>
-        <Button
-          variant="primary"
-          size="m"
-          disabled={!haveLocationsChanged}
-          onClick={() => update()}
-        >
-          Update Map
-        </Button>
-      </div>
-
       <main className={styles.main}>
         <div className={styles.container}>
           <EditMap
@@ -264,8 +239,16 @@ const Edit = ({ params }: Props) => {
           <Button
             variant="primary"
             size="m"
+            disabled={!haveLocationsChanged}
+            onClick={onSaveMapClick}
+          >
+            Save Map
+          </Button>
+          <Button
+            variant="primary"
+            size="m"
             disabled={selectedLocation === null}
-            onClick={() => onUpdateClick()}
+            onClick={onUpdateClick}
           >
             Update
           </Button>
@@ -273,21 +256,16 @@ const Edit = ({ params }: Props) => {
             variant="danger"
             size="m"
             disabled={selectedLocation === null}
-            onClick={() => handleRemoveLocation()}
+            onClick={handleRemoveLocation}
           >
             Remove
           </Button>
-          <Button
-            variant="danger"
-            size="m"
-            disabled={showPreviewMap}
-            onClick={() => {
-              if (confirm('Are you sure you want to clear all locations?'))
-                clearLocations()
-            }}
-          >
-            Clear All Locations
-          </Button>
+
+          <Dropdown
+            clearLocations={clearLocations}
+            locations={locations}
+            setLocations={setLocations}
+          />
         </div>
       </div>
     </>

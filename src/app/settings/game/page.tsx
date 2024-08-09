@@ -2,6 +2,8 @@
 
 import dynamic from 'next/dynamic'
 
+import styles from '../layout.module.css'
+
 const DistanceUnitSelect = dynamic(
   () => import('../../../components/DistanceUnitSelect/index.js'),
   { ssr: false },
@@ -9,7 +11,7 @@ const DistanceUnitSelect = dynamic(
 
 const Game = () => {
   return (
-    <section>
+    <section className={styles.section}>
       <h1>Game Settings</h1>
       <div>
         <DistanceUnitSelect />

@@ -13,7 +13,7 @@ import {
 } from '../utils/validations/auth.js'
 
 import type { FormState as ResetPasswordFormState } from '../app/(auth)/forgot-password/Form.js'
-import type { FormState as UpdatePasswordFormState } from '../app/(auth)/reset-password/Form.js'
+import type { FormState as UpdatePasswordFormState } from '../app/(auth)/update-password/Form.js'
 import type { FormState as SignInFormState } from '../app/(auth)/sign-in/Form.js'
 import type { FormState as SignUpFormState } from '../app/(auth)/sign-up/Form.js'
 
@@ -132,9 +132,6 @@ export const resetPassword = async (
 
   const { error } = await supabase.auth.resetPasswordForEmail(
     validated.data.email,
-    {
-      redirectTo: 'http://localhost:3000/reset-password',
-    },
   )
 
   if (error)
@@ -179,4 +176,8 @@ export const updatePassword = async (
   return redirect('/sign-in')
 }
 
-export const deleteAccount = async (_: any, formData: FormData) => {}
+export const deleteAccount = async (_: any, formData: FormData) => {
+  const supabase = createClient(true)
+
+  await supabase.auth.admin.deleteUser('')
+}

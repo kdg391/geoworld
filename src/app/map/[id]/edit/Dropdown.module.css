@@ -1,29 +1,14 @@
-.container {
-  display: flex;
-  gap: 4px;
-}
-
-.display-name {
-  cursor: pointer;
-  user-select: none;
-}
-
 .dropdown {
   display: none;
 
   &:global(.active) {
-    position: absolute;
-    top: 48px;
-    right: 16px;
     display: flex;
-    flex-direction: column;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    width: 128px;
-    z-index: 1;
+    position: absolute;
+    bottom: 36px;
+    right: 8px;
+    z-index: 3;
 
-    & li > * {
+    & li {
       display: flex;
       background-color: var(--dropdown);
       cursor: pointer;

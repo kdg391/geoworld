@@ -13,10 +13,6 @@
   background-color: var(--header-bg);
   border-bottom: 1px solid var(--header-border);
 
-  & ul a:hover {
-    text-decoration: underline;
-  }
-
   & .nav-wrapper {
     display: flex;
     align-items: center;
@@ -34,6 +30,10 @@
       display: flex;
       align-items: center;
       gap: 1rem;
+    }
+
+    & a:hover {
+      text-decoration: underline;
     }
   }
 }

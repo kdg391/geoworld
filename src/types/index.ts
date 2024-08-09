@@ -74,7 +74,7 @@ export interface Game {
   id: string
   map_id: string
   user_id: string
-  actual_locations: google.maps.LatLngLiteral[]
+  actual_locations: (Coords & { streak_location_code: string | null })[]
   round: number
   guessed_locations: (google.maps.LatLngLiteral | null)[]
   guessed_rounds: GuessedRound[]
