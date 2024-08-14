@@ -493,7 +493,7 @@ export const hasLiked = async (mapId: string) => {
 
   const { data, error } = await supabase
     .from('likes')
-    .select()
+    .select('*')
     .eq('user_id', user.id)
     .eq('map_id', mapId)
     .maybeSingle()

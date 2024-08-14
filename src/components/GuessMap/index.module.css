@@ -119,7 +119,7 @@
     width: 100%;
     display: none;
 
-    &:global(.active) {
+    &:global(.mobile-open) {
       width: 100%;
       height: 50svh;
       display: flex;

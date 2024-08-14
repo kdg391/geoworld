@@ -67,9 +67,7 @@ const Map = async ({ params }: Props) => {
 
   if (!leaderboardData || lErr) return
 
-  const { data: liked, error: likedErr } = await hasLiked(mapData.id)
-
-  if (likedErr) return
+  const { data: liked } = await hasLiked(mapData.id)
 
   return (
     <>

@@ -53,6 +53,7 @@ const GuessMap = ({
   const [mapSize, setMapSize] = useState(1)
   const [isMapPinned, setIsMapPinned] = useState(false)
   const [isMapActive, setIsMapActive] = useState(false)
+  const [isMobileOpen, setIsMobileOpen] = useState(false)
 
   const [isLoading, setIsLoading] = useState(false)
 
@@ -114,7 +115,8 @@ const GuessMap = ({
     if (!guessMapRef.current) return
 
     fitMapBounds()
-    setIsMapActive(false)
+
+    setIsMobileOpen(false)
 
     if (markerRef.current) {
       markerRef.current.position = null
@@ -129,6 +131,7 @@ const GuessMap = ({
         className={classNames(
           styles['guess-map-container'],
           isMapActive ? 'active' : '',
+          isMobileOpen ? 'mobile-open' : '',
           mapSize !== 1 ? `size--${mapSize}` : '',
         )}
         onMouseOver={() => {
@@ -147,7 +150,7 @@ const GuessMap = ({
         <button
           className={styles['close-btn']}
           aria-label={t('guessMap.closeMap')}
-          onClick={() => setIsMapActive(false)}
+          onClick={() => setIsMobileOpen(false)}
         >
           <X />
         </button>
@@ -181,7 +184,6 @@ const GuessMap = ({
           isLoading={isLoading}
           className={styles['guess-btn']}
           disabled={markerPosition === null || isLoading}
-          aria-disabled={markerPosition === null || isLoading}
           onClick={onGuessClick}
         >
           Guess
@@ -191,7 +193,7 @@ const GuessMap = ({
       <button
         className={styles['map-btn']}
         aria-label={t('guessMap.openMap')}
-        onClick={() => setIsMapActive(true)}
+        onClick={() => setIsMobileOpen(true)}
       >
         <MapIcon size={24} />
       </button>
