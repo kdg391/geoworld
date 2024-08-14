@@ -2,11 +2,11 @@
 
 import dynamic from 'next/dynamic'
 
-import useSettings from '../../hooks/useSettings.js'
+import useSettings from '@/hooks/useSettings.js'
 
-import { useTranslation } from '../../i18n/client.js'
+import { useTranslation } from '@/i18n/client.js'
 
-import type { DistanceUnit } from '../../types/index.js'
+import type { DistanceUnit } from '@/types/index.js'
 
 const Select = dynamic(() => import('../common/Select/index.js'))
 

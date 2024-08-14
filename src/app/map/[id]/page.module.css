@@ -18,11 +18,10 @@
 }
 
 .card {
-  flex: 1 1 0;
+  flex: 1 1 auto;
   padding: 1rem 1.5rem;
   background-color: var(--map-stat-bg);
   display: flex;
   align-items: center;
-  align-content: center;
   gap: 8px;
 }

@@ -3,11 +3,11 @@
 import dynamic from 'next/dynamic'
 import { useEffect, useRef } from 'react'
 
-import useGoogleApi from '../../hooks/useGoogleApi.js'
+import useGoogleApi from '@/hooks/useGoogleApi.js'
 
 import styles from './index.module.css'
 
-import type { ControlSettings, GameView } from '../../types/index.js'
+import type { ControlSettings, GameView } from '@/types/index.js'
 
 const StreetViewControls = dynamic(
   () => import('../StreetViewControls/index.js'),

@@ -1,10 +1,10 @@
 import { redirect } from 'next/navigation'
 
-import { getProfile } from '../../../../actions/profile.js'
+import { getProfile } from '@/actions/profile.js'
 
-import GoogleApiProvider from '../../../../providers/GoogleApiProvider.js'
+import GoogleApiProvider from '@/providers/GoogleApiProvider.js'
 
-import { createClient } from '../../../../utils/supabase/server.js'
+import { createClient } from '@/utils/supabase/server.js'
 
 import type { Metadata } from 'next'
 

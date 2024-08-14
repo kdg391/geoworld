@@ -3,7 +3,7 @@
 import dynamic from 'next/dynamic'
 import { redirect } from 'next/navigation'
 
-import { createClient } from '../../../utils/supabase/server.js'
+import { createClient } from '@/utils/supabase/server.js'
 
 import styles from '../layout.module.css'
 
@@ -24,9 +24,12 @@ const Account = async () => {
 
   return (
     <section className={styles.section}>
-      <h2>Email</h2>
+      <h1>Account Settings</h1>
       <div>
-        <EmailForm email={user.email} />
+        <h2>Email</h2>
+        <div>
+          <EmailForm email={user.email} />
+        </div>
       </div>
       <h2>Password</h2>
       <div>

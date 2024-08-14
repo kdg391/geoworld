@@ -1,10 +1,10 @@
 import dynamic from 'next/dynamic'
 
-import { createTranslation } from '../../i18n/server.js'
+import { createTranslation } from '@/i18n/server.js'
 
 import type { Metadata } from 'next'
 
-const Header = dynamic(() => import('../../components/Header/index.js'))
+const Header = dynamic(() => import('@/components/Header/index.js'))
 
 export const generateMetadata = async (): Promise<Metadata> => {
   const { t } = await createTranslation('translation')

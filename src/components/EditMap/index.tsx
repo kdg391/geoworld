@@ -5,9 +5,9 @@ import { useEffect, useRef } from 'react'
 
 import styles from './index.module.css'
 
-import type { Coords } from '../../types/index.js'
+import type { Coords } from '@/types/index.js'
 
-const GoogleMap = dynamic(() => import('../../components/GoogleMap.js'))
+const GoogleMap = dynamic(() => import('../GoogleMap.js'))
 
 interface Props {
   addNewLocation: (loc: google.maps.LatLngLiteral, panoId: string) => void
@@ -89,7 +89,7 @@ const EditMap = ({ addNewLocation, locations, setSelectedLocation }: Props) => {
         scrollwheel: true,
         zoom: 1,
         zoomControl: true,
-        mapId: process.env.NEXT_PUBLIC_GOOGLE_MAPS_RESULT,
+        mapId: process.env.NEXT_PUBLIC_GOOGLE_MAPS_MAP,
       }}
       onLoaded={(map) => initMap(map)}
       className={styles['edit-map']}

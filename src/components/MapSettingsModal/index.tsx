@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
-import { createGame } from '../../actions/game.js'
+import { createGame } from '@/actions/game.js'
 
 import {
   DEFAULT_ROUNDS,
@@ -14,23 +14,21 @@ import {
   OFFICIAL_MAP_COUNTRY_CODES,
   OFFICIAL_MAP_WORLD_ID,
   WORLD_EMOJI,
-} from '../../constants/index.js'
+} from '@/constants/index.js'
 
-import { useTranslation } from '../../i18n/client.js'
+import { useTranslation } from '@/i18n/client.js'
 
 import styles from './index.module.css'
 import './index.css'
 
-import type { Map } from '../../types/index.js'
+import type { Map } from '@/types/index.js'
 
-const Button = dynamic(() => import('../../components/common/Button/index.js'))
-const Modal = dynamic(() => import('../../components/Modal/index.js'))
-const NumberInput = dynamic(
-  () => import('../../components/common/NumberInput/index.js'),
-)
-const Slider = dynamic(() => import('../../components/common/Slider/index.js'))
-const Switch = dynamic(() => import('../../components/common/Switch/index.js'))
-const Twemoji = dynamic(() => import('../../components/Twemoji.js'))
+const Button = dynamic(() => import('../common/Button/index.js'))
+const Modal = dynamic(() => import('../Modal/index.js'))
+const NumberInput = dynamic(() => import('../common/NumberInput/index.js'))
+const Slider = dynamic(() => import('../common/Slider/index.js'))
+const Switch = dynamic(() => import('../common/Switch/index.js'))
+const Twemoji = dynamic(() => import('../Twemoji.js'))
 
 interface Props {
   isModalOpen: boolean
@@ -56,7 +54,7 @@ const MapSettingsModal = ({
       ? DEFAULT_ROUNDS
       : mapData.locations_count,
   )
-  const [timeLimit, setTimeLimit] = useState<number | null>(null)
+  const [timeLimit, setTimeLimit] = useState<number>(0)
 
   const [isLoading, setIsLoading] = useState(false)
 
@@ -83,9 +81,10 @@ const MapSettingsModal = ({
       userId,
     })
 
-    if (!gameData || error) return
-
-    setIsLoading(false)
+    if (!gameData || error) {
+      setIsLoading(false)
+      return
+    }
 
     router.push(`/game/${gameData.id}`)
   }
@@ -225,7 +224,7 @@ const MapSettingsModal = ({
           <div>
             <label htmlFor="time-limit">{t('roundTime')}</label>
             {' ('}
-            {timeLimit === null
+            {timeLimit === 0
               ? t('noTimeLimit')
               : t('roundTimeFormat', {
                   minutes: Math.floor(timeLimit / 60),
@@ -241,37 +240,27 @@ const MapSettingsModal = ({
               step={30}
               style={
                 {
-                  '--value': `${
-                    (100 / 600) * (timeLimit === null ? 0 : timeLimit)
-                  }%`,
+                  '--value': `${(100 / 600) * timeLimit}%`,
                 } as React.CSSProperties
               }
-              defaultValue={timeLimit === null ? 0 : timeLimit}
+              defaultValue={timeLimit}
               onChange={(event) => {
-                setTimeLimit(
-                  parseInt(event.target.value) === 0
-                    ? null
-                    : parseInt(event.target.value),
-                )
+                setTimeLimit(parseInt(event.target.value))
               }}
             />
           </div>
         </div>
       </div>
       <div className={styles['modal-actions']}>
-        <Button
-          variant="gray"
-          size="m"
-          aria-label={t('cancel')}
-          onClick={() => setIsModalOpen(false)}
-        >
+        <Button variant="gray" size="m" onClick={() => setIsModalOpen(false)}>
           {t('cancel')}
         </Button>
         <Button
           variant="primary"
           size="m"
           isLoading={isLoading}
-          aria-label={t('play')}
+          disabled={isLoading}
+          aria-disabled={isLoading}
           onClick={onPlayClick}
         >
           {t('play')}

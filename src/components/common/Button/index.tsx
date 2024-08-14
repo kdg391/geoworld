@@ -1,10 +1,8 @@
-import dynamic from 'next/dynamic'
-
-import { classNames } from './../../../utils/index.js'
+import { classNames } from '@/utils/index.js'
 
 import styles from './index.module.css'
 
-const Spinner = dynamic(() => import('../Spinner/index.js'))
+import Spinner from '../Spinner/index.js'
 
 interface Props {
   className?: string
@@ -38,7 +36,7 @@ const Button = ({
     )}
     {...props}
   >
-    {isLoading && <Spinner size={16} />}
+    {isLoading && <Spinner theme="dark" size={16} />}
     {children}
   </button>
 )

@@ -4,21 +4,22 @@ import { Map as MapIcon, X } from 'lucide-react'
 import dynamic from 'next/dynamic'
 import { useEffect, useRef, useState } from 'react'
 
-import COUNTRY_BOUNDS from '../../constants/country-bounds.json' with { type: 'json' }
+import COUNTRY_BOUNDS from '@/constants/country-bounds.json' with { type: 'json' }
 import {
   DEFAULT_MAP_CENTER,
   OFFICIAL_MAP_WORLD_ID,
   OFFICIAL_MAP_COUNTRY_CODES,
-} from '../../constants/index.js'
+} from '@/constants/index.js'
 
-import { useTranslation } from '../../i18n/client.js'
+import { useTranslation } from '@/i18n/client.js'
 
-import { classNames } from '../../utils/index.js'
+import { classNames } from '@/utils/index.js'
 
 import styles from './index.module.css'
 
-import type { GameView, Map } from '../../types/index.js'
+import type { GameView, Map } from '@/types/index.js'
 
+const Button = dynamic(() => import('../common/Button/index.js'))
 const GoogleMap = dynamic(() => import('../GoogleMap.js'))
 const GuessMapControls = dynamic(() => import('../GuessMapControls/index.js'))
 const GuessMapZoomControls = dynamic(
@@ -51,7 +52,9 @@ const GuessMap = ({
 
   const [mapSize, setMapSize] = useState(1)
   const [isMapPinned, setIsMapPinned] = useState(false)
-  const [mapActive, setIsMapActive] = useState(false)
+  const [isMapActive, setIsMapActive] = useState(false)
+
+  const [isLoading, setIsLoading] = useState(false)
 
   const { t } = useTranslation('game')
 
@@ -99,6 +102,14 @@ const GuessMap = ({
     fitMapBounds()
   }
 
+  const onGuessClick = async () => {
+    setIsLoading(true)
+
+    await finishRound(false)
+
+    setIsLoading(false)
+  }
+
   useEffect(() => {
     if (!guessMapRef.current) return
 
@@ -117,7 +128,7 @@ const GuessMap = ({
       <div
         className={classNames(
           styles['guess-map-container'],
-          mapActive ? 'active' : '',
+          isMapActive ? 'active' : '',
           mapSize !== 1 ? `size--${mapSize}` : '',
         )}
         onMouseOver={() => {
@@ -165,14 +176,16 @@ const GuessMap = ({
           <GuessMapZoomControls map={guessMapRef.current} />
         </div>
 
-        <button
+        <Button
+          full
+          isLoading={isLoading}
           className={styles['guess-btn']}
-          aria-label="Guess"
-          disabled={markerPosition === null}
-          onClick={() => finishRound(false)}
+          disabled={markerPosition === null || isLoading}
+          aria-disabled={markerPosition === null || isLoading}
+          onClick={onGuessClick}
         >
           Guess
-        </button>
+        </Button>
       </div>
 
       <button

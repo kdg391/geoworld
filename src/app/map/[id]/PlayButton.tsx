@@ -4,15 +4,13 @@ import dynamic from 'next/dynamic'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
-import { useTranslation } from '../../../i18n/client.js'
+import { useTranslation } from '@/i18n/client.js'
 
-import type { Map } from '../../../types/index.js'
+import type { Map } from '@/types/index.js'
 
-const Button = dynamic(
-  () => import('../../../components/common/Button/index.js'),
-)
+const Button = dynamic(() => import('@/components/common/Button/index.js'))
 const MapSettingsModal = dynamic(
-  () => import('../../../components/MapSettingsModal/index.js'),
+  () => import('@/components/MapSettingsModal/index.js'),
 )
 
 interface Props {

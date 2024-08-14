@@ -3,17 +3,18 @@
 import dynamic from 'next/dynamic'
 import { useFormState } from 'react-dom'
 
-import { changeEmail } from './actions.js'
+import { changeEmail } from '@/actions/auth.js'
 
-import { useTranslation } from '../../../i18n/client.js'
+import { useTranslation } from '@/i18n/client.js'
 
-const SubmitButton = dynamic(() => import('../../(auth)/SubmitButton.js'))
+const SubmitButton = dynamic(
+  () => import('@/components/common/SubmitButton/index.js'),
+)
 const TextInput = dynamic(
-  () => import('../../../components/common/TextInput/index.js'),
+  () => import('@/components/common/TextInput/index.js'),
 )
 
 export interface FormState {
-  data: string | null
   errors: {
     oldEmail?: string[]
     newEmail?: string[]
@@ -25,7 +26,6 @@ const EmailForm = ({ email }: { email: string | undefined }) => {
   'use client'
 
   const [state, action] = useFormState<FormState, FormData>(changeEmail, {
-    data: null,
     errors: null,
   })
 

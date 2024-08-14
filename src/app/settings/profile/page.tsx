@@ -1,9 +1,9 @@
 import dynamic from 'next/dynamic'
 import { redirect } from 'next/navigation'
 
-import { getProfile } from '../../../actions/profile.js'
+import { getProfile } from '@/actions/profile.js'
 
-import { createClient } from '../../../utils/supabase/server.js'
+import { createClient } from '@/utils/supabase/server.js'
 
 import styles from '../layout.module.css'
 
@@ -28,10 +28,12 @@ const Profile = async () => {
 
   return (
     <section className={styles.section}>
-      <h2>Profile</h2>
+      <h1>Profile Settings</h1>
+      <h2>Display Name</h2>
       <div>
         <DisplayNameForm displayName={pData.display_name} />
       </div>
+      <h2>Username</h2>
       <div>
         <UsernameForm username={pData.username} />
       </div>

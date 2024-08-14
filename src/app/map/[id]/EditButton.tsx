@@ -4,11 +4,9 @@ import { SquarePen } from 'lucide-react'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/navigation'
 
-import { deleteMap } from '../../../actions/map.js'
+import { deleteMap } from '@/actions/map.js'
 
-const Button = dynamic(
-  () => import('../../../components/common/Button/index.js'),
-)
+const Button = dynamic(() => import('@/components/common/Button/index.js'))
 
 interface Props {
   mapId: string

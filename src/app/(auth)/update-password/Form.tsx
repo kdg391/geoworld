@@ -3,15 +3,17 @@
 import dynamic from 'next/dynamic'
 import { useFormState } from 'react-dom'
 
-import { updatePassword } from '../../../actions/auth.js'
+import { updatePassword } from '@/actions/auth.js'
 
-import { useTranslation } from '../../../i18n/client.js'
+import { useTranslation } from '@/i18n/client.js'
 
 import styles from '../page.module.css'
 
-const SubmitButton = dynamic(() => import('../SubmitButton.js'))
+const SubmitButton = dynamic(
+  () => import('@/components/common/SubmitButton/index.js'),
+)
 const TextInput = dynamic(
-  () => import('../../../components/common/TextInput/index.js'),
+  () => import('@/components/common/TextInput/index.js'),
 )
 
 export interface FormState {
@@ -22,7 +24,7 @@ export interface FormState {
   } | null
 }
 
-const Form = () => {
+const Form = ({ code }: { code: string }) => {
   'use client'
 
   const { t } = useTranslation('auth')
@@ -33,6 +35,7 @@ const Form = () => {
 
   return (
     <form action={action} className={styles.form}>
+      <input type="hidden" value={code} name="code" hidden />
       <div>
         <label htmlFor="password" className={styles.label}>
           {t('newPassword')}

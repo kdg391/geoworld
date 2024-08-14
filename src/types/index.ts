@@ -3,20 +3,15 @@ import type { SUPPORTED_LOCALES } from '../constants/i18n.js'
 
 export type Locales = (typeof SUPPORTED_LOCALES)[number]
 
-export type Theme = 'light' | 'dark' | 'system'
+// todo: change name
+export type LightDark = 'light' | 'dark'
+export type Theme = LightDark | 'system'
 
 export type DistanceUnit = 'imperial' | 'metric'
 
 export type CountryCodes = (typeof OFFICIAL_COUNTRY_CODES)[number] | 'world'
 
 export type GameView = 'game' | 'result' | 'finalResult'
-
-export interface GameData {
-  code: CountryCodes
-  locations: google.maps.LatLngLiteral[]
-  rounds: number
-  guessedLocations: (google.maps.LatLngLiteral | null)[]
-}
 
 export interface Profile {
   id: string
@@ -36,7 +31,9 @@ export interface Map {
   creator: string
   is_published: boolean
   average_score: number
+  explorers: number
   locations_count: number
+  likes: number
   score_factor: number
   bounds: {
     min: google.maps.LatLngLiteral
@@ -52,7 +49,7 @@ export interface ControlSettings {
 
 export interface Settings {
   rounds: number
-  timeLimit: number | null
+  timeLimit: number
 }
 
 export type GameSettings = ControlSettings & Settings
@@ -63,6 +60,7 @@ export interface GuessedRound {
     metric: number
   }
   points: number
+  time: number
   timedOut: boolean
   timedOutWithGuess: boolean
 }
@@ -74,11 +72,15 @@ export interface Game {
   id: string
   map_id: string
   user_id: string
-  actual_locations: (Coords & { streak_location_code: string | null })[]
+  rounds: (Coords & {
+    streak_location_code: string | null
+    started_at: string
+  })[]
   round: number
   guessed_locations: (google.maps.LatLngLiteral | null)[]
   guessed_rounds: GuessedRound[]
   total_score: number
+  total_time: number
   settings: GameSettings
   state: GameState
   mode: GameMode
@@ -99,4 +101,5 @@ export type Location = {
   map_id: string
   user_id: string
   streak_location_code: string | null
+  started_at: string
 } & Coords

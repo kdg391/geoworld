@@ -2,9 +2,9 @@
 
 import { useEffect, useRef, useState } from 'react'
 
-import { useTranslation } from '../../i18n/client.js'
+import { useTranslation } from '@/i18n/client.js'
 
-import { formatTimeLeft } from '../../utils/index.js'
+import { formatTimeLeft } from '@/utils/index.js'
 
 import styles from './index.module.css'
 import './index.css'
@@ -14,7 +14,7 @@ interface Props {
   mapName: string
   round: number
   rounds: number
-  timeLimit: number | null
+  timeLimit: number
   totalScore: number
 }
 
@@ -28,15 +28,15 @@ const GameStatus = ({
 }: Props) => {
   const { t } = useTranslation('game')
 
-  const [timeLeft, setTimeLeft] = useState<number | null>(timeLimit)
+  const [timeLeft, setTimeLeft] = useState<number>(timeLimit)
 
   const pathRef = useRef<SVGCircleElement | null>(null)
 
   useEffect(() => {
-    if (timeLimit === null || timeLeft === null) return
+    if (timeLimit === 0 || timeLeft === 0) return
 
     const interval = setInterval(() => {
-      setTimeLeft((prev) => (prev as number) - 1)
+      setTimeLeft((prev) => prev - 1)
     }, 1000)
 
     if (pathRef.current) {
@@ -59,7 +59,7 @@ const GameStatus = ({
 
   return (
     <div className={styles['game-status-container']}>
-      {timeLimit !== null && timeLeft !== null && (
+      {timeLimit !== 0 && timeLeft !== 0 && (
         <div className={styles['timer-container']}>
           <div className={styles['timer-text']}>{formatTimeLeft(timeLeft)}</div>
           <svg width="100%" height="100%" className={styles['timer-svg']}>

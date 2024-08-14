@@ -9,14 +9,14 @@ import {
   OFFICIAL_MAP_COUNTRY_CODES,
   OFFICIAL_MAP_WORLD_ID,
   WORLD_EMOJI,
-} from '../../constants/index.js'
+} from '@/constants/index.js'
 
-import { useTranslation } from '../../i18n/client.js'
+import { useTranslation } from '@/i18n/client.js'
 
 import styles from './index.module.css'
 import './index.css'
 
-import type { Map } from '../../types/index.js'
+import type { Map } from '@/types/index.js'
 
 import Button from '../common/Button/index.js'
 
@@ -62,7 +62,6 @@ const MapCard = ({ mapData }: Props) => {
         <Button
           variant="primary"
           size="m"
-          aria-label={t('play')}
           disabled={mapData.locations_count === 0}
           onClick={() => router.push(`/map/${mapData.id}`)}
         >

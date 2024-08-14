@@ -3,21 +3,19 @@
 import dynamic from 'next/dynamic'
 import { useEffect, useState } from 'react'
 
-import { getCommunityMaps } from '../../../actions/map.js'
+import { getCommunityMaps } from '@/actions/map.js'
 
-import { useTranslation } from '../../../i18n/client.js'
+import { useTranslation } from '@/i18n/client.js'
 
-import type { Map } from '../../../types/index.js'
+import type { Map } from '@/types/index.js'
 
 import styles from './page.module.css'
 import homeStyles from '../../page.module.css'
 
-import MapCard from '../../../components/MapCard/index.js'
-import SkeletonMapCard from '../../../components/MapCard/Skeleton.js'
+import MapCard from '@/components/MapCard/index.js'
+import SkeletonMapCard from '@/components/MapCard/Skeleton.js'
 
-const Button = dynamic(
-  () => import('../../../components/common/Button/index.js'),
-)
+const Button = dynamic(() => import('@/components/common/Button/index.js'))
 
 const Community = () => {
   const { t } = useTranslation('translation')

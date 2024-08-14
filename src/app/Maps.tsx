@@ -67,7 +67,7 @@ const Maps = () => {
             </div>
 
             {officialMaps && (
-              <Link href="/maps/official">{t('viewOtherMaps')}</Link>
+              <Link href="/maps/official">{t('moreOfficialMaps')}</Link>
             )}
           </>
         )}
@@ -90,7 +90,7 @@ const Maps = () => {
             </div>
 
             {communityMaps && (
-              <Link href="/maps/community">{t('viewOtherMaps')}</Link>
+              <Link href="/maps/community">{t('moreCommunityMaps')}</Link>
             )}
           </>
         )}

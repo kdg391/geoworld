@@ -3,16 +3,44 @@
 import dynamic from 'next/dynamic'
 import { useEffect, useRef } from 'react'
 
-import useGoogleApi from '../../hooks/useGoogleApi.js'
+import useGoogleApi from '@/hooks/useGoogleApi.js'
 
 import styles from './index.module.css'
 
-import type { GameView } from '../../types/index.js'
+import type { Coords, GameView } from '@/types/index.js'
+
+const lineSymbol = {
+  path: 'M 0,-1 0,1',
+  strokeOpacity: 1,
+  scale: 2,
+}
+
+const polylineOptions = {
+  geodesic: true,
+  strokeColor: '#000000',
+  strokeOpacity: 0,
+  icons: [
+    {
+      icon: lineSymbol,
+      offset: '0',
+      repeat: '8px',
+    },
+  ],
+}
+
+const actualPinOptions = {
+  background: '#18c92d',
+  borderColor: '#159925',
+  glyphColor: '#138720',
+}
 
 const GoogleMap = dynamic(() => import('../GoogleMap.js'))
 
 interface Props {
-  actualLocations: google.maps.LatLngLiteral[]
+  actualLocations: (Coords & {
+    streak_location_code: string | null
+    started_at: string
+  })[]
   guessedLocations: (google.maps.LatLngLiteral | null)[]
   round: number
   view: GameView | null
@@ -74,70 +102,72 @@ const ResultMap = ({
 
     if (view === 'finalResult') {
       for (let i = 0; i < guessedLocations.length; i++) {
-        const pinBackground = new google.maps.marker.PinElement({
-          background: '#04d61d',
-        })
+        const actualPinBackground = new google.maps.marker.PinElement(
+          actualPinOptions,
+        )
+        actualPinBackground.style.cursor = 'pointer'
 
-        pinBackground.style.cursor = 'pointer'
+        const actualLoc = actualLocations[i]
 
-        const actual = new google.maps.marker.AdvancedMarkerElement({
+        const actualMarker = new google.maps.marker.AdvancedMarkerElement({
           map: resultMapRef.current,
-          position: actualLocations[i],
-          content: pinBackground.element,
+          position: {
+            lat: actualLoc.lat,
+            lng: actualLoc.lng,
+          },
+          content: actualPinBackground.element,
         })
 
-        const guessed = new google.maps.marker.AdvancedMarkerElement({
+        actualMarker.addListener('click', () => {
+          window.open(
+            `https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${actualLoc.lat},${actualLoc.lng}&heading=${actualLoc.heading}&pitch=${actualLoc.pitch}&fov=180&pano=${actualLoc.pano_id}`,
+            '_blank',
+          )
+        })
+
+        const guessedMarker = new google.maps.marker.AdvancedMarkerElement({
           map: resultMapRef.current,
           position: guessedLocations[i],
         })
 
-        actualMarkersRef.current.push(actual)
-        guessedMarkersRef.current.push(guessed)
+        actualMarkersRef.current.push(actualMarker)
+        guessedMarkersRef.current.push(guessedMarker)
       }
     } else {
-      const pinBackground = new google.maps.marker.PinElement({
-        background: '#04d61d',
-      })
+      const actualPinBackground = new google.maps.marker.PinElement(
+        actualPinOptions,
+      )
+      actualPinBackground.style.cursor = 'pointer'
 
-      pinBackground.style.cursor = 'pointer'
+      const actualLoc = actualLocations[round - 1]
 
-      const actual = new google.maps.marker.AdvancedMarkerElement({
+      const actualMarker = new google.maps.marker.AdvancedMarkerElement({
         map: resultMapRef.current,
-        position: actualLocations[round - 1],
-        content: pinBackground.element,
+        position: {
+          lat: actualLoc.lat,
+          lng: actualLoc.lng,
+        },
+        content: actualPinBackground.element,
       })
 
-      const guessed = new google.maps.marker.AdvancedMarkerElement({
+      actualMarker.addListener('click', () => {
+        window.open(
+          `https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${actualLoc.lat},${actualLoc.lng}&heading=${actualLoc.heading}&pitch=${actualLoc.pitch}&fov=180&pano=${actualLoc.pano_id}`,
+          '_blank',
+        )
+      })
+
+      const guessedMarker = new google.maps.marker.AdvancedMarkerElement({
         map: resultMapRef.current,
         position: guessedLocations[guessedLocations.length - 1],
       })
 
-      actualMarkersRef.current.push(actual)
-      guessedMarkersRef.current.push(guessed)
+      actualMarkersRef.current.push(actualMarker)
+      guessedMarkersRef.current.push(guessedMarker)
     }
   }
 
   const renderPolylines = () => {
-    const lineSymbol = {
-      path: 'M 0,-1 0,1',
-      strokeOpacity: 1,
-      scale: 2,
-    }
-
-    const polylineOptions = {
-      geodesic: true,
-      strokeColor: '#000000',
-      strokeOpacity: 0,
-      icons: [
-        {
-          icon: lineSymbol,
-          offset: '0',
-          repeat: '8px',
-        },
-      ],
-      map: resultMapRef.current,
-    }
-
     for (const polyline of polylinesRef.current) {
       polyline.setMap(null)
     }
@@ -146,21 +176,37 @@ const ResultMap = ({
 
     if (view === 'finalResult') {
       for (let i = 0; i < actualLocations.length; i++) {
-        const loc = guessedLocations[i]
+        const actualLoc = actualLocations[i]
+        const guessLoc = guessedLocations[i]
 
         const polyline = new google.maps.Polyline({
           ...polylineOptions,
-          path: [actualLocations[i], ...(loc !== null ? [loc] : [])],
+          map: resultMapRef.current,
+          path: [
+            {
+              lat: actualLoc.lat,
+              lng: actualLoc.lng,
+            },
+            ...(guessLoc !== null ? [guessLoc] : []),
+          ],
         })
 
         polylinesRef.current.push(polyline)
       }
     } else {
-      const loc = guessedLocations[guessedLocations.length - 1]
+      const actualLoc = actualLocations[round - 1]
+      const guessLoc = guessedLocations[guessedLocations.length - 1]
 
       const polyline = new google.maps.Polyline({
         ...polylineOptions,
-        path: [actualLocations[round - 1], ...(loc !== null ? [loc] : [])],
+        map: resultMapRef.current,
+        path: [
+          {
+            lat: actualLoc.lat,
+            lng: actualLoc.lng,
+          },
+          ...(guessLoc !== null ? [guessLoc] : []),
+        ],
       })
 
       polylinesRef.current.push(polyline)

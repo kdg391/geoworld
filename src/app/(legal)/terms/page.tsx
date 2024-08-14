@@ -1,4 +1,4 @@
-import { createTranslation } from '../../../i18n/server.js'
+import { createTranslation } from '@/i18n/server.js'
 
 const TermsOfService = async () => {
   const { t } = await createTranslation('translation')

@@ -4,34 +4,55 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import ThemeContext from '../contexts/ThemeContext.js'
 
-import type { Theme } from '../types/index.js'
+import type { LightDark, Theme } from '../types/index.js'
 
 interface Props {
   children: React.ReactNode
 }
 
 const getTheme = () => {
-  if (typeof window === 'undefined') return 'system'
+  if (typeof window === 'undefined') return null
 
-  let theme
+  const theme = localStorage.getItem('theme')
 
-  try {
-    theme = localStorage.getItem('theme')
-  } catch {}
-
-  return (theme ?? 'system') as Theme
+  return theme as LightDark | null
 }
 
 const ThemeProvider = ({ children }: Props) => {
-  const [theme, setTheme] = useState<Theme>(() => getTheme())
+  const [theme, setThemeState] = useState<Theme | null>(
+    () => getTheme() ?? 'system',
+  )
+  const [resolvedTheme, setResolvedTheme] = useState<LightDark | null>(() =>
+    getTheme(),
+  )
+
+  const setTheme = useCallback(
+    (value: Theme) => {
+      if (!theme) return
+
+      setThemeState(value)
+
+      if (value === 'system') {
+        if (localStorage.getItem('theme') !== null)
+          localStorage.removeItem('theme')
+      } else {
+        try {
+          localStorage.setItem('theme', value)
+        } catch {
+          //
+        }
+      }
+    },
+    [theme],
+  )
 
   const onMediaChange = useCallback(
     (event: MediaQueryListEvent) => {
+      const resolved = event.matches ? 'light' : 'dark'
+      setResolvedTheme(resolved)
+
       if (theme === 'system') {
-        document.documentElement.setAttribute(
-          'data-theme',
-          event.matches ? 'light' : 'dark',
-        )
+        document.documentElement.setAttribute('data-theme', resolved)
       }
     },
     [theme],
@@ -61,22 +82,15 @@ const ThemeProvider = ({ children }: Props) => {
   }, [])
 
   useEffect(() => {
+    if (!theme) return
+
     let newTheme = theme
 
     if (newTheme === 'system') {
       const { matches } = window.matchMedia('(prefers-color-scheme: light)')
 
       newTheme = matches ? 'light' : 'dark'
-
-      if (localStorage.getItem('theme') !== null) {
-        localStorage.removeItem('theme')
-      }
-    } else {
-      try {
-        localStorage.setItem('theme', theme)
-      } catch {
-        //
-      }
+      setResolvedTheme(newTheme)
     }
 
     document.documentElement.setAttribute('data-theme', newTheme)
@@ -86,8 +100,9 @@ const ThemeProvider = ({ children }: Props) => {
     () => ({
       theme,
       setTheme,
+      resolvedTheme: theme === 'system' ? resolvedTheme : theme,
     }),
-    [theme],
+    [theme, setTheme, resolvedTheme],
   )
 
   return (

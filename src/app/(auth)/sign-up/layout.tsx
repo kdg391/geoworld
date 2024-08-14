@@ -1,8 +1,8 @@
 import { redirect } from 'next/navigation'
 
-import { createTranslation } from '../../../i18n/server.js'
+import { createTranslation } from '@/i18n/server.js'
 
-import { createClient } from '../../../utils/supabase/server.js'
+import { createClient } from '@/utils/supabase/server.js'
 
 import type { Metadata } from 'next'
 
@@ -21,9 +21,11 @@ export default async function Layout({
 }) {
   const supabase = createClient()
 
-  const { data } = await supabase.auth.getUser()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
 
-  if (data.user) redirect('/')
+  if (user) redirect('/')
 
   return children
 }

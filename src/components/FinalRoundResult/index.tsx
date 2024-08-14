@@ -4,13 +4,13 @@ import dynamic from 'next/dynamic'
 import { useRouter } from 'next/navigation'
 import { memo, useState } from 'react'
 
-import { createGame } from '../../actions/game.js'
+import { createGame } from '@/actions/game.js'
 
-import { useTranslation } from '../../i18n/client.js'
+import { useTranslation } from '@/i18n/client.js'
 
 import styles from '../RoundResult/index.module.css'
 
-import type { GameSettings, Map } from '../../types/index.js'
+import type { GameSettings, Map } from '@/types/index.js'
 
 const Button = dynamic(() => import('../common/Button/index.js'))
 
@@ -37,9 +37,10 @@ const FinalRoundResult = ({ mapData, settings, totalScore, userId }: Props) => {
       userId,
     })
 
-    setIsLoading(false)
-
-    if (!gameData || error) return
+    if (!gameData || error) {
+      setIsLoading(false)
+      return
+    }
 
     router.push(`/game/${gameData.id}`)
   }
@@ -56,6 +57,8 @@ const FinalRoundResult = ({ mapData, settings, totalScore, userId }: Props) => {
           variant="primary"
           size="l"
           isLoading={isLoading}
+          disabled={isLoading}
+          aria-disabled={isLoading}
           onClick={onReplayClick}
         >
           {t('finalRoundResult.replay')}

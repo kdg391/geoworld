@@ -1,6 +1,6 @@
-import { createTranslation } from '../../i18n/server.js'
+import { createTranslation } from '@/i18n/server.js'
 
-import GoogleApiProvider from '../../providers/GoogleApiProvider.js'
+import GoogleApiProvider from '@/providers/GoogleApiProvider.js'
 
 import type { Metadata } from 'next'
 

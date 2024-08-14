@@ -2,9 +2,9 @@
 
 import { Flag, RotateCcw } from 'lucide-react'
 
-import { useTranslation } from '../../i18n/client.js'
+import { useTranslation } from '@/i18n/client.js'
 
-import { classNames } from '../../utils/index.js'
+import { classNames } from '@/utils/index.js'
 
 import styles from './index.module.css'
 

@@ -4,32 +4,25 @@ import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { useCallback, useEffect, useState } from 'react'
 
-import { getGame, updateGame } from '../../../actions/game.js'
-import { getMap } from '../../../actions/map.js'
+import { getGame, updateGame } from '@/actions/game.js'
+import { getMap } from '@/actions/map.js'
 
-import useGoogleApi from '../../../hooks/useGoogleApi.js'
+import useGoogleApi from '@/hooks/useGoogleApi.js'
 
 import styles from './page.module.css'
 
-import type { Game, GameView, Map } from '../../../types/index.js'
+import type { Game, GameView, Map } from '@/types/index.js'
+
 import Loading from './Loading.js'
 
 const FinalRoundResult = dynamic(
-  () => import('../../../components/FinalRoundResult/index.js'),
+  () => import('@/components/FinalRoundResult/index.js'),
 )
-const GameStatus = dynamic(
-  () => import('../../../components/GameStatus/index.js'),
-)
-const GuessMap = dynamic(() => import('../../../components/GuessMap/index.js'))
-const ResultMap = dynamic(
-  () => import('../../../components/ResultMap/index.js'),
-)
-const RoundResult = dynamic(
-  () => import('../../../components/RoundResult/index.js'),
-)
-const StreetView = dynamic(
-  () => import('../../../components/StreetView/index.js'),
-)
+const GameStatus = dynamic(() => import('@/components/GameStatus/index.js'))
+const GuessMap = dynamic(() => import('@/components/GuessMap/index.js'))
+const ResultMap = dynamic(() => import('@/components/ResultMap/index.js'))
+const RoundResult = dynamic(() => import('@/components/RoundResult/index.js'))
+const StreetView = dynamic(() => import('@/components/StreetView/index.js'))
 
 interface Props {
   params: {
@@ -141,7 +134,7 @@ const Game = ({ params }: Props) => {
         }}
       >
         <ResultMap
-          actualLocations={gameData.actual_locations}
+          actualLocations={gameData.rounds}
           guessedLocations={gameData.guessed_locations}
           round={gameData.round}
           view={view}
@@ -183,7 +176,7 @@ const Game = ({ params }: Props) => {
       />
 
       <StreetView
-        location={gameData.actual_locations[gameData.round]}
+        location={gameData.rounds[gameData.round]}
         settings={{
           canMove: gameData.settings.canMove,
           canPan: gameData.settings.canPan,

@@ -1,18 +1,19 @@
 'use client'
 
 import dynamic from 'next/dynamic'
+import { useState } from 'react'
 import { Trans } from 'react-i18next'
 
-import { getGame } from '../../actions/game.js'
+import { getGame } from '@/actions/game.js'
 
-import useSettings from '../../hooks/useSettings.js'
+import useSettings from '@/hooks/useSettings.js'
 
-import { useTranslation } from '../../i18n/client.js'
+import { useTranslation } from '@/i18n/client.js'
 
 import styles from './index.module.css'
 import './index.css'
 
-import type { Game, GameView, GuessedRound } from '../../types/index.js'
+import type { Game, GameView, GuessedRound } from '@/types/index.js'
 
 const Button = dynamic(() => import('../common/Button/index.js'))
 
@@ -37,7 +38,27 @@ const RoundResult = ({
 }: Props) => {
   const { distanceUnit } = useSettings()
 
+  const [isLoading, setIsLoading] = useState(false)
+
   const { t } = useTranslation('game')
+
+  const onNextClick = async () => {
+    setIsLoading(true)
+
+    const { data: gData, error: gErr } = await getGame(gameId)
+
+    setIsLoading(false)
+
+    if (!gData || gErr) return
+
+    setGameData(gData)
+
+    if (round === rounds - 1 && gData.state === 'finished') {
+      setView('finalResult')
+    } else {
+      setView('game')
+    }
+  }
 
   return (
     <>
@@ -62,20 +83,11 @@ const RoundResult = ({
       <Button
         variant="primary"
         size="l"
+        isLoading={isLoading}
         className={styles['next-btn']}
-        onClick={async () => {
-          const { data: gData, error: gErr } = await getGame(gameId)
-
-          if (!gData || gErr) return
-
-          setGameData(gData)
-
-          if (round === rounds - 1 && gData.state === 'finished') {
-            setView('finalResult')
-          } else {
-            setView('game')
-          }
-        }}
+        disabled={isLoading}
+        aria-disabled={isLoading}
+        onClick={onNextClick}
       >
         {round === rounds - 1 && finished
           ? t('roundResult.viewResults')

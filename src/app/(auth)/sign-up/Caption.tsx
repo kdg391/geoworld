@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { Trans } from 'react-i18next'
 
-import { useTranslation } from '../../../i18n/client.js'
+import { useTranslation } from '@/i18n/client.js'
 
 import styles from './Caption.module.css'
 

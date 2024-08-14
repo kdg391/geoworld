@@ -1,9 +1,10 @@
 'use server'
 
 import dynamic from 'next/dynamic'
+import Image from 'next/image'
 import Link from 'next/link'
 
-import { createTranslation } from '../../i18n/server.js'
+import { createTranslation } from '@/i18n/server.js'
 
 import styles from './index.module.css'
 import './index.css'
@@ -20,7 +21,15 @@ const Footer = async () => {
   return (
     <footer className={styles.footer}>
       <div>
-        <h3>GeoWorld</h3>
+        <div>
+          <Image
+            src="/assets/icons/icon.svg"
+            width={18}
+            height={18}
+            alt="Logo"
+          />
+          GeoWorld
+        </div>
         <div className={styles.settings}>
           <div className={styles['social-links']}>
             <a

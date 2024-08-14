@@ -8,11 +8,7 @@ import { useTranslation } from '../i18n/client.js'
 
 const Button = dynamic(() => import('../components/common/Button/index.js'))
 
-interface Props {
-  isSignedIn: boolean
-}
-
-const PlayButton = ({ isSignedIn }: Props) => {
+const PlayButton = () => {
   const router = useRouter()
 
   const { t } = useTranslation('translation')
@@ -21,9 +17,9 @@ const PlayButton = ({ isSignedIn }: Props) => {
     <Button
       variant="primary"
       size="m"
-      onClick={() => router.push(isSignedIn ? '/maps' : '/sign-in')}
+      onClick={() => router.push('/dashboard')}
     >
-      {isSignedIn ? t('play') : t('getStarted')}
+      {t('getStarted')}
       <ArrowRight size={16} />
     </Button>
   )

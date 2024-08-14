@@ -33,6 +33,7 @@ const GuessMapZoomControls = ({ map }: Props) => {
     <div className={styles['guess-map-zoom-controls']}>
       <button
         disabled={zoom >= MAX_ZOOM}
+        aria-label="Zoom In"
         onClick={() => {
           if (!map) return
 
@@ -47,6 +48,7 @@ const GuessMapZoomControls = ({ map }: Props) => {
       </button>
       <button
         disabled={zoom <= MIN_ZOOM}
+        aria-label="Zoom Out"
         onClick={() => {
           if (!map) return
 

@@ -3,15 +3,16 @@
 import dynamic from 'next/dynamic'
 import { useFormState } from 'react-dom'
 
-import { changeDisplayName } from './actions.js'
+import { changeDisplayName } from '@/actions/profile.js'
 
-const SubmitButton = dynamic(() => import('../../(auth)/SubmitButton.js'))
+const SubmitButton = dynamic(
+  () => import('@/components/common/SubmitButton/index.js'),
+)
 const TextInput = dynamic(
-  () => import('../../../components/common/TextInput/index.js'),
+  () => import('@/components/common/TextInput/index.js'),
 )
 
 export interface FormState {
-  data: string | null
   errors: {
     oldName?: string[]
     newName?: string[]
@@ -27,7 +28,6 @@ const DisplayNameForm = ({ displayName }: Props) => {
   'use client'
 
   const [state, action] = useFormState<FormState, FormData>(changeDisplayName, {
-    data: null,
     errors: null,
   })
 
@@ -42,7 +42,7 @@ const DisplayNameForm = ({ displayName }: Props) => {
           defaultValue={displayName ?? ''}
         />
         {state.errors?.newName && (
-          <p style={{ color: 'red' }}>{state.errors.newName}</p>
+          <p style={{ color: 'var(--danger)' }}>{state.errors.newName}</p>
         )}
 
         <SubmitButton size="s" type="submit" formAction={action}>

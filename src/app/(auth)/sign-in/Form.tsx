@@ -3,15 +3,17 @@
 import dynamic from 'next/dynamic'
 import { useFormState } from 'react-dom'
 
-import { signIn } from '../../../actions/auth.js'
+import { signIn } from '@/actions/auth.js'
 
-import { useTranslation } from '../../../i18n/client.js'
+import { useTranslation } from '@/i18n/client.js'
 
 import styles from '../page.module.css'
 
-const SubmitButton = dynamic(() => import('../SubmitButton.js'))
+const SubmitButton = dynamic(
+  () => import('@/components/common/SubmitButton/index.js'),
+)
 const TextInput = dynamic(
-  () => import('../../../components/common/TextInput/index.js'),
+  () => import('@/components/common/TextInput/index.js'),
 )
 
 export interface FormState {

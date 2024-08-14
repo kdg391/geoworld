@@ -3,15 +3,15 @@
 import { useSelect } from 'downshift'
 import { ChevronDown, Laptop, Moon, Sun } from 'lucide-react'
 
-import useTheme from '../../hooks/useTheme.js'
+import useTheme from '@/hooks/useTheme.js'
 
-import { useTranslation } from '../../i18n/client.js'
+import { useTranslation } from '@/i18n/client.js'
 
-import { classNames } from '../../utils/index.js'
+import { classNames } from '@/utils/index.js'
 
 import styles from './index.module.css'
 
-import type { Theme } from '../../types/index.js'
+import type { Theme } from '@/types/index.js'
 
 const ThemeSelect = () => {
   const { setTheme, theme } = useTheme()

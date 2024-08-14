@@ -3,15 +3,16 @@
 import dynamic from 'next/dynamic'
 import { useFormState } from 'react-dom'
 
-import { changeUsername } from './actions.js'
+import { changeUsername } from '@/actions/profile.js'
 
-const SubmitButton = dynamic(() => import('../../(auth)/SubmitButton.js'))
+const SubmitButton = dynamic(
+  () => import('@/components/common/SubmitButton/index.js'),
+)
 const TextInput = dynamic(
-  () => import('../../../components/common/TextInput/index.js'),
+  () => import('@/components/common/TextInput/index.js'),
 )
 
 export interface FormState {
-  data: string | null
   errors: {
     oldName?: string[]
     newName?: string[]
@@ -27,7 +28,6 @@ const UsernameForm = ({ username }: Props) => {
   'use client'
 
   const [state, action] = useFormState<FormState, FormData>(changeUsername, {
-    data: null,
     errors: null,
   })
 
@@ -39,6 +39,7 @@ const UsernameForm = ({ username }: Props) => {
           type="text"
           id="username"
           name="username"
+          pattern="[a-z][a-z0-9_]*"
           defaultValue={username ?? ''}
         />
         {state.errors?.newName && (

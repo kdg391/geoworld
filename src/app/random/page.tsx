@@ -3,14 +3,14 @@
 import dynamic from 'next/dynamic'
 import { useEffect, useRef, useState } from 'react'
 
-import useGoogleApi from '../../hooks/useGoogleApi.js'
+import useGoogleApi from '@/hooks/useGoogleApi.js'
 
-import { classNames, randomLatLng } from '../../utils/index.js'
+import { classNames, randomLatLng } from '@/utils/index.js'
 
 import styles from './page.module.css'
 
-const Button = dynamic(() => import('../../components/common/Button/index.js'))
-const GoogleMap = dynamic(() => import('../../components/GoogleMap.js'))
+const Button = dynamic(() => import('@/components/common/Button/index.js'))
+const GoogleMap = dynamic(() => import('@/components/GoogleMap.js'))
 
 const RandomStreetView = () => {
   const { isLoaded, loadApi } = useGoogleApi()
@@ -64,7 +64,7 @@ const RandomStreetView = () => {
 
         svPanoramaRef.current?.setPano(data.location.pano)
         svPanoramaRef.current?.setPov({
-          heading: 0,
+          heading: data.links?.[0].heading ?? 0,
           pitch: 0,
         })
 

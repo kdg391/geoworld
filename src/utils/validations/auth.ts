@@ -20,11 +20,11 @@ export const signUpValidation = z.object({
     .min(1, 'The username has to be filled.')
     .max(20, 'The username must be at least 20 characters.')
     .refine(
-      (name) => /^[a-zA-Z]/.test(name),
+      (name) => /^[a-z]/.test(name),
       'The username must start with an alphabet.',
     )
     .refine(
-      (name) => /^([a-zA-Z])[a-zA-Z0-9_]*$/.test(name),
+      (name) => /^[a-z][a-z0-9_]*$/.test(name),
       'The username must contain letters, numbers, or underscores _.',
     ),
 })
@@ -52,3 +52,38 @@ export const updatePasswordValidation = z
       })
     }
   })
+
+export const changeEmailValidation = z
+  .object({
+    oldEmail: z.string().trim().email(),
+    newEmail: emailValidation,
+  })
+  .superRefine(({ oldEmail, newEmail }, ctx) => {
+    if (oldEmail === newEmail) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'The email is the same as before.',
+        path: ['newEmail'],
+      })
+    }
+  })
+
+export const changePasswordValidation = z
+  .object({
+    oldPassword: z.string(),
+    newPassword: passwordValidation,
+    confirmPassword: z.string(),
+  })
+  .superRefine(async ({ newPassword, confirmPassword }, ctx) => {
+    if (newPassword !== confirmPassword) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'The confirm password is not matched.',
+        path: ['confirmPassword'],
+      })
+    }
+  })
+
+export const deleteAccountValidation = z.object({
+  password: z.string(),
+})

@@ -1,13 +1,13 @@
 import { redirect } from 'next/navigation'
 
-import GoogleApiProvider from '../../../providers/GoogleApiProvider.js'
+import GoogleApiProvider from '@/providers/GoogleApiProvider.js'
 
-import { createClient } from '../../../utils/supabase/server.js'
+import { createClient } from '@/utils/supabase/server.js'
 
 import styles from './page.module.css'
 
 import type { Metadata } from 'next'
-import { createTranslation } from '../../../i18n/server.js'
+import { createTranslation } from '@/i18n/server.js'
 
 export const generateMetadata = async (): Promise<Metadata> => {
   const { t } = await createTranslation('translation')
@@ -24,9 +24,12 @@ export default async function Layout({
 }) {
   const supabase = createClient()
 
-  const { data: uData, error: uErr } = await supabase.auth.getUser()
+  const {
+    data: { user },
+    error: uErr,
+  } = await supabase.auth.getUser()
 
-  if (!uData.user || uErr) redirect('/sign-in')
+  if (!user || uErr) redirect('/sign-in')
 
   return (
     <GoogleApiProvider>

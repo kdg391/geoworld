@@ -1,6 +1,6 @@
 import Link from 'next/link'
 
-import { createTranslation } from '../../i18n/server.js'
+import { createTranslation } from '@/i18n/server.js'
 
 import styles from './index.module.css'
 import './index.css'
@@ -10,7 +10,6 @@ const AuthFooter = async () => {
 
   return (
     <footer className={styles.footer}>
-      <div>GeoWorld</div>
       <nav>
         <ul className={styles.links}>
           <li>

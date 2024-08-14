@@ -3,7 +3,7 @@
 import { useSelect, type UseSelectSelectedItemChange } from 'downshift'
 import { ChevronDown, ChevronUp } from 'lucide-react'
 
-import { classNames } from '../../../utils/index.js'
+import { classNames } from '@/utils/index.js'
 
 import styles from './index.module.css'
 import './index.css'

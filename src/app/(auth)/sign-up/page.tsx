@@ -3,7 +3,7 @@
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 
-import { createTranslation } from '../../../i18n/server.js'
+import { createTranslation } from '@/i18n/server.js'
 
 import styles from '../page.module.css'
 

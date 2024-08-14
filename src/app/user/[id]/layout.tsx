@@ -1,12 +1,12 @@
 import dynamic from 'next/dynamic'
 
-import { getProfile } from '../../../actions/profile.js'
+import { getProfile } from '@/actions/profile.js'
 
-import { createTranslation } from '../../../i18n/server.js'
+import { createTranslation } from '@/i18n/server.js'
 
 import type { Metadata } from 'next'
 
-const Header = dynamic(() => import('../../../components/Header/index.js'))
+const Header = dynamic(() => import('@/components/Header/index.js'))
 
 interface Props {
   params: {

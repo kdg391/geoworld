@@ -10,7 +10,7 @@ interface Props {
   children?: React.ReactNode
 }
 
-const GoogleMap = ({
+const GoogleStreetView = ({
   defaultOptions,
   onLoaded,
   ...props
@@ -37,4 +37,4 @@ const GoogleMap = ({
   return <div ref={svPanoElRef} {...props}></div>
 }
 
-export default memo(GoogleMap)
+export default memo(GoogleStreetView)

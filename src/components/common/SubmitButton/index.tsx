@@ -5,7 +5,7 @@ import { useFormStatus } from 'react-dom'
 
 import type { ComponentProps } from 'react'
 
-const Button = dynamic(() => import('../../components/common/Button/index.js'))
+const Button = dynamic(() => import('../Button/index.js'))
 
 type Props = ComponentProps<'button'> & {
   full?: boolean
@@ -31,11 +31,10 @@ const SubmitButton = ({
       full={full}
       size={size}
       variant="primary"
-      type="submit"
       key={Math.random()}
-      disabled={isPending}
-      aria-disabled={isPending}
+      type="submit"
       isLoading={isPending}
+      disabled={isPending}
       {...props}
     >
       {pendingText && isPending ? pendingText : children}

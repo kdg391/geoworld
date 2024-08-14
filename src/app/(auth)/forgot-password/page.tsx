@@ -2,7 +2,7 @@
 
 import dynamic from 'next/dynamic'
 
-import { createTranslation } from '../../../i18n/server.js'
+import { createTranslation } from '@/i18n/server.js'
 
 import styles from '../page.module.css'
 

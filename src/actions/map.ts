@@ -1,5 +1,7 @@
 'use server'
 
+import { redirect } from 'next/navigation'
+
 import {
   OFFICIAL_MAP_COUNTRY_CODES,
   OFFICIAL_MAP_WORLD_ID,
@@ -153,20 +155,30 @@ export const getMap = async (id: string) => {
   }
 }
 
-export const createCommunityMap = async (data: {
-  name: string
-  description: string | null
-  creator: string
-}) => {
+export const createCommunityMap = async (_: unknown, formData: FormData) => {
   'use server'
 
   const supabase = createClient()
 
-  const validated = await createMapValidation.safeParseAsync(data)
+  const {
+    data: { user },
+    error: uErr,
+  } = await supabase.auth.getUser()
+
+  if (!user || uErr)
+    return {
+      errors: {
+        message: uErr?.message,
+      },
+    }
+
+  const validated = await createMapValidation.safeParseAsync({
+    name: formData.get('name'),
+    description: formData.get('description'),
+  })
 
   if (!validated.success)
     return {
-      data: null,
       errors: validated.error.flatten().fieldErrors,
     }
 
@@ -175,25 +187,29 @@ export const createCommunityMap = async (data: {
     .insert<Omit<Map, 'id' | 'created_at' | 'updated_at'>>({
       type: 'community',
       name: validated.data.name,
-      description: validated.data.description,
-      creator: validated.data.creator,
+      description:
+        validated.data.description === '' ? null : validated.data.description,
+      creator: user.id,
       is_published: false,
 
-      //
       average_score: 0,
+      explorers: 0,
       locations_count: 0,
+      likes: 0,
       score_factor: 0,
       bounds: null,
     })
     .select()
     .single<Map>()
 
-  return {
-    data: mData,
-    errors: {
-      message: mErr?.message ?? null,
-    },
-  }
+  if (mErr)
+    return {
+      errors: {
+        message: mErr?.message,
+      },
+    }
+
+  redirect(`/map/${mData.id}/edit`)
 }
 
 export const updateMap = async (
@@ -270,24 +286,32 @@ export const updateMap = async (
     const adding = newLocs.filter((n) =>
       oldLocs.every((o) => o.pano_id !== n.pano_id),
     )
+    const updating = newLocs.filter((n) =>
+      oldLocs.some(
+        (o) =>
+          o.pano_id === n.pano_id &&
+          (o.heading !== n.heading || o.pitch !== n.pitch || o.zoom !== n.zoom),
+      ),
+    )
     const removing = oldLocs.filter((o) =>
       newLocs.every((n) => n.pano_id !== o.pano_id),
     )
 
     if (removing.length > 0) {
-      for (const loc of removing) {
-        const { error: err } = await supabase
-          .from('locations')
-          .delete()
-          .eq('map_id', mapData.id)
-          .eq('pano_id', loc.pano_id)
+      const { error: removedErr } = await supabase
+        .from('locations')
+        .delete()
+        .eq('map_id', mapData.id)
+        .in(
+          'pano_id',
+          removing.map((loc) => loc.pano_id),
+        )
 
-        if (err)
-          return {
-            data: null,
-            error: err?.message ?? null,
-          }
-      }
+      if (removedErr)
+        return {
+          data: null,
+          error: removedErr?.message ?? null,
+        }
     }
 
     if (adding.length > 0) {
@@ -308,6 +332,21 @@ export const updateMap = async (
           data: null,
           error: insertedErr?.message ?? null,
         }
+    }
+
+    if (updating.length > 0) {
+      console.log(updating)
+
+      /*const { error } = await supabase
+        .from('locations')
+        .upsert(updating)
+        .eq('map_id', mapData.id)
+
+      if (error)
+        return {
+          data: null,
+          error: error.message ?? null,
+        }*/
     }
   }
 
@@ -433,5 +472,154 @@ export const getLocations = async (mapId: string) => {
   return {
     data,
     error: error?.message ?? null,
+  }
+}
+
+export const hasLiked = async (mapId: string) => {
+  'use server'
+
+  const supabase = createClient()
+
+  const {
+    data: { user },
+    error: uErr,
+  } = await supabase.auth.getUser()
+
+  if (!user || uErr)
+    return {
+      data: false,
+      error: uErr?.message ?? null,
+    }
+
+  const { data, error } = await supabase
+    .from('likes')
+    .select()
+    .eq('user_id', user.id)
+    .eq('map_id', mapId)
+    .maybeSingle()
+
+  return {
+    data: data !== null,
+    error: error?.message ?? null,
+  }
+}
+
+export const getLikes = async () => {
+  'use server'
+
+  const supabase = createClient()
+
+  const {
+    data: { user },
+    error: uErr,
+  } = await supabase.auth.getUser()
+
+  if (!user || uErr)
+    return {
+      data: null,
+      error: uErr?.message ?? null,
+    }
+
+  const { data, error } = await supabase
+    .from('likes')
+    .select('*')
+    .eq('user_id', user.id)
+
+  return {
+    data,
+    error: error?.message ?? null,
+  }
+}
+
+export const addLike = async (mapId: string) => {
+  'use server'
+
+  const supabase = createClient()
+
+  const {
+    data: { user },
+    error: uErr,
+  } = await supabase.auth.getUser()
+
+  if (!user || uErr)
+    return {
+      data: false,
+      error: uErr?.message ?? null,
+    }
+
+  const { data } = await supabase
+    .from('likes')
+    .select()
+    .eq('user_id', user.id)
+    .eq('map_id', mapId)
+    .maybeSingle()
+
+  if (data !== null)
+    return {
+      data: false,
+      error: 'The map is already liked.',
+    }
+
+  const { error } = await supabase.from('likes').insert({
+    map_id: mapId,
+    user_id: user.id,
+  })
+
+  if (error)
+    return {
+      data: false,
+      error: error.message,
+    }
+
+  return {
+    data: true,
+    error: null,
+  }
+}
+
+export const deleteLike = async (mapId: string) => {
+  'use server'
+
+  const supabase = createClient()
+
+  const {
+    data: { user },
+    error: uErr,
+  } = await supabase.auth.getUser()
+
+  if (!user || uErr)
+    return {
+      data: false,
+      error: uErr?.message ?? null,
+    }
+
+  const { data } = await supabase
+    .from('likes')
+    .select()
+    .eq('user_id', user.id)
+    .eq('map_id', mapId)
+    .maybeSingle()
+
+  if (data === null)
+    return {
+      data: false,
+      error: 'The map is not liked.',
+    }
+
+  const { error } = await supabase
+    .from('likes')
+    .delete()
+    .eq('user_id', user.id)
+    .eq('map_id', mapId)
+
+  if (error)
+    return {
+      data: false,
+      error: error.message,
+    }
+
+  return {
+    data: true,
+    error: null,
   }
 }

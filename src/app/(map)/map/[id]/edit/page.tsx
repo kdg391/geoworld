@@ -4,20 +4,18 @@ import dynamic from 'next/dynamic'
 import { useRouter } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 
-import { getLocations, getMap, updateMap } from '../../../../actions/map.js'
-import { getUser } from '../../../../actions/user.js'
+import { getLocations, getMap, updateMap } from '@/actions/map.js'
+import { getUser } from '@/actions/user.js'
 
-import useGoogleApi from '../../../../hooks/useGoogleApi.js'
+import useGoogleApi from '@/hooks/useGoogleApi.js'
 
 import styles from './page.module.css'
 
-import type { Coords, Map } from '../../../../types/index.js'
+import type { Coords, Map } from '@/types/index.js'
 
-const Button = dynamic(
-  () => import('../../../../components/common/Button/index.js'),
-)
+const Button = dynamic(() => import('@/components/common/Button/index.js'))
 const Dropdown = dynamic(() => import('./Dropdown.js'))
-const EditMap = dynamic(() => import('../../../../components/EditMap/index.js'))
+const EditMap = dynamic(() => import('@/components/EditMap/index.js'))
 
 interface Props {
   params: {
@@ -34,6 +32,8 @@ const Edit = ({ params }: Props) => {
   const [locations, setLocations] = useState<Coords[]>([])
   const [selectedLocation, setSelectedLocation] = useState<Coords | null>(null)
   const [haveLocationsChanged, setHaveLocationsChanged] = useState(false)
+
+  // const [isSaving, setIsSaving] = useState(false)
 
   const position = useRef<google.maps.LatLngLiteral | null>(null)
   const heading = useRef<number>(0)

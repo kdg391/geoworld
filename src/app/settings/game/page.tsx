@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic'
 import styles from '../layout.module.css'
 
 const DistanceUnitSelect = dynamic(
-  () => import('../../../components/DistanceUnitSelect/index.js'),
+  () => import('@/components/DistanceUnitSelect/index.js'),
   { ssr: false },
 )
 

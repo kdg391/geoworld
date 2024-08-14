@@ -8,7 +8,30 @@ import { createClient } from '../utils/supabase/server.js'
 
 import { gameSettingsValidation } from '../utils/validations/game.js'
 
-import type { Game, GameSettings, Location, Map } from '../types/index.js'
+import type {
+  Coords,
+  Game,
+  GameSettings,
+  Location,
+  Map,
+} from '../types/index.js'
+
+export const getGame = async (id: string) => {
+  'use server'
+
+  const supabase = createClient()
+
+  const { data, error } = await supabase
+    .from('games')
+    .select('*')
+    .eq('id', id)
+    .single<Game>()
+
+  return {
+    data,
+    error: error?.message ?? null,
+  }
+}
 
 export const createGame = async ({
   mapData,
@@ -32,60 +55,52 @@ export const createGame = async ({
       error: validated.error.flatten().fieldErrors,
     }
 
-  const { data: locations, error: lErr } = await supabase
+  const { data: location, error: lErr } = await supabase
     .rpc('get_random_locations', {
       p_map_id: mapData.id === OFFICIAL_MAP_WORLD_ID ? null : mapData.id,
-      p_count: settings.rounds,
+      // p_count: settings.rounds,
+      p_count: 1,
     })
     .select('*')
-    .returns<Location[]>()
+    .single<Location>()
 
-  if (!locations || lErr)
+  if (!location || lErr)
     return {
       data: null,
       error: lErr?.message ?? null,
     }
 
+  const actualLocation: Coords & {
+    streak_location_code: string | null
+    started_at: string
+  } = {
+    lat: location.lat,
+    lng: location.lng,
+    heading: location.heading,
+    pitch: location.pitch,
+    zoom: location.zoom,
+    pano_id: location.pano_id,
+    streak_location_code: location.streak_location_code,
+
+    started_at: new Date().toISOString(),
+  }
+
   const { data, error } = await supabase
     .from('games')
     .insert<Omit<Game, 'id'>>({
-      actual_locations: locations.map((loc) => ({
-        lat: loc.lat,
-        lng: loc.lng,
-        heading: loc.heading,
-        pitch: loc.pitch,
-        zoom: loc.zoom,
-        pano_id: loc.pano_id,
-        streak_location_code: loc.streak_location_code,
-      })),
+      rounds: [actualLocation],
       guessed_locations: [],
       guessed_rounds: [],
       map_id: mapData.id,
       round: 0,
       total_score: 0,
+      total_time: 0,
       settings,
       user_id: userId,
       state: 'started',
       mode: 'standard',
     })
     .select()
-    .single<Game>()
-
-  return {
-    data,
-    error: error?.message ?? null,
-  }
-}
-
-export const getGame = async (id: string) => {
-  'use server'
-
-  const supabase = createClient()
-
-  const { data, error } = await supabase
-    .from('games')
-    .select('*')
-    .eq('id', id)
     .single<Game>()
 
   return {
@@ -106,9 +121,12 @@ export const updateGame = async (
 
   const supabase = createClient()
 
-  const { data: uData, error: uErr } = await supabase.auth.getUser()
+  const {
+    data: { user },
+    error: uErr,
+  } = await supabase.auth.getUser()
 
-  if (!uData.user || uErr)
+  if (!user || uErr)
     return {
       data: null,
       error: uErr?.message ?? null,
@@ -126,10 +144,10 @@ export const updateGame = async (
       error: gErr?.message ?? null,
     }
 
-  if (gameData.user_id !== uData.user.id)
+  if (gameData.user_id !== user.id)
     return {
       data: null,
-      error: gErr,
+      error: 'This game is not your game.',
     }
 
   if (gameData.state === 'finished')
@@ -142,50 +160,99 @@ export const updateGame = async (
     imperial: data.guessedLocation
       ? calculateDistance(
           data.guessedLocation,
-          gameData.actual_locations[gameData.round],
+          gameData.rounds[gameData.round],
           'imperial',
         )
       : 0,
     metric: data.guessedLocation
       ? calculateDistance(
           data.guessedLocation,
-          gameData.actual_locations[gameData.round],
+          gameData.rounds[gameData.round],
           'metric',
         )
       : 0,
   }
 
+  const timedOutWithGuess = data.timedOut && data.guessedLocation !== null
+
   const score =
-    data.timedOut && !data.guessedLocation
+    data.timedOut && data.guessedLocation === null
       ? 0
       : calculateRoundScore(distance.metric, data.mapData.score_factor)
 
+  const time = Math.floor(
+    (Date.now() -
+      new Date(gameData.rounds[gameData.round].started_at).getTime()) /
+      1000,
+  )
+
   const isFinalRound = gameData.round === gameData.settings.rounds - 1
+
+  const updateData: Partial<Game> = {
+    round: isFinalRound ? gameData.round : gameData.round + 1,
+    guessed_rounds: [
+      ...gameData.guessed_rounds,
+      {
+        distance,
+        points: score,
+        time,
+        timedOut: data.timedOut,
+        timedOutWithGuess,
+      },
+    ],
+    guessed_locations: [...gameData.guessed_locations, data.guessedLocation],
+    total_score: gameData.total_score + score,
+    total_time: gameData.total_time + time,
+    state: isFinalRound ? 'finished' : 'started',
+  }
+
+  if (!isFinalRound) {
+    let location: Location
+
+    do {
+      const { data: lData, error: lErr } = await supabase
+        .rpc('get_random_locations', {
+          p_map_id:
+            data.mapData.id === OFFICIAL_MAP_WORLD_ID ? null : data.mapData.id,
+          p_count: 1,
+        })
+        .select('*')
+        .single<Location>()
+
+      if (!lData || lErr)
+        return {
+          data: null,
+          error: lErr?.message ?? null,
+        }
+
+      location = lData
+    } while (
+      gameData.rounds.find((r) => r.pano_id === location.pano_id) !== undefined
+    )
+
+    const actualLocation: Coords & {
+      streak_location_code: string | null
+      started_at: string
+    } = {
+      lat: location.lat,
+      lng: location.lng,
+      heading: location.heading,
+      pitch: location.pitch,
+      zoom: location.zoom,
+      pano_id: location.pano_id,
+      streak_location_code: location.streak_location_code,
+      started_at: new Date().toISOString(),
+    }
+
+    updateData.rounds = [...gameData.rounds, actualLocation]
+  }
 
   const { data: updatedData, error: updatedErr } = await supabase
     .from('games')
-    .update<Partial<Game>>({
-      round: isFinalRound ? gameData.round : gameData.round + 1,
-      guessed_rounds: [
-        ...gameData.guessed_rounds,
-        {
-          distance,
-          points: score,
-          timedOut: data.timedOut,
-          timedOutWithGuess: data.timedOut && data.guessedLocation !== null,
-        },
-      ],
-      guessed_locations: [...gameData.guessed_locations, data.guessedLocation],
-      total_score: gameData.total_score + score,
-      state: isFinalRound ? 'finished' : 'started',
-    })
+    .update<Partial<Game>>(updateData)
     .eq('id', id)
     .select()
     .single<Game>()
-
-  if (isFinalRound) {
-    data.mapData.average_score
-  }
 
   return {
     data: updatedData,

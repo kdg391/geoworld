@@ -54,10 +54,6 @@
     &:global(.size--2) {
       --active-width: 50vw;
     }
-
-    &:global(.size--3) {
-      --active-width: 65vw;
-    }
   }
 }
 
@@ -76,13 +72,12 @@
   text-transform: uppercase;
 
   background-color: var(--primary);
-  font-size: 1rem;
   padding: 0.75rem 1.5rem;
-  color: #fff;
   border-radius: 8px;
 
   &:disabled {
     background-color: var(--gray-650);
+    opacity: 1 !important;
   }
 }
 
@@ -130,7 +125,6 @@
       display: flex;
 
       & .guess-btn {
-        display: inline-block;
         border-radius: 0;
         margin-top: 0;
         padding: 1rem 1.5rem;

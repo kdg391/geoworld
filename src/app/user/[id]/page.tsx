@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 
-import { getProfile, getProfileByUsername } from '../../../actions/profile.js'
+import { getProfile, getProfileByUsername } from '@/actions/profile.js'
 
 interface Params {
   params: {

@@ -1,8 +1,14 @@
-import { getMap } from '../../../actions/map.js'
+import dynamic from 'next/dynamic'
 
-import { createTranslation } from '../../../i18n/server.js'
+import { getMap } from '@/actions/map.js'
+
+import { createTranslation } from '@/i18n/server.js'
 
 import type { Metadata } from 'next'
+
+import styles from './page.module.css'
+
+const Header = dynamic(() => import('@/components/Header/index.js'))
 
 interface Props {
   params: {
@@ -17,9 +23,9 @@ export const generateMetadata = async ({
 }: Props): Promise<Metadata> => {
   const { t } = await createTranslation('translation')
 
-  const { data: mapData, error: err } = await getMap(params.id)
+  const { data: mapData, error: mErr } = await getMap(params.id)
 
-  if (!mapData || err)
+  if (!mapData || mErr)
     return {
       title: `${t('map')} - GeoWorld`,
     }
@@ -30,5 +36,11 @@ export const generateMetadata = async ({
 }
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  return children
+  return (
+    <>
+      <Header />
+
+      <main className={styles.main}>{children}</main>
+    </>
+  )
 }

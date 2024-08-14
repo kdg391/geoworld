@@ -3,14 +3,14 @@
 import { Download, Ellipsis, MapPinX, Upload } from 'lucide-react'
 import { useRef } from 'react'
 
-import useClickOutside from '../../../../hooks/useClickOutside.js'
+import useClickOutside from '@/hooks/useClickOutside.js'
 
-import { classNames } from '../../../../utils/index.js'
+import { classNames } from '@/utils/index.js'
 
 import styles from './Dropdown.module.css'
 import './Dropdown.css'
 
-import type { Coords } from '../../../../types/index.js'
+import type { Coords } from '@/types/index.js'
 
 interface Props {
   clearLocations: () => void

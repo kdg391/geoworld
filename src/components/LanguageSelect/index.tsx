@@ -6,12 +6,12 @@ import {
   LOCALE_FLAGS,
   LOCALE_NAMES,
   SUPPORTED_LOCALES,
-} from '../../constants/i18n.js'
+} from '@/constants/i18n.js'
 
-import { useTranslation } from '../../i18n/client.js'
-import { setLocale } from '../../i18n/server.js'
+import { useTranslation } from '@/i18n/client.js'
+import { setLocale } from '@/i18n/server.js'
 
-import type { Locales } from '../../types/index.js'
+import type { Locales } from '@/types/index.js'
 
 const Select = dynamic(() => import('../common/Select/index.js'))
 const Twemoji = dynamic(() => import('../Twemoji.js'))

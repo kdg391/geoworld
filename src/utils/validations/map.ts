@@ -11,5 +11,4 @@ export const createMapValidation = z.object({
     .trim()
     .max(60, 'The description cannot be less than 60 characters.')
     .nullable(),
-  creator: z.string().uuid(),
 })
