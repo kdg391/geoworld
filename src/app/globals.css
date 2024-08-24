@@ -101,12 +101,16 @@
   }
 }
 
+html {
+  -webkit-text-size-adjust: none;
+  -moz-text-size-adjust: none;
+  text-size-adjust: none;
+}
+
 body {
   width: 100%;
   min-height: 100svh;
-  height: 100svh;
   padding: 0;
-  margin: 0;
   font-family:
     var(--font),
     system-ui,
@@ -125,12 +129,18 @@ body {
   font-size: 1rem;
 }
 
+body,
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
 button {
   cursor: pointer;
   user-select: none;
   border: 0;
-  font-family: inherit;
-  font-size: inherit;
 }
 
 a {
@@ -141,6 +151,12 @@ a {
 ul {
   list-style-type: none;
   padding: 0;
+}
+
+input,
+button,
+textarea {
+  font: inherit;
 }
 
 .sr-only {
@@ -157,4 +173,5 @@ ul {
   overflow: hidden;
   overscroll-behavior: contain;
   position: relative;
+  touch-action: none;
 }

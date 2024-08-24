@@ -58,7 +58,6 @@ const FinalRoundResult = ({ mapData, settings, totalScore, userId }: Props) => {
           size="l"
           isLoading={isLoading}
           disabled={isLoading}
-          aria-disabled={isLoading}
           onClick={onReplayClick}
         >
           {t('finalRoundResult.replay')}

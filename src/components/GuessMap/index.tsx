@@ -11,6 +11,8 @@ import {
   OFFICIAL_MAP_COUNTRY_CODES,
 } from '@/constants/index.js'
 
+import { useLocalStorage } from '@/hooks/useLocalStorage.js'
+
 import { useTranslation } from '@/i18n/client.js'
 
 import { classNames } from '@/utils/index.js'
@@ -50,9 +52,9 @@ const GuessMap = ({
     null,
   )
 
-  const [mapSize, setMapSize] = useState(1)
-  const [isMapPinned, setIsMapPinned] = useState(false)
-  const [isMapActive, setIsMapActive] = useState(false)
+  const [mapSize, setMapSize] = useLocalStorage('mapSize', 1)
+  const [isMapPinned, setIsMapPinned] = useLocalStorage('isMapPinned', false)
+  const [isMapActive, setIsMapActive] = useState(isMapPinned)
   const [isMobileOpen, setIsMobileOpen] = useState(false)
 
   const [isLoading, setIsLoading] = useState(false)
@@ -157,8 +159,8 @@ const GuessMap = ({
 
         <GuessMapControls
           isMapPinned={isMapPinned}
-          mapSize={mapSize}
           setIsMapPinned={setIsMapPinned}
+          mapSize={mapSize}
           setMapSize={setMapSize}
         />
 
@@ -182,8 +184,8 @@ const GuessMap = ({
         <Button
           full
           isLoading={isLoading}
-          className={styles['guess-btn']}
           disabled={markerPosition === null || isLoading}
+          className={styles['guess-btn']}
           onClick={onGuessClick}
         >
           Guess

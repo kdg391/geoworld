@@ -111,7 +111,7 @@ export const signIn = async (_: unknown, formData: FormData) => {
   const supabase = createClient()
 
   const { error } = await supabase.auth.signInWithPassword({
-    email: validated.data.email.trim(),
+    email: validated.data.email,
     password: validated.data.password,
   })
 
@@ -132,7 +132,7 @@ export const signIn = async (_: unknown, formData: FormData) => {
     if (next) redirect(next)
   }
 
-  redirect('/')
+  redirect('/dashboard')
 }
 
 export const signOut = async () => {

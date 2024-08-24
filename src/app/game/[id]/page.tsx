@@ -61,7 +61,22 @@ const Game = ({ params }: Props) => {
 
       if (!isLoaded) await loadApi()
 
-      setGameData(gData)
+      if (
+        gData.state !== 'finished' &&
+        gData.rounds.length === gData.guesses.length
+      ) {
+        const { data, error } = await updateGame(gData.id, {
+          data: null,
+          type: 'roundStart',
+        })
+
+        if (!data || error) return
+
+        setGameData(data)
+      } else {
+        setGameData(gData)
+      }
+
       setMapData(mData)
 
       if (gData.state === 'finished') setView('result')
@@ -73,15 +88,17 @@ const Game = ({ params }: Props) => {
 
   const finishRound = useCallback(
     async (timedOut: boolean) => {
-      if (!mapData || !gameData) return
+      if (!gameData) return
 
       if (markerPosition || timedOut) {
         const { data: updatedData, error: uErr } = await updateGame(
           gameData.id,
           {
-            guessedLocation: markerPosition,
-            mapData,
-            timedOut,
+            data: {
+              guessedLocation: markerPosition,
+              timedOut,
+            },
+            type: 'guess',
           },
         )
 
@@ -92,7 +109,7 @@ const Game = ({ params }: Props) => {
         setView('result')
       }
     },
-    [mapData, gameData, markerPosition],
+    [gameData, markerPosition],
   )
 
   if (mapData === null)
@@ -135,7 +152,7 @@ const Game = ({ params }: Props) => {
       >
         <ResultMap
           actualLocations={gameData.rounds}
-          guessedLocations={gameData.guessed_locations}
+          guessedLocations={gameData.guesses}
           round={gameData.round}
           view={view}
         />
@@ -143,13 +160,12 @@ const Game = ({ params }: Props) => {
         <div className={styles['result-wrapper']}>
           {view === 'result' && (
             <RoundResult
-              finished={gameData.state === 'finished'}
               gameId={gameData.id}
-              guessedRound={
-                gameData.guessed_rounds[gameData.guessed_rounds.length - 1]
+              guessedRound={gameData.guesses[gameData.guesses.length - 1]}
+              isFinished={
+                gameData.state === 'finished' ||
+                gameData.round === gameData.settings.rounds - 1
               }
-              round={gameData.round}
-              rounds={gameData.settings.rounds}
               setGameData={setGameData}
               setView={setView}
             />
@@ -170,8 +186,8 @@ const Game = ({ params }: Props) => {
         finishRound={finishRound}
         mapData={mapData}
         markerPosition={markerPosition}
-        round={gameData.round}
         setMarkerPosition={setMarkerPosition}
+        round={gameData.round}
         view={view}
       />
 

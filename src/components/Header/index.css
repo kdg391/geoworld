@@ -1,5 +1,4 @@
 [data-theme='light'] {
-  --header-bg: var(--white);
   --header-border: rgba(0, 0, 0, 0.15);
   --header-selected: var(--gray-150);
 
@@ -7,7 +6,6 @@
 }
 
 [data-theme='dark'] {
-  --header-bg: var(--gray-850);
   --header-border: rgba(255, 255, 255, 0.15);
   --header-selected: var(--gray-800);
 

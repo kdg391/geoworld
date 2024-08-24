@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic'
 import { useState } from 'react'
 import { Trans } from 'react-i18next'
 
-import { getGame } from '@/actions/game.js'
+import { updateGame } from '@/actions/game.js'
 
 import useSettings from '@/hooks/useSettings.js'
 
@@ -13,26 +13,22 @@ import { useTranslation } from '@/i18n/client.js'
 import styles from './index.module.css'
 import './index.css'
 
-import type { Game, GameView, GuessedRound } from '@/types/index.js'
+import type { Game, GameView, Guess } from '@/types/index.js'
 
 const Button = dynamic(() => import('../common/Button/index.js'))
 
 interface Props {
-  finished: boolean
   gameId: string
-  guessedRound: GuessedRound
-  round: number
-  rounds: number
+  guessedRound: Guess
+  isFinished: boolean
   setGameData: React.Dispatch<React.SetStateAction<Game | null | undefined>>
   setView: React.Dispatch<React.SetStateAction<GameView | null>>
 }
 
 const RoundResult = ({
-  finished,
   gameId,
   guessedRound,
-  round,
-  rounds,
+  isFinished,
   setGameData,
   setView,
 }: Props) => {
@@ -43,19 +39,21 @@ const RoundResult = ({
   const { t } = useTranslation('game')
 
   const onNextClick = async () => {
-    setIsLoading(true)
-
-    const { data: gData, error: gErr } = await getGame(gameId)
-
-    setIsLoading(false)
-
-    if (!gData || gErr) return
-
-    setGameData(gData)
-
-    if (round === rounds - 1 && gData.state === 'finished') {
+    if (isFinished) {
       setView('finalResult')
     } else {
+      setIsLoading(true)
+
+      const { data: gData, error: gErr } = await updateGame(gameId, {
+        data: null,
+        type: 'roundStart',
+      })
+
+      setIsLoading(false)
+
+      if (!gData || gErr) return
+
+      setGameData(gData)
       setView('game')
     }
   }
@@ -64,11 +62,11 @@ const RoundResult = ({
     <>
       <h2>
         {t('roundResult.points', {
-          count: guessedRound.points,
+          count: guessedRound.score,
         })}
       </h2>
       <p>
-        {guessedRound.timedOut ? (
+        {guessedRound.timedOut && !guessedRound.timedOutWithGuess ? (
           t('roundResult.timedOut')
         ) : (
           <Trans
@@ -84,14 +82,11 @@ const RoundResult = ({
         variant="primary"
         size="l"
         isLoading={isLoading}
-        className={styles['next-btn']}
         disabled={isLoading}
-        aria-disabled={isLoading}
+        className={styles['next-btn']}
         onClick={onNextClick}
       >
-        {round === rounds - 1 && finished
-          ? t('roundResult.viewResults')
-          : t('roundResult.nextRound')}
+        {isFinished ? t('roundResult.viewResults') : t('roundResult.nextRound')}
       </Button>
     </>
   )

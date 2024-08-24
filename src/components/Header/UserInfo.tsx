@@ -5,7 +5,6 @@ import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
-import { createPortal } from 'react-dom'
 
 import { signOut } from '@/actions/auth.js'
 import { getProfile } from '@/actions/profile.js'
@@ -107,46 +106,41 @@ const UserInfo = () => {
 
   return (
     <div className={styles.container} ref={containerRef}>
-      <span
+      <div
         className={styles['display-name']}
         onClick={() => setIsDropdownOpen((o) => !o)}
       >
         {profile.display_name}
-      </span>
-      {createPortal(
-        <ul
-          className={classNames(
-            styles.dropdown,
-            isDropdownOpen ? 'active' : '',
-          )}
-        >
-          <li>
-            <Link href={`/user/${profile.id}`}>
-              <UserRound size={18} />
-              {t('profile')}
-            </Link>
-          </li>
-          <li>
-            <Link href="/dashboard">
-              <Map size={18} />
-              {t('dashboard')}
-            </Link>
-          </li>
-          <li>
-            <Link href="/settings/profile">
-              <Settings size={18} />
-              {t('settings')}
-            </Link>
-          </li>
-          <li>
-            <div onClick={onSignOutClick}>
-              <LogOut size={18} />
-              {t('signOut')}
-            </div>
-          </li>
-        </ul>,
-        document.body,
-      )}
+      </div>
+
+      <ul
+        className={classNames(styles.dropdown, isDropdownOpen ? 'active' : '')}
+      >
+        <li>
+          <Link href={`/user/${profile.id}`}>
+            <UserRound size={18} />
+            {t('profile')}
+          </Link>
+        </li>
+        <li>
+          <Link href="/dashboard">
+            <Map size={18} />
+            {t('dashboard')}
+          </Link>
+        </li>
+        <li>
+          <Link href="/settings/profile">
+            <Settings size={18} />
+            {t('settings')}
+          </Link>
+        </li>
+        <li>
+          <div onClick={onSignOutClick}>
+            <LogOut size={18} />
+            {t('signOut')}
+          </div>
+        </li>
+      </ul>
     </div>
   )
 }

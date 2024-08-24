@@ -6,6 +6,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
+import { getUser } from '@/actions/user.js'
+
 import { useTranslation } from '@/i18n/client.js'
 
 import { classNames } from '@/utils/index.js'
@@ -17,18 +19,36 @@ const UserInfo = dynamic(() => import('./UserInfo.js'))
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isSignedIn, setIsSignedIn] = useState(false)
 
   const { t } = useTranslation('header')
 
   useEffect(() => {
-    if (isMenuOpen) document.body.style.setProperty('overflow-y', 'hidden')
-    else document.body.style.removeProperty('overflow-y')
+    const init = async () => {
+      const {
+        data: { user },
+        error,
+      } = await getUser()
+
+      setIsSignedIn(user != null && error === null)
+    }
+
+    init()
+  }, [])
+
+  useEffect(() => {
+    if (isMenuOpen) document.body.classList.add('scroll-locked')
+    else document.body.classList.remove('scroll-locked')
   }, [isMenuOpen])
 
   return (
     <header className={classNames(styles.header, isMenuOpen ? 'active' : '')}>
       <div>
-        <Link href="/" scroll={false} className={styles.title}>
+        <Link
+          href={isSignedIn ? '/dashboard' : '/'}
+          scroll={false}
+          className={styles.title}
+        >
           <Image
             src="/assets/icons/icon.svg"
             width={18}

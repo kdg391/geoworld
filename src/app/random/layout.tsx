@@ -4,7 +4,7 @@ import GoogleApiProvider from '@/providers/GoogleApiProvider.js'
 
 import type { Metadata } from 'next'
 
-export const metadata = async (): Promise<Metadata> => {
+export const generateMetadata = async (): Promise<Metadata> => {
   const { t } = await createTranslation('translation')
 
   return {

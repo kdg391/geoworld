@@ -16,8 +16,8 @@ const Modal = ({ children, isOpen, setIsOpen }: Props) => {
   const elRef = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
-    if (isOpen) document.body.style.setProperty('overflow-y', 'hidden')
-    else document.body.style.removeProperty('overflow-y')
+    if (isOpen) document.body.classList.add('scroll-locked')
+    else document.body.classList.remove('scroll-locked')
   }, [isOpen])
 
   useEffect(() => {

@@ -9,6 +9,12 @@ const TextInput = ({
 }: React.DetailedHTMLProps<
   React.InputHTMLAttributes<HTMLInputElement>,
   HTMLInputElement
->) => <input className={classNames(styles.input, className)} {...props} />
+>) => (
+  <input
+    className={classNames(styles.input, className)}
+    spellCheck="false"
+    {...props}
+  />
+)
 
 export default TextInput

@@ -9,11 +9,11 @@ import { createClient } from '../utils/supabase/server.js'
 import { gameSettingsValidation } from '../utils/validations/game.js'
 
 import type {
-  Coords,
   Game,
   GameSettings,
   Location,
   Map,
+  RoundLocation,
 } from '../types/index.js'
 
 export const getGame = async (id: string) => {
@@ -58,7 +58,6 @@ export const createGame = async ({
   const { data: location, error: lErr } = await supabase
     .rpc('get_random_locations', {
       p_map_id: mapData.id === OFFICIAL_MAP_WORLD_ID ? null : mapData.id,
-      // p_count: settings.rounds,
       p_count: 1,
     })
     .select('*')
@@ -70,10 +69,7 @@ export const createGame = async ({
       error: lErr?.message ?? null,
     }
 
-  const actualLocation: Coords & {
-    streak_location_code: string | null
-    started_at: string
-  } = {
+  const actualLocation: RoundLocation = {
     lat: location.lat,
     lng: location.lng,
     heading: location.heading,
@@ -81,24 +77,23 @@ export const createGame = async ({
     zoom: location.zoom,
     pano_id: location.pano_id,
     streak_location_code: location.streak_location_code,
-
     started_at: new Date().toISOString(),
+    ended_at: null,
   }
 
   const { data, error } = await supabase
     .from('games')
     .insert<Omit<Game, 'id'>>({
-      rounds: [actualLocation],
-      guessed_locations: [],
-      guessed_rounds: [],
       map_id: mapData.id,
+      user_id: userId,
+      guesses: [],
+      mode: 'standard',
       round: 0,
+      rounds: [actualLocation],
+      settings,
+      state: 'started',
       total_score: 0,
       total_time: 0,
-      settings,
-      user_id: userId,
-      state: 'started',
-      mode: 'standard',
     })
     .select()
     .single<Game>()
@@ -109,14 +104,22 @@ export const createGame = async ({
   }
 }
 
-export const updateGame = async (
-  id: string,
+interface RoundStartPayload {
+  data: null
+  type: 'roundStart'
+}
+
+interface GuessPayload {
   data: {
     guessedLocation: google.maps.LatLngLiteral | null
-    mapData: Map
     timedOut: boolean
-  },
-) => {
+  }
+  type: 'guess'
+}
+
+type Payload = RoundStartPayload | GuessPayload
+
+export const updateGame = async (id: string, { data, type }: Payload) => {
   'use server'
 
   const supabase = createClient()
@@ -156,95 +159,124 @@ export const updateGame = async (
       error: 'This game is finished.',
     }
 
-  const distance = {
-    imperial: data.guessedLocation
-      ? calculateDistance(
-          data.guessedLocation,
-          gameData.rounds[gameData.round],
-          'imperial',
-        )
-      : 0,
-    metric: data.guessedLocation
-      ? calculateDistance(
-          data.guessedLocation,
-          gameData.rounds[gameData.round],
-          'metric',
-        )
-      : 0,
-  }
+  const { data: mapData, error: mErr } = await supabase
+    .from('maps')
+    .select('*')
+    .eq('id', gameData.map_id)
+    .single<Map>()
 
-  const timedOutWithGuess = data.timedOut && data.guessedLocation !== null
+  if (!mapData || mErr)
+    return {
+      data: null,
+      error: mErr?.message ?? null,
+    }
 
-  const score =
-    data.timedOut && data.guessedLocation === null
-      ? 0
-      : calculateRoundScore(distance.metric, data.mapData.score_factor)
-
-  const time = Math.floor(
-    (Date.now() -
-      new Date(gameData.rounds[gameData.round].started_at).getTime()) /
-      1000,
-  )
+  const updateData: Partial<Game> = {}
 
   const isFinalRound = gameData.round === gameData.settings.rounds - 1
 
-  const updateData: Partial<Game> = {
-    round: isFinalRound ? gameData.round : gameData.round + 1,
-    guessed_rounds: [
-      ...gameData.guessed_rounds,
+  if (type === 'roundStart') {
+    if (!isFinalRound && gameData.rounds.length === gameData.guesses.length) {
+      let location: Location
+
+      do {
+        const { data: lData, error: lErr } = await supabase
+          .rpc('get_random_locations', {
+            p_map_id: mapData.id === OFFICIAL_MAP_WORLD_ID ? null : mapData.id,
+            p_count: 1,
+          })
+          .select('*')
+          .single<Location>()
+
+        if (!lData || lErr)
+          return {
+            data: null,
+            error: lErr?.message ?? null,
+          }
+
+        location = lData
+      } while (
+        gameData.rounds.find((r) => r.pano_id === location.pano_id) !==
+        undefined
+      )
+
+      const actualLocation: RoundLocation = {
+        lat: location.lat,
+        lng: location.lng,
+        heading: location.heading,
+        pitch: location.pitch,
+        zoom: location.zoom,
+        pano_id: location.pano_id,
+        streak_location_code: location.streak_location_code,
+        started_at: new Date().toISOString(),
+        ended_at: null,
+      }
+
+      updateData.round = isFinalRound ? gameData.round : gameData.round + 1
+      updateData.rounds = [...gameData.rounds, actualLocation]
+    } else {
+      return {
+        data: null,
+        error: 'Something went wrong',
+      }
+    }
+  } else {
+    const distance = {
+      imperial: data.guessedLocation
+        ? calculateDistance(
+            data.guessedLocation,
+            gameData.rounds[gameData.round],
+            'imperial',
+          )
+        : 0,
+      metric: data.guessedLocation
+        ? calculateDistance(
+            data.guessedLocation,
+            gameData.rounds[gameData.round],
+            'metric',
+          )
+        : 0,
+    }
+
+    const timedOutWithGuess = data.timedOut && data.guessedLocation !== null
+
+    const score =
+      data.timedOut && data.guessedLocation === null
+        ? 0
+        : calculateRoundScore(distance.metric, mapData.score_factor)
+
+    const now = new Date()
+
+    const time = data.timedOut
+      ? gameData.settings.timeLimit
+      : Math.floor(
+          (now.getTime() -
+            new Date(gameData.rounds[gameData.round].started_at).getTime()) /
+            1000,
+        )
+
+    const rounds = [...gameData.rounds]
+
+    rounds[gameData.round] = {
+      ...rounds[gameData.round],
+      ended_at: now.toISOString(),
+    }
+
+    updateData.rounds = rounds
+    updateData.guesses = [
+      ...gameData.guesses,
       {
         distance,
-        points: score,
+        position: data.guessedLocation,
+        score,
         time,
         timedOut: data.timedOut,
         timedOutWithGuess,
       },
-    ],
-    guessed_locations: [...gameData.guessed_locations, data.guessedLocation],
-    total_score: gameData.total_score + score,
-    total_time: gameData.total_time + time,
-    state: isFinalRound ? 'finished' : 'started',
-  }
-
-  if (!isFinalRound) {
-    let location: Location
-
-    do {
-      const { data: lData, error: lErr } = await supabase
-        .rpc('get_random_locations', {
-          p_map_id:
-            data.mapData.id === OFFICIAL_MAP_WORLD_ID ? null : data.mapData.id,
-          p_count: 1,
-        })
-        .select('*')
-        .single<Location>()
-
-      if (!lData || lErr)
-        return {
-          data: null,
-          error: lErr?.message ?? null,
-        }
-
-      location = lData
-    } while (
-      gameData.rounds.find((r) => r.pano_id === location.pano_id) !== undefined
-    )
-
-    const actualLocation: Coords & {
-      streak_location_code: string | null
-      started_at: string
-    } = {
-      lat: location.lat,
-      lng: location.lng,
-      heading: location.heading,
-      pitch: location.pitch,
-      zoom: location.zoom,
-      pano_id: location.pano_id,
-      streak_location_code: location.streak_location_code,
-      started_at: new Date().toISOString(),
-    }
-
-    updateData.rounds = [...gameData.rounds, actualLocation]
+    ]
+    updateData.total_score = gameData.total_score + score
+    updateData.total_time = gameData.total_time + time
+    updateData.state = isFinalRound ? 'finished' : 'started'
   }
 
   const { data: updatedData, error: updatedErr } = await supabase

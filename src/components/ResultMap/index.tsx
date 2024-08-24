@@ -7,7 +7,7 @@ import useGoogleApi from '@/hooks/useGoogleApi.js'
 
 import styles from './index.module.css'
 
-import type { Coords, GameView } from '@/types/index.js'
+import type { Coords, GameView, Guess } from '@/types/index.js'
 
 const lineSymbol = {
   path: 'M 0,-1 0,1',
@@ -41,7 +41,7 @@ interface Props {
     streak_location_code: string | null
     started_at: string
   })[]
-  guessedLocations: (google.maps.LatLngLiteral | null)[]
+  guessedLocations: Guess[]
   round: number
   view: GameView | null
 }
@@ -73,13 +73,13 @@ const ResultMap = ({
       for (let i = 0; i < guessedLocations.length; i++) {
         bounds.extend(actualLocations[i])
 
-        const guess = guessedLocations[i]
+        const guess = guessedLocations[i].position
         if (guess !== null) bounds.extend(guess)
       }
     } else {
-      bounds.extend(actualLocations[round - 1])
+      bounds.extend(actualLocations[round])
 
-      const guess = guessedLocations[guessedLocations.length - 1]
+      const guess = guessedLocations[round].position
       if (guess !== null) bounds.extend(guess)
     }
 
@@ -127,7 +127,7 @@ const ResultMap = ({
 
         const guessedMarker = new google.maps.marker.AdvancedMarkerElement({
           map: resultMapRef.current,
-          position: guessedLocations[i],
+          position: guessedLocations[i].position,
         })
 
         actualMarkersRef.current.push(actualMarker)
@@ -139,7 +139,7 @@ const ResultMap = ({
       )
       actualPinBackground.style.cursor = 'pointer'
 
-      const actualLoc = actualLocations[round - 1]
+      const actualLoc = actualLocations[round]
 
       const actualMarker = new google.maps.marker.AdvancedMarkerElement({
         map: resultMapRef.current,
@@ -159,7 +159,7 @@ const ResultMap = ({
 
       const guessedMarker = new google.maps.marker.AdvancedMarkerElement({
         map: resultMapRef.current,
-        position: guessedLocations[guessedLocations.length - 1],
+        position: guessedLocations[round].position,
       })
 
       actualMarkersRef.current.push(actualMarker)
@@ -177,7 +177,7 @@ const ResultMap = ({
     if (view === 'finalResult') {
       for (let i = 0; i < actualLocations.length; i++) {
         const actualLoc = actualLocations[i]
-        const guessLoc = guessedLocations[i]
+        const guessLoc = guessedLocations[i].position
 
         const polyline = new google.maps.Polyline({
           ...polylineOptions,
@@ -194,8 +194,8 @@ const ResultMap = ({
         polylinesRef.current.push(polyline)
       }
     } else {
-      const actualLoc = actualLocations[round - 1]
-      const guessLoc = guessedLocations[guessedLocations.length - 1]
+      const actualLoc = actualLocations[round]
+      const guessLoc = guessedLocations[round].position
 
       const polyline = new google.maps.Polyline({
         ...polylineOptions,

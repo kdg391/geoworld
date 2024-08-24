@@ -20,17 +20,12 @@ const SignIn = async () => {
 
       <Form />
 
-      <p>
+      <p className={styles.msg}>
         <Link href="/forgot-password">{t('forgotPassword')}</Link>
       </p>
-      <p>
+      <p className={styles.msg}>
         <span>{t('doNotHaveAccount')}</span>
-        <Link
-          href="/sign-up"
-          style={{
-            marginLeft: '4px',
-          }}
-        >
+        <Link href="/sign-up" className={styles['ml-4']}>
           {t('signUp')}
         </Link>
       </p>

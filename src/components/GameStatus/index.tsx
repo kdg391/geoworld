@@ -33,9 +33,9 @@ const GameStatus = ({
   const pathRef = useRef<SVGCircleElement | null>(null)
 
   useEffect(() => {
-    if (timeLimit === 0 || timeLeft === 0) return
+    if (timeLimit === 0) return
 
-    const interval = setInterval(() => {
+    const interval = setTimeout(() => {
       setTimeLeft((prev) => prev - 1)
     }, 1000)
 

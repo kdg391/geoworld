@@ -8,6 +8,9 @@ import SettingsContext, {
 
 const useSettings = () =>
   useContext(SettingsContext) ??
-  ({ distanceUnit: null, setDistanceUnit() {} } as ContextValue)
+  ({
+    distanceUnit: null,
+    setDistanceUnit() {},
+  } as ContextValue)
 
 export default useSettings

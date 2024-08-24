@@ -3,7 +3,7 @@
 import dynamic from 'next/dynamic'
 import { useFormState } from 'react-dom'
 
-import { createCommunityMap } from '@/actions/map.js'
+import { createCommunityMap, editCommunityMap } from '@/actions/map.js'
 
 import { useTranslation } from '@/i18n/client.js'
 
@@ -16,6 +16,7 @@ const SubmitButton = dynamic(() => import('../common/SubmitButton/index.js'))
 const TextInput = dynamic(() => import('../common/TextInput/index.js'))
 
 interface Props {
+  isEditing: boolean
   isModalOpen: boolean
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
@@ -28,11 +29,11 @@ export interface FormState {
   } | null
 }
 
-const MapEditModal = ({ isModalOpen, setIsModalOpen }: Props) => {
+const MapEditModal = ({ isEditing, isModalOpen, setIsModalOpen }: Props) => {
   const { t } = useTranslation('translation')
 
   const [state, action] = useFormState<FormState, FormData>(
-    createCommunityMap,
+    isEditing ? editCommunityMap : createCommunityMap,
     {
       errors: null,
     },
@@ -40,7 +41,7 @@ const MapEditModal = ({ isModalOpen, setIsModalOpen }: Props) => {
 
   return (
     <Modal isOpen={isModalOpen} setIsOpen={setIsModalOpen}>
-      <h2>Create Map</h2>
+      <h2>{isEditing ? 'Edit Map' : 'Create Map'}</h2>
       <div>
         <form action={action}>
           <div>
@@ -71,7 +72,9 @@ const MapEditModal = ({ isModalOpen, setIsModalOpen }: Props) => {
             >
               {t('cancel')}
             </Button>
-            <SubmitButton formAction={action}>Create</SubmitButton>
+            <SubmitButton formAction={action}>
+              {isEditing ? 'Update' : 'Create'}
+            </SubmitButton>
           </div>
           {state.errors?.message && <p>{state.errors.message}</p>}
         </form>

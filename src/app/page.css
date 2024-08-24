@@ -1,9 +1,0 @@
-[data-theme='light'] {
-  --gradient-1: #fff;
-  --gradient-2: rgba(255, 255, 255, 0.55);
-}
-
-[data-theme='dark'] {
-  --gradient-1: rgba(0, 0, 0, 0.95);
-  --gradient-2: rgba(0, 0, 0, 0.75);
-}

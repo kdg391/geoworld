@@ -1,22 +1,22 @@
 'use client'
 
-import { useSelect } from 'downshift'
-import { ChevronDown, Laptop, Moon, Sun } from 'lucide-react'
+import { Laptop, Moon, Sun } from 'lucide-react'
+import dynamic from 'next/dynamic'
 
 import useTheme from '@/hooks/useTheme.js'
 
 import { useTranslation } from '@/i18n/client.js'
 
-import { classNames } from '@/utils/index.js'
-
-import styles from './index.module.css'
-
 import type { Theme } from '@/types/index.js'
 
+const Select = dynamic(() => import('../common/Select/index.js'))
+
 const ThemeSelect = () => {
-  const { setTheme, theme } = useTheme()
+  const { theme, setTheme } = useTheme()
 
   const { t } = useTranslation('footer')
+
+  if (!theme) return
 
   const themeOptions = [
     {
@@ -36,68 +36,18 @@ const ThemeSelect = () => {
     },
   ]
 
-  const {
-    getItemProps,
-    getLabelProps,
-    getMenuProps,
-    getToggleButtonProps,
-    isOpen,
-    selectedItem,
-  } = useSelect({
-    defaultSelectedItem: themeOptions.find((opt) => opt.value === theme),
-    items: themeOptions,
-    itemToString: (item) => item?.label ?? '',
-    onSelectedItemChange: ({ selectedItem }) => {
-      if (selectedItem.value === theme) return
-
-      setTheme(selectedItem.value as Theme)
-    },
-  })
-
   return (
-    <div className={classNames(styles['theme-select'], isOpen ? 'open' : '')}>
-      <label
-        {...getLabelProps({
-          className: 'sr-only',
-        })}
-      >
-        {t('theme')}
-      </label>
-      <div
-        {...getToggleButtonProps({
-          className: styles['theme-button'],
-        })}
-        title={t('theme')}
-      >
-        <div>
-          {selectedItem?.icon}
-          <span>{t('theme')}</span>
-        </div>
-        <ChevronDown size={18} className={styles.arrow} />
-      </div>
-      <ul
-        {...getMenuProps({
-          className: styles['theme-dropdown'],
-        })}
-      >
-        {isOpen
-          ? themeOptions.map((item, index) => (
-              <li
-                key={item.value}
-                {...getItemProps({
-                  className:
-                    selectedItem?.value === item.value ? 'selected' : '',
-                  index,
-                  item,
-                })}
-              >
-                {item?.icon}
-                <span>{item.label}</span>
-              </li>
-            ))
-          : null}
-      </ul>
-    </div>
+    <Select
+      defaultSelectedItem={themeOptions.find((opt) => opt.value === theme)!}
+      label={t('theme')}
+      items={themeOptions}
+      menuPlacement="top"
+      onSelectedItemChange={async ({ selectedItem }) => {
+        if (selectedItem.value === theme) return
+
+        setTheme(selectedItem.value as Theme)
+      }}
+    />
   )
 }
 

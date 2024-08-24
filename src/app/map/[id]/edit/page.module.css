@@ -1,0 +1,28 @@
+.footer {
+  height: 50px;
+  display: flex;
+  align-items: center;
+  padding: 0 0.75rem;
+}
+
+.main {
+  height: calc(100svh - 50px);
+}
+
+.container {
+  display: flex;
+  height: 100%;
+
+  @media (max-width: 640px) {
+    flex-direction: column;
+  }
+}
+
+.street-view {
+  flex: 1;
+}
+
+.footer-actions {
+  display: flex;
+  gap: 4px;
+}

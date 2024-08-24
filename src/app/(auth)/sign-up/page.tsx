@@ -22,14 +22,9 @@ const SignUp = async () => {
 
         <Form />
 
-        <p>
+        <p className={styles.msg}>
           <span>{t('alreadyAccount')}</span>
-          <Link
-            href="/sign-in"
-            style={{
-              marginLeft: '4px',
-            }}
-          >
+          <Link href="/sign-in" className={styles['ml-4']}>
             {t('signIn')}
           </Link>
         </p>

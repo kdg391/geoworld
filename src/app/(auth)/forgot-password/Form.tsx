@@ -44,10 +44,14 @@ const Form = () => {
           name="email"
           placeholder="me@example.com"
           required
+          className={styles.input}
         />
-        {state.errors?.email && (
-          <p className={styles['error-msg']}>{state.errors.email}</p>
-        )}
+        {state.errors?.email &&
+          state.errors.email.map((msg) => (
+            <p key={msg} className={styles['error-msg']}>
+              {msg}
+            </p>
+          ))}
       </div>
       {state.errors?.message && (
         <p className={styles['error-msg']}>{state.errors.message}</p>

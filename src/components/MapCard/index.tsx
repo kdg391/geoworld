@@ -1,6 +1,5 @@
 'use client'
 
-import dynamic from 'next/dynamic'
 // import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 
@@ -19,8 +18,7 @@ import './index.css'
 import type { Map } from '@/types/index.js'
 
 import Button from '../common/Button/index.js'
-
-const Twemoji = dynamic(() => import('../Twemoji.js'))
+import Twemoji from '../Twemoji.js'
 
 interface Props {
   mapData: Map

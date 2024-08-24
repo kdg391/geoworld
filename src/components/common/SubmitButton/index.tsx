@@ -8,6 +8,7 @@ import type { ComponentProps } from 'react'
 const Button = dynamic(() => import('../Button/index.js'))
 
 type Props = ComponentProps<'button'> & {
+  disabled?: boolean
   full?: boolean
   size?: 's' | 'm' | 'l'
   pendingText?: string
@@ -15,6 +16,7 @@ type Props = ComponentProps<'button'> & {
 
 const SubmitButton = ({
   children,
+  disabled = false,
   full = false,
   size = 'm',
   pendingText,
@@ -31,10 +33,10 @@ const SubmitButton = ({
       full={full}
       size={size}
       variant="primary"
+      isLoading={disabled || isPending}
       key={Math.random()}
       type="submit"
-      isLoading={isPending}
-      disabled={isPending}
+      disabled={disabled || isPending}
       {...props}
     >
       {pendingText && isPending ? pendingText : children}

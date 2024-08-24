@@ -11,11 +11,11 @@ const EARTH_RADIUS = {
 const rad = (n: number) => n * (Math.PI / 180)
 
 // https://stackoverflow.com/a/1502821
-export function calculateDistance(
+export const calculateDistance = (
   l1: google.maps.LatLngLiteral,
   l2: google.maps.LatLngLiteral,
   unit: DistanceUnit,
-) {
+) => {
   const R = EARTH_RADIUS[unit]
 
   const dLat = rad(l2.lat - l1.lat)
@@ -36,10 +36,10 @@ const DEFAULT_SCORE_FACTOR = 2000
 const MAX_POINTS = 5000
 
 // https://github.com/benlikescode/geohub/blob/main/backend/utils/calculateRoundScore.ts
-export function calculateRoundScore(
+export const calculateRoundScore = (
   distance: number,
   scoreFactor = DEFAULT_SCORE_FACTOR,
-) {
+) => {
   if (distance * 1000 < 25) return MAX_POINTS
 
   const power = (distance * -1) / scoreFactor

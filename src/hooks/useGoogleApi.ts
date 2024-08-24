@@ -6,6 +6,9 @@ import GoogleApiContext, {
 
 const useGoogleApi = () =>
   useContext(GoogleApiContext) ??
-  ({ isLoaded: false, loadApi() {} } as ContextValue)
+  ({
+    isLoaded: false,
+    loadApi() {},
+  } as ContextValue)
 
 export default useGoogleApi

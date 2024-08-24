@@ -9,7 +9,7 @@
     display: none;
     visibility: hidden;
 
-    &:checked ~ span {
+    &:checked ~ .slider {
       background-color: var(--primary);
 
       &:after {
@@ -18,7 +18,7 @@
     }
   }
 
-  & > span {
+  & > .slider {
     display: inline-block;
     height: 24px;
     width: 48px;

@@ -7,14 +7,14 @@ import useGoogleApi from '@/hooks/useGoogleApi.js'
 
 import styles from './index.module.css'
 
-import type { ControlSettings, GameView } from '@/types/index.js'
+import type { ControlSettings, GameView, RoundLocation } from '@/types/index.js'
 
 const StreetViewControls = dynamic(
   () => import('../StreetViewControls/index.js'),
 )
 
 interface Props {
-  location: google.maps.LatLngLiteral
+  location: RoundLocation
   settings: ControlSettings
   view: GameView | null
 }
@@ -106,17 +106,28 @@ const StreetView = ({ location, settings, view }: Props) => {
 
     svServiceRef.current
       .getPanorama({
-        location,
+        location: {
+          lat: location.lat,
+          lng: location.lng,
+        },
       })
       .then(({ data }) => {
         if (!data.location) return
 
+        console.log(location)
+
+        let heading = location.heading
+
+        if (heading === 0) {
+          heading = data.links?.[0].heading ?? 0
+        }
+
         svPanoramaRef.current?.setPano(data.location.pano)
         svPanoramaRef.current?.setPov({
-          heading: 0,
-          pitch: 0,
+          heading,
+          pitch: location.pitch,
         })
-        svPanoramaRef.current?.setZoom(0)
+        svPanoramaRef.current?.setZoom(location.zoom)
 
         positionHistoryRef.current = []
       })

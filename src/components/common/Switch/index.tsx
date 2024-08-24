@@ -6,15 +6,25 @@ interface Props {
   onChange?: React.ChangeEventHandler<HTMLInputElement>
 }
 
-const Switch = ({ defaultChecked, id, onChange }: Props) => (
+const Switch = ({
+  defaultChecked,
+  id,
+  onChange,
+  ...props
+}: React.DetailedHTMLProps<
+  React.InputHTMLAttributes<HTMLInputElement>,
+  HTMLInputElement
+> &
+  Props) => (
   <label htmlFor={id} className={styles.switch}>
     <input
       type="checkbox"
       id={id}
       defaultChecked={defaultChecked}
       onChange={onChange}
+      {...props}
     />
-    <span></span>
+    <span className={styles.slider}></span>
   </label>
 )
 

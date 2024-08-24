@@ -24,6 +24,7 @@
     z-index: 3;
     box-shadow: 0 8px 16px 1px rgba(0, 0, 0, 0.1);
     border: 1px solid rgba(0, 0, 0, 0.15);
+    pointer-events: auto;
 
     & li > * {
       display: flex;
@@ -36,6 +37,26 @@
       &:hover {
         background-color: var(--dropdown-hover);
       }
+    }
+  }
+}
+
+@media only screen and (max-width: 640px) {
+  .container {
+    position: relative;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .display-name {
+    padding: 1.25rem 1.5rem;
+    width: 100%;
+    background-color: var(--bg);
+  }
+
+  .dropdown {
+    &:global(.active) {
+      position: static;
     }
   }
 }

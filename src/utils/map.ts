@@ -8,7 +8,7 @@ export const getCountryFromCoordinates = (loc: google.maps.LatLngLiteral) => {
 
   for (const feature of (worldGeoJson as any).features) {
     if (booleanPointInPolygon(p, feature)) {
-      return feature.properties!.iso_a2.toLowerCase()
+      return feature.properties.iso_a2.toLowerCase()
     }
   }
 

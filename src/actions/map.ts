@@ -184,20 +184,13 @@ export const createCommunityMap = async (_: unknown, formData: FormData) => {
 
   const { data: mData, error: mErr } = await supabase
     .from('maps')
-    .insert<Omit<Map, 'id' | 'created_at' | 'updated_at'>>({
+    .insert<Partial<Map>>({
       type: 'community',
       name: validated.data.name,
       description:
         validated.data.description === '' ? null : validated.data.description,
-      creator: user.id,
       is_published: false,
-
-      average_score: 0,
-      explorers: 0,
-      locations_count: 0,
-      likes: 0,
-      score_factor: 0,
-      bounds: null,
+      creator: user.id,
     })
     .select()
     .single<Map>()
@@ -212,11 +205,60 @@ export const createCommunityMap = async (_: unknown, formData: FormData) => {
   redirect(`/map/${mData.id}/edit`)
 }
 
+export const editCommunityMap = async (_: unknown, formData: FormData) => {
+  'use server'
+
+  const supabase = createClient()
+
+  const {
+    data: { user },
+    error: uErr,
+  } = await supabase.auth.getUser()
+
+  if (!user || uErr)
+    return {
+      errors: {
+        message: uErr?.message,
+      },
+    }
+
+  const validated = await createMapValidation.safeParseAsync({
+    name: formData.get('name'),
+    description: formData.get('description'),
+  })
+
+  if (!validated.success)
+    return {
+      errors: validated.error.flatten().fieldErrors,
+    }
+
+  const { error: mErr } = await supabase
+    .from('maps')
+    .update<Partial<Map>>({
+      name: validated.data.name,
+      description:
+        validated.data.description === '' ? null : validated.data.description,
+    })
+    .eq('map_id', '')
+    .select()
+    .single<Map>()
+
+  if (mErr)
+    return {
+      errors: {
+        message: mErr?.message,
+      },
+    }
+
+  return {
+    errors: null,
+  }
+}
+
 export const updateMap = async (
   id: string,
   data: {
-    name?: string
-    is_published?: boolean
+    isPublished?: boolean
     locations?: Coords[]
   },
 ) => {
@@ -224,23 +266,24 @@ export const updateMap = async (
 
   const supabase = createClient()
 
-  const { data: uData, error: uErr } = await supabase.auth.getUser()
+  const {
+    data: { user },
+    error: uErr,
+  } = await supabase.auth.getUser()
 
-  if (!uData.user || uErr)
+  if (!user || uErr)
     return {
-      data: null,
       error: uErr?.message ?? null,
     }
 
   const { data: pData, error: pErr } = await supabase
     .from('profiles')
     .select('*')
-    .eq('id', uData.user.id)
+    .eq('id', user.id)
     .single<Profile>()
 
   if (!pData || pErr)
     return {
-      data: null,
       error: pErr?.message ?? null,
     }
 
@@ -252,19 +295,16 @@ export const updateMap = async (
 
   if (!mapData || mErr)
     return {
-      data: null,
       error: mErr?.message ?? null,
     }
 
-  if (mapData.creator !== uData.user.id)
+  if (mapData.creator !== user.id)
     return {
-      data: null,
       error: mErr,
     }
 
   if (mapData.type === 'official' && !pData.is_admin)
     return {
-      data: null,
       error: null,
     }
 
@@ -277,7 +317,6 @@ export const updateMap = async (
 
     if (!oldLocs || lErr)
       return {
-        data: null,
         error: lErr?.message ?? null,
       }
 
@@ -309,7 +348,6 @@ export const updateMap = async (
 
       if (removedErr)
         return {
-          data: null,
           error: removedErr?.message ?? null,
         }
     }
@@ -318,7 +356,7 @@ export const updateMap = async (
       const { error: insertedErr } = await supabase.from('locations').insert(
         adding.map((loc) => ({
           map_id: mapData.id,
-          user_id: uData.user.id,
+          user_id: user.id,
           streak_location_code: getCountryFromCoordinates({
             lat: loc.lat,
             lng: loc.lng,
@@ -329,24 +367,20 @@ export const updateMap = async (
 
       if (insertedErr)
         return {
-          data: null,
           error: insertedErr?.message ?? null,
         }
     }
 
     if (updating.length > 0) {
-      console.log(updating)
-
-      /*const { error } = await supabase
+      const { error } = await supabase
         .from('locations')
         .upsert(updating)
         .eq('map_id', mapData.id)
 
       if (error)
         return {
-          data: null,
           error: error.message ?? null,
-        }*/
+        }
     }
   }
 
@@ -358,7 +392,6 @@ export const updateMap = async (
 
   if (!updatedLocs || updatedLocsErr)
     return {
-      data: null,
       error: updatedLocsErr?.message ?? null,
     }
 
@@ -373,21 +406,20 @@ export const updateMap = async (
       : { min: { lat: 0, lng: 0 }, max: { lat: 0, lng: 0 } }
   const scoreFactor = calculateScoreFactor(bounds)
 
-  const { data: updatedData, error: updatedErr } = await supabase
+  const updateData: Partial<Map> = {
+    bounds,
+    locations_count: updatedLocs.length,
+    score_factor: scoreFactor,
+    updated_at: new Date().toISOString(),
+  }
+
+  const { error: updatedErr } = await supabase
     .from('maps')
-    .update({
-      name: data.name,
-      locations_count: updatedLocs.length,
-      bounds,
-      score_factor: scoreFactor,
-      updated_at: new Date().toISOString(),
-    })
+    .update<Partial<Map>>(updateData)
     .eq('id', mapData.id)
-    .select()
     .single<Map>()
 
   return {
-    data: updatedData,
     error: updatedErr?.message ?? null,
   }
 }

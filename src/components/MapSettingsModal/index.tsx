@@ -260,7 +260,6 @@ const MapSettingsModal = ({
           size="m"
           isLoading={isLoading}
           disabled={isLoading}
-          aria-disabled={isLoading}
           onClick={onPlayClick}
         >
           {t('play')}

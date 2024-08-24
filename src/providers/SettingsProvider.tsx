@@ -13,11 +13,7 @@ interface Props {
 const getDistanceUnit = () => {
   if (typeof window === 'undefined') return 'metric'
 
-  let distanceUnit
-
-  try {
-    distanceUnit = localStorage.getItem('distanceUnit')
-  } catch {}
+  const distanceUnit = localStorage.getItem('distanceUnit')
 
   return (distanceUnit ?? 'metric') as DistanceUnit
 }

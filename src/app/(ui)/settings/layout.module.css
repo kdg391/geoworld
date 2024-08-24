@@ -1,0 +1,26 @@
+.main {
+  display: flex;
+  height: 100%;
+}
+
+.section {
+  flex: 1;
+  padding: 1rem;
+}
+
+.title {
+  margin-bottom: 1rem;
+}
+
+.setting {
+  border: 1px solid #eee;
+  padding: 1rem;
+}
+
+.input {
+  margin-top: 4px;
+}
+
+.error-msg {
+  color: var(--danger);
+}

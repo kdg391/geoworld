@@ -47,6 +47,7 @@ const Form = () => {
           maxLength={20}
           pattern="[a-z][a-z0-9_]*"
           required
+          className={styles.input}
           onChange={(event) => {
             event.target.value = event.target.value.toLowerCase()
           }}
@@ -65,19 +66,32 @@ const Form = () => {
           name="email"
           placeholder="me@example.com"
           required
+          className={styles.input}
         />
-        {state.errors?.email && (
-          <p className={styles['error-msg']}>{state.errors.email}</p>
-        )}
+        {state.errors?.email &&
+          state.errors.email.map((msg) => (
+            <p key={msg} className={styles['error-msg']}>
+              {msg}
+            </p>
+          ))}
       </div>
       <div>
         <label htmlFor="password" className={styles.label}>
           {t('password')}
         </label>
-        <TextInput type="password" id="password" name="password" required />
-        {state.errors?.password && (
-          <p className={styles['error-msg']}>{state.errors.password}</p>
-        )}
+        <TextInput
+          type="password"
+          id="password"
+          name="password"
+          required
+          className={styles.input}
+        />
+        {state.errors?.password &&
+          state.errors.password.map((msg) => (
+            <p key={msg} className={styles['error-msg']}>
+              {msg}
+            </p>
+          ))}
       </div>
       {state.errors?.message && (
         <p className={styles['error-msg']}>{state.errors.message}</p>

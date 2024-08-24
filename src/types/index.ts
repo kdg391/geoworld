@@ -3,7 +3,6 @@ import type { SUPPORTED_LOCALES } from '../constants/i18n.js'
 
 export type Locales = (typeof SUPPORTED_LOCALES)[number]
 
-// todo: change name
 export type LightDark = 'light' | 'dark'
 export type Theme = LightDark | 'system'
 
@@ -54,36 +53,16 @@ export interface Settings {
 
 export type GameSettings = ControlSettings & Settings
 
-export interface GuessedRound {
+export interface Guess {
   distance: {
     imperial: number
     metric: number
   }
-  points: number
+  position: google.maps.LatLngLiteral | null
+  score: number
   time: number
   timedOut: boolean
   timedOutWithGuess: boolean
-}
-
-type GameState = 'started' | 'finished'
-type GameMode = 'standard'
-
-export interface Game {
-  id: string
-  map_id: string
-  user_id: string
-  rounds: (Coords & {
-    streak_location_code: string | null
-    started_at: string
-  })[]
-  round: number
-  guessed_locations: (google.maps.LatLngLiteral | null)[]
-  guessed_rounds: GuessedRound[]
-  total_score: number
-  total_time: number
-  settings: GameSettings
-  state: GameState
-  mode: GameMode
 }
 
 export interface Coords {
@@ -101,5 +80,27 @@ export type Location = {
   map_id: string
   user_id: string
   streak_location_code: string | null
-  started_at: string
 } & Coords
+
+export type RoundLocation = Coords & {
+  streak_location_code: string | null
+  started_at: string
+  ended_at: string | null
+}
+
+type GameState = 'started' | 'finished'
+type GameMode = 'standard' | 'streak'
+
+export interface Game {
+  id: string
+  map_id: string
+  user_id: string
+  guesses: Guess[]
+  mode: GameMode
+  round: number
+  rounds: RoundLocation[]
+  settings: GameSettings
+  state: GameState
+  total_score: number
+  total_time: number
+}
