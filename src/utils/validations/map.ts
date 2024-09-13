@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-export const createMapValidation = z.object({
+export const createMapSchema = z.object({
   name: z
     .string()
     .trim()

@@ -8,7 +8,8 @@ import { createTranslation } from '@/i18n/server.js'
 import styles from '../page.module.css'
 
 const Caption = dynamic(() => import('./Caption.js'))
-const Form = dynamic(() => import('./Form.js'))
+
+import Form from './Form.js'
 
 const SignUp = async () => {
   'use server'
@@ -18,14 +19,14 @@ const SignUp = async () => {
   return (
     <>
       <div className={styles['form-container']}>
-        <h1 className={styles['form-title']}>{t('signUpTitle')}</h1>
+        <h1 className={styles['form-title']}>{t('sign_up.title')}</h1>
 
         <Form />
 
         <p className={styles.msg}>
-          <span>{t('alreadyAccount')}</span>
+          <span>{t('already_account')}</span>
           <Link href="/sign-in" className={styles['ml-4']}>
-            {t('signIn')}
+            {t('sign_in')}
           </Link>
         </p>
       </div>

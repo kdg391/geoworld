@@ -1,20 +1,28 @@
 {
-  "heroTitle": "Guess Where You Are in the World",
-  "communityMaps": "커뮤니티 맵",
+  "hero.title": "Guess Where You Are in the World",
+  "hero.desc": "",
+  "community_maps": "커뮤니티 맵",
+  "daily_challenge": "Daily Challenge",
+  "dashboard": "대시보드",
   "game": "게임",
-  "getStarted": "시작하기",
+  "get_started": "시작하기",
   "map": "맵",
   "maps": "맵",
-  "moreCommunityMaps": "커뮤니티 맵 더 보기",
-  "moreOfficialMaps": "공식 맵 더 보기",
-  "myMaps": "내 맵",
-  "officialMaps": "공식 맵",
+  "menu": "메뉴",
+  "more_community_maps": "커뮤니티 맵 더 보기",
+  "more_official_maps": "공식 맵 더 보기",
+  "my_maps": "내 맵",
+  "official_maps": "공식 맵",
   "play": "플레이",
-  "privacyPolicy": "개인 정보 보호 정책",
-  "randomStreetView": "랜덤 스트리트 뷰",
-  "termsOfService": "서비스 이용 약관",
+  "privacy": "개인 정보",
+  "privacy_policy": "개인 정보 보호 정책",
+  "profile": "프로필",
+  "random_street_view": "랜덤 스트리트 뷰",
+  "settings": "설정",
+  "terms": "이용 약관",
+  "terms_of_service": "서비스 이용 약관",
   "user": "유저",
-  "viewOtherMaps": "다른 맵 보기",
+  "view_other_maps": "다른 맵 보기",
   "country": {
     "ad": "안도라",
     "ae": "아랍에미리트",
@@ -233,18 +241,19 @@
     "zr": "콩고 민주 공화국",
     "zw": "짐바브웨"
   },
-  "distanceUnit": {
-    "imperial": "마일",
-    "metric": "미터"
-  },
-  "mapType": {
+  "distance_unit": "거리 단위",
+  "distance_unit.imperial": "마일",
+  "distance_unit.metric": "미터",
+  "language": "언어",
+  "language.en": "영어",
+  "language.ko": "한국어",
+  "map_type": {
     "community": "커뮤니티",
     "official": "공식"
   },
-  "theme": {
-    "light": "라이트",
-    "dark": "다크",
-    "system": "시스템"
-  },
+  "theme": "테마",
+  "theme.light": "라이트",
+  "theme.dark": "다크",
+  "theme.system": "시스템",
   "world": "월드"
 }

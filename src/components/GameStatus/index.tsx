@@ -1,16 +1,20 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { memo, useEffect, useRef, useState } from 'react'
 
 import { useTranslation } from '@/i18n/client.js'
 
 import { formatTimeLeft } from '@/utils/index.js'
 
 import styles from './index.module.css'
+
 import './index.css'
+
+import type { RoundLocation } from '@/types/index.js'
 
 interface Props {
   finishRound: (timedOut: boolean) => Promise<void>
+  location: RoundLocation
   mapName: string
   round: number
   rounds: number
@@ -20,24 +24,36 @@ interface Props {
 
 const GameStatus = ({
   finishRound,
+  location,
   mapName,
   round,
   rounds,
   timeLimit,
   totalScore,
 }: Props) => {
-  const { t } = useTranslation('game')
-
-  const [timeLeft, setTimeLeft] = useState<number>(timeLimit)
-
+  const timerRef = useRef<number | null>(null)
   const pathRef = useRef<SVGCircleElement | null>(null)
+
+  const [timeLeft, setTimeLeft] = useState<number>(() => {
+    const currentTime = new Date().getTime()
+    const timeElapsed = Math.floor(
+      (currentTime - new Date(location.started_at).getTime()) / 1000,
+    )
+    const left = timeLimit - timeElapsed
+
+    return left
+  })
+
+  const { t } = useTranslation('game')
 
   useEffect(() => {
     if (timeLimit === 0) return
 
-    const interval = setTimeout(() => {
+    const interval = window.setTimeout(() => {
       setTimeLeft((prev) => prev - 1)
     }, 1000)
+
+    timerRef.current = interval
 
     if (pathRef.current) {
       const circumference = 2 * Math.PI * 24
@@ -49,13 +65,37 @@ const GameStatus = ({
     }
 
     if (timeLeft <= 0) {
-      clearInterval(interval)
+      clearTimeout(interval)
 
       finishRound(true)
     }
 
-    return () => clearInterval(interval)
+    return () => clearTimeout(interval)
   }, [timeLimit, timeLeft])
+
+  useEffect(() => {
+    const onChange = () => {
+      if (!timerRef.current) return
+
+      if (document.hidden) {
+        clearTimeout(timerRef.current)
+      } else {
+        const currentTime = new Date().getTime()
+        const timeElapsed = Math.floor(
+          (currentTime - new Date(location.started_at).getTime()) / 1000,
+        )
+        const left = timeLimit - timeElapsed
+
+        setTimeLeft(left)
+      }
+    }
+
+    document.addEventListener('visibilitychange', onChange)
+
+    return () => {
+      document.removeEventListener('visibilitychange', onChange)
+    }
+  }, [])
 
   return (
     <div className={styles['game-status-container']}>
@@ -99,4 +139,4 @@ const GameStatus = ({
   )
 }
 
-export default GameStatus
+export default memo(GameStatus)

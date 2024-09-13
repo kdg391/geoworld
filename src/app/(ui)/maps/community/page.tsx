@@ -41,11 +41,11 @@ const Community = () => {
 
   return (
     <section className={styles.section}>
-      <h1>{t('communityMaps')}</h1>
+      <h1>{t('community_maps')}</h1>
       <div className={homeStyles['map-cards']}>
         {maps.length > 0
           ? maps.map((m) => <MapCard key={m.id} mapData={m} />)
-          : Array.from({ length: 12 }).map((_, i) => (
+          : Array.from({ length: 16 }).map((_, i) => (
               <SkeletonMapCard key={i} />
             ))}
       </div>
@@ -56,7 +56,7 @@ const Community = () => {
             size="s"
             onClick={() => setPage((p) => p + 1)}
           >
-            Load more
+            {t('load_more')}
           </Button>
         </div>
       )}

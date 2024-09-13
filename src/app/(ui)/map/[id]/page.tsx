@@ -22,6 +22,7 @@ import styles from './page.module.css'
 import './page.css'
 
 const EditButton = dynamic(() => import('./EditButton.js'))
+const Leaderboard = dynamic(() => import('./Leaderboard.js'))
 const LikeButton = dynamic(() => import('./LikeButton.js'))
 const PlayButton = dynamic(() => import('./PlayButton.js'))
 const Twemoji = dynamic(() => import('@/components/Twemoji.js'))
@@ -41,11 +42,9 @@ const Map = async ({ params }: Props) => {
 
   if (!mapData || mErr)
     return (
-      <main>
-        <section>
-          <h1>Map Not Found</h1>
-        </section>
-      </main>
+      <section>
+        <h1>Map Not Found</h1>
+      </section>
     )
 
   const supabase = createClient()
@@ -62,14 +61,6 @@ const Map = async ({ params }: Props) => {
         <h1>{"Can't load the creator data"}</h1>
       </section>
     )
-
-  const { data: leaderboardData, error: lErr } = await supabase
-    .rpc('get_ranked_games', {
-      p_map_id: mapData.id,
-    })
-    .select('*')
-
-  if (!leaderboardData || lErr) return
 
   const { data: liked } = await hasLiked(mapData.id)
 
@@ -92,7 +83,7 @@ const Map = async ({ params }: Props) => {
             )}
             {mapData.name}
           </h1>
-          <p>{t(`mapType.${mapData.type}`)}</p>
+          <p>{t(`map_type.${mapData.type}`)}</p>
           <p>{mapData.description}</p>
           <div>
             <span>
@@ -109,7 +100,7 @@ const Map = async ({ params }: Props) => {
             <Scale size={24} />
             <div>
               <div>{mapData.average_score.toLocaleString()}</div>
-              <div>{t('avgScore')}</div>
+              <div>{t('avg_score')}</div>
             </div>
           </div>
           <div className={styles.card}>
@@ -145,32 +136,7 @@ const Map = async ({ params }: Props) => {
       </section>
       <section>
         <h2>Leaderboard</h2>
-        {leaderboardData.length > 0 ? (
-          <table>
-            <thead>
-              <tr>
-                <th>Rank</th>
-                <th>User</th>
-                <th>Score</th>
-                <th>Time</th>
-              </tr>
-            </thead>
-            <tbody>
-              {leaderboardData?.map((l) => (
-                <tr key={l.id}>
-                  <td>{l.rank}</td>
-                  <td>
-                    <Link href={`/user/${l.user_id}`}>{l.display_name}</Link>
-                  </td>
-                  <td>{l.total_score}</td>
-                  <td>{l.total_time}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        ) : (
-          <p>No data</p>
-        )}
+        <Leaderboard mapId={mapData.id} />
       </section>
     </>
   )

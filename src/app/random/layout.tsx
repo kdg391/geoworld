@@ -8,7 +8,7 @@ export const generateMetadata = async (): Promise<Metadata> => {
   const { t } = await createTranslation('translation')
 
   return {
-    title: `${t('randomStreetView')} - GeoWorld`,
+    title: `${t('random_street_view')} - GeoWorld`,
   }
 }
 

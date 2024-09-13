@@ -112,10 +112,10 @@ const RandomStreetView = () => {
               lat: 0,
               lng: 0,
             },
-            zoom: 1,
-            disableDefaultUI: true,
             clickableIcons: false,
+            disableDefaultUI: true,
             streetViewControl: true,
+            zoom: 1,
           }}
           onLoaded={(map) => initMap(map)}
           className={styles.map}

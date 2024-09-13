@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { useTranslation } from '@/i18n/client.js'
 
 import styles from './index.module.css'
+
 import './index.css'
 
 const GitHub = dynamic(() => import('../icons/GitHub.js'))
@@ -55,7 +56,7 @@ const HomeFooter = () => {
           <h4>Links</h4>
           <ul className={styles.links}>
             <li>
-              <Link href="/random">{t('randomStreetView')}</Link>
+              <Link href="/random">{t('random_street_view')}</Link>
             </li>
           </ul>
         </div>
@@ -63,18 +64,12 @@ const HomeFooter = () => {
           <h4>Legal</h4>
           <ul className={styles.links}>
             <li>
-              <Link href="/terms">{t('termsOfService')}</Link>
+              <Link href="/terms">{t('terms_of_service')}</Link>
             </li>
             <li>
-              <Link href="/privacy">{t('privacyPolicy')}</Link>
+              <Link href="/privacy">{t('privacy_policy')}</Link>
             </li>
           </ul>
-        </div>
-        <div>
-          <h4>Docs</h4>
-        </div>
-        <div>
-          <h4>Test</h4>
         </div>
       </div>
     </footer>

@@ -6,7 +6,9 @@ export function createClient(secret = false) {
 
   return createServerClient(
     process.env.SUPABASE_URL as string,
-    secret ? process.env.SUPABASE_SECRET_KEY! : process.env.SUPABASE_ANON_KEY!,
+    (secret
+      ? process.env.SUPABASE_SECRET_KEY
+      : process.env.SUPABASE_ANON_KEY) as string,
     {
       cookies: {
         get(name: string) {
@@ -15,7 +17,7 @@ export function createClient(secret = false) {
         set(name: string, value: string, options: CookieOptions) {
           try {
             cookieStore.set({ name, value, ...options })
-          } catch (error) {
+          } catch {
             // The `set` method was called from a Server Component.
             // This can be ignored if you have middleware refreshing
             // user sessions.
@@ -24,7 +26,7 @@ export function createClient(secret = false) {
         remove(name: string, options: CookieOptions) {
           try {
             cookieStore.set({ name, value: '', ...options })
-          } catch (error) {
+          } catch {
             // The `delete` method was called from a Server Component.
             // This can be ignored if you have middleware refreshing
             // user sessions.

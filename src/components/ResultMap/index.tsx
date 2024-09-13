@@ -7,7 +7,7 @@ import useGoogleApi from '@/hooks/useGoogleApi.js'
 
 import styles from './index.module.css'
 
-import type { Coords, GameView, Guess } from '@/types/index.js'
+import type { GameView, Guess, RoundLocation } from '@/types/index.js'
 
 const lineSymbol = {
   path: 'M 0,-1 0,1',
@@ -37,10 +37,7 @@ const actualPinOptions = {
 const GoogleMap = dynamic(() => import('../GoogleMap.js'))
 
 interface Props {
-  actualLocations: (Coords & {
-    streak_location_code: string | null
-    started_at: string
-  })[]
+  actualLocations: RoundLocation[]
   guessedLocations: Guess[]
   round: number
   view: GameView | null

@@ -6,17 +6,15 @@ import type { Metadata } from 'next'
 
 import styles from './page.module.css'
 
-interface Props {
-  params: {
-    id: string
-  }
-}
-
 export const revalidate = 60
 
 export const generateMetadata = async ({
   params,
-}: Props): Promise<Metadata> => {
+}: {
+  params: {
+    id: string
+  }
+}): Promise<Metadata> => {
   const { t } = await createTranslation('translation')
 
   const { data: mapData, error: mErr } = await getMap(params.id)

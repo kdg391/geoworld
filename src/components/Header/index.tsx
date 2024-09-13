@@ -13,6 +13,7 @@ import { useTranslation } from '@/i18n/client.js'
 import { classNames } from '@/utils/index.js'
 
 import styles from './index.module.css'
+
 import './index.css'
 
 const UserInfo = dynamic(() => import('./UserInfo.js'))
@@ -21,7 +22,7 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isSignedIn, setIsSignedIn] = useState(false)
 
-  const { t } = useTranslation('header')
+  const { t } = useTranslation('translation')
 
   useEffect(() => {
     const init = async () => {
@@ -64,27 +65,29 @@ const Header = () => {
           <ul className={styles.links}>
             <li>
               <Link href="/maps" scroll={false}>
-                {t('translation:maps')}
+                {t('maps')}
               </Link>
             </li>
           </ul>
         </nav>
 
-        <UserInfo />
-
         <div
           className={styles.backdrop}
           onClick={() => setIsMenuOpen((o) => !o)}
-        />
+        ></div>
       </div>
 
-      <button
-        className={styles.menu}
-        aria-label={t('menu')}
-        onClick={() => setIsMenuOpen((o) => !o)}
-      >
-        {isMenuOpen ? <X size={18} /> : <Menu size={18} />}
-      </button>
+      <UserInfo />
+
+      <div>
+        <button
+          className={styles.menu}
+          aria-label={t('menu')}
+          onClick={() => setIsMenuOpen((o) => !o)}
+        >
+          {isMenuOpen ? <X size={18} /> : <Menu size={18} />}
+        </button>
+      </div>
     </header>
   )
 }

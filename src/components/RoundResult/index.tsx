@@ -4,13 +4,14 @@ import dynamic from 'next/dynamic'
 import { useState } from 'react'
 import { Trans } from 'react-i18next'
 
-import { updateGame } from '@/actions/game.js'
+import { startGameRound } from '@/actions/game.js'
 
 import useSettings from '@/hooks/useSettings.js'
 
 import { useTranslation } from '@/i18n/client.js'
 
 import styles from './index.module.css'
+
 import './index.css'
 
 import type { Game, GameView, Guess } from '@/types/index.js'
@@ -44,10 +45,7 @@ const RoundResult = ({
     } else {
       setIsLoading(true)
 
-      const { data: gData, error: gErr } = await updateGame(gameId, {
-        data: null,
-        type: 'roundStart',
-      })
+      const { data: gData, error: gErr } = await startGameRound(gameId)
 
       setIsLoading(false)
 
@@ -61,16 +59,16 @@ const RoundResult = ({
   return (
     <>
       <h2>
-        {t('roundResult.points', {
+        {t('round_result.points', {
           count: guessedRound.score,
         })}
       </h2>
       <p>
         {guessedRound.timedOut && !guessedRound.timedOutWithGuess ? (
-          t('roundResult.timedOut')
+          t('round_result.timed_out')
         ) : (
           <Trans
-            i18nKey={`roundResult.distance.${distanceUnit ?? 'metric'}`}
+            i18nKey={`round_result.distance.${distanceUnit ?? 'metric'}`}
             t={t}
             values={{
               distance: guessedRound.distance[distanceUnit ?? 'metric'],
@@ -86,7 +84,9 @@ const RoundResult = ({
         className={styles['next-btn']}
         onClick={onNextClick}
       >
-        {isFinished ? t('roundResult.viewResults') : t('roundResult.nextRound')}
+        {isFinished
+          ? t('round_result.view_results')
+          : t('round_result.next_round')}
       </Button>
     </>
   )

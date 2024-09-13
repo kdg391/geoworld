@@ -1,12 +1,10 @@
 'use server'
 
-import dynamic from 'next/dynamic'
-
 import { createTranslation } from '@/i18n/server.js'
 
 import styles from '../page.module.css'
 
-const Form = dynamic(() => import('./Form.js'))
+import Form from './Form.js'
 
 const UpdatePassword = async ({
   searchParams,
@@ -21,7 +19,7 @@ const UpdatePassword = async ({
 
   return (
     <div className={styles['form-container']}>
-      <h1 className={styles['form-title']}>{t('updatePassword')}</h1>
+      <h1 className={styles['form-title']}>{t('update_password')}</h1>
 
       <Form code={searchParams.code} />
     </div>

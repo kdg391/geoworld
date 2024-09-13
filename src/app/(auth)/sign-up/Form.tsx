@@ -1,6 +1,5 @@
 'use client'
 
-import dynamic from 'next/dynamic'
 import { useFormState } from 'react-dom'
 
 import { signUp } from '@/actions/auth.js'
@@ -9,14 +8,10 @@ import { useTranslation } from '@/i18n/client.js'
 
 import styles from '../page.module.css'
 
-const SubmitButton = dynamic(
-  () => import('@/components/common/SubmitButton/index.js'),
-)
-const TextInput = dynamic(
-  () => import('@/components/common/TextInput/index.js'),
-)
+import SubmitButton from '@/components/common/SubmitButton/index.js'
+import TextInput from '@/components/common/TextInput/index.js'
 
-export interface FormState {
+interface FormState {
   errors: {
     username?: string[]
     email?: string[]
@@ -97,7 +92,7 @@ const Form = () => {
         <p className={styles['error-msg']}>{state.errors.message}</p>
       )}
       <SubmitButton full formAction={action} className={styles['button']}>
-        {t('signUp')}
+        {t('sign_up')}
       </SubmitButton>
     </form>
   )

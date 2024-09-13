@@ -1,13 +1,12 @@
 'use server'
 
-import dynamic from 'next/dynamic'
 import Link from 'next/link'
 
 import { createTranslation } from '../../../i18n/server.js'
 
 import styles from '../page.module.css'
 
-const Form = dynamic(() => import('./Form.js'))
+import Form from './Form.js'
 
 const SignIn = async () => {
   'use server'
@@ -16,17 +15,17 @@ const SignIn = async () => {
 
   return (
     <div className={styles['form-container']}>
-      <h1 className={styles['form-title']}>{t('signIn')}</h1>
+      <h1 className={styles['form-title']}>{t('sign_in.title')}</h1>
 
       <Form />
 
       <p className={styles.msg}>
-        <Link href="/forgot-password">{t('forgotPassword')}</Link>
+        <Link href="/forgot-password">{t('forgot_password')}</Link>
       </p>
       <p className={styles.msg}>
-        <span>{t('doNotHaveAccount')}</span>
+        <span>{t('do_not_have_account')}</span>
         <Link href="/sign-up" className={styles['ml-4']}>
-          {t('signUp')}
+          {t('sign_up')}
         </Link>
       </p>
     </div>

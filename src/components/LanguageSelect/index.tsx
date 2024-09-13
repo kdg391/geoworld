@@ -30,15 +30,12 @@ const LANGUAGE_OPTIONS = SUPPORTED_LOCALES.map((lang) => ({
 }))
 
 const LanguageSelect = () => {
-  const { i18n, t } = useTranslation('footer')
+  const { i18n, t } = useTranslation('translation')
 
   return (
     <Select
-      defaultSelectedItem={
-        LANGUAGE_OPTIONS.find((opt) => opt.value === i18n.language)!
-      }
-      label={t('language')}
       items={LANGUAGE_OPTIONS}
+      label={t('language')}
       menuPlacement="top"
       onSelectedItemChange={async ({ selectedItem }) => {
         if (selectedItem.value === i18n.language) return
@@ -46,6 +43,7 @@ const LanguageSelect = () => {
         i18n.changeLanguage(selectedItem.value)
         await setLocale(selectedItem.value as Locales)
       }}
+      selectedItem={LANGUAGE_OPTIONS.find((opt) => opt.value === i18n.language)}
     />
   )
 }

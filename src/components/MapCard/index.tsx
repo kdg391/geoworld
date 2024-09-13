@@ -13,6 +13,7 @@ import {
 import { useTranslation } from '@/i18n/client.js'
 
 import styles from './index.module.css'
+
 import './index.css'
 
 import type { Map } from '@/types/index.js'

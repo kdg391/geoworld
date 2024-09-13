@@ -1,32 +1,36 @@
 {
-  "finalRoundResult": {
+  "final_round_result": {
     "points_one": "{{count, number}} Point",
     "points_other": "{{count, number}} Points",
     "replay": "Replay",
     "exit": "Exit"
   },
-  "guessMap": {
-    "closeMap": "Close Map",
-    "openMap": "Open Map"
+  "guess_map": {
+    "open_map": "Open Map",
+    "close_map": "Close Map",
+    "increase_map_size": "Increase Map Size",
+    "decrease_map_size": "Decrease Map Size",
+    "zoom_in": "Zoom In",
+    "zoom_out": "Zoom Out"
   },
-  "roundResult": {
+  "round_result": {
     "points_one": "+{{count, number}} Point",
     "points_other": "+{{count, number}} Points",
     "distance": {
       "imperial": "Your guess was <strong>{{distance, number(maximumFractionDigits: 1; style: unit; unit: mile)}}</strong> from the correct location",
       "metric": "Your guess was <strong>{{distance, number(maximumFractionDigits: 1; style: unit; unit: kilometer)}}</strong> from the correct location"
     },
-    "timedOut": "You've timed out.",
-    "viewResults": "View Results",
-    "nextRound": "Next Round"
+    "timed_out": "You've timed out.",
+    "view_results": "View Results",
+    "next_round": "Next Round"
   },
   "status": {
     "map": "Map",
     "round": "Round",
     "score": "Score"
   },
-  "svControls": {
-    "returnToStart": "Return to Start",
+  "controls": {
+    "return_to_start": "Return to Start",
     "undo": "Undo"
   }
 }

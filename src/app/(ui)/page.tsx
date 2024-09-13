@@ -1,7 +1,7 @@
 'use server'
 
 import dynamic from 'next/dynamic'
-import Image from 'next/image'
+// import Image from 'next/image'
 
 import { createTranslation } from '@/i18n/server.js'
 
@@ -17,18 +17,18 @@ const Home = async () => {
     <>
       <main>
         <section className={styles.hero}>
-          <div className={styles['hero-image']}>
-            <Image
+          <div className={styles['hero-img-container']}>
+            {/*<Image
               src="/assets/images/background.jpg"
               alt="Background Image"
-              className={styles['bg-image']}
+              className={styles['hero-img']}
               fill
               priority
-            />
+            />*/}
             <div className={styles['hero-backdrop']}></div>
           </div>
           <div className={styles['hero-content']}>
-            <h1>{t('heroTitle')}</h1>
+            <h1>{t('hero.title')}</h1>
             <p>
               Test your geography skills and discover new places.
               <br />

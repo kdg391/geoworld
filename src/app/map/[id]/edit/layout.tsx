@@ -6,8 +6,10 @@ import { createClient } from '@/utils/supabase/server.js'
 
 import type { Metadata } from 'next'
 
-export const metadata: Metadata = {
-  title: 'Edit Map - GeoWorld',
+export const generateMetadata = async (): Promise<Metadata> => {
+  return {
+    title: 'Edit Map - GeoWorld',
+  }
 }
 
 export default async function Layout({

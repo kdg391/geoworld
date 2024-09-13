@@ -1,6 +1,7 @@
 'use client'
 
 import dynamic from 'next/dynamic'
+import { useState } from 'react'
 import { useFormState } from 'react-dom'
 
 import { changeEmail } from '@/actions/auth.js'
@@ -24,12 +25,18 @@ interface FormState {
   } | null
 }
 
-const EmailForm = ({ email }: { email: string | undefined }) => {
+interface Props {
+  email: string | undefined
+}
+
+const EmailForm = ({ email }: Props) => {
   'use client'
 
   const [state, action] = useFormState<FormState, FormData>(changeEmail, {
     errors: null,
   })
+
+  const [changes, setChanges] = useState(false)
 
   const { t } = useTranslation('auth')
 
@@ -43,6 +50,9 @@ const EmailForm = ({ email }: { email: string | undefined }) => {
           name="email"
           defaultValue={email ?? ''}
           className={styles.input}
+          onChange={(event) => {
+            setChanges(event.target.value.trim() !== (email ?? ''))
+          }}
         />
         {state.errors?.newEmail &&
           state.errors.newEmail.map((msg) => (
@@ -51,7 +61,13 @@ const EmailForm = ({ email }: { email: string | undefined }) => {
             </p>
           ))}
 
-        <SubmitButton size="s" type="submit" formAction={action}>
+        <SubmitButton
+          size="s"
+          type="submit"
+          formAction={action}
+          isLoading={false}
+          disabled={!changes}
+        >
           Change email
         </SubmitButton>
       </form>

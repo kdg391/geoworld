@@ -1,7 +1,9 @@
 import { booleanPointInPolygon } from '@turf/boolean-point-in-polygon'
 import { point } from '@turf/helpers'
 
-import worldGeoJson from '../constants/country.geo.json' with { type: 'json' }
+import worldGeoJson from '../constants/country.geo.json' // with { type: 'json' }
+
+import 'server-only'
 
 export const getCountryFromCoordinates = (loc: google.maps.LatLngLiteral) => {
   const p = point([loc.lng, loc.lat])

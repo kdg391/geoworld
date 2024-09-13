@@ -30,14 +30,14 @@ const StreetViewControls: React.FC<Props> = ({
     >
       <button
         className={styles['return-to-start-btn']}
-        title={t('svControls.returnToStart')}
+        title={t('controls.return_to_start')}
         onClick={onReturnToStartClick}
       >
         <Flag size={16} />
       </button>
       <button
         className={styles['undo-btn']}
-        title={t('svControls.undo')}
+        title={t('controls.undo')}
         onClick={onUndoClick}
       >
         <RotateCcw size={16} />

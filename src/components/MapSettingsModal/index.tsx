@@ -19,6 +19,7 @@ import {
 import { useTranslation } from '@/i18n/client.js'
 
 import styles from './index.module.css'
+
 import './index.css'
 
 import type { Map } from '@/types/index.js'
@@ -32,19 +33,19 @@ const Twemoji = dynamic(() => import('../Twemoji.js'))
 
 interface Props {
   isModalOpen: boolean
-  mapData: Map
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>
+  mapData: Map
   userId?: string
 }
 
 const MapSettingsModal = ({
   isModalOpen,
-  mapData,
   setIsModalOpen,
+  mapData,
   userId,
 }: Props) => {
   const router = useRouter()
-  const { t } = useTranslation('map-settings')
+  const { t } = useTranslation(['translation', 'map-settings'])
 
   const [canMove, setCanMove] = useState(true)
   const [canPan, setCanPan] = useState(true)
@@ -109,26 +110,12 @@ const MapSettingsModal = ({
                 }
                 width={24}
                 height={24}
-                alt={
-                  mapData.id === OFFICIAL_MAP_WORLD_ID
-                    ? t('translation:world')
-                    : t(
-                        `translation:country.${OFFICIAL_MAP_COUNTRY_CODES[mapData.id]}`,
-                      )
-                }
+                alt={mapData.name}
               />
             )}
           </div>
           <div className={styles['map-details']}>
-            <h4>
-              {mapData.type === 'official'
-                ? mapData.id === OFFICIAL_MAP_WORLD_ID
-                  ? t('translation:world')
-                  : t(
-                      `translation:country.${OFFICIAL_MAP_COUNTRY_CODES[mapData.id]}`,
-                    )
-                : mapData.name}
-            </h4>
+            <h4>{mapData.name}</h4>
             {mapData.description && <p>{mapData.description}</p>}
           </div>
         </div>

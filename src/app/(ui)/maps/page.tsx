@@ -25,22 +25,22 @@ const Maps = async () => {
     <main>
       <section className={styles.section}>
         <div>
-          <h2>{t('officialMaps')}</h2>
+          <h2>{t('official_maps')}</h2>
           <div className={homeStyles['map-cards']}>
             {officialMaps.map((map) => (
               <MapCard key={map.id} mapData={map} />
             ))}
           </div>
-          <Link href="/maps/official">{t('moreOfficialMaps')}</Link>
+          <Link href="/maps/official">{t('more_official_maps')}</Link>
         </div>
         <div>
-          <h2>{t('communityMaps')}</h2>
+          <h2>{t('community_maps')}</h2>
           <div className={homeStyles['map-cards']}>
             {communityMaps.map((map) => (
               <MapCard key={map.id} mapData={map} />
             ))}
           </div>
-          <Link href="/maps/community">{t('moreCommunityMaps')}</Link>
+          <Link href="/maps/community">{t('more_community_maps')}</Link>
         </div>
       </section>
     </main>

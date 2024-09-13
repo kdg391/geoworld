@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { useCallback, useEffect, useState } from 'react'
 
-import { getGame, updateGame } from '@/actions/game.js'
+import { startGameRound, updateGame } from '@/actions/game.js'
 import { getMap } from '@/actions/map.js'
 
 import useGoogleApi from '@/hooks/useGoogleApi.js'
@@ -43,7 +43,7 @@ const Game = ({ params }: Props) => {
 
   useEffect(() => {
     const loadGame = async () => {
-      const { data: gData, error: gDataErr } = await getGame(params.id)
+      const { data: gData, error: gDataErr } = await startGameRound(params.id)
 
       if (!gData) {
         setGameData(null)
@@ -61,22 +61,7 @@ const Game = ({ params }: Props) => {
 
       if (!isLoaded) await loadApi()
 
-      if (
-        gData.state !== 'finished' &&
-        gData.rounds.length === gData.guesses.length
-      ) {
-        const { data, error } = await updateGame(gData.id, {
-          data: null,
-          type: 'roundStart',
-        })
-
-        if (!data || error) return
-
-        setGameData(data)
-      } else {
-        setGameData(gData)
-      }
-
+      setGameData(gData)
       setMapData(mData)
 
       if (gData.state === 'finished') setView('result')
@@ -94,11 +79,8 @@ const Game = ({ params }: Props) => {
         const { data: updatedData, error: uErr } = await updateGame(
           gameData.id,
           {
-            data: {
-              guessedLocation: markerPosition,
-              timedOut,
-            },
-            type: 'guess',
+            guessedLocation: markerPosition,
+            timedOut,
           },
         )
 
@@ -135,6 +117,7 @@ const Game = ({ params }: Props) => {
       {view === 'game' && (
         <GameStatus
           finishRound={finishRound}
+          location={gameData.rounds[gameData.round]}
           mapName={mapData.name}
           round={gameData.round}
           rounds={gameData.settings.rounds}

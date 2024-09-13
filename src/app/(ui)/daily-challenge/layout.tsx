@@ -1,8 +1,12 @@
+import { createTranslation } from '@/i18n/server.js'
+
 import type { Metadata } from 'next'
 
 export const generateMetadata = async (): Promise<Metadata> => {
+  const { t } = await createTranslation('translation')
+
   return {
-    title: 'Daily Challenge - GeoWorld',
+    title: `${t('daily_challenge')} - GeoWorld`,
   }
 }
 

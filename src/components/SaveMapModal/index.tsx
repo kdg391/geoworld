@@ -2,12 +2,12 @@
 
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 import { useFormState } from 'react-dom'
 
 import { updateMap } from '@/actions/map.js'
 
 import type { Coords } from '@/types/index.js'
-import { useState } from 'react'
 
 const Button = dynamic(() => import('../common/Button/index.js'))
 const Modal = dynamic(() => import('../Modal/index.js'))

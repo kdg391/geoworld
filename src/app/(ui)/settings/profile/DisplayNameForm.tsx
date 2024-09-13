@@ -1,9 +1,12 @@
 'use client'
 
 import dynamic from 'next/dynamic'
+import { useState } from 'react'
 import { useFormState } from 'react-dom'
 
 import { changeDisplayName } from '@/actions/profile.js'
+
+import { useTranslation } from '@/i18n/client.js'
 
 import styles from '../layout.module.css'
 
@@ -33,16 +36,23 @@ const DisplayNameForm = ({ displayName }: Props) => {
     errors: null,
   })
 
+  const { t } = useTranslation('auth')
+
+  const [changes, setChanges] = useState(false)
+
   return (
     <>
       <form action={action}>
-        <label htmlFor="display-name">Display Name</label>
+        <label htmlFor="display-name">{t('display_name')}</label>
         <TextInput
           type="text"
           id="display-name"
           name="display-name"
-          defaultValue={displayName ?? ''}
+          defaultValue={displayName}
           className={styles.input}
+          onChange={(event) => {
+            setChanges(event.target.value.trim() !== displayName)
+          }}
         />
         {state.errors?.newName &&
           state.errors.newName.map((msg) => (
@@ -51,7 +61,13 @@ const DisplayNameForm = ({ displayName }: Props) => {
             </p>
           ))}
 
-        <SubmitButton size="s" type="submit" formAction={action}>
+        <SubmitButton
+          size="s"
+          type="submit"
+          formAction={action}
+          isLoading={false}
+          disabled={!changes}
+        >
           Change display name
         </SubmitButton>
       </form>

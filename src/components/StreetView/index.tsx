@@ -25,7 +25,7 @@ const StreetView = ({ location, settings, view }: Props) => {
   const svPanoramaRef = useRef<google.maps.StreetViewPanorama | null>(null)
   const svServiceRef = useRef<google.maps.StreetViewService | null>(null)
 
-  const positionHistoryRef = useRef<google.maps.LatLngLiteral[]>([])
+  const posHistoryRef = useRef<google.maps.LatLngLiteral[]>([])
 
   const { isLoaded } = useGoogleApi()
 
@@ -53,49 +53,26 @@ const StreetView = ({ location, settings, view }: Props) => {
     svPanoramaRef.current = svPanorama
     svServiceRef.current = svService
 
-    const compareLocs = (
-      l1?: google.maps.LatLngLiteral,
-      l2?: google.maps.LatLngLiteral,
-    ) => {
-      if (!l1 || !l2) return false
-
-      return l1.lat === l2.lat && l1.lng === l2.lng
-    }
-
     svPanorama.addListener('position_changed', () => {
       const pos = svPanoramaRef.current?.getPosition()
 
       if (!pos) return
 
       const position = pos.toJSON()
+      const lastPosition =
+        posHistoryRef.current[posHistoryRef.current.length - 1]
 
       if (
-        positionHistoryRef.current.length < 1 ||
-        !compareLocs(
-          position,
-          positionHistoryRef.current[positionHistoryRef.current.length - 1],
+        posHistoryRef.current.length < 1 ||
+        !(
+          position.lat === lastPosition?.lat &&
+          position.lng === lastPosition?.lng
         )
       )
-        positionHistoryRef.current.push(position)
+        posHistoryRef.current.push(position)
     })
 
     loadPanorama()
-
-    setTimeout(() => {
-      if (settings.canPan) return
-
-      if (document.querySelector('.widget-scene')) {
-        const widgetScene = document.querySelector('.widget-scene') as Element
-
-        const disablePan = (event: Event) => {
-          event.stopPropagation()
-        }
-
-        widgetScene.addEventListener('mousedown', disablePan)
-        widgetScene.addEventListener('touchstart', disablePan)
-        widgetScene.addEventListener('pointerdown', disablePan)
-      }
-    }, 500)
   }
 
   const loadPanorama = () => {
@@ -114,13 +91,10 @@ const StreetView = ({ location, settings, view }: Props) => {
       .then(({ data }) => {
         if (!data.location) return
 
-        console.log(location)
-
-        let heading = location.heading
-
-        if (heading === 0) {
-          heading = data.links?.[0].heading ?? 0
-        }
+        const heading =
+          location.heading === 0
+            ? (data.links?.[0].heading ?? 0)
+            : location.heading
 
         svPanoramaRef.current?.setPano(data.location.pano)
         svPanoramaRef.current?.setPov({
@@ -129,7 +103,7 @@ const StreetView = ({ location, settings, view }: Props) => {
         })
         svPanoramaRef.current?.setZoom(location.zoom)
 
-        positionHistoryRef.current = []
+        posHistoryRef.current = []
       })
       .catch(console.error)
   }
@@ -143,11 +117,11 @@ const StreetView = ({ location, settings, view }: Props) => {
   const onUndoClick = () => {
     if (!svPanoramaRef.current) return
 
-    if (positionHistoryRef.current.length > 1) {
-      positionHistoryRef.current.pop()
+    if (posHistoryRef.current.length > 1) {
+      posHistoryRef.current.pop()
 
       svPanoramaRef.current.setPosition(
-        positionHistoryRef.current[positionHistoryRef.current.length - 1],
+        posHistoryRef.current[posHistoryRef.current.length - 1],
       )
     }
   }
@@ -162,6 +136,29 @@ const StreetView = ({ location, settings, view }: Props) => {
     if (view !== 'game') return
 
     loadPanorama()
+  }, [view])
+
+  useEffect(() => {
+    if (view !== 'game') return
+    if (settings.canPan) return
+
+    const widgetScene = document.querySelector('.widget-scene')
+
+    const disablePan = (event: Event) => {
+      if (settings.canPan) return
+
+      event.stopPropagation()
+    }
+
+    widgetScene?.addEventListener('mousedown', disablePan)
+    widgetScene?.addEventListener('touchstart', disablePan)
+    widgetScene?.addEventListener('pointerdown', disablePan)
+
+    return () => {
+      widgetScene?.removeEventListener('mousedown', disablePan)
+      widgetScene?.removeEventListener('touchstart', disablePan)
+      widgetScene?.removeEventListener('pointerdown', disablePan)
+    }
   }, [view])
 
   return (

@@ -48,7 +48,7 @@ const FinalRoundResult = ({ mapData, settings, totalScore, userId }: Props) => {
   return (
     <>
       <h2>
-        {t('finalRoundResult.points', {
+        {t('final_round_result.points', {
           count: totalScore,
         })}
       </h2>
@@ -60,10 +60,10 @@ const FinalRoundResult = ({ mapData, settings, totalScore, userId }: Props) => {
           disabled={isLoading}
           onClick={onReplayClick}
         >
-          {t('finalRoundResult.replay')}
+          {t('final_round_result.replay')}
         </Button>
         <Button variant="gray" size="l" onClick={() => router.push('/')}>
-          {t('finalRoundResult.exit')}
+          {t('final_round_result.exit')}
         </Button>
       </div>
     </>

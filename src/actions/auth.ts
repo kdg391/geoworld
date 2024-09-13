@@ -9,19 +9,19 @@ import { ONE_DAY } from '../constants/index.js'
 import { createClient } from '../utils/supabase/server.js'
 
 import {
-  changeEmailValidation,
-  changePasswordValidation,
-  deleteAccountValidation,
-  resetPasswordValidation,
-  signInValidation,
-  signUpValidation,
-  updatePasswordValidation,
+  changeEmailSchema,
+  changePasswordSchema,
+  deleteAccountSchema,
+  resetPasswordSchema,
+  signInSchema,
+  signUpSchema,
+  updatePasswordSchema,
 } from '../utils/validations/auth.js'
 
 export const signUp = async (_: unknown, formData: FormData) => {
   'use server'
 
-  const validated = await signUpValidation.safeParseAsync({
+  const validated = await signUpSchema.safeParseAsync({
     email: formData.get('email'),
     password: formData.get('password'),
     username: formData.get('username'),
@@ -77,7 +77,6 @@ export const signUp = async (_: unknown, formData: FormData) => {
   const { error } = await supabase.auth.admin.createUser({
     email: validated.data.email,
     password: validated.data.password,
-    email_confirm: true,
     user_metadata: {
       display_name: validated.data.username,
       username: validated.data.username,
@@ -98,7 +97,7 @@ export const signUp = async (_: unknown, formData: FormData) => {
 export const signIn = async (_: unknown, formData: FormData) => {
   'use server'
 
-  const validated = await signInValidation.safeParseAsync({
+  const validated = await signInSchema.safeParseAsync({
     email: formData.get('email'),
     password: formData.get('password'),
   })
@@ -146,7 +145,7 @@ export const signOut = async () => {
 export const resetPassword = async (_: unknown, formData: FormData) => {
   'use server'
 
-  const validated = await resetPasswordValidation.safeParseAsync({
+  const validated = await resetPasswordSchema.safeParseAsync({
     email: formData.get('email'),
   })
 
@@ -179,7 +178,7 @@ export const resetPassword = async (_: unknown, formData: FormData) => {
 export const updatePassword = async (_: unknown, formData: FormData) => {
   'use server'
 
-  const validated = await updatePasswordValidation.safeParseAsync({
+  const validated = await updatePasswordSchema.safeParseAsync({
     password: formData.get('password'),
     confirmPassword: formData.get('confirm-password'),
   })
@@ -246,7 +245,7 @@ export const changeEmail = async (_: unknown, formData: FormData) => {
       }
   }
 
-  const validated = await changeEmailValidation.safeParseAsync({
+  const validated = await changeEmailSchema.safeParseAsync({
     oldEmail: user.email,
     newEmail: formData.get('email'),
   })
@@ -306,7 +305,7 @@ export const changePassword = async (_: unknown, formData: FormData) => {
 
   if (!user || uErr) return redirect('/sign-in')
 
-  const validated = await changePasswordValidation.safeParseAsync({
+  const validated = await changePasswordSchema.safeParseAsync({
     oldPassword: formData.get('old-password'),
     newPassword: formData.get('new-password'),
     confirmPassword: formData.get('confirm-password'),
@@ -356,7 +355,7 @@ export const deleteAccount = async (_: unknown, formData: FormData) => {
 
   if (!user || uErr) return redirect('/sign-in')
 
-  const validated = await deleteAccountValidation.safeParseAsync({
+  const validated = await deleteAccountSchema.safeParseAsync({
     password: formData.get('password'),
   })
 

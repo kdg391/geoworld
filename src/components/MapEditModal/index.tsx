@@ -7,7 +7,6 @@ import { createCommunityMap, editCommunityMap } from '@/actions/map.js'
 
 import { useTranslation } from '@/i18n/client.js'
 
-// import styles from './index.module.css'
 import '../MapSettingsModal/index.css'
 
 const Button = dynamic(() => import('../common/Button/index.js'))
@@ -21,7 +20,7 @@ interface Props {
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export interface FormState {
+interface FormState {
   errors: {
     name?: string[]
     description?: string[]

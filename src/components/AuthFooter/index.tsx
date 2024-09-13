@@ -3,10 +3,11 @@ import Link from 'next/link'
 import { createTranslation } from '@/i18n/server.js'
 
 import styles from './index.module.css'
+
 import './index.css'
 
 const AuthFooter = async () => {
-  const { t } = await createTranslation('footer')
+  const { t } = await createTranslation('translation')
 
   return (
     <footer className={styles.footer}>

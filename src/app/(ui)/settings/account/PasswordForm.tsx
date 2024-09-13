@@ -5,6 +5,8 @@ import { useFormState } from 'react-dom'
 
 import { changePassword } from '@/actions/auth.js'
 
+import { useTranslation } from '@/i18n/client.js'
+
 import styles from '../layout.module.css'
 
 const SubmitButton = dynamic(
@@ -30,11 +32,13 @@ const PasswordForm = () => {
     errors: null,
   })
 
+  const { t } = useTranslation('auth')
+
   return (
     <>
       <form action={action}>
         <div>
-          <label htmlFor="old-password">Current Password</label>
+          <label htmlFor="old-password">{t('current_password')}</label>
           <TextInput
             type="password"
             id="old-password"
@@ -50,7 +54,7 @@ const PasswordForm = () => {
           ))}
 
         <div>
-          <label htmlFor="new-password">New Password</label>
+          <label htmlFor="new-password">{t('new_password')}</label>
           <TextInput
             type="password"
             id="new-password"
@@ -67,7 +71,7 @@ const PasswordForm = () => {
           ))}
 
         <div>
-          <label htmlFor="confirm-password">Confirm Password</label>
+          <label htmlFor="confirm-password">{t('confirm_password')}</label>
           <TextInput
             type="password"
             id="confirm-password"

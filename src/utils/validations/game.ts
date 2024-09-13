@@ -2,7 +2,7 @@ import z from 'zod'
 
 import { MAX_ROUNDS } from '../../constants/index.js'
 
-export const gameSettingsValidation = (rounds: number) =>
+export const getGameSettingsSchema = (rounds: number) =>
   z.object({
     canMove: z.boolean(),
     canPan: z.boolean(),

@@ -17,13 +17,13 @@ const NotSignedIn = () => {
 
   return (
     <div className={styles.notSigned}>
-      <Link href="/sign-in">{t('signIn')}</Link>
+      <Link href="/sign-in">{t('sign_in')}</Link>
       <Button
         variant="primary"
         size="m"
         onClick={() => router.push('/sign-up')}
       >
-        {t('signUp')}
+        {t('sign_up')}
       </Button>
     </div>
   )

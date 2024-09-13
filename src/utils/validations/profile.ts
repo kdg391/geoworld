@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-export const displayNameValidation = z
+export const displayNameSchema = z
   .object({
     oldName: z.string(),
     newName: z
@@ -19,7 +19,7 @@ export const displayNameValidation = z
     }
   })
 
-export const usernameValidation = z
+export const usernameSchema = z
   .object({
     oldName: z.string(),
     newName: z

@@ -1,12 +1,14 @@
 import Link from 'next/link'
 
+import styles from './not-found.module.css'
+
 const NotFound = () => {
   return (
-    <main>
-      <section>
-        <h1>404 Not Found</h1>
+    <main className={styles.main}>
+      <h1 className={styles.title}>404 Not Found</h1>
+      <p>
         <Link href="/">Back to Home</Link>
-      </section>
+      </p>
     </main>
   )
 }

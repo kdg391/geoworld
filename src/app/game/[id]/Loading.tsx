@@ -7,7 +7,7 @@ const Loading = () => (
     <div>
       <Spinner size={36} />
     </div>
-    <p>Loading...</p>
+    <p className={styles.text}>Loading...</p>
   </div>
 )
 

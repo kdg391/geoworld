@@ -13,8 +13,8 @@ export const updateSession = async (request: NextRequest) => {
     })
 
     const supabase = createServerClient(
-      process.env.SUPABASE_URL!,
-      process.env.SUPABASE_ANON_KEY!,
+      process.env.SUPABASE_URL as string,
+      process.env.SUPABASE_ANON_KEY as string,
       {
         cookies: {
           get(name: string) {
@@ -72,6 +72,7 @@ export const updateSession = async (request: NextRequest) => {
     if (!user || error) {
       if (
         pathname.startsWith('/dashboard') ||
+        pathname.startsWith('/game') ||
         pathname === '/settings/account' ||
         pathname === '/settings/profile'
       ) {
@@ -82,6 +83,10 @@ export const updateSession = async (request: NextRequest) => {
       }
     } else {
       if (pathname === '/') {
+        const url = new URL('/dashboard', request.url)
+
+        return NextResponse.redirect(url)
+      } else if (pathname === '/sign-in' || pathname === '/sign-up') {
         const url = new URL('/dashboard', request.url)
 
         return NextResponse.redirect(url)

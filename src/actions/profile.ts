@@ -5,8 +5,8 @@ import { redirect } from 'next/navigation'
 import { createClient } from '../utils/supabase/server.js'
 
 import {
-  displayNameValidation,
-  usernameValidation,
+  displayNameSchema,
+  usernameSchema,
 } from '../utils/validations/profile.js'
 
 import type { Profile } from '../types/index.js'
@@ -65,7 +65,7 @@ export const changeDisplayName = async (_: unknown, formData: FormData) => {
 
   if (!pData || pErr) return redirect('/sign-in')
 
-  const validated = await displayNameValidation.safeParseAsync({
+  const validated = await displayNameSchema.safeParseAsync({
     oldName: pData.display_name,
     newName: formData.get('display-name'),
   })
@@ -109,7 +109,7 @@ export const changeUsername = async (_: unknown, formData: FormData) => {
 
   if (!profileData || pErr) return redirect('/sign-in')
 
-  const validated = await usernameValidation.safeParseAsync({
+  const validated = await usernameSchema.safeParseAsync({
     oldName: profileData.username,
     newName: formData.get('username'),
   })

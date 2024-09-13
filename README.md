@@ -1,6 +1,6 @@
 # GeoWorld
 
-GeoWorld is a geography guessing game inspired by GeoGuessr, [GeoHub](https://github.com/benlikescode/GeoHub), and [GeoGuess](https://github.com/GeoGuess/GeoGuess).
+GeoWorld is a geography guessing game inspired by [GeoGuessr](https://geoguessr.com/), [GeoHub](https://github.com/benlikescode/GeoHub), and [GeoGuess](https://github.com/GeoGuess/GeoGuess).
 
 ## References
 
@@ -11,12 +11,14 @@ GeoWorld is a geography guessing game inspired by GeoGuessr, [GeoHub](https://gi
 - <https://github.com/mihai-craita/countries_center_box>
 - <https://github.com/AshKyd/geojson-regions>
 
-## Sources
+## Resources
 
 ### Fonts
 
+- [Inter](https://fonts.google.com/specimen/Inter)
 - [Pretendard](https://github.com/orioncactus/pretendard)
 
 ### Images
 
 - Icon: <https://www.flaticon.com/free-icon/map_1865269?term=map&page=1&position=33&origin=search&related_id=1865269>
+- Home Background: <https://pixabay.com/photos/spain-street-city-barcelona-travel-3486179/>

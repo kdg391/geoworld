@@ -1,41 +1,16 @@
-import localFont from 'next/font/local'
-
-import { getLocale } from '../i18n/server.js'
+import { createTranslation, getLocale } from '../i18n/server.js'
 
 import LocaleProvider from '../providers/LocaleProvider.js'
 import SettingsProvider from '../providers/SettingsProvider.js'
 import ThemeProvider from '../providers/ThemeProvider.js'
 
+import './pretendard.css'
 import './globals.css'
 
 import type { Metadata } from 'next'
 
-const pretendard = localFont({
-  src: [
-    {
-      path: '../assets/fonts/Pretendard-Bold.subset.woff2',
-      weight: '700',
-    },
-    {
-      path: '../assets/fonts/Pretendard-SemiBold.subset.woff2',
-      weight: '600',
-    },
-    {
-      path: '../assets/fonts/Pretendard-Medium.subset.woff2',
-      weight: '500',
-    },
-    {
-      path: '../assets/fonts/Pretendard-Regular.subset.woff2',
-      weight: '400',
-    },
-  ],
-  variable: '--font',
-  adjustFontFallback: false,
-})
-
-export const metadata: Metadata = {
+const defaultMetadata: Metadata = {
   title: 'GeoWorld',
-  description: 'GeoWorld is a geography guessing game.',
   openGraph: {
     type: 'website',
     siteName: 'GeoWorld',
@@ -122,6 +97,15 @@ export const metadata: Metadata = {
   },
 }
 
+export const generateMetadata = async (): Promise<Metadata> => {
+  const { t } = await createTranslation('translation')
+
+  return {
+    ...defaultMetadata,
+    description: t('description'),
+  }
+}
+
 export default async function RootLayout({
   children,
 }: Readonly<{
@@ -131,7 +115,7 @@ export default async function RootLayout({
 
   return (
     <html lang={locale} suppressHydrationWarning>
-      <body className={pretendard.variable}>
+      <body>
         <script
           dangerouslySetInnerHTML={{
             __html:

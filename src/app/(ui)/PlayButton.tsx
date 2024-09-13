@@ -19,7 +19,7 @@ const PlayButton = () => {
       size="m"
       onClick={() => router.push('/dashboard')}
     >
-      {t('getStarted')}
+      {t('get_started')}
       <ArrowRight size={16} />
     </Button>
   )

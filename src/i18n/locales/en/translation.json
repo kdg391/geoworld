@@ -1,20 +1,28 @@
 {
-  "heroTitle": "Guess Where You Are in the World",
-  "communityMaps": "Community Maps",
+  "hero.title": "Guess Where You Are in the World",
+  "hero.desc": "",
+  "community_maps": "Community Maps",
+  "daily_challenge": "Daily Challenge",
+  "dashboard": "Dashboard",
   "game": "Game",
-  "getStarted": "Get Started",
+  "get_started": "Get Started",
   "map": "Map",
   "maps": "Maps",
-  "moreCommunityMaps": "More community maps",
-  "moreOfficialMaps": "More official maps",
-  "myMaps": "My Maps",
-  "officialMaps": "Official Maps",
+  "menu": "Menu",
+  "more_community_maps": "More community maps",
+  "more_official_maps": "More official maps",
+  "my_maps": "My Maps",
+  "official_maps": "Official Maps",
   "play": "Play",
-  "privacyPolicy": "Privacy Policy",
-  "randomStreetView": "Random Street View",
-  "termsOfService": "Terms of Service",
+  "privacy": "Privacy",
+  "privacy_policy": "Privacy Policy",
+  "profile": "Profile",
+  "random_street_view": "Random Street View",
+  "settings": "Settings",
+  "terms": "Terms",
+  "terms_of_service": "Terms of Service",
   "user": "User",
-  "viewOtherMaps": "View other maps",
+  "view_other_maps": "View other maps",
   "country": {
     "ad": "Andorra",
     "ae": "United Arab Emirates",
@@ -233,18 +241,19 @@
     "zr": "Democratic Republic of the Congo",
     "zw": "Zimbabwe"
   },
-  "distanceUnit": {
-    "imperial": "Imperial",
-    "metric": "Metric"
-  },
-  "mapType": {
+  "distance_unit": "Distance Unit",
+  "distance_unit.imperial": "Imperial",
+  "distance_unit.metric": "Metric",
+  "language": "Language",
+  "language.en": "English",
+  "language.ko": "Korean",
+  "map_type": {
     "community": "Community",
     "official": "Official"
   },
-  "theme": {
-    "light": "Light",
-    "dark": "Dark",
-    "system": "System"
-  },
+  "theme": "Theme",
+  "theme.light": "Light",
+  "theme.dark": "Dark",
+  "theme.system": "System",
   "world": "World"
 }

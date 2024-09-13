@@ -5,3 +5,7 @@
   justify-content: center;
   height: 100svh;
 }
+
+.text {
+  margin-top: 0.5rem;
+}

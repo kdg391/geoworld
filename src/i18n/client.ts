@@ -44,7 +44,7 @@ i18next
     preload: runsOnServerSide ? SUPPORTED_LOCALES : [],
   })
 
-export function useTranslation(ns: string) {
+export function useTranslation(ns: string | string[]) {
   const lng = useLocale()
 
   const translator = useTransAlias(ns)

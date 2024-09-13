@@ -1,7 +1,9 @@
 'use client'
 
 import { Minus, Plus } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { memo, useEffect, useState } from 'react'
+
+import { useTranslation } from '@/i18n/client.js'
 
 import styles from './index.module.css'
 
@@ -13,6 +15,8 @@ interface Props {
 }
 
 const GuessMapZoomControls = ({ map }: Props) => {
+  const { t } = useTranslation('game')
+
   const [zoom, setZoom] = useState(1)
 
   useEffect(() => {
@@ -33,7 +37,7 @@ const GuessMapZoomControls = ({ map }: Props) => {
     <div className={styles['guess-map-zoom-controls']}>
       <button
         disabled={zoom >= MAX_ZOOM}
-        aria-label="Zoom In"
+        aria-label={t('guess_map.zoom_in')}
         onClick={() => {
           if (!map) return
 
@@ -48,7 +52,7 @@ const GuessMapZoomControls = ({ map }: Props) => {
       </button>
       <button
         disabled={zoom <= MIN_ZOOM}
-        aria-label="Zoom Out"
+        aria-label={t('guess_map.zoom_out')}
         onClick={() => {
           if (!map) return
 
@@ -65,4 +69,4 @@ const GuessMapZoomControls = ({ map }: Props) => {
   )
 }
 
-export default GuessMapZoomControls
+export default memo(GuessMapZoomControls)

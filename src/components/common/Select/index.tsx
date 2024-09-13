@@ -25,6 +25,7 @@ interface Props {
   label?: string
   menuPlacement?: 'top' | 'bottom'
   onSelectedItemChange: (changes: UseSelectSelectedItemChange<Item>) => void
+  selectedItem?: Item
 }
 
 const Select = ({
@@ -33,6 +34,7 @@ const Select = ({
   label,
   menuPlacement = 'bottom',
   onSelectedItemChange,
+  selectedItem,
 }: Props) => {
   const {
     getItemProps,
@@ -41,12 +43,13 @@ const Select = ({
     getToggleButtonProps,
     highlightedIndex,
     isOpen,
-    selectedItem,
+    selectedItem: selected,
   } = useSelect({
     defaultSelectedItem,
     items,
     itemToString: (item: Item | null) => item?.label ?? '',
     onSelectedItemChange,
+    selectedItem,
   })
 
   return (
@@ -59,8 +62,8 @@ const Select = ({
           })}
         >
           <div>
-            {selectedItem?.icon}
-            <span>{selectedItem?.label}</span>
+            {selected?.icon}
+            <span>{selected?.label}</span>
           </div>
           {menuPlacement === 'top' ? (
             <ChevronUp size={16} className="chevron" />
@@ -76,24 +79,23 @@ const Select = ({
             },
           })}
         >
-          {isOpen
-            ? items.map((item, index) => (
-                <li
-                  key={item.value}
-                  {...getItemProps({
-                    className: classNames(
-                      highlightedIndex === index ? 'focused' : '',
-                      selectedItem?.value === item.value ? 'selected' : '',
-                    ),
-                    index,
-                    item,
-                  })}
-                >
-                  {item?.icon}
-                  <span>{item.label}</span>
-                </li>
-              ))
-            : null}
+          {isOpen &&
+            items.map((item, index) => (
+              <li
+                key={item.value}
+                {...getItemProps({
+                  className: classNames(
+                    highlightedIndex === index ? 'focused' : '',
+                    selectedItem?.value === item.value ? 'selected' : '',
+                  ),
+                  index,
+                  item,
+                })}
+              >
+                {item?.icon}
+                <span>{item.label}</span>
+              </li>
+            ))}
         </ul>
       </div>
     </>

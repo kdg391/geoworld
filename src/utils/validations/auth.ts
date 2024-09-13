@@ -1,19 +1,19 @@
 import z from 'zod'
 
-export const emailValidation = z
+export const emailSchema = z
   .string()
   .trim()
   .min(1, 'The email has to be filled.')
   .email('This is not a valid email.')
 
-export const passwordValidation = z
+export const passwordSchema = z
   .string()
   .min(8, 'The password must be at least 8 characters.')
   .max(60, 'The password must be at most 60 characters.')
 
-export const signUpValidation = z.object({
-  email: emailValidation,
-  password: passwordValidation,
+export const signUpSchema = z.object({
+  email: emailSchema,
+  password: passwordSchema,
   username: z
     .string()
     .trim()
@@ -29,18 +29,18 @@ export const signUpValidation = z.object({
     ),
 })
 
-export const signInValidation = z.object({
-  email: emailValidation,
+export const signInSchema = z.object({
+  email: emailSchema,
   password: z.string(),
 })
 
-export const resetPasswordValidation = z.object({
-  email: emailValidation,
+export const resetPasswordSchema = z.object({
+  email: emailSchema,
 })
 
-export const updatePasswordValidation = z
+export const updatePasswordSchema = z
   .object({
-    password: passwordValidation,
+    password: passwordSchema,
     confirmPassword: z.string(),
   })
   .superRefine(({ password, confirmPassword }, ctx) => {
@@ -53,10 +53,10 @@ export const updatePasswordValidation = z
     }
   })
 
-export const changeEmailValidation = z
+export const changeEmailSchema = z
   .object({
     oldEmail: z.string().trim().email(),
-    newEmail: emailValidation,
+    newEmail: emailSchema,
   })
   .superRefine(({ oldEmail, newEmail }, ctx) => {
     if (oldEmail === newEmail) {
@@ -68,10 +68,10 @@ export const changeEmailValidation = z
     }
   })
 
-export const changePasswordValidation = z
+export const changePasswordSchema = z
   .object({
     oldPassword: z.string(),
-    newPassword: passwordValidation,
+    newPassword: passwordSchema,
     confirmPassword: z.string(),
   })
   .superRefine(async ({ newPassword, confirmPassword }, ctx) => {
@@ -84,6 +84,6 @@ export const changePasswordValidation = z
     }
   })
 
-export const deleteAccountValidation = z.object({
+export const deleteAccountSchema = z.object({
   password: z.string(),
 })

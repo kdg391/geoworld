@@ -13,30 +13,30 @@ const Select = dynamic(() => import('../common/Select/index.js'))
 const DistanceUnitSelect = () => {
   const { distanceUnit, setDistanceUnit } = useSettings()
 
-  const { t } = useTranslation('settings')
+  const { t } = useTranslation('translation')
 
   const distanceUnitOptions = [
     {
       value: 'imperial',
-      label: t('translation:distanceUnit.imperial'),
+      label: t('distance_unit.imperial'),
     },
     {
       value: 'metric',
-      label: t('translation:distanceUnit.metric'),
+      label: t('distance_unit.metric'),
     },
   ]
 
   return (
     <Select
-      defaultSelectedItem={
-        distanceUnitOptions.find((opt) => opt.value === distanceUnit)!
-      }
-      label={t('distanceUnit')}
       items={distanceUnitOptions}
+      label={t('distance_unit')}
       menuPlacement="bottom"
       onSelectedItemChange={({ selectedItem }) => {
         setDistanceUnit(selectedItem.value as DistanceUnit)
       }}
+      selectedItem={distanceUnitOptions.find(
+        (opt) => opt.value === distanceUnit,
+      )}
     />
   )
 }

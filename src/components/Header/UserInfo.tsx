@@ -34,7 +34,7 @@ const UserInfo = () => {
   const [profile, setProfile] = useState<Profile | null>(null)
   const [isDropdownOpen, setIsDropdownOpen] = useClickOutside(containerRef)
 
-  const { t } = useTranslation('header')
+  const { t } = useTranslation('translation')
 
   useEffect(() => {
     if (isDropdownOpen) document.body.classList.add('scroll-locked')
@@ -117,19 +117,19 @@ const UserInfo = () => {
         className={classNames(styles.dropdown, isDropdownOpen ? 'active' : '')}
       >
         <li>
-          <Link href={`/user/${profile.id}`}>
+          <Link href={`/user/${profile.id}`} scroll={false}>
             <UserRound size={18} />
             {t('profile')}
           </Link>
         </li>
         <li>
-          <Link href="/dashboard">
+          <Link href="/dashboard" scroll={false}>
             <Map size={18} />
             {t('dashboard')}
           </Link>
         </li>
         <li>
-          <Link href="/settings/profile">
+          <Link href="/settings/profile" scroll={false}>
             <Settings size={18} />
             {t('settings')}
           </Link>
@@ -137,7 +137,7 @@ const UserInfo = () => {
         <li>
           <div onClick={onSignOutClick}>
             <LogOut size={18} />
-            {t('signOut')}
+            {t('sign_out')}
           </div>
         </li>
       </ul>

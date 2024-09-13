@@ -1,10 +1,9 @@
 # Privacy Policy
 
 Effective: August 24, 2024
-
+<br>
 Last Updated: August 24, 2024
 
-<br>
 TL;DR
 
 - We do not use any third-party analytics services.
@@ -13,6 +12,7 @@ TL;DR
 - Passwords are encrypted.
 
 <br>
+
 At <https://geoworld.games>, accessible at <https://geoworld.games>, one of our main priorities is the privacy of our visitors. This Privacy Policy document contains types of information that is collected and recorded by <https://geoworld.games> and how we use it.
 
 This privacy policy applies only to our online activities and is valid for visitors to our website with regards to the information that they shared and/or collect in <https://geoworld.games>. This policy is not applicable to any information collected offline or via channels other than this website.

@@ -1,9 +1,12 @@
 'use client'
 
 import dynamic from 'next/dynamic'
+import { useState } from 'react'
 import { useFormState } from 'react-dom'
 
 import { changeUsername } from '@/actions/profile.js'
+
+import { useTranslation } from '@/i18n/client.js'
 
 import styles from '../layout.module.css'
 
@@ -33,17 +36,28 @@ const UsernameForm = ({ username }: Props) => {
     errors: null,
   })
 
+  const [changes, setChanges] = useState(false)
+
+  const { t } = useTranslation('auth')
+
   return (
     <>
       <form action={action}>
-        <label htmlFor="username">Username</label>
+        <label htmlFor="username">{t('username')}</label>
         <TextInput
           type="text"
           id="username"
           name="username"
+          minLength={1}
+          maxLength={20}
           pattern="[a-z][a-z0-9_]*"
-          defaultValue={username ?? ''}
+          defaultValue={username}
           className={styles.input}
+          onChange={(event) => {
+            event.target.value = event.target.value.toLowerCase()
+
+            setChanges(event.target.value.trim() !== username)
+          }}
         />
         {state.errors?.newName &&
           state.errors.newName.map((msg) => (
@@ -52,7 +66,13 @@ const UsernameForm = ({ username }: Props) => {
             </p>
           ))}
 
-        <SubmitButton size="s" type="submit" formAction={action}>
+        <SubmitButton
+          size="s"
+          type="submit"
+          formAction={action}
+          isLoading={false}
+          disabled={!changes}
+        >
           Change username
         </SubmitButton>
       </form>

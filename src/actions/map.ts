@@ -14,60 +14,9 @@ import { getCountryFromCoordinates } from '../utils/map.js'
 
 import { createClient } from '../utils/supabase/server.js'
 
-import { createMapValidation } from '../utils/validations/map.js'
+import { createMapSchema } from '../utils/validations/map.js'
 
 import type { Coords, Location, Map, Profile } from '../types/index.js'
-
-export const getRandomCommunityMaps = async (limit: number) => {
-  'use server'
-
-  const supabase = createClient()
-
-  const { data, error } = await supabase
-    .rpc('get_random_maps', {
-      p_type: 'community',
-      p_count: limit,
-    })
-    .select('*')
-    .returns<Map[]>()
-
-  return {
-    data,
-    error: error?.message ?? null,
-  }
-}
-
-export const getRandomOfficialMaps = async (limit: number) => {
-  'use server'
-
-  const supabase = createClient()
-
-  const { data, error } = await supabase
-    .rpc('get_random_maps', {
-      p_type: 'official',
-      p_count: limit,
-    })
-    .select('*')
-    .returns<Map[]>()
-
-  if (data) {
-    const { t } = await createTranslation('translation')
-
-    for (const map of data) {
-      map.name =
-        map.id === OFFICIAL_MAP_WORLD_ID
-          ? t('world')
-          : map.id in OFFICIAL_MAP_COUNTRY_CODES
-            ? t(`country.${OFFICIAL_MAP_COUNTRY_CODES[map.id]}`)
-            : map.name
-    }
-  }
-
-  return {
-    data,
-    error: error?.message ?? null,
-  }
-}
 
 const PAGE_PER_MAPS = 20
 
@@ -77,11 +26,10 @@ export const getCommunityMaps = async (page: number) => {
   const supabase = createClient()
 
   const { data, error } = await supabase
-    .from('maps')
-    .select('*')
-    .eq('type', 'community')
-    .eq('is_published', true)
-    .range(page * PAGE_PER_MAPS, (page + 1) * PAGE_PER_MAPS - 1)
+    .rpc('get_community_maps', {
+      p_offset: page * PAGE_PER_MAPS,
+      p_limit: PAGE_PER_MAPS,
+    })
     .returns<Map[]>()
 
   return {
@@ -97,13 +45,9 @@ export const getOfficialMaps = async (page: number) => {
   const supabase = createClient()
 
   const { data, error } = await supabase
-    .from('maps')
-    .select('*')
-    .eq('type', 'official')
-    .eq('is_published', true)
-    .range(page * PAGE_PER_MAPS, (page + 1) * PAGE_PER_MAPS - 1)
-    .order('name', {
-      ascending: true,
+    .rpc('get_official_maps', {
+      p_offset: page * PAGE_PER_MAPS,
+      p_limit: PAGE_PER_MAPS,
     })
     .returns<Map[]>()
 
@@ -172,7 +116,7 @@ export const createCommunityMap = async (_: unknown, formData: FormData) => {
       },
     }
 
-  const validated = await createMapValidation.safeParseAsync({
+  const validated = await createMapSchema.safeParseAsync({
     name: formData.get('name'),
     description: formData.get('description'),
   })
@@ -222,7 +166,7 @@ export const editCommunityMap = async (_: unknown, formData: FormData) => {
       },
     }
 
-  const validated = await createMapValidation.safeParseAsync({
+  const validated = await createMapSchema.safeParseAsync({
     name: formData.get('name'),
     description: formData.get('description'),
   })

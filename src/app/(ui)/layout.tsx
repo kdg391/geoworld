@@ -2,7 +2,8 @@ import dynamic from 'next/dynamic'
 
 import styles from './layout.module.css'
 
-const Header = dynamic(() => import('@/components/Header/index.js'))
+import Header from '@/components/Header/index.js'
+
 const Footer = dynamic(() => import('./Footer.js'))
 
 export default function Layout({ children }: { children: React.ReactNode }) {

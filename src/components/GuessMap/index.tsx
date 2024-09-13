@@ -3,15 +3,14 @@
 import { Map as MapIcon, X } from 'lucide-react'
 import dynamic from 'next/dynamic'
 import { useEffect, useRef, useState } from 'react'
+import { useLocalStorage } from 'usehooks-ts'
 
-import COUNTRY_BOUNDS from '@/constants/country-bounds.json' with { type: 'json' }
+import COUNTRY_BOUNDS from '@/constants/country-bounds.json' // with { type: 'json' }
 import {
   DEFAULT_MAP_CENTER,
   OFFICIAL_MAP_WORLD_ID,
   OFFICIAL_MAP_COUNTRY_CODES,
 } from '@/constants/index.js'
-
-import { useLocalStorage } from '@/hooks/useLocalStorage.js'
 
 import { useTranslation } from '@/i18n/client.js'
 
@@ -21,7 +20,8 @@ import styles from './index.module.css'
 
 import type { GameView, Map } from '@/types/index.js'
 
-const Button = dynamic(() => import('../common/Button/index.js'))
+import Button from '../common/Button/index.js'
+
 const GoogleMap = dynamic(() => import('../GoogleMap.js'))
 const GuessMapControls = dynamic(() => import('../GuessMapControls/index.js'))
 const GuessMapZoomControls = dynamic(
@@ -151,7 +151,7 @@ const GuessMap = ({
       >
         <button
           className={styles['close-btn']}
-          aria-label={t('guessMap.closeMap')}
+          aria-label={t('guess_map.close_map')}
           onClick={() => setIsMobileOpen(false)}
         >
           <X />
@@ -194,7 +194,7 @@ const GuessMap = ({
 
       <button
         className={styles['map-btn']}
-        aria-label={t('guessMap.openMap')}
+        aria-label={t('guess_map.open_map')}
         onClick={() => setIsMobileOpen(true)}
       >
         <MapIcon size={24} />
