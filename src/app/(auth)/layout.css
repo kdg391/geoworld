@@ -1,11 +1,7 @@
 [data-theme='light'] {
-  --form-bg: var(--white);
-  --form-border: rgba(0, 0, 0, 0.15);
   --form-label: #676767;
 }
 
 [data-theme='dark'] {
-  --form-bg: var(--gray-850);
-  --form-border: rgba(255, 255, 255, 0.15);
   --form-label: #c2c2c2;
 }

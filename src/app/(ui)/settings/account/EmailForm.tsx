@@ -1,6 +1,5 @@
 'use client'
 
-import dynamic from 'next/dynamic'
 import { useState } from 'react'
 import { useFormState } from 'react-dom'
 
@@ -10,12 +9,8 @@ import { useTranslation } from '@/i18n/client.js'
 
 import styles from '../layout.module.css'
 
-const SubmitButton = dynamic(
-  () => import('@/components/common/SubmitButton/index.js'),
-)
-const TextInput = dynamic(
-  () => import('@/components/common/TextInput/index.js'),
-)
+import SubmitButton from '@/components/common/SubmitButton/index.js'
+import TextInput from '@/components/common/TextInput/index.js'
 
 interface FormState {
   errors: {
@@ -68,7 +63,7 @@ const EmailForm = ({ email }: Props) => {
           isLoading={false}
           disabled={!changes}
         >
-          Change email
+          {t('change_email')}
         </SubmitButton>
       </form>
       {state.errors?.message && (

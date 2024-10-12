@@ -1,25 +1,24 @@
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 
-import { getCommunityMaps, getOfficialMaps } from '@/actions/map.js'
-
 import { createTranslation } from '@/i18n/server.js'
 
 import styles from './page.module.css'
 import homeStyles from '../page.module.css'
 
+import type { Map } from '@/types/index.js'
+
 const MapCard = dynamic(() => import('@/components/MapCard/index.js'))
 
 const Maps = async () => {
-  const { data: officialMaps, error: oErr } = await getOfficialMaps(0)
+  const { data: officialMaps } = (await fetch(
+    `${process.env.NEXT_PUBLIC_URL}/api/maps/official?page=0`,
+  ).then((res) => res.json())) as { data: Map[] | null }
+  const { data: communityMaps } = (await fetch(
+    `${process.env.NEXT_PUBLIC_URL}/api/maps/community?page=0`,
+  ).then((res) => res.json())) as { data: Map[] | null }
 
-  if (!officialMaps || oErr) return
-
-  const { data: communityMaps, error: cErr } = await getCommunityMaps(0)
-
-  if (!communityMaps || cErr) return
-
-  const { t } = await createTranslation('translation')
+  const { t } = await createTranslation('common')
 
   return (
     <main>
@@ -27,16 +26,14 @@ const Maps = async () => {
         <div>
           <h2>{t('official_maps')}</h2>
           <div className={homeStyles['map-cards']}>
-            {officialMaps.map((map) => (
-              <MapCard key={map.id} mapData={map} />
-            ))}
+            {officialMaps?.map((map) => <MapCard key={map.id} mapData={map} />)}
           </div>
           <Link href="/maps/official">{t('more_official_maps')}</Link>
         </div>
         <div>
           <h2>{t('community_maps')}</h2>
           <div className={homeStyles['map-cards']}>
-            {communityMaps.map((map) => (
+            {communityMaps?.map((map) => (
               <MapCard key={map.id} mapData={map} />
             ))}
           </div>

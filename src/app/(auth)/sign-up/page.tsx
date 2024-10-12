@@ -7,9 +7,9 @@ import { createTranslation } from '@/i18n/server.js'
 
 import styles from '../page.module.css'
 
-const Caption = dynamic(() => import('./Caption.js'))
-
 import Form from './Form.js'
+
+const Caption = dynamic(() => import('../Caption.js'))
 
 const SignUp = async () => {
   'use server'

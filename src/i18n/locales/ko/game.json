@@ -8,10 +8,10 @@
   "guess_map": {
     "open_map": "지도 열기",
     "close_map": "지도 닫기",
-    "increase_map_size": "Increase Map Size",
-    "decrease_map_size": "Decrease Map Size",
-    "zoom_in": "Zoom In",
-    "zoom_out": "Zoom Out"
+    "increase_map_size": "지도 크기 늘리기",
+    "decrease_map_size": "지도 크기 줄이기",
+    "zoom_in": "확대",
+    "zoom_out": "축소"
   },
   "round_result": {
     "points_one": "+{{count, number}} 포인트",

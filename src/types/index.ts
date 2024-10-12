@@ -10,21 +10,34 @@ export type DistanceUnit = 'imperial' | 'metric'
 
 export type CountryCodes = (typeof OFFICIAL_COUNTRY_CODES)[number] | 'world'
 
-export type GameView = 'game' | 'result' | 'finalResult'
+export type User = DefaultUser & {
+  hashed_password: string | null
+}
+
+type UserRole = 'user' | 'admin'
+
+export interface DefaultUser {
+  id: string
+  created_at: string
+  email: string
+  emailVerified: string | null
+  role: UserRole
+}
 
 export interface Profile {
   id: string
-  username: string
-  display_name: string
-  is_admin: boolean
+  username: string | null
+  display_name: string | null
   is_public: boolean
 }
+
+type MapType = 'community' | 'official'
 
 export interface Map {
   id: string
   created_at: string
   updated_at: string
-  type: 'community' | 'official'
+  type: MapType
   name: string
   description: string | null
   creator: string
@@ -32,7 +45,7 @@ export interface Map {
   average_score: number
   explorers: number
   locations_count: number
-  likes: number
+  likes_count: number
   score_factor: number
   bounds: {
     min: google.maps.LatLngLiteral
@@ -90,6 +103,8 @@ export type RoundLocation = Coords & {
 
 type GameState = 'started' | 'finished'
 type GameMode = 'standard' | 'streak'
+
+export type GameView = 'game' | 'result' | 'finalResult'
 
 export interface Game {
   id: string

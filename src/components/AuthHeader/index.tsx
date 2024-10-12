@@ -5,12 +5,22 @@ import styles from './index.module.css'
 
 const AuthHeader = () => (
   <header className={styles.header}>
-    <h2 className={styles.title}>
-      <Link href="/" className={styles['title-link']}>
-        <Image src="/assets/icons/icon.svg" alt="Icon" width={18} height={18} />
-        <span>GeoWorld</span>
-      </Link>
-    </h2>
+    <Link href="/" className={styles['title-link']}>
+      <Image
+        src="/assets/light.svg"
+        width={124}
+        height={24}
+        alt="GeoWorld Logo"
+        className="dark-hidden"
+      />
+      <Image
+        src="/assets/dark.svg"
+        width={124}
+        height={24}
+        alt="GeoWorld Logo"
+        className="light-hidden"
+      />
+    </Link>
   </header>
 )
 

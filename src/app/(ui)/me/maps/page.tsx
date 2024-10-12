@@ -3,6 +3,8 @@
 import dynamic from 'next/dynamic'
 import { redirect } from 'next/navigation'
 
+import { auth } from '@/auth.js'
+
 import { createClient } from '@/utils/supabase/server.js'
 
 import type { Map } from '@/types/index.js'
@@ -14,19 +16,18 @@ const CreateButton = dynamic(() => import('./CreateButton.js'))
 const Maps = async () => {
   'use server'
 
-  const supabase = createClient()
+  const session = await auth()
 
-  const {
-    data: { user },
-    error: uErr,
-  } = await supabase.auth.getUser()
+  if (!session) redirect('/sign-in?next=/dashboard/maps')
 
-  if (!user || uErr) redirect('/sign-in?next=/dashboard/maps')
+  const supabase = createClient({
+    supabaseAccessToken: session.supabaseAccessToken,
+  })
 
   const { data: myMaps, error: mErr } = await supabase
     .from('maps')
     .select('*')
-    .eq('creator', user.id)
+    .eq('creator', session.user.id)
     .eq('type', 'community')
     .order('updated_at', {
       ascending: false,

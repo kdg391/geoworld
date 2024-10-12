@@ -17,19 +17,30 @@ const ThemeSelect = dynamic(() => import('../ThemeSelect/index.js'), {
 })
 
 const HomeFooter = () => {
-  const { t } = useTranslation('translation')
+  const { t } = useTranslation('common')
 
   return (
     <footer className={styles.footer}>
       <div className={styles.left}>
-        <div className={styles.title}>
+        <div
+          style={{
+            display: 'flex',
+          }}
+        >
           <Image
-            src="/assets/icons/icon.svg"
-            width={24}
+            src="/assets/light.svg"
+            width={124}
             height={24}
-            alt="Logo"
+            alt="GeoWorld Logo"
+            className="dark-hidden"
           />
-          GeoWorld
+          <Image
+            src="/assets/dark.svg"
+            width={124}
+            height={24}
+            alt="GeoWorld Logo"
+            className="light-hidden"
+          />
         </div>
         <div className={styles['social-links']}>
           <a
@@ -52,14 +63,6 @@ const HomeFooter = () => {
         </div>
       </div>
       <div className={styles.right}>
-        <div>
-          <h4>Links</h4>
-          <ul className={styles.links}>
-            <li>
-              <Link href="/random">{t('random_street_view')}</Link>
-            </li>
-          </ul>
-        </div>
         <div>
           <h4>Legal</h4>
           <ul className={styles.links}>

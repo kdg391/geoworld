@@ -2,6 +2,8 @@
 
 import Link from 'next/link'
 
+import { auth } from '@/auth.js'
+
 import { createClient } from '@/utils/supabase/server.js'
 
 interface Props {
@@ -9,7 +11,11 @@ interface Props {
 }
 
 const Leaderboard = async ({ mapId }: Props) => {
-  const supabase = createClient()
+  const session = await auth()
+
+  const supabase = createClient({
+    supabaseAccessToken: session?.supabaseAccessToken,
+  })
 
   const { data, error } = await supabase
     .rpc('get_ranked_games', {
@@ -30,7 +36,7 @@ const Leaderboard = async ({ mapId }: Props) => {
         </tr>
       </thead>
       <tbody>
-        {data?.map((l) => (
+        {data.map((l) => (
           <tr key={l.id}>
             <td>{l.rank}</td>
             <td>

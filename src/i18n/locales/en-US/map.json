@@ -3,5 +3,7 @@
   "explorers": "Explorers",
   "likes": "Likes",
   "locations_one": "Location",
-  "locations_other": "Locations"
+  "locations_other": "Locations",
+  "leaderboard": "Leaderboard",
+  "updated": "Updated {{val, datetime}}"
 }

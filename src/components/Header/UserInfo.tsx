@@ -1,14 +1,13 @@
 'use client'
 
-import { LogOut, Map, Settings, UserRound } from 'lucide-react'
+import { LogOut, Settings, UserRound } from 'lucide-react'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { signOut } from 'next-auth/react'
 import { useEffect, useRef, useState } from 'react'
 
-import { signOut } from '@/actions/auth.js'
 import { getProfile } from '@/actions/profile.js'
-import { getUser } from '@/actions/user.js'
 
 import { ONE_DAY } from '@/constants/index.js'
 
@@ -19,22 +18,29 @@ import { useTranslation } from '@/i18n/client.js'
 import { classNames } from '@/utils/index.js'
 
 import styles from './UserInfo.module.css'
+
 import './UserInfo.css'
 
+import type { Session } from 'next-auth'
 import type { Profile } from '@/types/index.js'
 
 const NotSignedIn = dynamic(() => import('./NotSignedIn.js'))
 
-const UserInfo = () => {
+interface Props {
+  session: Session | null
+}
+
+const UserInfo = ({ session }: Props) => {
   const containerRef = useRef<HTMLDivElement | null>(null)
 
   const router = useRouter()
 
   const [isLoading, setIsLoading] = useState(true)
   const [profile, setProfile] = useState<Profile | null>(null)
+
   const [isDropdownOpen, setIsDropdownOpen] = useClickOutside(containerRef)
 
-  const { t } = useTranslation('translation')
+  const { t } = useTranslation(['common', 'auth'])
 
   useEffect(() => {
     if (isDropdownOpen) document.body.classList.add('scroll-locked')
@@ -43,12 +49,7 @@ const UserInfo = () => {
 
   useEffect(() => {
     const init = async () => {
-      const {
-        data: { user },
-        error: uErr,
-      } = await getUser()
-
-      if (!user || uErr) return
+      if (!session) return
 
       const pCache = localStorage.getItem('profileCache')
       const pCacheUpdated = localStorage.getItem('profileCacheUpdated')
@@ -63,7 +64,7 @@ const UserInfo = () => {
         return
       }
 
-      const { data: pData, error: pErr } = await getProfile(user.id)
+      const { data: pData, error: pErr } = await getProfile(session.user.id)
 
       if (!pData || pErr) return
 
@@ -88,7 +89,8 @@ const UserInfo = () => {
   }, [])
 
   if (isLoading) return
-  if (!profile) return <NotSignedIn />
+  if (!session) return <NotSignedIn />
+  if (!profile) return
 
   const onSignOutClick = async () => {
     if (localStorage.getItem('profileCache'))
@@ -123,12 +125,6 @@ const UserInfo = () => {
           </Link>
         </li>
         <li>
-          <Link href="/dashboard" scroll={false}>
-            <Map size={18} />
-            {t('dashboard')}
-          </Link>
-        </li>
-        <li>
           <Link href="/settings/profile" scroll={false}>
             <Settings size={18} />
             {t('settings')}
@@ -137,7 +133,7 @@ const UserInfo = () => {
         <li>
           <div onClick={onSignOutClick}>
             <LogOut size={18} />
-            {t('sign_out')}
+            {t('auth:sign_out')}
           </div>
         </li>
       </ul>

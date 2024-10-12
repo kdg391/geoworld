@@ -28,7 +28,7 @@ interface Props {
 const MapCard = ({ mapData }: Props) => {
   const router = useRouter()
 
-  const { t } = useTranslation('translation')
+  const { t } = useTranslation('common')
 
   return (
     <div className={styles['map-card']}>

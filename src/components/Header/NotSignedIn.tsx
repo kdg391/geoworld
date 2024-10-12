@@ -1,6 +1,5 @@
 'use client'
 
-import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
@@ -8,7 +7,7 @@ import { useTranslation } from '@/i18n/client.js'
 
 import styles from './NotSignedIn.module.css'
 
-const Button = dynamic(() => import('../common/Button/index.js'))
+import Button from '../common/Button/index.js'
 
 const NotSignedIn = () => {
   const router = useRouter()

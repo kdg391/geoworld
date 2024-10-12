@@ -7,7 +7,7 @@ import styles from './page.module.css'
 import type { Metadata } from 'next'
 
 export const generateMetadata = async (): Promise<Metadata> => {
-  const { t } = await createTranslation('translation')
+  const { t } = await createTranslation('common')
 
   return {
     title: `${t('game')} - GeoWorld`,

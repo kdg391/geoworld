@@ -29,7 +29,7 @@ interface FormState {
 }
 
 const MapEditModal = ({ isEditing, isModalOpen, setIsModalOpen }: Props) => {
-  const { t } = useTranslation('translation')
+  const { t } = useTranslation('common')
 
   const [state, action] = useFormState<FormState, FormData>(
     isEditing ? editCommunityMap : createCommunityMap,

@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 
-import { getProfile, getProfileByUsername } from '@/actions/profile.js'
+import { getProfileByUsername } from '@/actions/profile.js'
 
 interface Params {
   params: {
@@ -26,7 +26,9 @@ const User = async ({ params }: Params) => {
     redirect(`/user/${pData.id}`)
   }
 
-  const { data: pData, error: pErr } = await getProfile(params.id)
+  const { data: pData, error: pErr } = await fetch(
+    `${process.env.NEXT_PUBLIC_URL}/api/users/${params.id}`,
+  ).then((res) => res.json())
 
   if (!pData || pErr)
     return (

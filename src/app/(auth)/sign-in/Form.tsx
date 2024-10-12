@@ -1,8 +1,9 @@
 'use client'
 
+import Link from 'next/link'
 import { useFormState } from 'react-dom'
 
-import { signIn } from '@/actions/auth.js'
+import { signInCredentials } from '@/actions/auth.js'
 
 import { useTranslation } from '@/i18n/client.js'
 
@@ -22,10 +23,12 @@ interface FormState {
 const Form = () => {
   'use client'
 
-  const { t } = useTranslation('auth')
-  const [state, action] = useFormState<FormState, FormData>(signIn, {
+  // @ts-ignore
+  const [state, action] = useFormState<FormState, FormData>(signInCredentials, {
     errors: null,
   })
+
+  const { t } = useTranslation('auth')
 
   return (
     <form action={action} className={styles.form}>
@@ -69,6 +72,9 @@ const Form = () => {
       {state.errors?.message && (
         <p className={styles['error-msg']}>{state.errors.message}</p>
       )}
+      <p className={styles.msg}>
+        <Link href="/reset-password">{t('forgot_password')}</Link>
+      </p>
       <SubmitButton full formAction={action} className={styles.button}>
         {t('sign_in')}
       </SubmitButton>

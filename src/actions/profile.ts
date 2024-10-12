@@ -2,11 +2,13 @@
 
 import { redirect } from 'next/navigation'
 
+import { auth } from '@/auth.js'
+
 import { createClient } from '../utils/supabase/server.js'
 
 import {
-  displayNameSchema,
-  usernameSchema,
+  changeDisplayNameSchema,
+  changeUsernameSchema,
 } from '../utils/validations/profile.js'
 
 import type { Profile } from '../types/index.js'
@@ -14,7 +16,11 @@ import type { Profile } from '../types/index.js'
 export const getProfile = async (id: string) => {
   'use server'
 
-  const supabase = createClient()
+  const session = await auth()
+
+  const supabase = createClient({
+    supabaseAccessToken: session?.supabaseAccessToken,
+  })
 
   const { data, error } = await supabase
     .from('profiles')
@@ -31,7 +37,11 @@ export const getProfile = async (id: string) => {
 export const getProfileByUsername = async (username: string) => {
   'use server'
 
-  const supabase = createClient()
+  const session = await auth()
+
+  const supabase = createClient({
+    supabaseAccessToken: session?.supabaseAccessToken,
+  })
 
   const { data, error } = await supabase
     .from('profiles')
@@ -48,25 +58,24 @@ export const getProfileByUsername = async (username: string) => {
 export const changeDisplayName = async (_: unknown, formData: FormData) => {
   'use server'
 
-  const supabase = createClient()
+  const session = await auth()
 
-  const {
-    data: { user },
-    error: uErr,
-  } = await supabase.auth.getUser()
+  if (!session) redirect('/sign-in')
 
-  if (!user || uErr) return redirect('/sign-in')
+  const supabase = createClient({
+    supabaseAccessToken: session.supabaseAccessToken,
+  })
 
-  const { data: pData, error: pErr } = await supabase
+  const { data: profile, error: pErr } = await supabase
     .from('profiles')
     .select('*')
-    .eq('id', user.id)
+    .eq('id', session.user.id)
     .single<Profile>()
 
-  if (!pData || pErr) return redirect('/sign-in')
+  if (!profile || pErr) redirect('/sign-in')
 
-  const validated = await displayNameSchema.safeParseAsync({
-    oldName: pData.display_name,
+  const validated = await changeDisplayNameSchema.safeParseAsync({
+    oldName: profile.display_name,
     newName: formData.get('display-name'),
   })
 
@@ -80,7 +89,7 @@ export const changeDisplayName = async (_: unknown, formData: FormData) => {
     .update({
       display_name: validated.data.newName,
     })
-    .eq('id', user.id)
+    .eq('id', session.user.id)
 
   return {
     errors: {
@@ -92,25 +101,24 @@ export const changeDisplayName = async (_: unknown, formData: FormData) => {
 export const changeUsername = async (_: unknown, formData: FormData) => {
   'use server'
 
-  const supabase = createClient()
+  const session = await auth()
 
-  const {
-    data: { user },
-    error: uErr,
-  } = await supabase.auth.getUser()
+  if (!session) redirect('/sign-in')
 
-  if (!user || uErr) return redirect('/sign-in')
+  const supabase = createClient({
+    supabaseAccessToken: session.supabaseAccessToken,
+  })
 
-  const { data: profileData, error: pErr } = await supabase
+  const { data: profile, error: pErr } = await supabase
     .from('profiles')
     .select('*')
-    .eq('id', user.id)
+    .eq('id', session.user.id)
     .single<Profile>()
 
-  if (!profileData || pErr) return redirect('/sign-in')
+  if (!profile || pErr) redirect('/sign-in')
 
-  const validated = await usernameSchema.safeParseAsync({
-    oldName: profileData.username,
+  const validated = await changeUsernameSchema.safeParseAsync({
+    oldName: profile.username,
     newName: formData.get('username'),
   })
 
@@ -125,7 +133,7 @@ export const changeUsername = async (_: unknown, formData: FormData) => {
     })
     .returns<boolean>()
 
-  if (usernameExists === true)
+  if (usernameExists)
     return {
       errors: {
         newName: ['The username already exists.'],
@@ -144,7 +152,7 @@ export const changeUsername = async (_: unknown, formData: FormData) => {
     .update({
       username: validated.data.newName.trim(),
     })
-    .eq('id', user.id)
+    .eq('id', session.user.id)
 
   return {
     errors: {

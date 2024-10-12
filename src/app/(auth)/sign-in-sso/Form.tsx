@@ -2,7 +2,7 @@
 
 import { useFormState } from 'react-dom'
 
-import { resetPassword } from '@/actions/auth.js'
+import { signInSSO } from '@/actions/auth.js'
 
 import { useTranslation } from '@/i18n/client.js'
 
@@ -14,18 +14,18 @@ import TextInput from '@/components/common/TextInput/index.js'
 interface FormState {
   errors: {
     email?: string[]
-    message?: string
+    message?: string[]
   } | null
 }
 
 const Form = () => {
   'use client'
 
-  const { t } = useTranslation('auth')
-
-  const [state, action] = useFormState<FormState, FormData>(resetPassword, {
+  const [state, action] = useFormState<FormState, FormData>(signInSSO, {
     errors: null,
   })
+
+  const { t } = useTranslation('auth')
 
   return (
     <form action={action} className={styles.form}>
@@ -52,7 +52,7 @@ const Form = () => {
         <p className={styles['error-msg']}>{state.errors.message}</p>
       )}
       <SubmitButton full formAction={action} className={styles.button}>
-        {t('reset_password')}
+        {t('sign_in')}
       </SubmitButton>
     </form>
   )

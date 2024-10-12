@@ -3,7 +3,7 @@
 import dynamic from 'next/dynamic'
 import { useEffect, useState } from 'react'
 
-import { getCommunityMaps } from '@/actions/map.js'
+import { PAGE_PER_MAPS } from '@/constants/index.js'
 
 import { useTranslation } from '@/i18n/client.js'
 
@@ -18,7 +18,7 @@ import SkeletonMapCard from '@/components/MapCard/Skeleton.js'
 const Button = dynamic(() => import('@/components/common/Button/index.js'))
 
 const Community = () => {
-  const { t } = useTranslation('translation')
+  const { t } = useTranslation('common')
 
   const [page, setPage] = useState(0)
 
@@ -27,12 +27,21 @@ const Community = () => {
   const [hasMore, setHasMore] = useState(false)
 
   const loadMaps = async () => {
-    const { data, hasMore, error } = await getCommunityMaps(page)
+    try {
+      const res = await fetch(`/api/maps/community?page=${page}`, {
+        method: 'GET',
+        next: {
+          revalidate: 60,
+        },
+      })
 
-    if (!data || error) return
+      if (!res.ok) return
 
-    setMaps((m) => [...m, ...data])
-    setHasMore(hasMore)
+      const { data } = await res.json()
+
+      setMaps((m) => [...m, ...data])
+      setHasMore(data.length >= PAGE_PER_MAPS)
+    } catch {}
   }
 
   useEffect(() => {

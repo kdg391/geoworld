@@ -45,7 +45,7 @@ const MapSettingsModal = ({
   userId,
 }: Props) => {
   const router = useRouter()
-  const { t } = useTranslation(['translation', 'map-settings'])
+  const { t } = useTranslation(['common', 'map-settings'])
 
   const [canMove, setCanMove] = useState(true)
   const [canPan, setCanPan] = useState(true)
@@ -93,7 +93,7 @@ const MapSettingsModal = ({
   return (
     <Modal isOpen={isModalOpen} setIsOpen={setIsModalOpen}>
       <div className={styles['modal-header']}>
-        <h3>{t('title')}</h3>
+        <h3>{t('map-settings:title')}</h3>
         <button aria-label="Close" onClick={() => setIsModalOpen(false)}>
           <X size={16} />
         </button>
@@ -120,7 +120,7 @@ const MapSettingsModal = ({
           </div>
         </div>
         <div className={styles.setting}>
-          <label htmlFor="move">{t('move')}</label>
+          <label htmlFor="move">{t('map-settings:move')}</label>
           <Switch
             id="move"
             defaultChecked={canMove}
@@ -128,7 +128,7 @@ const MapSettingsModal = ({
           />
         </div>
         <div className={styles.setting}>
-          <label htmlFor="pan">{t('pan')}</label>
+          <label htmlFor="pan">{t('map-settings:pan')}</label>
           <Switch
             id="pan"
             defaultChecked={canPan}
@@ -136,7 +136,7 @@ const MapSettingsModal = ({
           />
         </div>
         <div className={styles.setting}>
-          <label htmlFor="zoom">{t('zoom')}</label>
+          <label htmlFor="zoom">{t('map-settings:zoom')}</label>
           <Switch
             id="zoom"
             defaultChecked={canZoom}
@@ -144,7 +144,7 @@ const MapSettingsModal = ({
           />
         </div>
         <div className={styles.setting}>
-          <label htmlFor="rounds">{t('rounds')}</label>
+          <label htmlFor="rounds">{t('map-settings:rounds')}</label>
 
           <div style={{ display: 'flex' }}>
             <button
@@ -209,13 +209,22 @@ const MapSettingsModal = ({
         </div>
         <div>
           <div>
-            <label htmlFor="time-limit">{t('roundTime')}</label>
+            <label htmlFor="time-limit">{t('map-settings:round_time')}</label>
             {' ('}
             {timeLimit === 0
-              ? t('noTimeLimit')
-              : t('roundTimeFormat', {
+              ? t('map-settings:no_time_limit')
+              : t('map-settings:round_time_format', {
                   minutes: Math.floor(timeLimit / 60),
                   seconds: timeLimit % 60,
+                  style: 'unit',
+                  formatParams: {
+                    minutes: {
+                      unit: 'minute',
+                    },
+                    seconds: {
+                      unit: 'second',
+                    },
+                  },
                 })}
             {')'}
           </div>

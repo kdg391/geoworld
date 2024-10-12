@@ -1,10 +1,10 @@
 import { createTranslation } from '@/i18n/server.js'
 
 export const generateMetadata = async () => {
-  const { t } = await createTranslation('translation')
+  const { t } = await createTranslation('common')
 
   return {
-    title: `${t('ongoingGames')} - GeoWorld`,
+    title: `${t('ongoing_games')} - GeoWorld`,
   }
 }
 

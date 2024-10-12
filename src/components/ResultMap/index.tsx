@@ -9,14 +9,13 @@ import styles from './index.module.css'
 
 import type { GameView, Guess, RoundLocation } from '@/types/index.js'
 
-const lineSymbol = {
+const lineSymbol: google.maps.Symbol = {
   path: 'M 0,-1 0,1',
   strokeOpacity: 1,
   scale: 2,
 }
 
-const polylineOptions = {
-  geodesic: true,
+const polylineOptions: google.maps.PolylineOptions = {
   strokeColor: '#000000',
   strokeOpacity: 0,
   icons: [

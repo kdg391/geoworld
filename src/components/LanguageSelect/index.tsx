@@ -30,7 +30,7 @@ const LANGUAGE_OPTIONS = SUPPORTED_LOCALES.map((lang) => ({
 }))
 
 const LanguageSelect = () => {
-  const { i18n, t } = useTranslation('translation')
+  const { t, i18n } = useTranslation('common')
 
   return (
     <Select

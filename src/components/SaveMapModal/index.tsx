@@ -7,6 +7,8 @@ import { useFormState } from 'react-dom'
 
 import { updateMap } from '@/actions/map.js'
 
+import { useTranslation } from '@/i18n/client.js'
+
 import type { Coords } from '@/types/index.js'
 
 const Button = dynamic(() => import('../common/Button/index.js'))
@@ -59,6 +61,8 @@ const SaveMapModal = ({
 
   const [state, action] = useFormState<State, FormData>(update, { error: null })
 
+  const { t } = useTranslation('common')
+
   return (
     <Modal isOpen={isModalOpen} setIsOpen={setIsModalOpen}>
       <h1>Save Map</h1>
@@ -79,7 +83,7 @@ const SaveMapModal = ({
             type="button"
             onClick={() => setIsModalOpen(false)}
           >
-            Cancel
+            {t('cancel')}
           </Button>
           <SubmitButton size="m" type="submit" formAction={action}>
             Save

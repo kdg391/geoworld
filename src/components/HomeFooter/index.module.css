@@ -1,15 +1,6 @@
 .footer {
-  background-color: var(--footer-bg);
   border-top: 1px solid var(--footer-border);
   padding: 1.25rem 1.75rem;
-}
-
-.title {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 1.25rem;
-  font-weight: bold;
 }
 
 .settings {

@@ -11,7 +11,7 @@ const Button = dynamic(() => import('@/components/common/Button/index.js'))
 const PlayButton = () => {
   const router = useRouter()
 
-  const { t } = useTranslation('translation')
+  const { t } = useTranslation('common')
 
   return (
     <Button

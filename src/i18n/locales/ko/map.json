@@ -1,7 +1,9 @@
 {
   "avg_score": "평균 점수",
-  "explorers": "Explorers",
+  "explorers": "플레이한 유저",
   "likes": "좋아요",
   "locations_one": "위치",
-  "locations_other": "위치"
+  "locations_other": "위치",
+  "leaderboard": "리더보드",
+  "updated": "업데이트: {{val, datetime}}"
 }

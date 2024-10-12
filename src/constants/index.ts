@@ -1,4 +1,5 @@
 export const ONE_DAY = 60 * 60 * 24
+export const PAGE_PER_MAPS = 20
 
 // game
 export const MAX_ROUNDS = 10

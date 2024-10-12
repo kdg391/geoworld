@@ -7,7 +7,7 @@ import styles from './index.module.css'
 import './index.css'
 
 const AuthFooter = async () => {
-  const { t } = await createTranslation('translation')
+  const { t } = await createTranslation('common')
 
   return (
     <footer className={styles.footer}>

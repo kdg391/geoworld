@@ -2,6 +2,8 @@
 
 import { redirect } from 'next/navigation'
 
+import { auth } from '../auth.js'
+
 import {
   OFFICIAL_MAP_COUNTRY_CODES,
   OFFICIAL_MAP_WORLD_ID,
@@ -18,63 +20,14 @@ import { createMapSchema } from '../utils/validations/map.js'
 
 import type { Coords, Location, Map, Profile } from '../types/index.js'
 
-const PAGE_PER_MAPS = 20
-
-export const getCommunityMaps = async (page: number) => {
-  'use server'
-
-  const supabase = createClient()
-
-  const { data, error } = await supabase
-    .rpc('get_community_maps', {
-      p_offset: page * PAGE_PER_MAPS,
-      p_limit: PAGE_PER_MAPS,
-    })
-    .returns<Map[]>()
-
-  return {
-    data,
-    hasMore: data ? data.length >= PAGE_PER_MAPS : false,
-    error: error?.message ?? null,
-  }
-}
-
-export const getOfficialMaps = async (page: number) => {
-  'use server'
-
-  const supabase = createClient()
-
-  const { data, error } = await supabase
-    .rpc('get_official_maps', {
-      p_offset: page * PAGE_PER_MAPS,
-      p_limit: PAGE_PER_MAPS,
-    })
-    .returns<Map[]>()
-
-  if (data) {
-    const { t } = await createTranslation('translation')
-
-    for (const map of data) {
-      map.name =
-        map.id === OFFICIAL_MAP_WORLD_ID
-          ? t('world')
-          : map.id in OFFICIAL_MAP_COUNTRY_CODES
-            ? t(`country.${OFFICIAL_MAP_COUNTRY_CODES[map.id]}`)
-            : map.name
-    }
-  }
-
-  return {
-    data,
-    hasMore: data ? data.length >= PAGE_PER_MAPS : false,
-    error: error?.message ?? null,
-  }
-}
-
 export const getMap = async (id: string) => {
   'use server'
 
-  const supabase = createClient()
+  const session = await auth()
+
+  const supabase = createClient({
+    supabaseAccessToken: session?.supabaseAccessToken,
+  })
 
   const { data, error } = await supabase
     .from('maps')
@@ -83,7 +36,7 @@ export const getMap = async (id: string) => {
     .single<Map>()
 
   if (data?.type === 'official') {
-    const { t } = await createTranslation('translation')
+    const { t } = await createTranslation('common')
 
     data.name =
       data.id === OFFICIAL_MAP_WORLD_ID
@@ -102,19 +55,18 @@ export const getMap = async (id: string) => {
 export const createCommunityMap = async (_: unknown, formData: FormData) => {
   'use server'
 
-  const supabase = createClient()
+  const session = await auth()
 
-  const {
-    data: { user },
-    error: uErr,
-  } = await supabase.auth.getUser()
-
-  if (!user || uErr)
+  if (!session)
     return {
       errors: {
-        message: uErr?.message,
+        message: 'Unauthorized',
       },
     }
+
+  const supabase = createClient({
+    supabaseAccessToken: session.supabaseAccessToken,
+  })
 
   const validated = await createMapSchema.safeParseAsync({
     name: formData.get('name'),
@@ -134,7 +86,7 @@ export const createCommunityMap = async (_: unknown, formData: FormData) => {
       description:
         validated.data.description === '' ? null : validated.data.description,
       is_published: false,
-      creator: user.id,
+      creator: session.user.id,
     })
     .select()
     .single<Map>()
@@ -152,19 +104,18 @@ export const createCommunityMap = async (_: unknown, formData: FormData) => {
 export const editCommunityMap = async (_: unknown, formData: FormData) => {
   'use server'
 
-  const supabase = createClient()
+  const session = await auth()
 
-  const {
-    data: { user },
-    error: uErr,
-  } = await supabase.auth.getUser()
-
-  if (!user || uErr)
+  if (!session)
     return {
       errors: {
-        message: uErr?.message,
+        message: 'Not signed in',
       },
     }
+
+  const supabase = createClient({
+    supabaseAccessToken: session.supabaseAccessToken,
+  })
 
   const validated = await createMapSchema.safeParseAsync({
     name: formData.get('name'),
@@ -208,22 +159,21 @@ export const updateMap = async (
 ) => {
   'use server'
 
-  const supabase = createClient()
+  const session = await auth()
 
-  const {
-    data: { user },
-    error: uErr,
-  } = await supabase.auth.getUser()
-
-  if (!user || uErr)
+  if (!session)
     return {
-      error: uErr?.message ?? null,
+      error: 'Unauthorized',
     }
+
+  const supabase = createClient({
+    supabaseAccessToken: session.supabaseAccessToken,
+  })
 
   const { data: pData, error: pErr } = await supabase
     .from('profiles')
     .select('*')
-    .eq('id', user.id)
+    .eq('id', session.user.id)
     .single<Profile>()
 
   if (!pData || pErr)
@@ -242,12 +192,12 @@ export const updateMap = async (
       error: mErr?.message ?? null,
     }
 
-  if (mapData.creator !== user.id)
+  if (mapData.creator !== session.user.id)
     return {
       error: mErr,
     }
 
-  if (mapData.type === 'official' && !pData.is_admin)
+  if (mapData.type === 'official' && session.user.role !== 'admin')
     return {
       error: null,
     }
@@ -300,7 +250,7 @@ export const updateMap = async (
       const { error: insertedErr } = await supabase.from('locations').insert(
         adding.map((loc) => ({
           map_id: mapData.id,
-          user_id: user.id,
+          user_id: session.user.id,
           streak_location_code: getCountryFromCoordinates({
             lat: loc.lat,
             lng: loc.lng,
@@ -371,20 +321,22 @@ export const updateMap = async (
 export const deleteMap = async (id: string) => {
   'use server'
 
-  const supabase = createClient()
+  const session = await auth()
 
-  const { data: uData, error: uErr } = await supabase.auth.getUser()
-
-  if (!uData.user || uErr)
+  if (!session)
     return {
       data: null,
-      error: uErr?.message ?? null,
+      error: 'Unauthorized',
     }
+
+  const supabase = createClient({
+    supabaseAccessToken: session.supabaseAccessToken,
+  })
 
   const { data: pData, error: pErr } = await supabase
     .from('profiles')
     .select('*')
-    .eq('id', uData.user.id)
+    .eq('id', session.user.id)
     .single<Profile>()
 
   if (!pData || pErr)
@@ -405,13 +357,13 @@ export const deleteMap = async (id: string) => {
       error: mErr?.message ?? null,
     }
 
-  if (mapData.creator !== uData.user.id)
+  if (mapData.creator !== session.user.id)
     return {
       data: null,
       error: mErr,
     }
 
-  if (mapData.type === 'official' && !pData.is_admin)
+  if (mapData.type === 'official' && session.user.role !== 'admin')
     return {
       data: null,
       error: null,
@@ -454,23 +406,22 @@ export const getLocations = async (mapId: string) => {
 export const hasLiked = async (mapId: string) => {
   'use server'
 
-  const supabase = createClient()
+  const session = await auth()
 
-  const {
-    data: { user },
-    error: uErr,
-  } = await supabase.auth.getUser()
-
-  if (!user || uErr)
+  if (!session)
     return {
       data: false,
-      error: uErr?.message ?? null,
+      error: 'Unauthorized',
     }
+
+  const supabase = createClient({
+    supabaseAccessToken: session.supabaseAccessToken,
+  })
 
   const { data, error } = await supabase
     .from('likes')
     .select('*')
-    .eq('user_id', user.id)
+    .eq('user_id', session.user.id)
     .eq('map_id', mapId)
     .maybeSingle()
 
@@ -483,23 +434,22 @@ export const hasLiked = async (mapId: string) => {
 export const getLikes = async () => {
   'use server'
 
-  const supabase = createClient()
+  const session = await auth()
 
-  const {
-    data: { user },
-    error: uErr,
-  } = await supabase.auth.getUser()
-
-  if (!user || uErr)
+  if (!session)
     return {
       data: null,
-      error: uErr?.message ?? null,
+      error: 'Unauthorized',
     }
+
+  const supabase = createClient({
+    supabaseAccessToken: session.supabaseAccessToken,
+  })
 
   const { data, error } = await supabase
     .from('likes')
     .select('*')
-    .eq('user_id', user.id)
+    .eq('user_id', session.user.id)
 
   return {
     data,
@@ -510,23 +460,22 @@ export const getLikes = async () => {
 export const addLike = async (mapId: string) => {
   'use server'
 
-  const supabase = createClient()
+  const session = await auth()
 
-  const {
-    data: { user },
-    error: uErr,
-  } = await supabase.auth.getUser()
-
-  if (!user || uErr)
+  if (!session)
     return {
-      data: false,
-      error: uErr?.message ?? null,
+      data: null,
+      error: 'Unauthorized',
     }
+
+  const supabase = createClient({
+    supabaseAccessToken: session.supabaseAccessToken,
+  })
 
   const { data } = await supabase
     .from('likes')
     .select()
-    .eq('user_id', user.id)
+    .eq('user_id', session.user.id)
     .eq('map_id', mapId)
     .maybeSingle()
 
@@ -538,7 +487,7 @@ export const addLike = async (mapId: string) => {
 
   const { error } = await supabase.from('likes').insert({
     map_id: mapId,
-    user_id: user.id,
+    user_id: session.user.id,
   })
 
   if (error)
@@ -556,23 +505,22 @@ export const addLike = async (mapId: string) => {
 export const deleteLike = async (mapId: string) => {
   'use server'
 
-  const supabase = createClient()
+  const session = await auth()
 
-  const {
-    data: { user },
-    error: uErr,
-  } = await supabase.auth.getUser()
-
-  if (!user || uErr)
+  if (!session)
     return {
-      data: false,
-      error: uErr?.message ?? null,
+      data: null,
+      error: 'Unauthorized',
     }
+
+  const supabase = createClient({
+    supabaseAccessToken: session.supabaseAccessToken,
+  })
 
   const { data } = await supabase
     .from('likes')
     .select()
-    .eq('user_id', user.id)
+    .eq('user_id', session.user.id)
     .eq('map_id', mapId)
     .maybeSingle()
 
@@ -585,7 +533,7 @@ export const deleteLike = async (mapId: string) => {
   const { error } = await supabase
     .from('likes')
     .delete()
-    .eq('user_id', user.id)
+    .eq('user_id', session.user.id)
     .eq('map_id', mapId)
 
   if (error)

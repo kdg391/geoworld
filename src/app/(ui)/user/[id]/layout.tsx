@@ -15,7 +15,7 @@ export const generateMetadata = async ({
 }: Props): Promise<Metadata> => {
   if (decodeURIComponent(params.id).startsWith('@')) return {}
 
-  const { t } = await createTranslation('translation')
+  const { t } = await createTranslation('common')
 
   const { data: pData, error: pErr } = await getProfile(params.id)
 

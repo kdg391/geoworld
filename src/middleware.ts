@@ -1,11 +1,15 @@
 import { match as matchLocale } from '@formatjs/intl-localematcher'
 import Negotiator from 'negotiator'
+import { NextResponse, type NextRequest } from 'next/server'
+import NextAuth from 'next-auth'
+
+import authConfig from './auth.config.js'
 
 import { DEFAULT_LOCALE, SUPPORTED_LOCALES } from './constants/i18n.js'
 
-import { updateSession } from './utils/supabase/middleware.js'
+import { createClient } from './utils/supabase/server.js'
 
-import type { NextRequest } from 'next/server'
+import type { Profile } from './types/index.js'
 
 function getLocale(request: NextRequest): string {
   const negotiatorHeaders: Record<string, string> = {}
@@ -21,14 +25,67 @@ function getLocale(request: NextRequest): string {
   return locale
 }
 
-export async function middleware(request: NextRequest) {
-  const req = await updateSession(request)
+const supabase = createClient({
+  serviceRole: true,
+})
 
-  req.headers.set('x-next-pathname', request.nextUrl.pathname)
-  req.headers.set('x-next-locale', getLocale(request))
+const { auth } = NextAuth(authConfig)
 
-  return req
-}
+export default auth(async (request) => {
+  const response = NextResponse.next({
+    request: {
+      headers: request.headers,
+    },
+  })
+
+  const { pathname } = request.nextUrl
+
+  response.headers.set('x-next-pathname', pathname)
+  response.headers.set('x-next-locale', getLocale(request))
+
+  const session = request.auth
+
+  if (!session) {
+    if (
+      pathname.startsWith('/dashboard') ||
+      pathname.startsWith('/game') ||
+      pathname === '/settings/account' ||
+      pathname === '/settings/profile' ||
+      (pathname.startsWith('/map') && pathname.endsWith('/edit'))
+    ) {
+      const url = new URL('/sign-in', request.url)
+      url.searchParams.set('next', pathname)
+
+      return NextResponse.redirect(url)
+    }
+  } else {
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', session.user.id)
+      .maybeSingle<Profile>()
+
+    if (profile) {
+      if (!profile.display_name || !profile.username) {
+        const url = new URL('/set-username', request.url)
+
+        return NextResponse.redirect(url)
+      }
+    }
+
+    if (pathname === '/') {
+      const url = new URL('/dashboard', request.url)
+
+      return NextResponse.redirect(url)
+    } else if (pathname === '/sign-in' || pathname === '/sign-up') {
+      const url = new URL('/dashboard', request.url)
+
+      return NextResponse.redirect(url)
+    }
+  }
+
+  return response
+})
 
 export const config = {
   matcher: [

@@ -3,7 +3,7 @@
 import dynamic from 'next/dynamic'
 import { useEffect, useState } from 'react'
 
-import { getOfficialMaps } from '@/actions/map.js'
+import { PAGE_PER_MAPS } from '@/constants/index.js'
 
 import { useTranslation } from '@/i18n/client.js'
 
@@ -18,7 +18,7 @@ import SkeletonMapCard from '@/components/MapCard/Skeleton.js'
 const Button = dynamic(() => import('@/components/common/Button/index.js'))
 
 const Official = () => {
-  const { t } = useTranslation('translation')
+  const { t } = useTranslation('common')
 
   const [page, setPage] = useState(0)
 
@@ -27,12 +27,21 @@ const Official = () => {
   const [hasMore, setHasMore] = useState(false)
 
   const loadMaps = async () => {
-    const { data, hasMore, error } = await getOfficialMaps(page)
+    try {
+      const res = await fetch(`/api/maps/official?page=${page}`, {
+        method: 'GET',
+        next: {
+          revalidate: 60,
+        },
+      })
 
-    if (!data || error) return
+      if (!res.ok) return
 
-    setMaps((m) => [...m, ...data])
-    setHasMore(hasMore)
+      const { data } = await res.json()
+
+      setMaps((m) => [...m, ...data])
+      setHasMore(data.length >= PAGE_PER_MAPS)
+    } catch {}
   }
 
   useEffect(() => {

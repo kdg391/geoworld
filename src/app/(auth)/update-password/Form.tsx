@@ -19,18 +19,23 @@ interface FormState {
   } | null
 }
 
-const Form = ({ code }: { code: string }) => {
+interface Props {
+  token: string
+}
+
+const Form = ({ token }: Props) => {
   'use client'
 
-  const { t } = useTranslation('auth')
-
+  // @ts-ignore
   const [state, action] = useFormState<FormState, FormData>(updatePassword, {
     errors: null,
   })
 
+  const { t } = useTranslation('auth')
+
   return (
     <form action={action} className={styles.form}>
-      <input type="hidden" value={code} name="code" hidden />
+      <input type="hidden" value={token} name="token" hidden />
       <div>
         <label htmlFor="password" className={styles.label}>
           {t('new_password')}

@@ -1,38 +1,32 @@
-import { createServerClient, type CookieOptions } from '@supabase/ssr'
-import { cookies } from 'next/headers'
+import { createClient as createSupabaseClient } from '@supabase/supabase-js'
 
-export function createClient(secret = false) {
-  const cookieStore = cookies()
-
-  return createServerClient(
+export const createClient = ({
+  serviceRole = false,
+  supabaseAccessToken,
+}: {
+  serviceRole?: boolean
+  supabaseAccessToken?: string
+} = {}) =>
+  createSupabaseClient(
     process.env.SUPABASE_URL as string,
-    (secret
-      ? process.env.SUPABASE_SECRET_KEY
+    (serviceRole
+      ? process.env.SUPABASE_SERVICE_ROLE_KEY
       : process.env.SUPABASE_ANON_KEY) as string,
     {
-      cookies: {
-        get(name: string) {
-          return cookieStore.get(name)?.value
-        },
-        set(name: string, value: string, options: CookieOptions) {
-          try {
-            cookieStore.set({ name, value, ...options })
-          } catch {
-            // The `set` method was called from a Server Component.
-            // This can be ignored if you have middleware refreshing
-            // user sessions.
+      db: {
+        schema: 'next_auth',
+      },
+      ...(supabaseAccessToken
+        ? {
+            global: {
+              headers: {
+                Authorization: `Bearer ${supabaseAccessToken}`,
+              },
+            },
           }
-        },
-        remove(name: string, options: CookieOptions) {
-          try {
-            cookieStore.set({ name, value: '', ...options })
-          } catch {
-            // The `delete` method was called from a Server Component.
-            // This can be ignored if you have middleware refreshing
-            // user sessions.
-          }
-        },
+        : {}),
+      auth: {
+        persistSession: false,
       },
     },
   )
-}

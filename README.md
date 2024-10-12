@@ -1,6 +1,6 @@
 # GeoWorld
 
-GeoWorld is a geography guessing game inspired by [GeoGuessr](https://geoguessr.com/), [GeoHub](https://github.com/benlikescode/GeoHub), and [GeoGuess](https://github.com/GeoGuess/GeoGuess).
+GeoWorld is a geography guessing game inspired by [GeoGuessr](https://geoguessr.com/).
 
 ## References
 
@@ -15,7 +15,6 @@ GeoWorld is a geography guessing game inspired by [GeoGuessr](https://geoguessr.
 
 ### Fonts
 
-- [Inter](https://fonts.google.com/specimen/Inter)
 - [Pretendard](https://github.com/orioncactus/pretendard)
 
 ### Images

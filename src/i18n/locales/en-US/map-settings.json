@@ -1,0 +1,10 @@
+{
+  "title": "Map Settings",
+  "move": "Move",
+  "pan": "Pan",
+  "zoom": "Zoom",
+  "rounds": "Rounds",
+  "round_time": "Round Time",
+  "no_time_limit": "No Time Limit",
+  "round_time_format": "{{minutes, number(unitDisplay: narrow)}} {{seconds, number(unitDisplay: narrow)}}"
+}

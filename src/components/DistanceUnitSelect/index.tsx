@@ -13,7 +13,7 @@ const Select = dynamic(() => import('../common/Select/index.js'))
 const DistanceUnitSelect = () => {
   const { distanceUnit, setDistanceUnit } = useSettings()
 
-  const { t } = useTranslation('translation')
+  const { t } = useTranslation('common')
 
   const distanceUnitOptions = [
     {

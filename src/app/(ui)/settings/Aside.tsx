@@ -3,10 +3,15 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
+import { useTranslation } from '@/i18n/client.js'
+
 import styles from './Aside.module.css'
+
 import './Aside.css'
 
 const Aside = () => {
+  const { t } = useTranslation('common')
+
   const pathname = usePathname()
 
   return (
@@ -17,7 +22,7 @@ const Aside = () => {
             href="/settings/profile"
             className={pathname === '/settings/profile' ? 'view' : ''}
           >
-            Profile
+            {t('profile')}
           </Link>
         </li>
         <li>
@@ -25,7 +30,7 @@ const Aside = () => {
             href="/settings/account"
             className={pathname === '/settings/account' ? 'view' : ''}
           >
-            Account
+            {t('account')}
           </Link>
         </li>
         <li>
@@ -33,7 +38,7 @@ const Aside = () => {
             href="/settings/game"
             className={pathname === '/settings/game' ? 'view' : ''}
           >
-            Game
+            {t('game')}
           </Link>
         </li>
       </ul>

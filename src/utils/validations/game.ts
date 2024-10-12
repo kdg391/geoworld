@@ -1,6 +1,6 @@
-import z from 'zod'
+import { z } from 'zod'
 
-import { MAX_ROUNDS } from '../../constants/index.js'
+import { MAX_ROUNDS } from '@/constants/index.js'
 
 export const getGameSettingsSchema = (rounds: number) =>
   z.object({

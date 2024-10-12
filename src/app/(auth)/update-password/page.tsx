@@ -9,11 +9,11 @@ import Form from './Form.js'
 const UpdatePassword = async ({
   searchParams,
 }: {
-  searchParams: { code?: string }
+  searchParams: { token?: string }
 }) => {
   'use server'
 
-  if (!searchParams.code) return
+  if (!searchParams.token) return
 
   const { t } = await createTranslation('auth')
 
@@ -21,7 +21,7 @@ const UpdatePassword = async ({
     <div className={styles['form-container']}>
       <h1 className={styles['form-title']}>{t('update_password')}</h1>
 
-      <Form code={searchParams.code} />
+      <Form token={searchParams.token} />
     </div>
   )
 }

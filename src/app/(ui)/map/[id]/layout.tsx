@@ -1,5 +1,3 @@
-import { getMap } from '@/actions/map.js'
-
 import { createTranslation } from '@/i18n/server.js'
 
 import type { Metadata } from 'next'
@@ -15,9 +13,17 @@ export const generateMetadata = async ({
     id: string
   }
 }): Promise<Metadata> => {
-  const { t } = await createTranslation('translation')
+  const { t } = await createTranslation('common')
 
-  const { data: mapData, error: mErr } = await getMap(params.id)
+  const { data: mapData, error: mErr } = await fetch(
+    `${process.env.NEXT_PUBLIC_URL}/api/maps/${params.id}`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    },
+  ).then((res) => res.json())
 
   if (!mapData || mErr)
     return {

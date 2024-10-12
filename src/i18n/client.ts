@@ -33,14 +33,14 @@ i18next
     debug: !runsOnServerSide && process.env.NODE_ENV === 'development',
     supportedLngs: SUPPORTED_LOCALES,
     fallbackLng: DEFAULT_LOCALE,
-    ns: 'translation',
-    defaultNS: 'translation',
-    lng: undefined,
+    ns: 'common',
+    defaultNS: 'common',
     detection: {
       caches: ['cookie'],
       order: ['cookie'],
       lookupCookie: LANGUAGE_COOKIE,
     },
+    load: 'currentOnly',
     preload: runsOnServerSide ? SUPPORTED_LOCALES : [],
   })
 

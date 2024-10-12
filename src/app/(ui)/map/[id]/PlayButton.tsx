@@ -25,7 +25,7 @@ const PlayButton = ({ mapData, userId }: Props) => {
 
   const [isModalOpen, setIsModalOpen] = useState(false)
 
-  const { t } = useTranslation('translation')
+  const { t } = useTranslation('common')
 
   return (
     <>

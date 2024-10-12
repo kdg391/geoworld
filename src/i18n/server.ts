@@ -1,6 +1,6 @@
 'use server'
 
-import { createInstance, type i18n } from 'i18next'
+import { createInstance } from 'i18next'
 import resourcesToBackend from 'i18next-resources-to-backend'
 import { cookies, headers } from 'next/headers'
 import { initReactI18next } from 'react-i18next/initReactI18next'
@@ -13,28 +13,24 @@ import {
 
 import type { Locales } from '../types/index.js'
 
-let instance: i18n
-
 async function initI18next(lng: Locales, namespace: string | string[]) {
-  if (!instance) {
-    instance = createInstance()
+  const instance = createInstance()
 
-    await instance
-      .use(initReactI18next)
-      .use(
-        resourcesToBackend(
-          (lang: string, ns: string) => import(`./locales/${lang}/${ns}.json`),
-        ),
-      )
-  }
-
-  await instance.init({
-    supportedLngs: SUPPORTED_LOCALES,
-    fallbackLng: DEFAULT_LOCALE,
-    lng,
-    ns: namespace,
-    defaultNS: 'translation',
-  })
+  await instance
+    .use(initReactI18next)
+    .use(
+      resourcesToBackend(
+        (lang: string, ns: string) => import(`./locales/${lang}/${ns}.json`),
+      ),
+    )
+    .init({
+      supportedLngs: SUPPORTED_LOCALES,
+      fallbackLng: DEFAULT_LOCALE,
+      lng,
+      ns: namespace,
+      defaultNS: 'common',
+      load: 'currentOnly',
+    })
 
   return instance
 }

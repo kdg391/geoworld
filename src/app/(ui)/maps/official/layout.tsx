@@ -5,7 +5,7 @@ import type { Metadata } from 'next'
 export const revalidate = 3600
 
 export const generateMetadata = async (): Promise<Metadata> => {
-  const { t } = await createTranslation('translation')
+  const { t } = await createTranslation('common')
 
   return {
     title: `${t('official_maps')} - GeoWorld`,

@@ -2,7 +2,7 @@
 
 import { useFormState } from 'react-dom'
 
-import { signUp } from '@/actions/auth.js'
+import { signUpCredentials } from '@/actions/auth.js'
 
 import { useTranslation } from '@/i18n/client.js'
 
@@ -16,6 +16,7 @@ interface FormState {
     username?: string[]
     email?: string[]
     password?: string[]
+    confirmPassword?: string[]
     message?: string
   } | null
 }
@@ -23,10 +24,11 @@ interface FormState {
 const Form = () => {
   'use client'
 
-  const { t } = useTranslation('auth')
-  const [state, action] = useFormState<FormState, FormData>(signUp, {
+  const [state, action] = useFormState<FormState, FormData>(signUpCredentials, {
     errors: null,
   })
+
+  const { t } = useTranslation('auth')
 
   return (
     <form action={action} className={styles.form}>
@@ -83,6 +85,24 @@ const Form = () => {
         />
         {state.errors?.password &&
           state.errors.password.map((msg) => (
+            <p key={msg} className={styles['error-msg']}>
+              {msg}
+            </p>
+          ))}
+      </div>
+      <div>
+        <label htmlFor="confirm-password" className={styles.label}>
+          {t('confirm_password')}
+        </label>
+        <TextInput
+          type="password"
+          id="confirm-password"
+          name="confirm-password"
+          required
+          className={styles.input}
+        />
+        {state.errors?.confirmPassword &&
+          state.errors.confirmPassword.map((msg) => (
             <p key={msg} className={styles['error-msg']}>
               {msg}
             </p>

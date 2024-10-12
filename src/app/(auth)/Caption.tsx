@@ -15,7 +15,7 @@ const Caption = () => {
   return (
     <p className={styles.caption}>
       <Trans
-        i18nKey="sign_up.caption"
+        i18nKey="caption"
         t={t}
         components={[
           <Link key={0} href="/terms" />,

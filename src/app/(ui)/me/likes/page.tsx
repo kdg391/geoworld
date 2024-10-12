@@ -2,6 +2,8 @@
 
 import { redirect } from 'next/navigation'
 
+import { auth } from '@/auth.js'
+
 import { createClient } from '@/utils/supabase/server.js'
 
 import type { Map } from '@/types/index.js'
@@ -11,19 +13,18 @@ import MapCard from '@/components/MapCard/index.js'
 const Likes = async () => {
   'use server'
 
-  const supabase = createClient()
+  const session = await auth()
 
-  const {
-    data: { user },
-    error: uErr,
-  } = await supabase.auth.getUser()
+  if (!session) redirect('/sign-in?next=/dashboard/likes')
 
-  if (!user || uErr) redirect('/sign-in?next=/dashboard/likes')
+  const supabase = createClient({
+    supabaseAccessToken: session.supabaseAccessToken,
+  })
 
   const { data: likedMaps, error: lErr } = await supabase
     .from('likes')
     .select('map_id')
-    .eq('user_id', user.id)
+    .eq('user_id', session.user.id)
     .returns<{ map_id: string }[]>()
 
   if (!likedMaps || lErr) return

@@ -1,10 +1,10 @@
 'use client'
 
 import dynamic from 'next/dynamic'
+import { useSession } from 'next-auth/react'
 import { useEffect, useRef, useState } from 'react'
 
 import { getLocations, getMap } from '@/actions/map.js'
-import { getUser } from '@/actions/user.js'
 
 import useGoogleApi from '@/hooks/useGoogleApi.js'
 
@@ -26,6 +26,8 @@ interface Props {
 const Edit = ({ params }: Props) => {
   const { isLoaded, loadApi } = useGoogleApi()
 
+  const { data: session, status } = useSession()
+
   const [mapData, setMapData] = useState<Map | null>()
   const [locations, setLocations] = useState<Coords[]>([])
   const [selectedLocation, setSelectedLocation] = useState<Coords | null>(null)
@@ -45,24 +47,24 @@ const Edit = ({ params }: Props) => {
   const svServiceRef = useRef<google.maps.StreetViewService | null>(null)
 
   useEffect(() => {
+    if (status === 'loading') return
+
     const init = async () => {
-      const { data: uData, error: uErr } = await getUser()
-
-      if (!uData.user || uErr) {
+      if (!session) {
         setMapData(null)
         return
       }
 
-      const { data: mData, error: mErr } = await getMap(params.id)
+      const { data: mapData, error: mErr } = await getMap(params.id)
 
-      if (!mData || mErr || mData.creator !== uData.user.id) {
+      if (!mapData || mErr || mapData.creator !== session.user.id) {
         setMapData(null)
         return
       }
 
-      setMapData(mData)
+      setMapData(mapData)
 
-      const { data: lData, error: lErr } = await getLocations(mData.id)
+      const { data: lData, error: lErr } = await getLocations(mapData.id)
 
       if (!lData || lErr) {
         setLocations([])
@@ -75,7 +77,7 @@ const Edit = ({ params }: Props) => {
     }
 
     init()
-  }, [])
+  }, [status])
 
   useEffect(() => {
     const onBeforeUnload = (event: Event) => {

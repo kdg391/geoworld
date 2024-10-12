@@ -1,6 +1,7 @@
 import dynamic from 'next/dynamic'
 
 import styles from './layout.module.css'
+
 import './layout.css'
 
 const AuthFooter = dynamic(() => import('@/components/AuthFooter/index.js'))

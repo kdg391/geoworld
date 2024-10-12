@@ -15,7 +15,7 @@ const Select = dynamic(() => import('../common/Select/index.js'))
 const ThemeSelect = () => {
   const { theme, setTheme } = useTheme()
 
-  const { t } = useTranslation('translation')
+  const { t } = useTranslation('common')
 
   const themeOptions = useMemo(
     () => [

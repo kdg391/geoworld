@@ -1,30 +1,25 @@
-import dynamic from 'next/dynamic'
 import { redirect } from 'next/navigation'
+
+import { auth } from '@/auth.js'
 
 import { getProfile } from '@/actions/profile.js'
 
-import { createClient } from '@/utils/supabase/server.js'
-
 import styles from '../layout.module.css'
 
-const DisplayNameForm = dynamic(() => import('./DisplayNameForm.js'))
-const UsernameForm = dynamic(() => import('./UsernameForm.js'))
+import DisplayNameForm from './DisplayNameForm.js'
+import UsernameForm from './UsernameForm.js'
 
 const Profile = async () => {
   'use server'
 
-  const supabase = createClient()
+  const session = await auth()
 
-  const {
-    data: { user },
-    error,
-  } = await supabase.auth.getUser()
+  if (!session) redirect('/sign-in')
 
-  if (!user || error) return redirect('/sign-in')
+  const { data: profile, error } = await getProfile(session.user.id)
 
-  const { data: pData, error: pErr } = await getProfile(user.id)
-
-  if (!pData || pErr) return redirect('/sign-in')
+  if (!profile || error) redirect('/sign-in')
+  if (!profile.display_name || !profile.username) redirect('/setup-profile')
 
   return (
     <section className={styles.section}>
@@ -32,13 +27,13 @@ const Profile = async () => {
       <section className={styles.setting}>
         <h2>Display Name</h2>
         <div>
-          <DisplayNameForm displayName={pData.display_name} />
+          <DisplayNameForm displayName={profile.display_name} />
         </div>
       </section>
       <section className={styles.setting}>
         <h2>Username</h2>
         <div>
-          <UsernameForm username={pData.username} />
+          <UsernameForm username={profile.username} />
         </div>
       </section>
     </section>

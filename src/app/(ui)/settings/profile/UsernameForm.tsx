@@ -1,6 +1,5 @@
 'use client'
 
-import dynamic from 'next/dynamic'
 import { useState } from 'react'
 import { useFormState } from 'react-dom'
 
@@ -10,12 +9,8 @@ import { useTranslation } from '@/i18n/client.js'
 
 import styles from '../layout.module.css'
 
-const SubmitButton = dynamic(
-  () => import('@/components/common/SubmitButton/index.js'),
-)
-const TextInput = dynamic(
-  () => import('@/components/common/TextInput/index.js'),
-)
+import SubmitButton from '@/components/common/SubmitButton/index.js'
+import TextInput from '@/components/common/TextInput/index.js'
 
 interface FormState {
   errors: {
@@ -51,6 +46,7 @@ const UsernameForm = ({ username }: Props) => {
           minLength={1}
           maxLength={20}
           pattern="[a-z][a-z0-9_]*"
+          required
           defaultValue={username}
           className={styles.input}
           onChange={(event) => {

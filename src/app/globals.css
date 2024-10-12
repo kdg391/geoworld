@@ -47,10 +47,10 @@
   --link-blue: #439aff;
   --link-blue-hover: #318aff;
 
-  --scrollbar-thumb: var(--gray-250);
+  /* --scrollbar-thumb: var(--gray-250);
   --scrollbar-thumb-hover: var(--gray-350);
   --scrollbar-thumb-active: var(--gray-400);
-  --scrollbar-track: var(--gray-150);
+  --scrollbar-track: var(--gray-150); */
 }
 
 [data-theme='dark'] {
@@ -62,13 +62,13 @@
   --link-blue: #54a4ff;
   --link-blue-hover: #78beff;
 
-  --scrollbar-thumb: var(--gray-800);
+  /* --scrollbar-thumb: var(--gray-800);
   --scrollbar-thumb-hover: var(--gray-750);
   --scrollbar-thumb-active: var(--gray-650);
-  --scrollbar-track: var(--gray-850);
+  --scrollbar-track: var(--gray-850); */
 }
 
-/*@supports (scrollbar-width: thin) and (not selector(::-webkit-scrollbar)) {
+/* @supports (scrollbar-width: thin) and (not selector(::-webkit-scrollbar)) {
   :root {
     scrollbar-width: thin;
     scrollbar-color: var(--scrollbar-track) var(--scrollbar-thumb);
@@ -99,7 +99,12 @@
   ::-webkit-scrollbar-button {
     display: none;
   }
-}*/
+} */
+
+[data-theme='light'] .light-hidden,
+[data-theme='dark'] .dark-hidden {
+  display: none;
+}
 
 html {
   -webkit-text-size-adjust: none;

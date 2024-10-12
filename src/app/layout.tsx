@@ -98,7 +98,7 @@ const defaultMetadata: Metadata = {
 }
 
 export const generateMetadata = async (): Promise<Metadata> => {
-  const { t } = await createTranslation('translation')
+  const { t } = await createTranslation('common')
 
   return {
     ...defaultMetadata,

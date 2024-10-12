@@ -1,14 +1,16 @@
-import { redirect } from 'next/navigation'
+import { SessionProvider } from 'next-auth/react'
+
+import { createTranslation } from '@/i18n/server.js'
 
 import GoogleApiProvider from '@/providers/GoogleApiProvider.js'
-
-import { createClient } from '@/utils/supabase/server.js'
 
 import type { Metadata } from 'next'
 
 export const generateMetadata = async (): Promise<Metadata> => {
+  const { t } = await createTranslation('common')
+
   return {
-    title: 'Edit Map - GeoWorld',
+    title: `${t('edit_map')} - GeoWorld`,
   }
 }
 
@@ -17,14 +19,9 @@ export default async function Layout({
 }: {
   children: React.ReactNode
 }) {
-  const supabase = createClient()
-
-  const {
-    data: { user },
-    error: uErr,
-  } = await supabase.auth.getUser()
-
-  if (!user || uErr) return redirect('/')
-
-  return <GoogleApiProvider>{children}</GoogleApiProvider>
+  return (
+    <GoogleApiProvider>
+      <SessionProvider>{children}</SessionProvider>
+    </GoogleApiProvider>
+  )
 }

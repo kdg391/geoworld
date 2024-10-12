@@ -5,7 +5,7 @@ import GoogleApiProvider from '@/providers/GoogleApiProvider.js'
 import type { Metadata } from 'next'
 
 export const generateMetadata = async (): Promise<Metadata> => {
-  const { t } = await createTranslation('translation')
+  const { t } = await createTranslation('common')
 
   return {
     title: `${t('random_street_view')} - GeoWorld`,
