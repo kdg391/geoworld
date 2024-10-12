@@ -8,8 +8,6 @@ import { createClient } from './utils/supabase/server.js'
 
 import { signInCredentialsSchema } from './utils/validations/auth.js'
 
-import 'server-only'
-
 import type { NextAuthConfig } from 'next-auth'
 import type { User } from './types/index.js'
 
