@@ -14,6 +14,7 @@ const defaultMetadata: Metadata = {
   openGraph: {
     type: 'website',
     siteName: 'GeoWorld',
+    images: ['/assets/icons/android-icon-192x192.png'],
   },
   icons: [
     {

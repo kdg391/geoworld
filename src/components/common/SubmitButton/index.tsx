@@ -12,6 +12,7 @@ type Props = ComponentProps<'button'> & {
   full?: boolean
   isLoading?: boolean
   size?: 's' | 'm' | 'l'
+  variant?: 'primary' | 'danger'
   pendingText?: string
 }
 
@@ -21,6 +22,7 @@ const SubmitButton = ({
   full = false,
   isLoading = false,
   size = 'm',
+  variant = 'primary',
   pendingText,
   ...props
 }: Props) => {
@@ -34,7 +36,7 @@ const SubmitButton = ({
     <Button
       full={full}
       size={size}
-      variant="primary"
+      variant={variant}
       isLoading={(isLoading && disabled) || isPending}
       key={Math.random()}
       type="submit"

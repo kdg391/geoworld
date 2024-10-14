@@ -6,11 +6,9 @@ import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
 
 import { auth, signIn, signOut } from '../auth.js'
-
-import { ONE_DAY } from '../constants/index.js'
+import { CredentialsError } from '../auth.config.js'
 
 import { createClient } from '../utils/supabase/server.js'
-
 import {
   changeEmailSchema,
   changePasswordSchema,
@@ -42,7 +40,7 @@ export const signUpCredentials = async (_: unknown, formData: FormData) => {
     serviceRole: true,
   })
 
-  const { data: emailExists, error: eErr } = await supabase
+  const { data: emailExists, error: emailErr } = await supabase
     .rpc('check_email_exists', {
       p_email: validated.data.email,
     })
@@ -55,10 +53,10 @@ export const signUpCredentials = async (_: unknown, formData: FormData) => {
       },
     }
 
-  if (eErr)
+  if (emailErr)
     return {
       errors: {
-        email: [eErr.message],
+        email: [emailErr.message],
       },
     }
 
@@ -93,14 +91,22 @@ export const signUpCredentials = async (_: unknown, formData: FormData) => {
       },
     }
 
-  await supabase.from('accounts').insert({
+  const { error: accountErr } = await supabase.from('accounts').insert({
     provider: 'credentials',
     providerAccountId: user.id,
     type: 'credentials',
     userId: user.id,
   })
 
+  if (accountErr)
+    return {
+      errors: {
+        message: accountErr.message,
+      },
+    }
+
   revalidatePath('/sign-in', 'layout')
+
   return redirect('/sign-in')
 }
 
@@ -118,15 +124,13 @@ export const signInCredentials = async (_: unknown, formData: FormData) => {
     }
 
   try {
-    const a = await signIn('credentials', {
+    await signIn('credentials', {
       email: validated.data.email,
       password: validated.data.password,
       redirect: false,
     })
-
-    console.log(a)
   } catch (err) {
-    if (err instanceof Error)
+    if (err instanceof CredentialsError)
       return {
         errors: {
           message: [err.message],
@@ -172,6 +176,8 @@ export const signInSSO = async (_: unknown, formData: FormData) => {
           message: [err.message],
         },
       }
+
+    throw err
   } finally {
     let redirectTo = '/dashboard'
     const referrer = headers().get('referer')
@@ -184,16 +190,31 @@ export const signInSSO = async (_: unknown, formData: FormData) => {
 
     redirect(redirectTo)
   }
-
-  return {
-    errors: null,
-  }
 }
 
 export const signInDiscord = async () => {
   'use server'
 
-  await signIn('discord')
+  try {
+    await signIn('discord', {
+      redirect: false,
+    })
+  } catch (err) {
+    if (err instanceof Error) redirect(`/sign-in?error=`)
+
+    throw err
+  } finally {
+    let redirectTo = '/dashboard'
+    const referrer = headers().get('referer')
+
+    if (referrer) {
+      const next = new URL(referrer).searchParams.get('next')
+
+      if (next) redirectTo = next
+    }
+
+    redirect(redirectTo)
+  }
 }
 
 export const resetPassword = async (_: unknown, formData: FormData) => {
@@ -300,7 +321,7 @@ export const changeEmail = async (_: unknown, formData: FormData) => {
   if (session.user.emailVerified) {
     const emailConfirmedAt = new Date(session.user.emailVerified).getTime()
 
-    if (Date.now() - emailConfirmedAt < ONE_DAY * 7 * 1000)
+    if (Date.now() - emailConfirmedAt < 60 * 60 * 24 * 7 * 1000)
       return {
         errors: {
           message: 'The email can be changed one week after the last change.',
@@ -429,6 +450,7 @@ export const deleteAccount = async (_: unknown, formData: FormData) => {
 
   const validated = await deleteAccountSchema.safeParseAsync({
     password: formData.get('password'),
+    confirmMessage: formData.get('confirm-message'),
   })
 
   if (!validated.success)
@@ -451,4 +473,5 @@ export const deleteAccount = async (_: unknown, formData: FormData) => {
     }
 
   revalidatePath('/', 'layout')
+  redirect('/')
 }

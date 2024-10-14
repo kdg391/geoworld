@@ -49,3 +49,8 @@ export const changeUsernameSchema = z
       })
     }
   })
+
+export const setupProfileSchema = z.object({
+  username: usernameSchema,
+  displayName: displayNameSchema,
+})

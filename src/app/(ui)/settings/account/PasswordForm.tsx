@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import { useFormState } from 'react-dom'
 
 import { changePassword } from '@/actions/auth.js'
@@ -27,6 +28,10 @@ const PasswordForm = () => {
     errors: null,
   })
 
+  const [oldPwChanges, setOldPwChanges] = useState(false)
+  const [newPwChanges, setNewPwChanges] = useState(false)
+  const [confirmPwChanges, setConfirmPwChanges] = useState(false)
+
   const { t } = useTranslation('auth')
 
   return (
@@ -39,6 +44,9 @@ const PasswordForm = () => {
             id="old-password"
             name="old-password"
             required
+            onChange={(event) => {
+              setOldPwChanges(event.target.value !== '')
+            }}
           />
         </div>
         {state.errors?.oldPassword &&
@@ -56,6 +64,9 @@ const PasswordForm = () => {
             name="new-password"
             required
             className={styles.input}
+            onChange={(event) => {
+              setNewPwChanges(event.target.value !== '')
+            }}
           />
         </div>
         {state.errors?.newPassword &&
@@ -73,6 +84,9 @@ const PasswordForm = () => {
             name="confirm-password"
             required
             className={styles.input}
+            onChange={(event) => {
+              setConfirmPwChanges(event.target.value !== '')
+            }}
           />
         </div>
         {state.errors?.confirmPassword &&
@@ -82,7 +96,12 @@ const PasswordForm = () => {
             </p>
           ))}
 
-        <SubmitButton size="s" type="submit" formAction={action}>
+        <SubmitButton
+          size="s"
+          type="submit"
+          formAction={action}
+          disabled={!oldPwChanges || !newPwChanges || !confirmPwChanges}
+        >
           {t('change_password')}
         </SubmitButton>
       </form>

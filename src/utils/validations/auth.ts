@@ -90,4 +90,5 @@ export const changePasswordSchema = z
 
 export const deleteAccountSchema = z.object({
   password: z.string(),
+  confirmMessage: z.literal('DELETE'),
 })

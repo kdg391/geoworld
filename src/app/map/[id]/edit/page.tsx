@@ -24,7 +24,7 @@ interface Props {
 }
 
 const Edit = ({ params }: Props) => {
-  const { isLoaded, loadApi } = useGoogleApi()
+  const { isLoaded, loadGoogleApi } = useGoogleApi()
 
   const { data: session, status } = useSession()
 
@@ -71,7 +71,7 @@ const Edit = ({ params }: Props) => {
         return
       }
 
-      if (!isLoaded) await loadApi()
+      if (!isLoaded) await loadGoogleApi()
 
       setLocations(lData)
     }

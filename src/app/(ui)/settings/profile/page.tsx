@@ -4,6 +4,8 @@ import { auth } from '@/auth.js'
 
 import { getProfile } from '@/actions/profile.js'
 
+import { createTranslation } from '@/i18n/server.js'
+
 import styles from '../layout.module.css'
 
 import DisplayNameForm from './DisplayNameForm.js'
@@ -21,17 +23,19 @@ const Profile = async () => {
   if (!profile || error) redirect('/sign-in')
   if (!profile.display_name || !profile.username) redirect('/setup-profile')
 
+  const { t } = await createTranslation('auth')
+
   return (
     <section className={styles.section}>
       <h1 className={styles.title}>Profile Settings</h1>
       <section className={styles.setting}>
-        <h2>Display Name</h2>
+        <h2 className={styles['title-h2']}>{t('display_name')}</h2>
         <div>
           <DisplayNameForm displayName={profile.display_name} />
         </div>
       </section>
       <section className={styles.setting}>
-        <h2>Username</h2>
+        <h2 className={styles['title-h2']}>{t('username')}</h2>
         <div>
           <UsernameForm username={profile.username} />
         </div>

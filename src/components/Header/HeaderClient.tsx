@@ -69,6 +69,11 @@ const HeaderClient = ({ session }: Props) => {
                 {t('maps')}
               </Link>
             </li>
+            <li>
+              <Link href="/" scroll={false}>
+                {t('maps')}
+              </Link>
+            </li>
           </ul>
         </nav>
 
@@ -78,17 +83,15 @@ const HeaderClient = ({ session }: Props) => {
         ></div>
       </div>
 
-      <div>
-        <button
-          className={styles.menu}
-          aria-label={t('menu')}
-          onClick={() => setIsMenuOpen((o) => !o)}
-        >
-          {isMenuOpen ? <X size={18} /> : <Menu size={18} />}
-        </button>
-      </div>
-
       <UserInfo session={session} />
+
+      <button
+        className={styles.menu}
+        aria-label={t('menu')}
+        onClick={() => setIsMenuOpen((o) => !o)}
+      >
+        {isMenuOpen ? <X size={18} /> : <Menu size={18} />}
+      </button>
     </header>
   )
 }

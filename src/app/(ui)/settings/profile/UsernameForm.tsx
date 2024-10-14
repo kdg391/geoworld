@@ -38,7 +38,6 @@ const UsernameForm = ({ username }: Props) => {
   return (
     <>
       <form action={action}>
-        <label htmlFor="username">{t('username')}</label>
         <TextInput
           type="text"
           id="username"
@@ -69,7 +68,7 @@ const UsernameForm = ({ username }: Props) => {
           isLoading={false}
           disabled={!changes}
         >
-          Change username
+          {t('change_username')}
         </SubmitButton>
       </form>
       {state.errors?.message && (

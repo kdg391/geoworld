@@ -38,11 +38,12 @@ const DisplayNameForm = ({ displayName }: Props) => {
   return (
     <>
       <form action={action}>
-        <label htmlFor="display-name">{t('display_name')}</label>
         <TextInput
           type="text"
           id="display-name"
           name="display-name"
+          minLength={1}
+          maxLength={20}
           required
           defaultValue={displayName}
           className={styles.input}
@@ -64,7 +65,7 @@ const DisplayNameForm = ({ displayName }: Props) => {
           isLoading={false}
           disabled={!changes}
         >
-          Change display name
+          {t('change_display_name')}
         </SubmitButton>
       </form>
       {state.errors?.message && (

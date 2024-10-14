@@ -9,8 +9,6 @@ import { useEffect, useRef, useState } from 'react'
 
 import { getProfile } from '@/actions/profile.js'
 
-import { ONE_DAY } from '@/constants/index.js'
-
 import useClickOutside from '@/hooks/useClickOutside.js'
 
 import { useTranslation } from '@/i18n/client.js'
@@ -57,7 +55,7 @@ const UserInfo = ({ session }: Props) => {
       if (
         pCache &&
         pCacheUpdated &&
-        Date.now() - parseInt(pCacheUpdated) < ONE_DAY * 1000
+        Date.now() - parseInt(pCacheUpdated) < 60 * 60 * 24 * 1000
       ) {
         setProfile(JSON.parse(pCache))
 

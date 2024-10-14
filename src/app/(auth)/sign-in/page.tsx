@@ -1,8 +1,8 @@
-import { Mail } from 'lucide-react'
+// import { Mail } from 'lucide-react'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 
-import { signIn } from '@/auth.js'
+import { signInDiscord } from '@/actions/auth.js'
 
 import { createTranslation } from '@/i18n/server.js'
 
@@ -12,7 +12,7 @@ import { classNames } from '@/utils/index.js'
 
 import Form from './Form.js'
 
-import Discord from '@/components/icons/Discord'
+import Discord from '@/components/icons/Discord.js'
 
 const Caption = dynamic(() => import('../Caption.js'))
 
@@ -28,13 +28,7 @@ const SignIn = async () => {
 
         <div className={styles.providers}>
           <div>
-            <form
-              action={async () => {
-                'use server'
-
-                await signIn('discord')
-              }}
-            >
+            <form action={signInDiscord}>
               <button
                 type="submit"
                 className={classNames(styles['provider-btn'], 'discord')}
@@ -44,7 +38,7 @@ const SignIn = async () => {
               </button>
             </form>
           </div>
-          <div>
+          {/*<div>
             <Link
               href="/sign-in-sso"
               className={classNames(styles['provider-btn'], 'sso')}
@@ -52,8 +46,9 @@ const SignIn = async () => {
               <Mail size={16} />
               {t('sign_in.sso')}
             </Link>
-          </div>
+          </div>*/}
         </div>
+
         <div className={styles.separator}>
           <hr />
           <span>or</span>

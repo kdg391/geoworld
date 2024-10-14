@@ -64,7 +64,7 @@ const HomeFooter = () => {
       </div>
       <div className={styles.right}>
         <div>
-          <h4>Legal</h4>
+          <h2>Legal</h2>
           <ul className={styles.links}>
             <li>
               <Link href="/terms">{t('terms_of_service')}</Link>

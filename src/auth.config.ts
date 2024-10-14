@@ -11,7 +11,7 @@ import { signInCredentialsSchema } from './utils/validations/auth.js'
 import type { NextAuthConfig } from 'next-auth'
 import type { User } from './types/index.js'
 
-class CredentialsError extends Error {
+export class CredentialsError extends Error {
   name = 'CredentialsError'
 }
 

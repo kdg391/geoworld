@@ -20,12 +20,12 @@ const Home = async () => {
       <section className={styles.hero}>
         <div className={styles['hero-img-container']}>
           {/*<Image
-              src="/assets/images/background.jpg"
-              alt="Background Image"
-              className={styles['hero-img']}
-              fill
-              priority
-            />*/}
+            src="/assets/images/background.jpg"
+            alt="Background Image"
+            className={styles['hero-img']}
+            fill
+            priority
+          />*/}
           <div className={styles['hero-backdrop']}></div>
         </div>
         <div className={styles['hero-content']}>

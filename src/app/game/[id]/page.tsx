@@ -39,7 +39,7 @@ const Game = ({ params }: Props) => {
   const [markerPosition, setMarkerPosition] =
     useState<google.maps.LatLngLiteral | null>(null)
 
-  const { isLoaded, loadApi } = useGoogleApi()
+  const { isLoaded, loadGoogleApi } = useGoogleApi()
 
   useEffect(() => {
     const loadGame = async () => {
@@ -59,7 +59,7 @@ const Game = ({ params }: Props) => {
       }
       if (mDataErr) return
 
-      if (!isLoaded) await loadApi()
+      if (!isLoaded) await loadGoogleApi()
 
       setGameData(gData)
       setMapData(mData)

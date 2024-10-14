@@ -2,4 +2,4 @@
 
 Effective:
 
-Last Updated: August 24, 2024
+Last Updated: October 14, 2024

@@ -33,27 +33,6 @@ const Form = () => {
   return (
     <form action={action} className={styles.form}>
       <div>
-        <label htmlFor="username" className={styles.label}>
-          {t('username')}
-        </label>
-        <TextInput
-          type="text"
-          id="username"
-          name="username"
-          minLength={1}
-          maxLength={20}
-          pattern="[a-z][a-z0-9_]*"
-          required
-          className={styles.input}
-          onChange={(event) => {
-            event.target.value = event.target.value.toLowerCase()
-          }}
-        />
-        {state.errors?.username && (
-          <p className={styles['error-msg']}>{state.errors.username}</p>
-        )}
-      </div>
-      <div>
         <label htmlFor="email" className={styles.label}>
           {t('email')}
         </label>

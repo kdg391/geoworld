@@ -2,13 +2,13 @@
 
 import { redirect } from 'next/navigation'
 
-import { auth } from '@/auth.js'
+import { auth } from '../auth.js'
 
 import { createClient } from '../utils/supabase/server.js'
-
 import {
   changeDisplayNameSchema,
   changeUsernameSchema,
+  setupProfileSchema,
 } from '../utils/validations/profile.js'
 
 import type { Profile } from '../types/index.js'
@@ -159,4 +159,69 @@ export const changeUsername = async (_: unknown, formData: FormData) => {
       message: error?.message,
     },
   }
+}
+
+export const setupProfile = async (_: unknown, formData: FormData) => {
+  const session = await auth()
+
+  if (!session) redirect('/sign-in')
+
+  const supabase = createClient({
+    supabaseAccessToken: session.supabaseAccessToken,
+  })
+
+  const { data: profile, error: pErr } = await supabase
+    .from('profiles')
+    .select('*')
+    .eq('id', session.user.id)
+    .single<Profile>()
+
+  if (!profile || pErr) redirect('/sign-in')
+
+  const validated = await setupProfileSchema.safeParseAsync({
+    username: formData.get('username'),
+    displayName: formData.get('display-name'),
+  })
+
+  if (!validated.success)
+    return {
+      errors: validated.error.flatten().fieldErrors,
+    }
+
+  const { data: usernameExists, error: uNameErr } = await supabase
+    .rpc('check_username_exists', {
+      p_username: validated.data.username,
+    })
+    .returns<boolean>()
+
+  if (usernameExists)
+    return {
+      errors: {
+        username: ['The username already exists.'],
+      },
+    }
+
+  if (uNameErr)
+    return {
+      errors: {
+        username: [uNameErr.message],
+      },
+    }
+
+  const { error } = await supabase
+    .from('profiles')
+    .update({
+      username: validated.data.username,
+      displayName: validated.data.displayName,
+    })
+    .eq('id', session.user.id)
+
+  if (error)
+    return {
+      errors: {
+        message: error.message,
+      },
+    }
+
+  redirect('/dashboard')
 }

@@ -6,4 +6,23 @@
   & a:hover {
     text-decoration: underline;
   }
+
+  @media (max-width: 640px) {
+    & a {
+      border-radius: 0.5rem;
+      color: #fff;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background-color: var(--gray-650);
+
+      &:hover:not(:disabled) {
+        background-color: var(--gray-600);
+        text-decoration: none;
+      }
+    }
+  }
 }

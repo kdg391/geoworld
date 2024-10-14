@@ -1,4 +1,4 @@
 .main-container {
-  min-height: calc(100svh - var(--header-h));
+  height: calc(100svh - var(--header-h));
   overflow-y: auto;
 }

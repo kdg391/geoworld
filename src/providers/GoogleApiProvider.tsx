@@ -21,7 +21,7 @@ const GoogleApiProvider = ({ children }: Props) => {
     [],
   )
 
-  const loadApi = useCallback(async () => {
+  const loadGoogleApi = useCallback(async () => {
     if (isLoaded) return
 
     await loader.importLibrary('core')
@@ -33,8 +33,8 @@ const GoogleApiProvider = ({ children }: Props) => {
   }, [isLoaded, loader])
 
   const providerValue = useMemo(
-    () => ({ isLoaded, loadApi }),
-    [isLoaded, loadApi],
+    () => ({ isLoaded, loadGoogleApi }),
+    [isLoaded, loadGoogleApi],
   )
 
   return (

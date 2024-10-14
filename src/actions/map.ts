@@ -13,9 +13,7 @@ import { createTranslation } from '../i18n/server.js'
 
 import { calculateMapBounds, calculateScoreFactor } from '../utils/game.js'
 import { getCountryFromCoordinates } from '../utils/map.js'
-
 import { createClient } from '../utils/supabase/server.js'
-
 import { createMapSchema } from '../utils/validations/map.js'
 
 import type { Coords, Location, Map, Profile } from '../types/index.js'

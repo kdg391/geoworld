@@ -12,6 +12,10 @@
   margin-bottom: 1rem;
 }
 
+.title-h2 {
+  font-size: 1.25rem;
+}
+
 .setting {
   border: 1px solid #eee;
   padding: 1rem;

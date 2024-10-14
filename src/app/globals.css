@@ -174,9 +174,9 @@ textarea {
   border: 0;
 }
 
-.scroll-locked {
+/* .scroll-locked {
   overflow: hidden;
   overscroll-behavior: contain;
   position: relative;
-  touch-action: none;
-}
+  pointer-events: none;
+} */

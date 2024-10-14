@@ -21,7 +21,6 @@ interface FormState {
 const Form = () => {
   'use client'
 
-  // @ts-ignore
   const [state, action] = useFormState<FormState, FormData>(resetPassword, {
     errors: null,
   })

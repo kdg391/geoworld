@@ -38,7 +38,6 @@ const EmailForm = ({ email }: Props) => {
   return (
     <>
       <form action={action}>
-        <label htmlFor="email">{t('email')}</label>
         <TextInput
           type="email"
           id="email"
@@ -67,7 +66,7 @@ const EmailForm = ({ email }: Props) => {
         </SubmitButton>
       </form>
       {state.errors?.message && (
-        <p className={styles['error-msg']}>{state.errors?.message}</p>
+        <p className={styles['error-msg']}>{state.errors.message}</p>
       )}
     </>
   )

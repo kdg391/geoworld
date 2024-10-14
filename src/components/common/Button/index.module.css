@@ -1,11 +1,11 @@
 .button {
-  border-radius: 8px;
+  border-radius: 0.5rem;
   color: #fff;
   font-size: 1rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 0.5rem;
 
   &:global(.full) {
     width: 100%;

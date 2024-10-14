@@ -5,9 +5,7 @@ import { auth } from '../auth.js'
 import { OFFICIAL_MAP_WORLD_ID } from '../constants/index.js'
 
 import { calculateDistance, calculateRoundScore } from '../utils/game.js'
-
 import { createClient } from '../utils/supabase/server.js'
-
 import { getGameSettingsSchema } from '../utils/validations/game.js'
 
 import type {

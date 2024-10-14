@@ -1,8 +1,8 @@
 # Privacy Policy
 
-Effective: August 24, 2024
+Effective: October 14, 2024
 <br>
-Last Updated: August 24, 2024
+Last Updated: October 14, 2024
 
 TL;DR
 
