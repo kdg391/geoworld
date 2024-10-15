@@ -6,7 +6,6 @@ import Resend from 'next-auth/providers/resend'
 import authConfig from './auth.config.js'
 
 import { html, text } from './utils/email.js'
-
 import { createClient } from './utils/supabase/server.js'
 
 const supabase = createClient({
@@ -42,7 +41,13 @@ const providers = [
   }),
 ]
 
-export const { handlers, signIn, signOut, auth } = NextAuth(() => {
+export const {
+  handlers,
+  signIn,
+  signOut,
+  auth,
+  unstable_update: update,
+} = NextAuth(() => {
   const adapter = SupabaseAdapter({
     url: process.env.SUPABASE_URL as string,
     secret: process.env.SUPABASE_SERVICE_ROLE_KEY as string,
@@ -62,14 +67,24 @@ export const { handlers, signIn, signOut, auth } = NextAuth(() => {
       maxAge: 60 * 60 * 24 * 30,
     },
     callbacks: {
-      async jwt({ token, user }) {
+      async jwt({ /*account, profile,*/ token, user }) {
+        // console.log(
+        //   'jwt({ account, profile, token, user })',
+        //   account,
+        //   profile,
+        //   token,
+        //   user,
+        // )
+
         if (user) {
           token.user = user
         }
 
         return token
       },
-      session({ session, token }) {
+      async session({ session, token }) {
+        // console.log('session({ session, token })', session, token)
+
         // @ts-ignore
         session.user = token.user
 
@@ -90,10 +105,23 @@ export const { handlers, signIn, signOut, auth } = NextAuth(() => {
 
         return session
       },
+      async signIn({ account }) {
+        if (account?.provider !== 'credentials') return true
+
+        return true
+      },
     },
     providers,
     trustHost: true,
     events: {
+      async linkAccount({ user }) {
+        await supabase
+          .from('users')
+          .update({
+            emailVerified: new Date().toISOString(),
+          })
+          .eq('id', user.id)
+      },
       async signIn({ account, user, isNewUser }) {
         if (
           (account?.provider === 'resend' || account?.provider === 'discord') &&
@@ -103,14 +131,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth(() => {
             id: user.id,
             is_public: true,
           })
-        }
-      },
-      async signOut(message) {
-        if ('session' in message && message.session?.sessionToken) {
-          await supabase
-            .from('sessions')
-            .delete()
-            .eq('sessionToken', message.session?.sessionToken)
         }
       },
     },

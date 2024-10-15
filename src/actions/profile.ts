@@ -26,7 +26,7 @@ export const getProfile = async (id: string) => {
     .from('profiles')
     .select('*')
     .eq('id', id)
-    .single<Profile>()
+    .maybeSingle<Profile>()
 
   return {
     data,
@@ -47,7 +47,7 @@ export const getProfileByUsername = async (username: string) => {
     .from('profiles')
     .select('*')
     .eq('username', username)
-    .single<Profile>()
+    .maybeSingle<Profile>()
 
   return {
     data,
@@ -61,6 +61,13 @@ export const changeDisplayName = async (_: unknown, formData: FormData) => {
   const session = await auth()
 
   if (!session) redirect('/sign-in')
+
+  if (session.user.role !== 'user')
+    return {
+      errors: {
+        message: 'You cannot change your display name.',
+      },
+    }
 
   const supabase = createClient({
     supabaseAccessToken: session.supabaseAccessToken,
@@ -86,7 +93,7 @@ export const changeDisplayName = async (_: unknown, formData: FormData) => {
 
   const { error } = await supabase
     .from('profiles')
-    .update({
+    .update<Partial<Profile>>({
       display_name: validated.data.newName,
     })
     .eq('id', session.user.id)
@@ -104,6 +111,13 @@ export const changeUsername = async (_: unknown, formData: FormData) => {
   const session = await auth()
 
   if (!session) redirect('/sign-in')
+
+  if (session.user.role !== 'user')
+    return {
+      errors: {
+        message: 'You cannot change your username.',
+      },
+    }
 
   const supabase = createClient({
     supabaseAccessToken: session.supabaseAccessToken,
@@ -127,7 +141,7 @@ export const changeUsername = async (_: unknown, formData: FormData) => {
       errors: validated.error.flatten().fieldErrors,
     }
 
-  const { data: usernameExists, error: uNameErr } = await supabase
+  const { data: usernameExists, error: usernameErr } = await supabase
     .rpc('check_username_exists', {
       p_username: validated.data.newName,
     })
@@ -140,17 +154,17 @@ export const changeUsername = async (_: unknown, formData: FormData) => {
       },
     }
 
-  if (uNameErr)
+  if (usernameErr)
     return {
       errors: {
-        newName: [uNameErr.message],
+        newName: [usernameErr.message],
       },
     }
 
   const { error } = await supabase
     .from('profiles')
-    .update({
-      username: validated.data.newName.trim(),
+    .update<Partial<Profile>>({
+      username: validated.data.newName,
     })
     .eq('id', session.user.id)
 
@@ -210,9 +224,9 @@ export const setupProfile = async (_: unknown, formData: FormData) => {
 
   const { error } = await supabase
     .from('profiles')
-    .update({
+    .update<Partial<Profile>>({
       username: validated.data.username,
-      displayName: validated.data.displayName,
+      display_name: validated.data.displayName,
     })
     .eq('id', session.user.id)
 

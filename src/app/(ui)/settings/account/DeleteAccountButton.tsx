@@ -17,7 +17,7 @@ const DeleteAccountButton = () => {
     <>
       <Button
         variant="danger"
-        size="m"
+        size="s"
         onClick={() => setIsFormOpened((o) => !o)}
       >
         {t('delete_account')}

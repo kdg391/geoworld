@@ -34,7 +34,7 @@ export const signInCredentialsSchema = z.object({
   password: z.string(),
 })
 
-export const signInSSOSchema = z.object({
+export const signInEmailSchema = z.object({
   email: emailSchema,
 })
 

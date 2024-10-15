@@ -45,7 +45,7 @@ const DeleteAccountForm = () => {
             name="password"
             className={styles.input}
             onChange={(event) => {
-              setPwChanges(event.target.value.trim() !== '')
+              setPwChanges(event.target.value !== '')
             }}
           />
           {state.errors?.password &&
@@ -65,7 +65,7 @@ const DeleteAccountForm = () => {
             name="message"
             className={styles.input}
             onChange={(event) => {
-              setConfirmChanges(event.target.value.trim() !== 'DELETE')
+              setConfirmChanges(event.target.value === 'DELETE')
             }}
           />
           {state.errors?.confirmMessage &&

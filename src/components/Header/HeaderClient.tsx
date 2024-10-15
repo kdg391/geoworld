@@ -69,11 +69,6 @@ const HeaderClient = ({ session }: Props) => {
                 {t('maps')}
               </Link>
             </li>
-            <li>
-              <Link href="/" scroll={false}>
-                {t('maps')}
-              </Link>
-            </li>
           </ul>
         </nav>
 

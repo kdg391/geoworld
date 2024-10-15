@@ -14,15 +14,18 @@
 
 .title-h2 {
   font-size: 1.25rem;
+  margin-bottom: 0.5rem;
 }
 
 .setting {
-  border: 1px solid #eee;
+  border: 1px solid var(--setting-border);
+  border-radius: 0.5rem;
   padding: 1rem;
+  margin: 0.5rem 0;
 }
 
 .input {
-  margin-top: 4px;
+  margin-top: 0.25rem;
 }
 
 .error-msg {

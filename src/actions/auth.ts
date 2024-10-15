@@ -4,9 +4,9 @@ import bcrypt from 'bcryptjs'
 import { revalidatePath } from 'next/cache'
 import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
+import { AuthError } from 'next-auth'
 
 import { auth, signIn, signOut } from '../auth.js'
-import { CredentialsError } from '../auth.config.js'
 
 import { createClient } from '../utils/supabase/server.js'
 import {
@@ -15,7 +15,7 @@ import {
   deleteAccountSchema,
   resetPasswordSchema,
   signInCredentialsSchema,
-  signInSSOSchema,
+  signInEmailSchema,
   signUpSchema,
   updatePasswordSchema,
 } from '../utils/validations/auth.js'
@@ -123,39 +123,51 @@ export const signInCredentials = async (_: unknown, formData: FormData) => {
       errors: validated.error.flatten().fieldErrors,
     }
 
+  let redirectTo = '/dashboard'
+  const referrer = headers().get('referer')
+
+  if (referrer) {
+    const next = new URL(referrer).searchParams.get('next')
+
+    if (next) redirectTo = next
+  }
+
   try {
     await signIn('credentials', {
       email: validated.data.email,
       password: validated.data.password,
-      redirect: false,
+      redirectTo,
     })
   } catch (err) {
-    if (err instanceof CredentialsError)
-      return {
-        errors: {
-          message: [err.message],
-        },
+    if (err instanceof AuthError) {
+      switch (err.type) {
+        case 'CredentialsSignin':
+          return {
+            errors: {
+              message: 'Email or password is incorrect.',
+            },
+          }
+        default:
+          return {
+            errors: {
+              message: 'Something went wrong!',
+            },
+          }
       }
-
-    throw err
-  } finally {
-    let redirectTo = '/dashboard'
-    const referrer = headers().get('referer')
-
-    if (referrer) {
-      const next = new URL(referrer).searchParams.get('next')
-
-      if (next) redirectTo = next
     }
 
-    redirect(redirectTo)
+    throw err
+  }
+
+  return {
+    errors: null,
   }
 }
 
-export const signInSSO = async (_: unknown, formData: FormData) => {
+export const signInEmail = async (_: unknown, formData: FormData) => {
   'use server'
 
-  const validated = await signInSSOSchema.safeParseAsync({
+  const validated = await signInEmailSchema.safeParseAsync({
     email: formData.get('email'),
   })
 
@@ -164,57 +176,65 @@ export const signInSSO = async (_: unknown, formData: FormData) => {
       errors: validated.error.flatten().fieldErrors,
     }
 
+  let redirectTo = '/dashboard'
+  const referrer = headers().get('referer')
+
+  if (referrer) {
+    const next = new URL(referrer).searchParams.get('next')
+
+    if (next) redirectTo = next
+  }
+
   try {
     await signIn('resend', {
       email: validated.data.email,
-      redirect: false,
+      redirectTo,
     })
   } catch (err) {
-    if (err instanceof Error)
+    if (err instanceof AuthError)
       return {
         errors: {
-          message: [err.message],
+          message: 'Something went wrong!',
         },
       }
 
     throw err
-  } finally {
-    let redirectTo = '/dashboard'
-    const referrer = headers().get('referer')
+  }
 
-    if (referrer) {
-      const next = new URL(referrer).searchParams.get('next')
-
-      if (next) redirectTo = next
-    }
-
-    redirect(redirectTo)
+  return {
+    errors: null,
   }
 }
 
-export const signInDiscord = async () => {
+export const signInDiscord = async (_: unknown) => {
   'use server'
+
+  let redirectTo = '/dashboard'
+  const referrer = headers().get('referer')
+
+  if (referrer) {
+    const next = new URL(referrer).searchParams.get('next')
+
+    if (next) redirectTo = next
+  }
 
   try {
     await signIn('discord', {
-      redirect: false,
+      redirectTo,
     })
   } catch (err) {
-    if (err instanceof Error) redirect(`/sign-in?error=`)
+    if (err instanceof AuthError) return /*{
+        errors: {
+          message: 'Something went wrong!',
+        },
+      }*/
 
     throw err
-  } finally {
-    let redirectTo = '/dashboard'
-    const referrer = headers().get('referer')
-
-    if (referrer) {
-      const next = new URL(referrer).searchParams.get('next')
-
-      if (next) redirectTo = next
-    }
-
-    redirect(redirectTo)
   }
+
+  return /*{
+    errors: null,
+  }*/
 }
 
 export const resetPassword = async (_: unknown, formData: FormData) => {
@@ -443,6 +463,13 @@ export const deleteAccount = async (_: unknown, formData: FormData) => {
   const session = await auth()
 
   if (!session) redirect('/sign-in')
+
+  if (session.user.role !== 'user')
+    return {
+      errors: {
+        message: 'You cannot delete your account.',
+      },
+    }
 
   const supabase = createClient({
     supabaseAccessToken: session.supabaseAccessToken,

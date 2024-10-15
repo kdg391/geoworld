@@ -7,10 +7,6 @@ import authConfig from './auth.config.js'
 
 import { DEFAULT_LOCALE, SUPPORTED_LOCALES } from './constants/i18n.js'
 
-import { createClient } from './utils/supabase/server.js'
-
-import type { Profile } from './types/index.js'
-
 function getLocale(request: NextRequest): string {
   const negotiatorHeaders: Record<string, string> = {}
   request.headers.forEach((value, key) => (negotiatorHeaders[key] = value))
@@ -24,10 +20,6 @@ function getLocale(request: NextRequest): string {
 
   return locale
 }
-
-const supabase = createClient({
-  serviceRole: true,
-})
 
 const { auth } = NextAuth(authConfig)
 
@@ -51,7 +43,8 @@ export default auth(async (request) => {
       pathname.startsWith('/game') ||
       pathname === '/settings/account' ||
       pathname === '/settings/profile' ||
-      (pathname.startsWith('/map') && pathname.endsWith('/edit'))
+      (pathname.startsWith('/map') && pathname.endsWith('/edit')) ||
+      pathname === '/setup-profile'
     ) {
       const url = new URL('/sign-in', request.url)
       url.searchParams.set('next', pathname)
@@ -59,20 +52,6 @@ export default auth(async (request) => {
       return NextResponse.redirect(url)
     }
   } else {
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('id', session.user.id)
-      .maybeSingle<Profile>()
-
-    if (profile) {
-      if (!profile.display_name || !profile.username) {
-        const url = new URL('/set-username', request.url)
-
-        return NextResponse.redirect(url)
-      }
-    }
-
     if (pathname === '/') {
       const url = new URL('/dashboard', request.url)
 

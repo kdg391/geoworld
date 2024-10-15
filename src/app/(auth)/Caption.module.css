@@ -1,7 +1,14 @@
 .caption {
-  margin-top: 12px;
+  margin-top: 1rem;
   font-size: 0.875rem;
   text-align: center;
   word-break: keep-all;
+  padding: 0 2rem;
   max-width: 20rem;
+  width: 20rem;
+
+  @media (min-width: 640px) {
+    max-width: 24rem;
+    width: 24rem;
+  }
 }

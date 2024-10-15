@@ -8,7 +8,8 @@ TL;DR
 
 - We do not use any third-party analytics services.
 - We do not log any data related to your usage. 
-- If you create an account, we collect your username, email, and password.
+- When you create an account with an email and password, we collect your username, display name, email, and password.
+- When you create an account with Discord, we collect your Discord account email.
 - Passwords are encrypted.
 
 <br>
@@ -23,7 +24,9 @@ By using our website, you hereby consent to our Privacy Policy and agree to its 
 
 ## Information we collect
 
-When you create an account, we collect your username, email, and password.
+When you create an account with an email and password, we collect your username, display name, email, and password.
+
+When you create an account with Discord, we collect your Discord account email.
 
 ## How we use your information
 
@@ -31,7 +34,7 @@ We use the information we collect in various ways, including to:
 
 - Provide, operate, and maintain our website
 - Improve, personalize, and expand our website
-- Send you emails
+- Send you emails (email verification, and password resets)
 - Find and prevent fraud
 
 ## Data Logging

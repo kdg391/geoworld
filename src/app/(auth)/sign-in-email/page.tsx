@@ -15,8 +15,12 @@ const SignIn = async () => {
 
   return (
     <div className={styles['form-container']}>
-      <h1 className={styles['form-title']}>{t('sign_in.sso')}</h1>
-      <p className={styles['form-description']}>Sign in with your email</p>
+      <h1 className={styles['form-title']}>{t('sign_in.email')}</h1>
+      <p className={styles['form-description']}>
+        {
+          "Enter your email and we'll send you a link to log in to your account."
+        }
+      </p>
 
       <Form />
 

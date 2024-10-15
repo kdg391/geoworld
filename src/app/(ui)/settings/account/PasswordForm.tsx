@@ -44,6 +44,7 @@ const PasswordForm = () => {
             id="old-password"
             name="old-password"
             required
+            className={styles.input}
             onChange={(event) => {
               setOldPwChanges(event.target.value !== '')
             }}

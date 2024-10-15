@@ -1,6 +1,7 @@
 {
   "account": "Account",
   "cancel": "Cancel",
+  "classic_maps": "Classic Maps",
   "community_maps": "Community Maps",
   "daily_challenge": "Daily Challenge",
   "dashboard": "Dashboard",
@@ -15,6 +16,7 @@
   "menu": "Menu",
   "more_community_maps": "More community maps",
   "more_official_maps": "More official maps",
+  "multi_player": "Multi Player",
   "my_maps": "My Maps",
   "official_maps": "Official Maps",
   "play": "Play",
@@ -23,6 +25,7 @@
   "profile": "Profile",
   "random_street_view": "Random Street View",
   "settings": "Settings",
+  "single_player": "Single Player",
   "terms": "Terms",
   "terms_of_service": "Terms of Service",
   "user": "User",

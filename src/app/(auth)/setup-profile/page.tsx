@@ -1,87 +1,49 @@
-'use client'
+'use server'
 
-import { useFormState } from 'react-dom'
+import { redirect } from 'next/navigation'
 
-import { setupProfile } from '@/actions/profile.js'
+import { auth } from '@/auth.js'
 
-import { useTranslation } from '@/i18n/client.js'
+import { createTranslation } from '@/i18n/server.js'
+
+import { createClient } from '@/utils/supabase/server.js'
+
+import type { Profile } from '@/types/index.js'
 
 import styles from '../page.module.css'
 
-import SubmitButton from '@/components/common/SubmitButton/index.js'
-import TextInput from '@/components/common/TextInput/index.js'
+import Form from './Form.js'
 
-interface FormState {
-  errors: {
-    username?: string[]
-    displayName?: string[]
-    message?: string
-  } | null
-}
+const SetupProfile = async () => {
+  'use server'
 
-const Form = () => {
-  'use client'
+  const session = await auth()
 
-  const [state, action] = useFormState<FormState, FormData>(setupProfile, {
-    errors: null,
+  if (!session) redirect('/sign-in')
+
+  const { t } = await createTranslation('auth')
+
+  const supabase = createClient({
+    supabaseAccessToken: session.supabaseAccessToken,
   })
 
-  const { t } = useTranslation('auth')
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('*')
+    .eq('id', session.user.id)
+    .single<Profile>()
+
+  if (!profile) redirect('/sign-in')
+
+  if (profile.display_name && profile.username) redirect('/dashboard')
 
   return (
-    <form action={action} className={styles.form}>
-      <div>
-        <label htmlFor="username" className={styles.label}>
-          {t('username')}
-        </label>
-        <TextInput
-          type="text"
-          id="username"
-          name="username"
-          minLength={1}
-          maxLength={20}
-          pattern="[a-z][a-z0-9_]*"
-          required
-          className={styles.input}
-          onChange={(event) => {
-            event.target.value = event.target.value.toLowerCase()
-          }}
-        />
-        {state.errors?.username &&
-          state.errors.username.map((msg) => (
-            <p key={msg} className={styles['error-msg']}>
-              {msg}
-            </p>
-          ))}
-      </div>
-      <div>
-        <label htmlFor="display-name" className={styles.label}>
-          {t('display_name')}
-        </label>
-        <TextInput
-          type="text"
-          id="display-name"
-          name="display-name"
-          minLength={1}
-          maxLength={20}
-          required
-          className={styles.input}
-        />
-        {state.errors?.displayName &&
-          state.errors.displayName.map((msg) => (
-            <p key={msg} className={styles['error-msg']}>
-              {msg}
-            </p>
-          ))}
-      </div>
-      {state.errors?.message && (
-        <p className={styles['error-msg']}>{state.errors.message}</p>
-      )}
-      <SubmitButton full formAction={action} className={styles.button}>
-        {t('save_profile')}
-      </SubmitButton>
-    </form>
+    <div className={styles['form-container']}>
+      <h1 className={styles['form-title']}>{t('setup_profile')}</h1>
+
+      <Form />
+    </div>
   )
 }
 
-export default Form
+export default SetupProfile

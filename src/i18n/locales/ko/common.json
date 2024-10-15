@@ -1,6 +1,7 @@
 {
   "account": "계정",
   "cancel": "취소",
+  "classic_maps": "클래식 맵",
   "community_maps": "커뮤니티 맵",
   "daily_challenge": "데일리 챌린지",
   "dashboard": "대시보드",
@@ -15,6 +16,7 @@
   "menu": "메뉴",
   "more_community_maps": "커뮤니티 맵 더 보기",
   "more_official_maps": "공식 맵 더 보기",
+  "multi_player": "멀티 플레이어",
   "my_maps": "내 맵",
   "official_maps": "공식 맵",
   "play": "플레이",
@@ -23,6 +25,7 @@
   "profile": "프로필",
   "random_street_view": "랜덤 스트리트 뷰",
   "settings": "설정",
+  "single_player": "싱글 플레이어",
   "terms": "이용 약관",
   "terms_of_service": "서비스 이용 약관",
   "user": "유저",

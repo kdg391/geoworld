@@ -2,7 +2,7 @@
 
 import { useFormState } from 'react-dom'
 
-import { signInSSO } from '@/actions/auth.js'
+import { signInEmail } from '@/actions/auth.js'
 
 import { useTranslation } from '@/i18n/client.js'
 
@@ -14,14 +14,14 @@ import TextInput from '@/components/common/TextInput/index.js'
 interface FormState {
   errors: {
     email?: string[]
-    message?: string[]
+    message?: string
   } | null
 }
 
 const Form = () => {
   'use client'
 
-  const [state, action] = useFormState<FormState, FormData>(signInSSO, {
+  const [state, action] = useFormState<FormState, FormData>(signInEmail, {
     errors: null,
   })
 

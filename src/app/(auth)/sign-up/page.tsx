@@ -11,6 +11,8 @@ import { classNames } from '@/utils/index.js'
 
 import styles from '../page.module.css'
 
+import '../page.css'
+
 import Form from './Form.js'
 import Discord from '@/components/icons/Discord.js'
 
