@@ -387,7 +387,11 @@ export const deleteMap = async (id: string) => {
 export const getLocations = async (mapId: string) => {
   'use server'
 
-  const supabase = createClient()
+  const session = await auth()
+
+  const supabase = createClient({
+    supabaseAccessToken: session?.supabaseAccessToken,
+  })
 
   const { data, error } = await supabase
     .from('locations')
