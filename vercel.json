@@ -5,15 +5,7 @@
       "schedule": "0 0 * * *"
     },
     {
-      "path": "/api/cron/ongoing-games",
-      "schedule": "0 0 * * *"
-    },
-    {
-      "path": "/api/cron/verification-tokens",
-      "schedule": "0 0 * * *"
-    },
-    {
-      "path": "/api/cron/password-reset-tokens",
+      "path": "/api/cron/delete-expired",
       "schedule": "0 0 * * *"
     }
   ]
