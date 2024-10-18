@@ -1,7 +1,19 @@
 {
   "crons": [
     {
-      "path": "/api/cron/daily",
+      "path": "/api/cron/daily-challenge",
+      "schedule": "0 0 * * *"
+    },
+    {
+      "path": "/api/cron/ongoing-games",
+      "schedule": "0 0 * * *"
+    },
+    {
+      "path": "/api/cron/verification-tokens",
+      "schedule": "0 0 * * *"
+    },
+    {
+      "path": "/api/cron/password-reset-tokens",
       "schedule": "0 0 * * *"
     }
   ]

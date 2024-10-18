@@ -14,7 +14,7 @@ export type User = DefaultUser & {
   hashed_password: string | null
 }
 
-type UserRole = 'user' | 'admin'
+type UserRole = 'user' | 'admin' | 'guest'
 
 export interface DefaultUser {
   id: string

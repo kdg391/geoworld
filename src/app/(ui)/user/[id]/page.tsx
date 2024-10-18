@@ -1,5 +1,4 @@
-import Link from 'next/link'
-import { redirect } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
 
 import { getProfileByUsername } from '@/actions/profile.js'
 
@@ -13,35 +12,31 @@ const User = async ({ params }: Params) => {
   const id = decodeURIComponent(params.id)
 
   if (id.startsWith('@')) {
-    const { data: pData, error: pErr } = await getProfileByUsername(id.slice(1))
+    const { data: profile, error: profileErr } = await getProfileByUsername(
+      id.slice(1),
+    )
 
-    if (!pData || pErr)
-      return (
-        <section>
-          <h1>User Not Found</h1>
-          <Link href="/">Go to Home</Link>
-        </section>
-      )
+    if (!profile || profileErr) notFound()
 
-    redirect(`/user/${pData.id}`)
+    redirect(`/user/${profile.id}`)
   }
 
-  const { data: pData, error: pErr } = await fetch(
+  const { data: profile, error: profileErr } = await fetch(
     `${process.env.NEXT_PUBLIC_URL}/api/users/${params.id}`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    },
   ).then((res) => res.json())
 
-  if (!pData || pErr)
-    return (
-      <section>
-        <h1>User Not Found</h1>
-        <Link href="/">Go to Home</Link>
-      </section>
-    )
+  if (!profile || profileErr) notFound()
 
   return (
     <section>
-      <h1>{pData.display_name}</h1>
-      <p>@{pData.username}</p>
+      <h1>{profile.display_name}</h1>
+      <p>@{profile.username}</p>
     </section>
   )
 }

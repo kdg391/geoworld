@@ -334,6 +334,13 @@ export const changeEmail = async (_: unknown, formData: FormData) => {
 
   if (!session) redirect('/sign-in')
 
+  if (session.user.role !== 'user')
+    return {
+      errors: {
+        message: 'You cannot change your email.',
+      },
+    }
+
   const supabase = createClient({
     supabaseAccessToken: session.supabaseAccessToken,
   })
@@ -400,6 +407,13 @@ export const changePassword = async (_: unknown, formData: FormData) => {
   const session = await auth()
 
   if (!session) redirect('/sign-in')
+
+  if (session.user.role !== 'user')
+    return {
+      errors: {
+        message: 'You cannot change your password.',
+      },
+    }
 
   const supabase = createClient({
     supabaseAccessToken: session.supabaseAccessToken,

@@ -1,22 +1,23 @@
 'use client'
 
-import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
 import { useTranslation } from '@/i18n/client.js'
 
-import styles from './NotSignedIn.module.css'
-
 import Button from '../common/Button/index.js'
 
-const NotSignedIn = () => {
+import styles from './MobileAuthButtons.module.css'
+
+const MobileAuthButtons = () => {
   const router = useRouter()
 
   const { t } = useTranslation('auth')
 
   return (
-    <div className={styles.notSigned}>
-      <Link href="/sign-in">{t('sign_in')}</Link>
+    <div className={styles['auth-buttons']}>
+      <Button variant="gray" size="m" onClick={() => router.push('/sign-in')}>
+        {t('sign_in')}
+      </Button>
       <Button
         variant="primary"
         size="m"
@@ -28,4 +29,4 @@ const NotSignedIn = () => {
   )
 }
 
-export default NotSignedIn
+export default MobileAuthButtons

@@ -2,12 +2,10 @@
 
 // import { createClient } from '@/utils/supabase/server.js'
 
-// const ADMIN_ID = 'f5aa9d4b-5bc7-4cff-841b-7d3112a8eb90'
-
 export async function GET(request: Request) {
   if (
     request.headers.get('Authorization') !== `Bearer ${process.env.CRON_SECRET}`
-  ) {
+  )
     return Response.json(
       {
         message: 'Unauthorized',
@@ -16,10 +14,11 @@ export async function GET(request: Request) {
         status: 401,
       },
     )
-  }
 
   return Response.json(
-    { message: 'Work in progress' },
+    {
+      message: 'Work in progress',
+    },
     {
       status: 500,
     },
@@ -28,13 +27,12 @@ export async function GET(request: Request) {
   /*const supabase = createClient()
 
   const date = new Date()
-  const today = `${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(2, '0')}-${String(date.getUTCDate()).padStart(2, '0')}`
 
   const { data, error } = await supabase
     .from('challenges')
     .select('*')
     .eq('is_daily_challenge', true)
-    .eq('created_at', today)
+    .eq('created_at', date.toISOString())
     .maybeSingle()
 
   if (error)

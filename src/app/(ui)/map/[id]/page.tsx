@@ -3,6 +3,7 @@
 import { Earth, Scale, UsersRound } from 'lucide-react'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
+import { notFound } from 'next/navigation'
 
 import { auth } from '@/auth.js'
 
@@ -40,12 +41,7 @@ const Map = async ({ params }: Props) => {
 
   const { data: mapData, error: mErr } = await getMap(params.id)
 
-  if (!mapData || mErr)
-    return (
-      <section>
-        <h1>Map Not Found</h1>
-      </section>
-    )
+  if (!mapData || mErr) notFound()
 
   const { data: creator } = await fetch(
     `${process.env.NEXT_PUBLIC_URL}/api/users/${mapData.creator}`,

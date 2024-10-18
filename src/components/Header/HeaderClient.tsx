@@ -1,7 +1,6 @@
 'use client'
 
 import { Menu, X } from 'lucide-react'
-import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
@@ -10,13 +9,16 @@ import { useTranslation } from '@/i18n/client.js'
 
 import { classNames } from '@/utils/index.js'
 
-import styles from './index.module.css'
+import AuthButtons from './AuthButtons.js'
+import MobileAuthButtons from './MobileAuthButtons.js'
+import MobileUserInfo from './MobileUserInfo.js'
+import UserInfo from './UserInfo.js'
 
-import './index.css'
+import styles from './Header.module.css'
+
+import './Header.css'
 
 import type { Session } from 'next-auth'
-
-const UserInfo = dynamic(() => import('./UserInfo.js'))
 
 interface Props {
   session: Session | null
@@ -25,7 +27,7 @@ interface Props {
 const HeaderClient = ({ session }: Props) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
-  const { t } = useTranslation('common')
+  const { t } = useTranslation(['common', 'auth'])
 
   useEffect(() => {
     if (isMenuOpen) document.body.classList.add('scroll-locked')
@@ -33,14 +35,12 @@ const HeaderClient = ({ session }: Props) => {
   }, [isMenuOpen])
 
   return (
-    <header className={classNames(styles.header, isMenuOpen ? 'active' : '')}>
+    <header className={styles.header}>
       <div>
         <Link
           href={session !== null ? '/dashboard' : '/'}
           scroll={false}
-          style={{
-            display: 'flex',
-          }}
+          className="flex"
         >
           <Image
             src="/assets/light.svg"
@@ -72,21 +72,58 @@ const HeaderClient = ({ session }: Props) => {
           </ul>
         </nav>
 
-        <div
-          className={styles.backdrop}
-          onClick={() => setIsMenuOpen((o) => !o)}
-        ></div>
+        {session ? <UserInfo session={session} /> : <AuthButtons />}
       </div>
 
-      <UserInfo session={session} />
-
-      <button
-        className={styles.menu}
-        aria-label={t('menu')}
-        onClick={() => setIsMenuOpen((o) => !o)}
+      {/* Mobile */}
+      <div
+        className={classNames(
+          styles['mobile-menu-container'],
+          isMenuOpen ? 'active' : '',
+        )}
       >
-        {isMenuOpen ? <X size={18} /> : <Menu size={18} />}
-      </button>
+        <button
+          className={styles['mobile-menu-btn']}
+          aria-label={t('menu')}
+          onClick={() => setIsMenuOpen((o) => !o)}
+        >
+          {isMenuOpen ? <X size={18} /> : <Menu size={18} />}
+        </button>
+
+        {isMenuOpen && (
+          <>
+            <div className={styles['mobile-menu']}>
+              <div className={styles['mobile-nav-wrapper']}>
+                {session ? (
+                  <MobileUserInfo session={session} />
+                ) : (
+                  <MobileAuthButtons />
+                )}
+
+                <nav className={styles['mobile-nav']}>
+                  <ul>
+                    <li>
+                      <Link href="/maps" scroll={false}>
+                        {t('maps')}
+                      </Link>
+                    </li>
+                    {session !== null && (
+                      <li>
+                        <Link href="/home">{t('home')}</Link>
+                      </li>
+                    )}
+                  </ul>
+                </nav>
+              </div>
+
+              <div
+                className={styles.backdrop}
+                onClick={() => setIsMenuOpen((o) => !o)}
+              ></div>
+            </div>
+          </>
+        )}
+      </div>
     </header>
   )
 }

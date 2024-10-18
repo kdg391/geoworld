@@ -16,7 +16,7 @@ import { getCountryFromCoordinates } from '../utils/map.js'
 import { createClient } from '../utils/supabase/server.js'
 import { createMapSchema } from '../utils/validations/map.js'
 
-import type { Coords, Location, Map, Profile } from '../types/index.js'
+import type { Coords, Location, Map } from '../types/index.js'
 
 export const getMap = async (id: string) => {
   'use server'
@@ -107,7 +107,7 @@ export const editCommunityMap = async (_: unknown, formData: FormData) => {
   if (!session)
     return {
       errors: {
-        message: 'Not signed in',
+        message: 'Unauthorized',
       },
     }
 
@@ -167,17 +167,6 @@ export const updateMap = async (
   const supabase = createClient({
     supabaseAccessToken: session.supabaseAccessToken,
   })
-
-  const { data: pData, error: pErr } = await supabase
-    .from('profiles')
-    .select('*')
-    .eq('id', session.user.id)
-    .single<Profile>()
-
-  if (!pData || pErr)
-    return {
-      error: pErr?.message ?? null,
-    }
 
   const { data: mapData, error: mErr } = await supabase
     .from('maps')
@@ -330,18 +319,6 @@ export const deleteMap = async (id: string) => {
   const supabase = createClient({
     supabaseAccessToken: session.supabaseAccessToken,
   })
-
-  const { data: pData, error: pErr } = await supabase
-    .from('profiles')
-    .select('*')
-    .eq('id', session.user.id)
-    .single<Profile>()
-
-  if (!pData || pErr)
-    return {
-      data: null,
-      error: pErr?.message ?? null,
-    }
 
   const { data: mapData, error: mErr } = await supabase
     .from('maps')

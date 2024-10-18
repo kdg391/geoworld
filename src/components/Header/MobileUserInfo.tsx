@@ -3,46 +3,33 @@
 import { LogOut, Settings, UserRound } from 'lucide-react'
 import Link from 'next/link'
 import { signOut } from 'next-auth/react'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { getProfile } from '@/actions/profile.js'
 
-import useClickOutside from '@/hooks/useClickOutside.js'
-
 import { useTranslation } from '@/i18n/client.js'
 
-import { classNames } from '@/utils/index.js'
-
-import styles from './UserInfo.module.css'
-
-import './UserInfo.css'
+import styles from './MobileUserInfo.module.css'
 
 import type { Session } from 'next-auth'
 import type { Profile } from '@/types/index.js'
 
 interface Props {
-  session: Session | null
+  session: Session
 }
 
-const UserInfo = ({ session }: Props) => {
-  const containerRef = useRef<HTMLDivElement | null>(null)
-
+const MobileUserInfo = ({ session }: Props) => {
   const [isLoading, setIsLoading] = useState(true)
-  const [profile, setProfile] = useState<Profile | null>(null)
 
-  const [isDropdownOpen, setIsDropdownOpen] = useClickOutside(containerRef)
+  const [profile, setProfile] = useState<Pick<
+    Profile,
+    'id' | 'username' | 'display_name'
+  > | null>(null)
 
   const { t } = useTranslation(['common', 'auth'])
 
   useEffect(() => {
-    if (isDropdownOpen) document.body.classList.add('scroll-locked')
-    else document.body.classList.remove('scroll-locked')
-  }, [isDropdownOpen])
-
-  useEffect(() => {
     const init = async () => {
-      if (!session) return
-
       const pCache = localStorage.getItem('profileCache')
       const pCacheUpdated = localStorage.getItem('profileCacheUpdated')
 
@@ -94,38 +81,34 @@ const UserInfo = ({ session }: Props) => {
   }
 
   return (
-    <div className={styles.container} ref={containerRef}>
-      <div
-        className={styles['display-name']}
-        onClick={() => setIsDropdownOpen((o) => !o)}
-      >
-        {profile.display_name}
-      </div>
-
-      <ul
-        className={classNames(styles.dropdown, isDropdownOpen ? 'active' : '')}
-      >
-        <li>
-          <Link href={`/user/${profile.id}`} scroll={false}>
-            <UserRound size={18} />
-            {t('profile')}
-          </Link>
-        </li>
-        <li>
-          <Link href="/settings/profile" scroll={false}>
-            <Settings size={18} />
-            {t('settings')}
-          </Link>
-        </li>
-        <li>
-          <div onClick={onSignOutClick}>
-            <LogOut size={18} />
-            {t('auth:sign_out')}
-          </div>
-        </li>
-      </ul>
+    <div className={styles.container}>
+      <Link href={`/user/${profile.id}`} className={styles.profile}>
+        <div className="flex">
+          <UserRound size={24} />
+        </div>
+        <div>
+          <div>{profile.display_name}</div>
+          <div className={styles.username}>@{profile.username}</div>
+        </div>
+      </Link>
+      <nav className={styles.nav}>
+        <ul>
+          <li>
+            <Link href="/settings/profile" scroll={false}>
+              <Settings size={18} />
+              {t('settings')}
+            </Link>
+          </li>
+          <li>
+            <div onClick={onSignOutClick}>
+              <LogOut size={18} />
+              {t('auth:sign_out')}
+            </div>
+          </li>
+        </ul>
+      </nav>
     </div>
   )
 }
 
-export default UserInfo
+export default MobileUserInfo

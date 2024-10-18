@@ -1,30 +1,32 @@
-import { auth } from '@/auth'
-import { createTranslation } from '@/i18n/server'
-import { Profile } from '@/types'
-import { createClient } from '@/utils/supabase/server'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
+
+import { auth } from '@/auth.js'
+
+import { createTranslation } from '@/i18n/server.js'
+
+import type { Profile } from '@/types/index.js'
 
 const Dashboard = async () => {
   const session = await auth()
 
   if (!session) redirect('/sign-in')
 
-  const { t } = await createTranslation('common')
-
-  const supabase = createClient({
-    supabaseAccessToken: session.supabaseAccessToken,
-  })
-
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('*')
-    .eq('id', session.user.id)
-    .single<Profile>()
+  const { data: profile } = (await fetch(
+    `${process.env.NEXT_PUBLIC_URL}/api/users/${session.user.id}`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    },
+  ).then((res) => res.json())) as { data: Profile | null }
 
   if (!profile) redirect('/sign-in')
 
   if (!profile.display_name || !profile.username) redirect('/setup-profile')
+
+  const { t } = await createTranslation('common')
 
   return (
     <div>
