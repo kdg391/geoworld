@@ -15,7 +15,7 @@ const AuthButtons = () => {
     <div className={styles['auth-buttons']}>
       <Link href="/sign-in">{t('sign_in')}</Link>
       <Button
-        as="a"
+        as={Link}
         href="/sign-up"
         variant="primary"
         size="m"
