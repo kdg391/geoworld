@@ -3,14 +3,11 @@ import rehypeRaw from 'rehype-raw'
 
 import styles from '../page.module.css'
 
-const TermsOfService = async () => {
+export const revalidate = 86400
+
+const Terms = async () => {
   const content = await fetch(
-    'https://raw.githubusercontent.com/kdg391/geoworld/main/terms-of-service.md',
-    {
-      next: {
-        tags: ['terms'],
-      },
-    },
+    'https://raw.githubusercontent.com/kdg391/geoworld/main/docs/terms-of-service.md',
   ).then((res) => res.text())
 
   return (
@@ -20,4 +17,4 @@ const TermsOfService = async () => {
   )
 }
 
-export default TermsOfService
+export default Terms

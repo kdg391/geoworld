@@ -5,22 +5,17 @@ import dynamic from 'next/dynamic'
 import { useEffect, useRef, useState } from 'react'
 import { useLocalStorage } from 'usehooks-ts'
 
-import COUNTRY_BOUNDS from '@/constants/country-bounds.json' // with { type: 'json' }
-import {
-  DEFAULT_MAP_CENTER,
-  OFFICIAL_MAP_WORLD_ID,
-  OFFICIAL_MAP_COUNTRY_CODES,
-} from '@/constants/index.js'
+import { DEFAULT_MAP_CENTER, OFFICIAL_MAP_WORLD_ID } from '@/constants/index.js'
 
 import { useTranslation } from '@/i18n/client.js'
 
 import { classNames } from '@/utils/index.js'
 
+import Button from '../common/Button/index.js'
+
 import styles from './index.module.css'
 
 import type { GameView, Map } from '@/types/index.js'
-
-import Button from '../common/Button/index.js'
 
 const GoogleMap = dynamic(() => import('../GoogleMap.js'))
 const GuessMapControls = dynamic(() => import('../GuessMapControls/index.js'))
@@ -64,13 +59,8 @@ const GuessMap = ({
   const fitMapBounds = () => {
     if (!guessMapRef.current) return
 
-    if (mapData.id !== OFFICIAL_MAP_WORLD_ID) {
-      const { min, max } =
-        mapData.type === 'official' &&
-        OFFICIAL_MAP_COUNTRY_CODES[mapData.id] in COUNTRY_BOUNDS
-          ? // @ts-ignore
-            COUNTRY_BOUNDS[OFFICIAL_MAP_COUNTRY_CODES[mapData.id]]
-          : mapData.bounds
+    if (mapData.id !== OFFICIAL_MAP_WORLD_ID && mapData.bounds !== null) {
+      const { min, max } = mapData.bounds
 
       const latLngBounds = new google.maps.LatLngBounds()
 

@@ -15,19 +15,15 @@ const SignIn = async () => {
 
   return (
     <div className={styles['form-container']}>
-      <h1 className={styles['form-title']}>{t('sign_in.email')}</h1>
-      <p className={styles['form-description']}>
-        {
-          "Enter your email and we'll send you a link to log in to your account."
-        }
-      </p>
+      <h1 className={styles['form-title']}>{t('email_sign_in')}</h1>
+      <p className={styles['form-description']}>{t('email_sign_in_desc')}</p>
 
       <Form />
 
       <p className={styles.msg}>
-        <span>{t('do_not_have_account')}</span>
-        <Link href="/sign-up" className={styles['ml-4']}>
-          {t('sign_up')}
+        <span>Is your account created with Discord or credentials?</span>
+        <Link href="/sign-in" className={styles['ml-4']}>
+          {t('sign_in')}
         </Link>
       </p>
     </div>

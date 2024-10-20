@@ -2,8 +2,6 @@ import { createTranslation } from '@/i18n/server.js'
 
 import type { Metadata } from 'next'
 
-export const revalidate = 3600
-
 export const generateMetadata = async (): Promise<Metadata> => {
   const { t } = await createTranslation('common')
 

@@ -2,6 +2,7 @@
 
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
+import { notFound } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
 
 import { startGameRound, updateGame } from '@/actions/game.js'
@@ -102,13 +103,7 @@ const Game = ({ params }: Props) => {
       </section>
     )
 
-  if (gameData === null)
-    return (
-      <section>
-        <h1>Game Not Found</h1>
-        <Link href="/">Go to Home</Link>
-      </section>
-    )
+  if (gameData === null) notFound()
 
   if (!mapData || !gameData) return <Loading />
 

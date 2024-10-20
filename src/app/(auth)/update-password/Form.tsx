@@ -26,7 +26,6 @@ interface Props {
 const Form = ({ token }: Props) => {
   'use client'
 
-  // @ts-ignore
   const [state, action] = useFormState<FormState, FormData>(updatePassword, {
     errors: null,
   })

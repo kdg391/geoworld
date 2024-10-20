@@ -3,14 +3,11 @@ import rehypeRaw from 'rehype-raw'
 
 import styles from '../page.module.css'
 
-const PrivacyPolicy = async () => {
+export const revalidate = 86400
+
+const Privacy = async () => {
   const content = await fetch(
-    'https://raw.githubusercontent.com/kdg391/geoworld/main/privacy-policy.md',
-    {
-      next: {
-        tags: ['privacy'],
-      },
-    },
+    'https://raw.githubusercontent.com/kdg391/geoworld/main/docs/privacy-policy.md',
   ).then((res) => res.text())
 
   return (
@@ -20,4 +17,4 @@ const PrivacyPolicy = async () => {
   )
 }
 
-export default PrivacyPolicy
+export default Privacy

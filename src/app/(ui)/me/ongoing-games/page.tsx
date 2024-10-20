@@ -28,17 +28,18 @@ const OngoingGames = async () => {
     })
     .returns<{ id: string; map: { name: string; created_at: string } }[]>()
 
-  console.log(ongoingGames, gErr)
-
   if (!ongoingGames || gErr) return
 
   return (
     <section>
       <h1>Ongoing Games</h1>
       <div>
-        {ongoingGames.map((g, index) => {
-          return <div key={index}>{g.map.name}</div>
-        })}
+        {ongoingGames.map((g, index) => (
+          <div key={index}>
+            <div>{g.map.name}</div>
+            <div>{g.map.created_at}</div>
+          </div>
+        ))}
       </div>
     </section>
   )

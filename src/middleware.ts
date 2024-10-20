@@ -12,6 +12,7 @@ function getLocale(request: NextRequest): string {
   request.headers.forEach((value, key) => (negotiatorHeaders[key] = value))
 
   const languages = new Negotiator({ headers: negotiatorHeaders }).languages(
+    // eslint-disable-next-line
     // @ts-ignore
     SUPPORTED_LOCALES,
   )

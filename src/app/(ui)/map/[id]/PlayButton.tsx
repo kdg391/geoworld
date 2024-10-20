@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
-import { DEFAULT_ROUNDS } from '@/constants/index.js'
+import { DEFAULT_ROUNDS } from '@/constants/game.js'
 
 import { useTranslation } from '@/i18n/client.js'
 
@@ -29,13 +29,6 @@ const PlayButton = ({ mapData, userId }: Props) => {
 
   return (
     <>
-      <MapSettingsModal
-        isModalOpen={isModalOpen}
-        setIsModalOpen={setIsModalOpen}
-        mapData={mapData}
-        userId={userId}
-      />
-
       <Button
         variant="primary"
         size="m"
@@ -51,6 +44,13 @@ const PlayButton = ({ mapData, userId }: Props) => {
       >
         {t('play')}
       </Button>
+
+      <MapSettingsModal
+        isModalOpen={isModalOpen}
+        setIsModalOpen={setIsModalOpen}
+        mapData={mapData}
+        userId={userId}
+      />
     </>
   )
 }

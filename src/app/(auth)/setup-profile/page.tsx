@@ -8,11 +8,11 @@ import { createTranslation } from '@/i18n/server.js'
 
 import { createClient } from '@/utils/supabase/server.js'
 
-import type { Profile } from '@/types/index.js'
+import Form from './Form.js'
 
 import styles from '../page.module.css'
 
-import Form from './Form.js'
+import type { Profile } from '@/types/index.js'
 
 const SetupProfile = async () => {
   'use server'

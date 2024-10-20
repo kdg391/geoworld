@@ -35,7 +35,7 @@ const SignIn = async () => {
                 className={classNames(styles['provider-btn'], 'discord')}
               >
                 <Discord size={16} />
-                {t('sign_in.discord')}
+                {t('continue_with_discord')}
               </button>
             </form>
           </div>
@@ -45,7 +45,7 @@ const SignIn = async () => {
               className={classNames(styles['provider-btn'], 'email')}
             >
               <Mail size={16} />
-              {t('sign_in.email')}
+              {t('continue_with_email')}
             </Link>
           </div>
         </div>

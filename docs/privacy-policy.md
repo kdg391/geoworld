@@ -1,16 +1,8 @@
 # Privacy Policy
 
-Effective: October 14, 2024
+Effective: October 20, 2024
 <br>
-Last Updated: October 14, 2024
-
-TL;DR
-
-- We do not use any third-party analytics services.
-- We do not log any data related to your usage. 
-- When you create an account with an email and password, we collect your username, display name, email, and password.
-- When you create an account with Discord, we collect your Discord account email.
-- Passwords are encrypted.
+Last Updated: October 20, 2024
 
 <br>
 
@@ -26,7 +18,9 @@ By using our website, you hereby consent to our Privacy Policy and agree to its 
 
 When you create an account with an email and password, we collect your username, display name, email, and password.
 
-When you create an account with Discord, we collect your Discord account email.
+When you create an account with email verification, we collect your username, display name, and email.
+
+When you create an account with Discord, we collect your username, display name, and Discord account email.
 
 ## How we use your information
 

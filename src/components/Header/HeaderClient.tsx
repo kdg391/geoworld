@@ -108,13 +108,26 @@ const HeaderClient = ({ session }: Props) => {
                       </Link>
                     </li>
                     {session !== null && (
-                      <li>
-                        <Link href="/home">{t('home')}</Link>
-                      </li>
+                      <>
+                        <li>
+                          <Link href="/me/likes">Liked Maps</Link>
+                        </li>
+                        <li>
+                          <Link href="/me/maps">Your Maps</Link>
+                        </li>
+                        <li>
+                          <Link href="/me/omgoing-games">Ongoing Games</Link>
+                        </li>
+                        <li>
+                          <Link href="/home">{t('home')}</Link>
+                        </li>
+                      </>
                     )}
                   </ul>
                 </nav>
               </div>
+
+              <div></div>
 
               <div
                 className={styles.backdrop}

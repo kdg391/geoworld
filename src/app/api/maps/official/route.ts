@@ -1,9 +1,9 @@
 import { auth } from '@/auth.js'
 
 import {
+  MAPS_PAGE_LIMIT,
   OFFICIAL_MAP_COUNTRY_CODES,
   OFFICIAL_MAP_WORLD_ID,
-  PAGE_PER_MAPS,
 } from '@/constants/index.js'
 
 import { createTranslation } from '@/i18n/server.js'
@@ -44,8 +44,8 @@ export const GET = async (request: NextRequest) => {
 
   const { data, error } = await supabase
     .rpc('get_official_maps', {
-      p_offset: validated.data.page * PAGE_PER_MAPS,
-      p_limit: PAGE_PER_MAPS,
+      p_offset: validated.data.page * MAPS_PAGE_LIMIT,
+      p_limit: MAPS_PAGE_LIMIT,
     })
     .returns<Map[]>()
 

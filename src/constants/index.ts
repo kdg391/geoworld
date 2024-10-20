@@ -1,10 +1,6 @@
-export const PAGE_PER_MAPS = 20
-
-// game
-export const MAX_ROUNDS = 10
-export const DEFAULT_ROUNDS = 5
-
 // map
+export const MAPS_PAGE_LIMIT = 20
+
 export const COMMUNITY_MAP_MAX_LOCATIONS = 100
 
 export const DEFAULT_MAP_CENTER: google.maps.LatLngLiteral = {

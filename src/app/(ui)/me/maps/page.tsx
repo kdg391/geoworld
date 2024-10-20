@@ -7,9 +7,9 @@ import { auth } from '@/auth.js'
 
 import { createClient } from '@/utils/supabase/server.js'
 
-import type { Map } from '@/types/index.js'
-
 import MapCard from '@/components/MapCard/index.js'
+
+import type { Map } from '@/types/index.js'
 
 const CreateButton = dynamic(() => import('./CreateButton.js'))
 

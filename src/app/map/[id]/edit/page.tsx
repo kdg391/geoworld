@@ -1,6 +1,7 @@
 'use client'
 
 import dynamic from 'next/dynamic'
+import { notFound } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { useEffect, useRef, useState } from 'react'
 
@@ -222,7 +223,7 @@ const Edit = ({ params }: Props) => {
   }
 
   if (mapData === undefined) return <div>Loading...</div>
-  if (mapData === null) return <div>Map Not Found</div>
+  if (mapData === null) notFound()
 
   return (
     <>

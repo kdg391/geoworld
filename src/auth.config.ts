@@ -56,7 +56,6 @@ export default {
       },
     }),
     Discord({
-      allowDangerousEmailAccountLinking: true,
       authorization: 'https://discord.com/api/oauth2/authorize?scope=email',
       profile(profile: DiscordProfile) {
         return {

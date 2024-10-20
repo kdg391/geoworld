@@ -3,17 +3,17 @@
 import dynamic from 'next/dynamic'
 import { useEffect, useState } from 'react'
 
-import { PAGE_PER_MAPS } from '@/constants/index.js'
+import { MAPS_PAGE_LIMIT } from '@/constants/index.js'
 
 import { useTranslation } from '@/i18n/client.js'
 
-import type { Map } from '@/types/index.js'
+import MapCard from '@/components/MapCard/index.js'
+import SkeletonMapCard from '@/components/MapCard/Skeleton.js'
 
 import styles from '../community/page.module.css'
 import homeStyles from '../../page.module.css'
 
-import MapCard from '@/components/MapCard/index.js'
-import SkeletonMapCard from '@/components/MapCard/Skeleton.js'
+import type { Map } from '@/types/index.js'
 
 const Button = dynamic(() => import('@/components/common/Button/index.js'))
 
@@ -40,7 +40,7 @@ const Official = () => {
       const { data } = await res.json()
 
       setMaps((m) => [...m, ...data])
-      setHasMore(data.length >= PAGE_PER_MAPS)
+      setHasMore(data.length >= MAPS_PAGE_LIMIT)
     } catch {}
   }
 

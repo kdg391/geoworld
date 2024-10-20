@@ -67,7 +67,7 @@ export const {
       maxAge: 60 * 60 * 24 * 30,
     },
     callbacks: {
-      async jwt({ /*account, profile,*/ token, user }) {
+      async jwt({ token, user }) {
         // console.log(
         //   'jwt({ account, profile, token, user })',
         //   account,
@@ -85,14 +85,17 @@ export const {
       async session({ session, token }) {
         // console.log('session({ session, token })', session, token)
 
+        // eslint-disable-next-line
         // @ts-ignore
         session.user = token.user
 
         const payload = {
           aud: 'authenticated',
           exp: Math.floor(new Date(session.expires).getTime() / 1000),
+          // eslint-disable-next-line
           // @ts-ignore
           sub: token.user.id,
+          // eslint-disable-next-line
           // @ts-ignore
           email: token.user.email,
           role: 'authenticated',

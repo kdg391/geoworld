@@ -206,7 +206,7 @@ export const signInEmail = async (_: unknown, formData: FormData) => {
   }
 }
 
-export const signInDiscord = async (_: unknown) => {
+export const signInDiscord = async () => {
   'use server'
 
   let redirectTo = '/dashboard'
@@ -321,7 +321,9 @@ export const updatePassword = async (_: unknown, formData: FormData) => {
         },
       }
 
-    return
+    return {
+      errors: null,
+    }
   }
 
   redirect('/sign-in')

@@ -7,10 +7,9 @@ import { useState } from 'react'
 
 import { createGame } from '@/actions/game.js'
 
+import { DEFAULT_ROUNDS, MAX_ROUNDS } from '@/constants/game.js'
 import {
-  DEFAULT_ROUNDS,
   FLAG_ENOJIS,
-  MAX_ROUNDS,
   OFFICIAL_MAP_COUNTRY_CODES,
   OFFICIAL_MAP_WORLD_ID,
   WORLD_EMOJI,
