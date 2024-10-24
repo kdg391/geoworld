@@ -264,7 +264,8 @@ export const resetPassword = async (_: unknown, formData: FormData) => {
     )
 
     const data = await response.json()
-    console.log(data)
+
+    if (data?.error) throw new Error('Something went wrong!')
   } catch (err) {
     if (err instanceof Error)
       return {
@@ -310,10 +311,9 @@ export const updatePassword = async (_: unknown, formData: FormData) => {
     )
 
     const data = await response.json()
-    console.log(data)
-  } catch (err) {
-    console.log(err)
 
+    if (data.error) throw new Error('Something went wrong!')
+  } catch (err) {
     if (err instanceof Error)
       return {
         errors: {

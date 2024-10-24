@@ -183,14 +183,15 @@ export const createGame = async ({
   const { data, error } = await supabase
     .from('games')
     .insert<Partial<Game>>({
-      map_id: mapData.id,
-      user_id: userId,
+      bounds: null,
       guesses: [],
+      map_id: mapData.id,
       mode: 'standard',
       round: 0,
       rounds: [actualLocation],
       settings,
       state: 'started',
+      user_id: userId,
     })
     .select()
     .single<Game>()

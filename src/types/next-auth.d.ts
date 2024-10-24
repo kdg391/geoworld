@@ -1,6 +1,5 @@
-import { DefaultSession } from 'next-auth'
+import type { DefaultSession } from 'next-auth'
 import type { DefaultUser } from './index.js'
-import { DefaultJWT } from '@auth/core/jwt'
 
 declare module 'next-auth' {
   // Returned by `useSession`, `getSession` and received as a prop on the `SessionProvider` React Context

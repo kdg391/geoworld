@@ -5,7 +5,7 @@ import Resend from 'next-auth/providers/resend'
 
 import authConfig from './auth.config.js'
 
-import { html, text } from './utils/email.js'
+import { signInHtml, signInText } from './utils/email.js'
 import { createClient } from './utils/supabase/server.js'
 
 const supabase = createClient({
@@ -30,8 +30,8 @@ const providers = [
           from: `GeoWorld <${provider.from}>`,
           to,
           subject: `Sign in to ${host}`,
-          html: await html({ url, host, theme }),
-          text: await text({ url, host }),
+          html: await signInHtml({ url, host, theme }),
+          text: await signInText({ url, host }),
         }),
       })
 
@@ -77,6 +77,8 @@ export const {
         // )
 
         if (user) {
+          // eslint-disable-next-line
+          // @ts-ignore
           token.user = user
         }
 

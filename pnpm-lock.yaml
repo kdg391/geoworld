@@ -42,8 +42,8 @@ importers:
         specifier: ^9.0.8
         version: 9.0.8(react@18.3.1)
       i18next:
-        specifier: ^23.16.1
-        version: 23.16.1
+        specifier: ^23.16.2
+        version: 23.16.2
       i18next-browser-languagedetector:
         specifier: ^8.0.0
         version: 8.0.0
@@ -63,8 +63,8 @@ importers:
         specifier: 14.2.15
         version: 14.2.15(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       next-auth:
-        specifier: 5.0.0-beta.22
-        version: 5.0.0-beta.22(next@14.2.15(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
+        specifier: 5.0.0-beta.25
+        version: 5.0.0-beta.25(next@14.2.15(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
       react:
         specifier: ^18.3.1
         version: 18.3.1
@@ -72,11 +72,11 @@ importers:
         specifier: ^18.3.1
         version: 18.3.1(react@18.3.1)
       react-i18next:
-        specifier: ^15.0.3
-        version: 15.0.3(i18next@23.16.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: ^15.1.0
+        version: 15.1.0(i18next@23.16.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-markdown:
         specifier: ^9.0.1
-        version: 9.0.1(@types/react@18.3.11)(react@18.3.1)
+        version: 9.0.1(@types/react@18.3.12)(react@18.3.1)
       rehype-raw:
         specifier: ^7.0.0
         version: 7.0.0
@@ -115,8 +115,8 @@ importers:
         specifier: ^20.16.1
         version: 20.16.7
       '@types/react':
-        specifier: ^18.3.11
-        version: 18.3.11
+        specifier: ^18.3.12
+        version: 18.3.12
       '@types/react-dom':
         specifier: ^18.3.1
         version: 18.3.1
@@ -133,27 +133,13 @@ importers:
         specifier: ^3.3.3
         version: 3.3.3
       supabase:
-        specifier: ^1.204.3
-        version: 1.204.3
+        specifier: ^1.207.9
+        version: 1.207.9
       typescript:
         specifier: ^5.6.3
         version: 5.6.3
 
 packages:
-
-  '@auth/core@0.35.3':
-    resolution: {integrity: sha512-g6qfiqU4OtyvIEZ8J7UoIwAxEnNnLJV0/f/DW41U+4G5nhBlaCrnKhawJIJpU0D3uavXLeDT3B0BkjtiimvMDA==}
-    peerDependencies:
-      '@simplewebauthn/browser': ^9.0.1
-      '@simplewebauthn/server': ^9.0.2
-      nodemailer: ^6.8.0
-    peerDependenciesMeta:
-      '@simplewebauthn/browser':
-        optional: true
-      '@simplewebauthn/server':
-        optional: true
-      nodemailer:
-        optional: true
 
   '@auth/core@0.37.2':
     resolution: {integrity: sha512-kUvzyvkcd6h1vpeMAojK2y7+PAV5H+0Cc9+ZlKYDFhDY31AlvsB+GW5vNO4qE3Y07KeQgvNO9U0QUx/fN62kBw==}
@@ -178,8 +164,8 @@ packages:
     resolution: {integrity: sha512-VBj9MYyDb9tuLq7yzqjgzt6Q+IBQLrGZfdjOekyEirZPHxXWoTSGUTMrpsfi58Up73d13NfYLv8HT9vmznjzhQ==}
     engines: {node: '>=6.9.0'}
 
-  '@babel/runtime@7.25.7':
-    resolution: {integrity: sha512-FjoyLe754PMiYsFaN5C94ttGiOmBNYTf6pLr4xXHAT5uctHb092PBszndLDR5XA/jghQvn4n7JMHl7dmTgbm9w==}
+  '@babel/runtime@7.25.9':
+    resolution: {integrity: sha512-4zpTHZ9Cm6L9L+uIqghQX8ZXg8HKFcjYO3qHoO8zTmRm6HQUJ8SSJ+KRvbMBZn0EGVlT4DRYeQ/6hjlyXBh+Kg==}
     engines: {node: '>=6.9.0'}
 
   '@discoveryjs/json-ext@0.5.7':
@@ -528,8 +514,8 @@ packages:
   '@types/react-dom@18.3.1':
     resolution: {integrity: sha512-qW1Mfv8taImTthu4KoXgDfLuk4bydU6Q/TkADnDWWHwi4NX4BR+LWfTp2sVmTqRrsHvyDDTelgelxJ+SsejKKQ==}
 
-  '@types/react@18.3.11':
-    resolution: {integrity: sha512-r6QZ069rFTjrEYgFdOck1gK7FLVsgJE7tTz0pQBczlBNUhBNk0MQH4UbnFSwjpQLMkLzgqvBBa+qGpLje16eTQ==}
+  '@types/react@18.3.12':
+    resolution: {integrity: sha512-D2wOSq/d6Agt28q7rSI3jhU7G6aiuzljDGZ2hTZHIkrTLUI+AF3WMeKkEZ9nN2fkBAlcktT6vcZjDFiIhMYEQw==}
 
   '@types/unist@2.0.11':
     resolution: {integrity: sha512-CmBKiL6NNo/OqgmMn95Fk9Whlp2mtvIv+KNpQKN2F4SjvrEesubTRWGYSg+BnWZOnlCaSTU1sMpsBOzgbYhnsA==}
@@ -802,10 +788,6 @@ packages:
 
   concat-map@0.0.1:
     resolution: {integrity: sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==}
-
-  cookie@0.6.0:
-    resolution: {integrity: sha512-U71cyTamuh1CRNCfpGY6to28lxvNwPG4Guz/EVjgf3Jmzv0vlDp1atT9eS5dDjMYHucpHbWns6Lwf3BKz6svdw==}
-    engines: {node: '>= 0.6'}
 
   cookie@0.7.1:
     resolution: {integrity: sha512-6DnInpx7SJ2AK3+CTUE/ZM0vWTUboZCegxhC2xiIydHR9jNuTAASBrfEpHhiGOZw/nX51bHt6YQl8jsGo4y/0w==}
@@ -1268,8 +1250,8 @@ packages:
   i18next-resources-to-backend@1.2.1:
     resolution: {integrity: sha512-okHbVA+HZ7n1/76MsfhPqDou0fptl2dAlhRDu2ideXloRRduzHsqDOznJBef+R3DFZnbvWoBW+KxJ7fnFjd6Yw==}
 
-  i18next@23.16.1:
-    resolution: {integrity: sha512-H73h/H7BN7PI38Sq9XsOXzWFBH6mtyCYFiUMVtd9BxiYNDWPPIzKcBmDrqhjKbw3IXP5j6JoSW4ugJlaZuOvKw==}
+  i18next@23.16.2:
+    resolution: {integrity: sha512-dFyxwLXxEQK32f6tITBMaRht25mZPJhQ0WbC0p3bO2mWBal9lABTMqSka5k+GLSRWLzeJBKDpH7BeIA9TZI7Jg==}
 
   ignore@5.3.2:
     resolution: {integrity: sha512-hsBTNUqQTDwkWtcdYI2i06Y/nUBEsNEDJKjWdigLvegy8kDuJAS8uRlpkkcQpyEXL0Z/pjDy5HBmMjRCJ2gq+g==}
@@ -1683,8 +1665,8 @@ packages:
     resolution: {integrity: sha512-8Ofs/AUQh8MaEcrlq5xOX0CQ9ypTF5dl78mjlMNfOK08fzpgTHQRQPBxcPlEtIw0yRpws+Zo/3r+5WRby7u3Gg==}
     engines: {node: '>= 0.6'}
 
-  next-auth@5.0.0-beta.22:
-    resolution: {integrity: sha512-QGBo9HGOjmnJBHGXvtFztl0tM5tL0porDlk74HVoCCzXd986ApOlIW3EmiCuho7YzEopgkFiwwmcXpoCrHAtYw==}
+  next-auth@5.0.0-beta.25:
+    resolution: {integrity: sha512-2dJJw1sHQl2qxCrRk+KTQbeH+izFbGFPuJj5eGgBZFYyiYYtvlrBeUw1E/OJJxTRjuxbSYGnCTkUIRsIIW0bog==}
     peerDependencies:
       '@simplewebauthn/browser': ^9.0.1
       '@simplewebauthn/server': ^9.0.2
@@ -1735,9 +1717,6 @@ packages:
   npm-normalize-package-bin@4.0.0:
     resolution: {integrity: sha512-TZKxPvItzai9kN9H/TkmCtx/ZN/hvr3vUycjlfmH0ootY9yFBzNOpiXAdIn1Iteqsvk4lQn6B5PTrt+n6h8k/w==}
     engines: {node: ^18.17.0 || >=20.5.0}
-
-  oauth4webapi@2.17.0:
-    resolution: {integrity: sha512-lbC0Z7uzAFNFyzEYRIC+pkSVvDHJTbEW+dYlSBAlCYDe6RxUkJ26bClhk8ocBZip1wfI9uKTe0fm4Ib4RHn6uQ==}
 
   oauth4webapi@3.1.1:
     resolution: {integrity: sha512-0h4FZjsntbKQ5IHGM9mFT7uOwQCRdcTG7YhC0xXlWIcCch24wUa6Vggaipa3Sw6Ab7nEnmO4rctROmyuHBfP7Q==}
@@ -1899,8 +1878,8 @@ packages:
     peerDependencies:
       react: ^18.3.1
 
-  react-i18next@15.0.3:
-    resolution: {integrity: sha512-BlO1P+oLKjjIxDBQ0GkAIMacgjfMbnvops+3Y5nZXF7UJ99v4KCWr0Na1azJXC8AMiNWp4kgUcFCJM7U9ZsUDg==}
+  react-i18next@15.1.0:
+    resolution: {integrity: sha512-zj3nJynMnZsy2gPZiOTC7XctCY5eQGqT3tcKMmfJWC9FMvgd+960w/adq61j8iPzpwmsXejqID9qC3Mqu1Xu2Q==}
     peerDependencies:
       i18next: '>= 23.2.3'
       react: '>= 16.8.0'
@@ -2127,8 +2106,8 @@ packages:
       babel-plugin-macros:
         optional: true
 
-  supabase@1.204.3:
-    resolution: {integrity: sha512-uO09eyAw7TZAX/7wPeieQBWrl4QAJ0WLF+HTkFy35GWBmQULP5nkJR93LcuhSyooYiqwEUKlChEF/PGAEmTCKw==}
+  supabase@1.207.9:
+    resolution: {integrity: sha512-BJPwsAd2UBIpQawcQV3/xKHEZ8YrrkHYpgibxCZbG+RuxuhTtkHG7zR4I3LylIIEwcKp3hmDKu/hO1m2NT5RXA==}
     engines: {npm: '>=8'}
     hasBin: true
 
@@ -2358,16 +2337,6 @@ packages:
 
 snapshots:
 
-  '@auth/core@0.35.3':
-    dependencies:
-      '@panva/hkdf': 1.2.1
-      '@types/cookie': 0.6.0
-      cookie: 0.6.0
-      jose: 5.9.4
-      oauth4webapi: 2.17.0
-      preact: 10.11.3
-      preact-render-to-string: 5.2.3(preact@10.11.3)
-
   '@auth/core@0.37.2':
     dependencies:
       '@panva/hkdf': 1.2.1
@@ -2391,7 +2360,7 @@ snapshots:
     dependencies:
       regenerator-runtime: 0.14.1
 
-  '@babel/runtime@7.25.7':
+  '@babel/runtime@7.25.9':
     dependencies:
       regenerator-runtime: 0.14.1
 
@@ -2722,9 +2691,9 @@ snapshots:
 
   '@types/react-dom@18.3.1':
     dependencies:
-      '@types/react': 18.3.11
+      '@types/react': 18.3.12
 
-  '@types/react@18.3.11':
+  '@types/react@18.3.12':
     dependencies:
       '@types/prop-types': 15.7.13
       csstype: 3.1.3
@@ -3042,8 +3011,6 @@ snapshots:
   compute-scroll-into-view@3.1.0: {}
 
   concat-map@0.0.1: {}
-
-  cookie@0.6.0: {}
 
   cookie@0.7.1: {}
 
@@ -3748,9 +3715,9 @@ snapshots:
     dependencies:
       '@babel/runtime': 7.25.6
 
-  i18next@23.16.1:
+  i18next@23.16.2:
     dependencies:
-      '@babel/runtime': 7.25.7
+      '@babel/runtime': 7.25.9
 
   ignore@5.3.2: {}
 
@@ -4275,9 +4242,9 @@ snapshots:
 
   negotiator@1.0.0: {}
 
-  next-auth@5.0.0-beta.22(next@14.2.15(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1):
+  next-auth@5.0.0-beta.25(next@14.2.15(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1):
     dependencies:
-      '@auth/core': 0.35.3
+      '@auth/core': 0.37.2
       next: 14.2.15(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react: 18.3.1
 
@@ -4319,8 +4286,6 @@ snapshots:
   normalize-range@0.1.2: {}
 
   npm-normalize-package-bin@4.0.0: {}
-
-  oauth4webapi@2.17.0: {}
 
   oauth4webapi@3.1.1: {}
 
@@ -4481,11 +4446,11 @@ snapshots:
       react: 18.3.1
       scheduler: 0.23.2
 
-  react-i18next@15.0.3(i18next@23.16.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+  react-i18next@15.1.0(i18next@23.16.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
-      '@babel/runtime': 7.25.7
+      '@babel/runtime': 7.25.9
       html-parse-stringify: 3.0.1
-      i18next: 23.16.1
+      i18next: 23.16.2
       react: 18.3.1
     optionalDependencies:
       react-dom: 18.3.1(react@18.3.1)
@@ -4494,10 +4459,10 @@ snapshots:
 
   react-is@18.2.0: {}
 
-  react-markdown@9.0.1(@types/react@18.3.11)(react@18.3.1):
+  react-markdown@9.0.1(@types/react@18.3.12)(react@18.3.1):
     dependencies:
       '@types/hast': 3.0.4
-      '@types/react': 18.3.11
+      '@types/react': 18.3.12
       devlop: 1.1.0
       hast-util-to-jsx-runtime: 2.3.0
       html-url-attributes: 3.0.0
@@ -4780,7 +4745,7 @@ snapshots:
       client-only: 0.0.1
       react: 18.3.1
 
-  supabase@1.204.3:
+  supabase@1.207.9:
     dependencies:
       bin-links: 5.0.0
       https-proxy-agent: 7.0.5

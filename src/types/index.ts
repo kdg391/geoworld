@@ -108,9 +108,12 @@ export type GameView = 'game' | 'result' | 'finalResult'
 
 export interface Game {
   id: string
-  map_id: string
-  user_id: string
+  bounds: {
+    min: google.maps.LatLngLiteral
+    max: google.maps.LatLngLiteral
+  } | null
   guesses: Guess[]
+  map_id: string
   mode: GameMode
   round: number
   rounds: RoundLocation[]
@@ -118,4 +121,5 @@ export interface Game {
   state: GameState
   total_score: number
   total_time: number
+  user_id: string
 }

@@ -22,9 +22,9 @@ export const PUT = async (request: NextRequest) => {
   if (!validated.success)
     return Response.json(
       {
-        message: 'Invalid Search Params',
+        message: 'Invalid Body',
         errors: validated.error.flatten().fieldErrors,
-        code: 'invalid_search_params',
+        code: 'invalid_body',
       },
       {
         status: 400,
@@ -41,7 +41,7 @@ export const PUT = async (request: NextRequest) => {
     .eq('token', validated.data.token)
     .maybeSingle()
 
-  if (tokenErr)
+  if (!data || tokenErr)
     return Response.json(
       {
         message: 'Cannot find the token',
@@ -72,7 +72,7 @@ export const PUT = async (request: NextRequest) => {
 
   return Response.json(
     {
-      message: 'updated password',
+      message: 'Successfully updated the password',
     },
     {
       status: 200,

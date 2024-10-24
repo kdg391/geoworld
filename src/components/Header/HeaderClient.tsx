@@ -127,8 +127,6 @@ const HeaderClient = ({ session }: Props) => {
                 </nav>
               </div>
 
-              <div></div>
-
               <div
                 className={styles.backdrop}
                 onClick={() => setIsMenuOpen((o) => !o)}

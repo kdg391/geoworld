@@ -1,5 +1,7 @@
 import { z } from 'zod'
 
+import { sendEmail } from '@/utils/email.js'
+
 import { createClient } from '@/utils/supabase/server.js'
 
 import { emailSchema } from '@/utils/validations/auth.js'
@@ -20,9 +22,9 @@ export const POST = async (request: Request) => {
   if (!validated.success)
     return Response.json(
       {
-        message: 'Invalid Search Params',
+        message: 'Invalid Body',
         errors: validated.error.flatten().fieldErrors,
-        code: 'invalid_search_params',
+        code: 'invalid_body',
       },
       {
         status: 400,
@@ -77,7 +79,25 @@ export const POST = async (request: Request) => {
     })
 
     const url = `${process.env.NEXT_PUBLIC_URL}/update-password?token=${token}`
-    console.log(url)
+
+    try {
+      await sendEmail({
+        html: `<h1>Reset your password</h1><a href="${url}">Click to reset</a>`,
+        subject: 'Reset your password',
+        text: `Please go to ${url} to reset your password`,
+        to: user.email,
+      })
+    } catch (err) {
+      if (err instanceof Error)
+        return Response.json(
+          {
+            message: 'Something went wrong!',
+          },
+          {
+            status: 500,
+          },
+        )
+    }
   }
 
   return Response.json(

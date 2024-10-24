@@ -2,17 +2,11 @@ import bcrypt from 'bcryptjs'
 import Credentials from 'next-auth/providers/credentials'
 import Discord, { type DiscordProfile } from 'next-auth/providers/discord'
 
-import { createTranslation } from './i18n/server.js'
-
 import { createClient } from './utils/supabase/server.js'
 import { signInCredentialsSchema } from './utils/validations/auth.js'
 
 import type { NextAuthConfig } from 'next-auth'
 import type { User } from './types/index.js'
-
-export class CredentialsError extends Error {
-  name = 'CredentialsError'
-}
 
 export default {
   providers: [
@@ -35,8 +29,6 @@ export default {
           .eq('email', email)
           .single<User>()
 
-        const { t } = await createTranslation('auth')
-
         if (!user) return null
 
         const isPwMatched = await bcrypt.compare(
@@ -44,7 +36,7 @@ export default {
           user.hashed_password as string,
         )
 
-        if (!isPwMatched) throw new CredentialsError(t('invalid_credentials'))
+        if (!isPwMatched) return null
 
         return {
           id: user.id,

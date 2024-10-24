@@ -10,7 +10,7 @@ interface HTMLOptions {
   url: string
 }
 
-export async function html({ host, theme, url }: HTMLOptions) {
+export async function signInHtml({ host, theme, url }: HTMLOptions) {
   const escapedHost = host.replace(/\./g, '&#8203;.')
 
   const brandColor = theme.brandColor ?? '#346df1'
@@ -60,6 +60,33 @@ interface TextOptions {
   url: string
 }
 
-export async function text({ host, url }: TextOptions) {
+export async function signInText({ host, url }: TextOptions) {
   return `Sign in to ${host}\n${url}\n\n`
+}
+
+interface SendEmailOptions {
+  html: string // todo
+  subject: string
+  text: string // todo
+  to: string
+}
+
+export async function sendEmail({ html, subject, text, to }: SendEmailOptions) {
+  const res = await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${process.env.AUTH_RESEND_KEY}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      from: `GeoWorld <${process.env.RESEND_EMAIL_FROM}>`,
+      to,
+      subject,
+      html,
+      text,
+    }),
+  })
+
+  if (!res.ok)
+    throw new Error('Resend error: ' + JSON.stringify(await res.json()))
 }
