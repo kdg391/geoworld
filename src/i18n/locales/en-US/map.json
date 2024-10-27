@@ -1,5 +1,6 @@
 {
   "avg_score": "Average Score",
+  "created": "Created by {{displayName}}",
   "explorers": "Explorers",
   "likes": "Likes",
   "locations_one": "Location",

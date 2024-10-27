@@ -1,7 +1,6 @@
 'use client'
 
-import { useState } from 'react'
-import { useFormState } from 'react-dom'
+import { useActionState, useState } from 'react'
 
 import { changeUsername } from '@/actions/profile.js'
 
@@ -27,7 +26,7 @@ interface Props {
 const UsernameForm = ({ username }: Props) => {
   'use client'
 
-  const [state, action] = useFormState<FormState, FormData>(changeUsername, {
+  const [state, action] = useActionState<FormState, FormData>(changeUsername, {
     errors: null,
   })
 

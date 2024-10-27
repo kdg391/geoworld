@@ -1,4 +1,4 @@
-import { Mail } from 'lucide-react'
+// import { Mail } from 'lucide-react'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 
@@ -39,7 +39,7 @@ const SignIn = async () => {
               </button>
             </form>
           </div>
-          <div>
+          {/*<div>
             <Link
               href="/sign-in-email"
               className={classNames(styles['provider-btn'], 'email')}
@@ -47,7 +47,7 @@ const SignIn = async () => {
               <Mail size={16} />
               {t('continue_with_email')}
             </Link>
-          </div>
+          </div>*/}
         </div>
 
         <div className={styles.separator}>

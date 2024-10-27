@@ -107,24 +107,29 @@ const HeaderClient = ({ session }: Props) => {
                         {t('maps')}
                       </Link>
                     </li>
-                    {session !== null && (
-                      <>
-                        <li>
-                          <Link href="/me/likes">Liked Maps</Link>
-                        </li>
-                        <li>
-                          <Link href="/me/maps">Your Maps</Link>
-                        </li>
-                        <li>
-                          <Link href="/me/omgoing-games">Ongoing Games</Link>
-                        </li>
-                        <li>
-                          <Link href="/home">{t('home')}</Link>
-                        </li>
-                      </>
-                    )}
                   </ul>
                 </nav>
+
+                {session !== null && (
+                  <nav className={styles['mobile-nav']}>
+                    <ul>
+                      <li>
+                        <Link href="/me/maps">{t('my_maps')}</Link>
+                      </li>
+                      <li>
+                        <Link href="/me/likes">{t('liked_maps')}</Link>
+                      </li>
+                      <li>
+                        <Link href="/me/ongoing-games">
+                          {t('ongoing_games')}
+                        </Link>
+                      </li>
+                      <li>
+                        <Link href="/home">{t('home')}</Link>
+                      </li>
+                    </ul>
+                  </nav>
+                )}
               </div>
 
               <div

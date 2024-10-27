@@ -1,7 +1,6 @@
 'use client'
 
-import { useState } from 'react'
-import { useFormState } from 'react-dom'
+import { useActionState, useState } from 'react'
 
 import { deleteAccount } from '@/actions/auth.js'
 
@@ -23,7 +22,7 @@ interface FormState {
 const DeleteAccountForm = () => {
   'use client'
 
-  const [state, action] = useFormState<FormState, FormData>(deleteAccount, {
+  const [state, action] = useActionState<FormState, FormData>(deleteAccount, {
     errors: null,
   })
 

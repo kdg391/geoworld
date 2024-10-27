@@ -1,6 +1,6 @@
 'use client'
 
-import { useFormState } from 'react-dom'
+import { useActionState } from 'react'
 
 import { signInEmail } from '@/actions/auth.js'
 
@@ -21,7 +21,7 @@ interface FormState {
 const Form = () => {
   'use client'
 
-  const [state, action] = useFormState<FormState, FormData>(signInEmail, {
+  const [state, action] = useActionState<FormState, FormData>(signInEmail, {
     errors: null,
   })
 

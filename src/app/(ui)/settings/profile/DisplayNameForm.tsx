@@ -1,7 +1,6 @@
 'use client'
 
-import { useState } from 'react'
-import { useFormState } from 'react-dom'
+import { useActionState, useState } from 'react'
 
 import { changeDisplayName } from '@/actions/profile.js'
 
@@ -27,9 +26,12 @@ interface Props {
 const DisplayNameForm = ({ displayName }: Props) => {
   'use client'
 
-  const [state, action] = useFormState<FormState, FormData>(changeDisplayName, {
-    errors: null,
-  })
+  const [state, action] = useActionState<FormState, FormData>(
+    changeDisplayName,
+    {
+      errors: null,
+    },
+  )
 
   const { t } = useTranslation('auth')
 

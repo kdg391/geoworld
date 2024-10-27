@@ -7,7 +7,7 @@ import { notFound } from 'next/navigation'
 
 import { auth } from '@/auth.js'
 
-import { getMap, hasLiked } from '@/actions/map.js'
+import { hasLiked } from '@/actions/map.js'
 
 import {
   FLAG_ENOJIS,
@@ -29,17 +29,25 @@ const PlayButton = dynamic(() => import('./PlayButton.js'))
 const Twemoji = dynamic(() => import('@/components/Twemoji.js'))
 
 interface Props {
-  params: {
+  params: Promise<{
     id: string
-  }
+  }>
 }
 
-const Map = async ({ params }: Props) => {
+const Map = async (props: Props) => {
   'use server'
 
-  const { t } = await createTranslation(['common', 'map'])
+  const params = await props.params
 
-  const { data: mapData, error: mErr } = await getMap(params.id)
+  const { data: mapData, error: mErr } = await fetch(
+    `${process.env.NEXT_PUBLIC_URL}/api/maps/${params.id}`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    },
+  ).then((res) => res.json())
 
   if (!mapData || mErr) notFound()
 
@@ -55,6 +63,8 @@ const Map = async ({ params }: Props) => {
   const { data: liked } = await hasLiked(mapData.id)
 
   const session = await auth()
+
+  const { t } = await createTranslation(['common', 'map'])
 
   return (
     <>

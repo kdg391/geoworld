@@ -36,6 +36,7 @@ const LanguageSelect = () => {
     <Select
       items={LANGUAGE_OPTIONS}
       label={t('language')}
+      showLabel={false}
       menuPlacement="top"
       onSelectedItemChange={async ({ selectedItem }) => {
         if (selectedItem.value === i18n.language) return

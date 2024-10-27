@@ -1,7 +1,11 @@
 [data-theme='light'] {
   --footer-border: rgba(0, 0, 0, 0.1);
+  --link-c: var(--gray-800);
+  --social-link: var(--gray-650);
 }
 
 [data-theme='dark'] {
-  --footer-border: rgba(255, 255, 255, 0.1);
+  --footer-border: rgba(255, 255, 255, 0.15);
+  --link-c: var(--gray-200);
+  --social-link: var(--gray-300);
 }

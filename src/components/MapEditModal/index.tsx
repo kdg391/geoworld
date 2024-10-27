@@ -1,7 +1,7 @@
 'use client'
 
 import dynamic from 'next/dynamic'
-import { useFormState } from 'react-dom'
+import { useActionState } from 'react'
 
 import { createCommunityMap, editCommunityMap } from '@/actions/map.js'
 
@@ -31,7 +31,7 @@ interface FormState {
 const MapEditModal = ({ isEditing, isModalOpen, setIsModalOpen }: Props) => {
   const { t } = useTranslation('common')
 
-  const [state, action] = useFormState<FormState, FormData>(
+  const [state, action] = useActionState<FormState, FormData>(
     isEditing ? editCommunityMap : createCommunityMap,
     {
       errors: null,

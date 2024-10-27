@@ -44,6 +44,7 @@ const ThemeSelect = () => {
     <Select
       items={themeOptions}
       label={t('theme')}
+      showLabel={false}
       menuPlacement="top"
       onSelectedItemChange={async ({ selectedItem }) => {
         if (selectedItem.value === theme) return

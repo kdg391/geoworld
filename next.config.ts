@@ -1,8 +1,8 @@
 import withBundleAnalyzer from '@next/bundle-analyzer'
 
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  swcMinify: true,
+import type { NextConfig } from 'next'
+
+const nextConfig: NextConfig = {
   reactStrictMode: true,
   webpack: (config) => {
     config.resolve.extensionAlias = {

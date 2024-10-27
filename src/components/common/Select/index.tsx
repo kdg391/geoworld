@@ -26,6 +26,7 @@ interface Props {
   menuPlacement?: 'top' | 'bottom'
   onSelectedItemChange: (changes: UseSelectSelectedItemChange<Item>) => void
   selectedItem?: Item
+  showLabel?: boolean
 }
 
 const Select = ({
@@ -35,6 +36,7 @@ const Select = ({
   menuPlacement = 'bottom',
   onSelectedItemChange,
   selectedItem,
+  showLabel = true,
 }: Props) => {
   const {
     getItemProps,
@@ -54,7 +56,7 @@ const Select = ({
 
   return (
     <>
-      {label && <label {...getLabelProps()}>{label}</label>}
+      {label && showLabel && <label {...getLabelProps()}>{label}</label>}
       <div className={classNames(styles.downshift, isOpen ? 'open' : '')}>
         <div
           {...getToggleButtonProps({

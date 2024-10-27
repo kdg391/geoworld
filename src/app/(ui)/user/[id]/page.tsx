@@ -2,13 +2,15 @@ import { notFound, redirect } from 'next/navigation'
 
 import { getProfileByUsername } from '@/actions/profile.js'
 
-interface Params {
-  params: {
+interface Props {
+  params: Promise<{
     id: string
-  }
+  }>
 }
 
-const User = async ({ params }: Params) => {
+const User = async (props: Props) => {
+  const params = await props.params
+
   const id = decodeURIComponent(params.id)
 
   if (id.startsWith('@')) {

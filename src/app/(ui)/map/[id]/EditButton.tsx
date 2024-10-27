@@ -1,6 +1,6 @@
 'use client'
 
-import { SquarePen } from 'lucide-react'
+import { SquarePen, Trash } from 'lucide-react'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/navigation'
 
@@ -16,11 +16,7 @@ const EditButton = ({ mapId }: Props) => {
   const router = useRouter()
 
   return (
-    <div
-      style={{
-        display: 'flex',
-      }}
-    >
+    <div className="flex">
       <Button
         variant="primary"
         size="m"
@@ -42,6 +38,7 @@ const EditButton = ({ mapId }: Props) => {
           }
         }}
       >
+        <Trash size={16} />
         Delete
       </Button>
     </div>

@@ -5,14 +5,14 @@ import { createTranslation } from '@/i18n/server.js'
 import type { Metadata } from 'next'
 
 interface Props {
-  params: {
+  params: Promise<{
     id: string
-  }
+  }>
 }
 
-export const generateMetadata = async ({
-  params,
-}: Props): Promise<Metadata> => {
+export const generateMetadata = async (props: Props): Promise<Metadata> => {
+  const params = await props.params
+
   if (decodeURIComponent(params.id).startsWith('@')) return {}
 
   const { t } = await createTranslation('common')

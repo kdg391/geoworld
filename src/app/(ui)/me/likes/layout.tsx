@@ -4,7 +4,7 @@ export const generateMetadata = async () => {
   const { t } = await createTranslation('common')
 
   return {
-    title: `${t('my_likes')} - GeoWorld`,
+    title: `${t('liked_maps')} - GeoWorld`,
   }
 }
 

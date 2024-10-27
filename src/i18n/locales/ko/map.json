@@ -1,5 +1,6 @@
 {
   "avg_score": "평균 점수",
+  "created": "Created by {{displayName}}",
   "explorers": "플레이한 유저",
   "likes": "좋아요",
   "locations_one": "위치",

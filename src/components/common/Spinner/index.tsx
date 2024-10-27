@@ -7,7 +7,6 @@ import { classNames } from '@/utils/index.js'
 import styles from './index.module.css'
 
 interface Props {
-  className?: string
   size: number
   theme?: 'light' | 'dark' | 'auto'
 }

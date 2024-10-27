@@ -47,6 +47,8 @@ type ButtonComponent = (<C extends React.ElementType = 'button'>(
 }
 
 const Button: ButtonComponent = forwardRef(
+  // eslint-disable-next-line
+  // @ts-ignore
   <C extends React.ElementType = 'button'>(
     {
       as,
@@ -58,7 +60,8 @@ const Button: ButtonComponent = forwardRef(
       variant,
       ...props
     }: ButtonProps<C>,
-    // ref: PolymorphicRef<C>,
+    // eslint-disable-next-line
+    _: PolymorphicRef<C>,
   ) => {
     const Element = as ?? 'button'
 

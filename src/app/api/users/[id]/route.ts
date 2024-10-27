@@ -8,13 +8,15 @@ export const revalidate = 300
 
 export const GET = async (
   _: Request,
-  { params }: { params: { id: string } },
+  segmentData: { params: Promise<{ id: string }> },
 ) => {
   const session = await auth()
 
   const supabase = createClient({
     supabaseAccessToken: session?.supabaseAccessToken,
   })
+
+  const params = await segmentData.params
 
   const { data, error } = await supabase
     .from('profiles')

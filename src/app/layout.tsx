@@ -1,7 +1,6 @@
 import { createTranslation, getLocale } from '../i18n/server.js'
 
 import LocaleProvider from '../providers/LocaleProvider.js'
-import SettingsProvider from '../providers/SettingsProvider.js'
 import ThemeProvider from '../providers/ThemeProvider.js'
 
 import './pretendard.css'
@@ -130,9 +129,7 @@ export default async function RootLayout({
         />
 
         <LocaleProvider value={locale}>
-          <SettingsProvider>
-            <ThemeProvider>{children}</ThemeProvider>
-          </SettingsProvider>
+          <ThemeProvider>{children}</ThemeProvider>
         </LocaleProvider>
       </body>
     </html>

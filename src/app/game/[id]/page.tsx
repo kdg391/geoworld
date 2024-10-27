@@ -3,7 +3,7 @@
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { useCallback, useEffect, useState } from 'react'
+import { use, useCallback, useEffect, useState } from 'react'
 
 import { startGameRound, updateGame } from '@/actions/game.js'
 import { getMap } from '@/actions/map.js'
@@ -26,12 +26,14 @@ const RoundResult = dynamic(() => import('@/components/RoundResult/index.js'))
 const StreetView = dynamic(() => import('@/components/StreetView/index.js'))
 
 interface Props {
-  params: {
+  params: Promise<{
     id: string
-  }
+  }>
 }
 
-const Game = ({ params }: Props) => {
+const Game = (props: Props) => {
+  const params = use(props.params)
+
   const [mapData, setMapData] = useState<Map | null>()
   const [gameData, setGameData] = useState<Game | null>()
 

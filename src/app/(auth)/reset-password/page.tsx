@@ -14,9 +14,7 @@ const ResetPassword = async () => {
   return (
     <div className={styles['form-container']}>
       <h1 className={styles['form-title']}>{t('reset_password')}</h1>
-      <p className={styles['form-description']}>
-        {"Enter your email and we'll send you a link to reset your password."}
-      </p>
+      <p className={styles['form-description']}>{t('reset_password_desc')}</p>
 
       <Form />
     </div>

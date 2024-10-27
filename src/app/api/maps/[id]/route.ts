@@ -15,7 +15,7 @@ export const revalidate = 60
 
 export const GET = async (
   _: Request,
-  { params }: { params: { id: string } },
+  segmentData: { params: Promise<{ id: string }> },
 ) => {
   'use server'
 
@@ -24,6 +24,8 @@ export const GET = async (
   const supabase = createClient({
     supabaseAccessToken: session?.supabaseAccessToken,
   })
+
+  const params = await segmentData.params
 
   const { data, error } = await supabase
     .from('maps')

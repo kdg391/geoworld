@@ -1,6 +1,6 @@
 'use client'
 
-import { useFormState } from 'react-dom'
+import { useActionState } from 'react'
 
 import { updatePassword } from '@/actions/auth.js'
 
@@ -26,7 +26,7 @@ interface Props {
 const Form = ({ token }: Props) => {
   'use client'
 
-  const [state, action] = useFormState<FormState, FormData>(updatePassword, {
+  const [state, action] = useActionState<FormState, FormData>(updatePassword, {
     errors: null,
   })
 

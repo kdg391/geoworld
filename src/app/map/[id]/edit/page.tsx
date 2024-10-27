@@ -3,7 +3,7 @@
 import dynamic from 'next/dynamic'
 import { notFound } from 'next/navigation'
 import { useSession } from 'next-auth/react'
-import { useEffect, useRef, useState } from 'react'
+import { use, useEffect, useRef, useState } from 'react'
 
 import { getLocations, getMap } from '@/actions/map.js'
 
@@ -19,12 +19,14 @@ const EditMap = dynamic(() => import('@/components/EditMap/index.js'))
 const SaveMapModal = dynamic(() => import('@/components/SaveMapModal/index.js'))
 
 interface Props {
-  params: {
+  params: Promise<{
     id: string
-  }
+  }>
 }
 
-const Edit = ({ params }: Props) => {
+const Edit = (props: Props) => {
+  const params = use(props.params)
+
   const { isLoaded, loadGoogleApi } = useGoogleApi()
 
   const { data: session, status } = useSession()

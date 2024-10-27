@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { useFormState } from 'react-dom'
+import { useActionState } from 'react'
 
 import { signInCredentials } from '@/actions/auth.js'
 
@@ -23,9 +23,12 @@ interface FormState {
 const Form = () => {
   'use client'
 
-  const [state, action] = useFormState<FormState, FormData>(signInCredentials, {
-    errors: null,
-  })
+  const [state, action] = useActionState<FormState, FormData>(
+    signInCredentials,
+    {
+      errors: null,
+    },
+  )
 
   const { t } = useTranslation('auth')
 

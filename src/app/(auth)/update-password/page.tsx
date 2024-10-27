@@ -6,12 +6,14 @@ import styles from '../page.module.css'
 
 import Form from './Form.js'
 
-const UpdatePassword = async ({
-  searchParams,
-}: {
-  searchParams: { token?: string }
+const UpdatePassword = async (props: {
+  searchParams: Promise<{
+    token?: string
+  }>
 }) => {
   'use server'
+
+  const searchParams = await props.searchParams
 
   if (!searchParams.token) return
 

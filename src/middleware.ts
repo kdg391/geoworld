@@ -1,11 +1,16 @@
 import { match as matchLocale } from '@formatjs/intl-localematcher'
 import Negotiator from 'negotiator'
+import { cookies } from 'next/headers'
 import { NextResponse, type NextRequest } from 'next/server'
 import NextAuth from 'next-auth'
 
 import authConfig from './auth.config.js'
 
-import { DEFAULT_LOCALE, SUPPORTED_LOCALES } from './constants/i18n.js'
+import {
+  DEFAULT_LOCALE,
+  LANGUAGE_COOKIE,
+  SUPPORTED_LOCALES,
+} from './constants/i18n.js'
 
 function getLocale(request: NextRequest): string {
   const negotiatorHeaders: Record<string, string> = {}
@@ -32,9 +37,16 @@ export default auth(async (request) => {
   })
 
   const { pathname } = request.nextUrl
+  const locale = getLocale(request)
 
   response.headers.set('x-next-pathname', pathname)
-  response.headers.set('x-next-locale', getLocale(request))
+
+  response.headers.set('x-next-locale', locale)
+
+  const cookieStore = await cookies()
+
+  if (!cookieStore.has(LANGUAGE_COOKIE))
+    cookieStore.set(LANGUAGE_COOKIE, locale)
 
   const session = request.auth
 

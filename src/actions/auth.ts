@@ -124,7 +124,9 @@ export const signInCredentials = async (_: unknown, formData: FormData) => {
     }
 
   let redirectTo = '/dashboard'
-  const referrer = headers().get('referer')
+
+  const headersList = await headers()
+  const referrer = headersList.get('referer')
 
   if (referrer) {
     const next = new URL(referrer).searchParams.get('next')
@@ -177,7 +179,9 @@ export const signInEmail = async (_: unknown, formData: FormData) => {
     }
 
   let redirectTo = '/dashboard'
-  const referrer = headers().get('referer')
+
+  const headersList = await headers()
+  const referrer = headersList.get('referer')
 
   if (referrer) {
     const next = new URL(referrer).searchParams.get('next')
@@ -210,7 +214,9 @@ export const signInDiscord = async () => {
   'use server'
 
   let redirectTo = '/dashboard'
-  const referrer = headers().get('referer')
+
+  const headersList = await headers()
+  const referrer = headersList.get('referer')
 
   if (referrer) {
     const next = new URL(referrer).searchParams.get('next')

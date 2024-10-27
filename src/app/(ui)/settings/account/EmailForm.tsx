@@ -1,7 +1,6 @@
 'use client'
 
-import { useState } from 'react'
-import { useFormState } from 'react-dom'
+import { useActionState, useState } from 'react'
 
 import { changeEmail } from '@/actions/auth.js'
 
@@ -27,7 +26,7 @@ interface Props {
 const EmailForm = ({ email }: Props) => {
   'use client'
 
-  const [state, action] = useFormState<FormState, FormData>(changeEmail, {
+  const [state, action] = useActionState<FormState, FormData>(changeEmail, {
     errors: null,
   })
 

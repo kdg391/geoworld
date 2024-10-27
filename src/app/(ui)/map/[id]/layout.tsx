@@ -6,14 +6,14 @@ import styles from './page.module.css'
 
 export const revalidate = 60
 
-export const generateMetadata = async ({
-  params,
-}: {
-  params: {
+interface Props {
+  params: Promise<{
     id: string
-  }
-}): Promise<Metadata> => {
-  const { t } = await createTranslation('common')
+  }>
+}
+
+export const generateMetadata = async (props: Props): Promise<Metadata> => {
+  const params = await props.params
 
   const { data: mapData, error: mErr } = await fetch(
     `${process.env.NEXT_PUBLIC_URL}/api/maps/${params.id}`,
@@ -24,6 +24,8 @@ export const generateMetadata = async ({
       },
     },
   ).then((res) => res.json())
+
+  const { t } = await createTranslation('common')
 
   if (!mapData || mErr)
     return {

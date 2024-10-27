@@ -1,6 +1,6 @@
 'use server'
 
-import { Mail } from 'lucide-react'
+// import { Mail } from 'lucide-react'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 
@@ -41,7 +41,7 @@ const SignUp = async () => {
               </button>
             </form>
           </div>
-          <div>
+          {/*<div>
             <Link
               href="/sign-in-email"
               className={classNames(styles['provider-btn'], 'email')}
@@ -49,7 +49,7 @@ const SignUp = async () => {
               <Mail size={16} />
               {t('continue_with_email')}
             </Link>
-          </div>
+          </div>*/}
         </div>
 
         <div className={styles.separator}>

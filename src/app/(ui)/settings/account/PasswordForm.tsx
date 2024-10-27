@@ -1,7 +1,6 @@
 'use client'
 
-import { useState } from 'react'
-import { useFormState } from 'react-dom'
+import { useActionState, useState } from 'react'
 
 import { changePassword } from '@/actions/auth.js'
 
@@ -24,7 +23,7 @@ interface FormState {
 const PasswordForm = () => {
   'use client'
 
-  const [state, action] = useFormState<FormState, FormData>(changePassword, {
+  const [state, action] = useActionState<FormState, FormData>(changePassword, {
     errors: null,
   })
 

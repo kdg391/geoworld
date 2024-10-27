@@ -44,7 +44,6 @@ const MapSettingsModal = ({
   userId,
 }: Props) => {
   const router = useRouter()
-  const { t } = useTranslation(['common', 'map-settings'])
 
   const [canMove, setCanMove] = useState(true)
   const [canPan, setCanPan] = useState(true)
@@ -57,6 +56,8 @@ const MapSettingsModal = ({
   const [timeLimit, setTimeLimit] = useState<number>(0)
 
   const [isLoading, setIsLoading] = useState(false)
+
+  const { t } = useTranslation(['common', 'map-settings'])
 
   const maxRounds =
     mapData.locations_count > MAX_ROUNDS ? MAX_ROUNDS : mapData.locations_count

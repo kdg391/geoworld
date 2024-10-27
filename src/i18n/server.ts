@@ -45,10 +45,14 @@ export async function createTranslation(ns: string | string[]) {
 }
 
 export async function getLocale() {
-  let locale = cookies().get(LANGUAGE_COOKIE)?.value
+  const cookieStore = await cookies()
+
+  let locale = cookieStore.get(LANGUAGE_COOKIE)?.value
 
   if (!locale) {
-    locale = headers().get('x-next-locale') ?? DEFAULT_LOCALE
+    const headersList = await headers()
+
+    locale = headersList.get('x-next-locale') ?? DEFAULT_LOCALE
   }
 
   return locale as Locales
@@ -57,5 +61,7 @@ export async function getLocale() {
 export async function setLocale(locale: Locales) {
   'use server'
 
-  cookies().set(LANGUAGE_COOKIE, locale)
+  const cookieStore = await cookies()
+
+  cookieStore.set(LANGUAGE_COOKIE, locale)
 }
