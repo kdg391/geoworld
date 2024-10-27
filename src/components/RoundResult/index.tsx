@@ -3,10 +3,9 @@
 import dynamic from 'next/dynamic'
 import { useState } from 'react'
 import { Trans } from 'react-i18next'
+import { useLocalStorage } from 'usehooks-ts'
 
 import { startGameRound } from '@/actions/game.js'
-
-import useSettings from '@/hooks/useSettings.js'
 
 import { useTranslation } from '@/i18n/client.js'
 
@@ -14,7 +13,7 @@ import styles from './index.module.css'
 
 import './index.css'
 
-import type { Game, GameView, Guess } from '@/types/index.js'
+import type { DistanceUnit, Game, GameView, Guess } from '@/types/index.js'
 
 const Button = dynamic(() => import('../common/Button/index.js'))
 
@@ -33,7 +32,7 @@ const RoundResult = ({
   setGameData,
   setView,
 }: Props) => {
-  const { distanceUnit } = useSettings()
+  const [distanceUnit] = useLocalStorage<DistanceUnit>('distanceUnit', 'metric')
 
   const [isLoading, setIsLoading] = useState(false)
 
@@ -68,10 +67,10 @@ const RoundResult = ({
           t('round_result.timed_out')
         ) : (
           <Trans
-            i18nKey={`round_result.distance.${distanceUnit ?? 'metric'}`}
+            i18nKey={`round_result.distance.${distanceUnit}`}
             t={t}
             values={{
-              distance: guessedRound.distance[distanceUnit ?? 'metric'],
+              distance: guessedRound.distance[distanceUnit],
             }}
           />
         )}
