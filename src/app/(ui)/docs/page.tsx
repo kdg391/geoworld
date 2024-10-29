@@ -1,3 +1,3 @@
-const Docs = () => <p>Todo</p>
+const Docs = () => {}
 
 export default Docs

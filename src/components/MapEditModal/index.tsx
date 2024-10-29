@@ -45,7 +45,14 @@ const MapEditModal = ({ isEditing, isModalOpen, setIsModalOpen }: Props) => {
         <form action={action}>
           <div>
             <label htmlFor="name">
-              Name <span>*</span>
+              {t('name')}{' '}
+              <span
+                style={{
+                  color: 'var(--danger)',
+                }}
+              >
+                *
+              </span>
             </label>
             <TextInput
               type="text"
@@ -58,7 +65,7 @@ const MapEditModal = ({ isEditing, isModalOpen, setIsModalOpen }: Props) => {
           </div>
           {state.errors?.name && <p>{state.errors.name}</p>}
           <div>
-            <label htmlFor="description">Description (Optional)</label>
+            <label htmlFor="description">{t('description')} (Optional)</label>
             <textarea id="description" name="description" maxLength={60} />
           </div>
           {state.errors?.description && <p>{state.errors.description}</p>}

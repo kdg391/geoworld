@@ -4,6 +4,8 @@ import { redirect } from 'next/navigation'
 
 import { auth } from '@/auth.js'
 
+import { createTranslation } from '@/i18n/server.js'
+
 import { createClient } from '@/utils/supabase/server.js'
 
 import type { Map } from '@/types/index.js'
@@ -40,9 +42,11 @@ const Likes = async () => {
 
   if (!maps || mErr) return
 
+  const { t } = await createTranslation('common')
+
   return (
     <section>
-      <h1>Liked Maps</h1>
+      <h1>{t('liked_maps')}</h1>
       <div>{maps?.map((m) => <MapCard key={m.id} mapData={m} />)}</div>
     </section>
   )

@@ -23,15 +23,19 @@ const Maps = async () => {
   return (
     <main>
       <section className={styles.section}>
-        <div>
-          <h2>{t('official_maps')}</h2>
+        <div
+          style={{
+            marginBottom: '1rem',
+          }}
+        >
+          <h2 className={styles.title}>{t('official_maps')}</h2>
           <div className={homeStyles['map-cards']}>
             {officialMaps?.map((map) => <MapCard key={map.id} mapData={map} />)}
           </div>
           <Link href="/maps/official">{t('more_official_maps')}</Link>
         </div>
         <div>
-          <h2>{t('community_maps')}</h2>
+          <h2 className={styles.title}>{t('community_maps')}</h2>
           <div className={homeStyles['map-cards']}>
             {communityMaps?.map((map) => (
               <MapCard key={map.id} mapData={map} />

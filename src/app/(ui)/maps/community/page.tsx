@@ -50,7 +50,7 @@ const Community = () => {
 
   return (
     <section className={styles.section}>
-      <h1>{t('community_maps')}</h1>
+      <h1 className={styles.title}>{t('community_maps')}</h1>
       <div className={homeStyles['map-cards']}>
         {maps.length > 0
           ? maps.map((m) => <MapCard key={m.id} mapData={m} />)

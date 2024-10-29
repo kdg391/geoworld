@@ -146,7 +146,7 @@ const MapSettingsModal = ({
         <div className={styles.setting}>
           <label htmlFor="rounds">{t('map-settings:rounds')}</label>
 
-          <div style={{ display: 'flex' }}>
+          <div className="flex">
             <button
               className={styles['rounds-btn']}
               disabled={rounds <= 1}

@@ -21,10 +21,10 @@ const GoogleStreetView = ({
   >) => {
   const svPanoElRef = useRef<HTMLDivElement | null>(null)
 
-  const { isLoaded } = useGoogleApi()
+  const { isGoogleLoaded } = useGoogleApi()
 
   useEffect(() => {
-    if (!isLoaded) return
+    if (!isGoogleLoaded) return
 
     const svPano = new google.maps.StreetViewPanorama(
       svPanoElRef.current as HTMLDivElement,
@@ -32,7 +32,7 @@ const GoogleStreetView = ({
     )
 
     onLoaded(svPano)
-  }, [isLoaded])
+  }, [isGoogleLoaded])
 
   return <div ref={svPanoElRef} {...props}></div>
 }

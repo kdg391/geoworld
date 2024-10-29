@@ -13,7 +13,7 @@ const Button = dynamic(() => import('@/components/common/Button/index.js'))
 const GoogleMap = dynamic(() => import('@/components/GoogleMap.js'))
 
 const RandomStreetView = () => {
-  const { isLoaded, loadGoogleApi } = useGoogleApi()
+  const { isGoogleLoaded, loadGoogleApi } = useGoogleApi()
 
   const mapRef = useRef<google.maps.Map | null>(null)
   const svPanoramaRef = useRef<google.maps.StreetViewPanorama | null>(null)
@@ -75,14 +75,14 @@ const RandomStreetView = () => {
   }
 
   useEffect(() => {
-    if (!isLoaded) loadGoogleApi()
+    if (!isGoogleLoaded) loadGoogleApi()
   }, [])
 
   useEffect(() => {
-    if (!isLoaded) return
+    if (!isGoogleLoaded) return
 
     initStreetView()
-  }, [isLoaded])
+  }, [isGoogleLoaded])
 
   return (
     <main className={styles.main}>

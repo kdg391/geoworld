@@ -33,13 +33,15 @@ const MapCard = ({ mapData }: Props) => {
   return (
     <div className={styles['map-card']}>
       <div className={styles['map-thumbnail']}>
-        {/*<Image
-          src={`/assets/images/${mapData.id}.avif`}
-          alt="thumbnail"
-          fill
-          sizes="100%"
-          className={styles['map-thumbnail-img']}
-        />*/}
+        {/* {mapData.type === 'official' && (
+          <Image
+            src={`/assets/images/${OFFICIAL_MAP_COUNTRY_CODES[mapData.id]}.jpg`}
+            alt="thumbnail"
+            fill
+            sizes="100%"
+            className={styles['map-thumbnail-img']}
+          />
+        )} */}
         <div className={styles['map-thumbnail-backdrop']}></div>
         <div className={styles['map-name-wrapper']}>
           {mapData.type === 'official' && (

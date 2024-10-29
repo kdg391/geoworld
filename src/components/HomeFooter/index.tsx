@@ -54,7 +54,7 @@ const HomeFooter = () => {
         <div className={styles['footer-nav']}>
           <div className={styles['footer-nav-container']}>
             <div>
-              <h2 className={styles['link-title']}>Legal</h2>
+              <h2 className={styles['link-title']}>{t('legal')}</h2>
               <ul className={styles.links}>
                 <li>
                   <Link href="/terms">{t('terms_of_service')}</Link>
@@ -68,15 +68,15 @@ const HomeFooter = () => {
               <h2 className={styles['link-title']}>Explore</h2>
               <ul className={styles.links}>
                 <li>
-                  <Link href="/maps">Classic Maps</Link>
+                  <Link href="/maps">{t('classic_maps')}</Link>
                 </li>
                 <li>
-                  <Link href="/daily-challenge">Daily Challenge</Link>
+                  <Link href="/daily-challenge">{t('daily_challenge')}</Link>
                 </li>
               </ul>
             </div>
             <div>
-              <h2 className={styles['link-title']}>Developers</h2>
+              <h2 className={styles['link-title']}>{t('developers')}</h2>
               <ul className={styles.links}>
                 <li>
                   <Link href="/docs">Docs</Link>
@@ -90,7 +90,7 @@ const HomeFooter = () => {
                   <Link href="/about">About</Link>
                 </li>
                 <li>
-                  <Link href="/random">Random</Link>
+                  <Link href="/random">{t('random_street_view')}</Link>
                 </li>
               </ul>
             </div>
@@ -98,7 +98,7 @@ const HomeFooter = () => {
         </div>
       </div>
       <div className={styles['settings-container']}>
-        <div>GeoWorld</div>
+        <div className={styles['text-sm']}>GeoWorld</div>
         <div className={styles.settings}>
           <div>
             <LanguageSelect />

@@ -27,7 +27,7 @@ const StreetView = ({ location, settings, view }: Props) => {
 
   const posHistoryRef = useRef<google.maps.LatLngLiteral[]>([])
 
-  const { isLoaded } = useGoogleApi()
+  const { isGoogleLoaded } = useGoogleApi()
 
   const init = () => {
     const svPanorama = new google.maps.StreetViewPanorama(
@@ -127,10 +127,10 @@ const StreetView = ({ location, settings, view }: Props) => {
   }
 
   useEffect(() => {
-    if (!isLoaded) return
+    if (!isGoogleLoaded) return
 
     init()
-  }, [isLoaded])
+  }, [isGoogleLoaded])
 
   useEffect(() => {
     if (view !== 'game') return

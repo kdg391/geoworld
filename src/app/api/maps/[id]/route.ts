@@ -49,6 +49,8 @@ export const GET = async (
     return Response.json(
       {
         message: 'Map Not Found',
+        error: 'Map Not Found',
+        code: 'map_not_found',
       },
       {
         status: 404,

@@ -4,8 +4,9 @@ import { redirect } from 'next/navigation'
 
 import { auth } from '@/auth.js'
 
+import { createTranslation } from '@/i18n/server.js'
+
 import { createClient } from '@/utils/supabase/server.js'
-import { createTranslation } from '@/i18n/server'
 
 // import type { Map } from '@/types/index.js'
 

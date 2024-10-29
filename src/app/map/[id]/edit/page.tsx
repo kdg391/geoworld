@@ -27,7 +27,7 @@ interface Props {
 const Edit = (props: Props) => {
   const params = use(props.params)
 
-  const { isLoaded, loadGoogleApi } = useGoogleApi()
+  const { isGoogleLoaded, loadGoogleApi } = useGoogleApi()
 
   const { data: session, status } = useSession()
 
@@ -74,7 +74,7 @@ const Edit = (props: Props) => {
         return
       }
 
-      if (!isLoaded) await loadGoogleApi()
+      if (!isGoogleLoaded) await loadGoogleApi()
 
       setLocations(lData)
     }
@@ -98,10 +98,10 @@ const Edit = (props: Props) => {
   }, [haveLocationsChanged])
 
   useEffect(() => {
-    if (!isLoaded) return
+    if (!isGoogleLoaded) return
 
     initStreetView()
-  }, [isLoaded])
+  }, [isGoogleLoaded])
 
   useEffect(() => {
     loadPanorama()

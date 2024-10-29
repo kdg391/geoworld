@@ -4,13 +4,6 @@ import { redirect } from 'next/navigation'
 
 import { auth } from '../auth.js'
 
-import {
-  OFFICIAL_MAP_COUNTRY_CODES,
-  OFFICIAL_MAP_WORLD_ID,
-} from '../constants/index.js'
-
-import { createTranslation } from '../i18n/server.js'
-
 import { calculateMapBounds, calculateScoreFactor } from '../utils/game.js'
 import { getCountryFromCoordinates } from '../utils/map.js'
 import { createClient } from '../utils/supabase/server.js'
@@ -19,30 +12,15 @@ import { createMapSchema } from '../utils/validations/map.js'
 import type { Coords, Location, Map } from '../types/index.js'
 
 export const getMap = async (id: string) => {
-  'use server'
-
-  const session = await auth()
-
-  const supabase = createClient({
-    supabaseAccessToken: session?.supabaseAccessToken,
-  })
-
-  const { data, error } = await supabase
-    .from('maps')
-    .select('*')
-    .eq('id', id)
-    .single<Map>()
-
-  if (data?.type === 'official') {
-    const { t } = await createTranslation('common')
-
-    data.name =
-      data.id === OFFICIAL_MAP_WORLD_ID
-        ? t('world')
-        : data.id in OFFICIAL_MAP_COUNTRY_CODES
-          ? t(`country.${OFFICIAL_MAP_COUNTRY_CODES[data.id]}`)
-          : data.name
-  }
+  const { data, error } = await fetch(
+    `${process.env.NEXT_PUBLIC_URL}/api/maps/${id}`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    },
+  ).then((res) => res.json())
 
   return {
     data,
@@ -378,34 +356,6 @@ export const getLocations = async (mapId: string) => {
 
   return {
     data,
-    error: error?.message ?? null,
-  }
-}
-
-export const hasLiked = async (mapId: string) => {
-  'use server'
-
-  const session = await auth()
-
-  if (!session)
-    return {
-      data: false,
-      error: 'Unauthorized',
-    }
-
-  const supabase = createClient({
-    supabaseAccessToken: session.supabaseAccessToken,
-  })
-
-  const { data, error } = await supabase
-    .from('likes')
-    .select('*')
-    .eq('user_id', session.user.id)
-    .eq('map_id', mapId)
-    .maybeSingle()
-
-  return {
-    data: data !== null,
     error: error?.message ?? null,
   }
 }
