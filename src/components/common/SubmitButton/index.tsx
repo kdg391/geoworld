@@ -25,7 +25,7 @@ const SubmitButton = ({
   size = 'm',
   variant = 'primary',
   pendingText,
-  ref: _,
+  ref,
   ...props
 }: Props) => {
   'use client'
@@ -33,6 +33,8 @@ const SubmitButton = ({
   const { pending, action } = useFormStatus()
 
   const isPending = pending && action === props.formAction
+
+  void ref
 
   return (
     <Button
