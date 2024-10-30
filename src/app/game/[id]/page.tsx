@@ -9,11 +9,11 @@ import { getMap } from '@/actions/map.js'
 
 import useGoogleApi from '@/hooks/useGoogleApi.js'
 
+import Loading from './Loading.js'
+
 import styles from './page.module.css'
 
 import type { Game, GameView, Map } from '@/types/index.js'
-
-import Loading from './Loading.js'
 
 const FinalRoundResult = dynamic(
   () => import('@/components/FinalRoundResult/index.js'),
@@ -96,8 +96,7 @@ const Game = (props: Props) => {
     [gameData, markerPosition],
   )
 
-  if (mapData === null) notFound()
-  if (gameData === null) notFound()
+  if (mapData === null || gameData === null) notFound()
 
   if (!mapData || !gameData) return <Loading />
 

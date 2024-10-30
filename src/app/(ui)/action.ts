@@ -1,10 +1,12 @@
 'use server'
 
-import { createGame } from '@/actions/game'
-import { getMap } from '@/actions/map'
-import { OFFICIAL_MAP_WORLD_ID } from '@/constants'
 import { redirect } from 'next/navigation'
 import { z } from 'zod'
+
+import { createGame } from '@/actions/game.js'
+import { getMap } from '@/actions/map.js'
+
+import { OFFICIAL_MAP_WORLD_ID } from '@/constants/index.js'
 
 const schema = z.object({
   name: z

@@ -1,7 +1,7 @@
 'use client'
 
 import { Play } from 'lucide-react'
-import { useActionState, useState } from 'react'
+import { useActionState } from 'react'
 
 import { playGame } from './action.js'
 
@@ -20,25 +20,9 @@ interface FormState {
 const Form = () => {
   'use client'
 
-  const [isLoading, setIsLoading] = useState(false)
-
-  const onPlayButtonClick = async (_: unknown, formData: FormData) => {
-    'use client'
-
-    setIsLoading(true)
-
-    const state = await playGame(null, formData)
-    setIsLoading(false)
-
-    return state
-  }
-
-  const [state, action] = useActionState<FormState, FormData>(
-    onPlayButtonClick,
-    {
-      errors: null,
-    },
-  )
+  const [state, action] = useActionState<FormState, FormData>(playGame, {
+    errors: null,
+  })
 
   return (
     <form action={action} className={styles.form}>
@@ -49,7 +33,7 @@ const Form = () => {
       <p className={styles.desc}>예시: 21001 홍길동</p>
 
       <div>
-        <SubmitButton isLoading={isLoading} variant="primary" size="m">
+        <SubmitButton formAction={action} variant="primary" size="m">
           <Play size={16} fill="var(--color)" />
           플레이
         </SubmitButton>

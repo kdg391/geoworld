@@ -1,5 +1,6 @@
 'use client'
 
+import { Trophy } from 'lucide-react'
 import { useState } from 'react'
 
 import Leaderboard from './Leaderboard.js'
@@ -7,7 +8,6 @@ import Leaderboard from './Leaderboard.js'
 import Button from '@/components/common/Button/index.js'
 
 import styles from './LeaderboardButton.module.css'
-import { Trophy } from 'lucide-react'
 
 const LeaderboardButton = () => {
   const [isOpen, setIsOpen] = useState(false)

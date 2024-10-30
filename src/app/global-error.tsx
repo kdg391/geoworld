@@ -12,9 +12,9 @@ export default function GlobalError({
       <body>
         <main>
           <section>
-            <h2>Something went wrong!</h2>
+            <h2>문제가 발생했습니다.</h2>
             <p>{error.message}</p>
-            <button onClick={() => reset()}>Try again</button>
+            <button onClick={() => reset()}>다시 시도하기</button>
           </section>
         </main>
       </body>
