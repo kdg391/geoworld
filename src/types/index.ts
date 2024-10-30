@@ -121,5 +121,5 @@ export interface Game {
   state: GameState
   total_score: number
   total_time: number
-  user_id: string
+  name: string
 }

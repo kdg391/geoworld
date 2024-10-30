@@ -1,7 +1,5 @@
 'use server'
 
-import { auth } from '../auth.js'
-
 import { OFFICIAL_MAP_WORLD_ID } from '../constants/index.js'
 
 import { calculateDistance, calculateRoundScore } from '../utils/game.js'
@@ -19,20 +17,10 @@ import type {
 export const startGameRound = async (id: string) => {
   'use server'
 
-  const session = await auth()
-
-  if (!session)
-    return {
-      data: null,
-      error: 'Unauthorized',
-    }
-
-  const supabase = createClient({
-    supabaseAccessToken: session.supabaseAccessToken,
-  })
+  const supabase = createClient()
 
   const { data: gameData, error: gErr } = await supabase
-    .from('games')
+    .from('school_games')
     .select('*')
     .eq('id', id)
     .single<Game>()
@@ -43,16 +31,10 @@ export const startGameRound = async (id: string) => {
       error: gErr?.message ?? null,
     }
 
-  if (gameData.user_id !== session.user.id)
-    return {
-      data: null,
-      error: 'This game is not your game.',
-    }
-
   if (gameData.state === 'finished')
     return {
-      data: null,
-      error: 'This game is finished.',
+      data: gameData,
+      error: null,
     }
 
   const { data: mapData, error: mErr } = await supabase
@@ -110,7 +92,7 @@ export const startGameRound = async (id: string) => {
     updateData.rounds = [...gameData.rounds, actualLocation]
 
     const { data: updatedData, error: updatedErr } = await supabase
-      .from('games')
+      .from('school_games')
       .update<Partial<Game>>(updateData)
       .eq('id', id)
       .select()
@@ -131,19 +113,15 @@ export const startGameRound = async (id: string) => {
 export const createGame = async ({
   mapData,
   settings,
-  userId,
+  name,
 }: {
   mapData: Map
   settings: GameSettings
-  userId: string
+  name: string
 }) => {
   'use server'
 
-  const session = await auth()
-
-  const supabase = createClient({
-    supabaseAccessToken: session?.supabaseAccessToken,
-  })
+  const supabase = createClient()
 
   const settingsSchema = getGameSettingsSchema(mapData.locations_count)
   const validated = await settingsSchema.safeParseAsync(settings)
@@ -181,7 +159,7 @@ export const createGame = async ({
   }
 
   const { data, error } = await supabase
-    .from('games')
+    .from('school_games')
     .insert<Partial<Game>>({
       bounds: null,
       guesses: [],
@@ -191,7 +169,7 @@ export const createGame = async ({
       rounds: [actualLocation],
       settings,
       state: 'started',
-      user_id: userId,
+      name,
     })
     .select()
     .single<Game>()
@@ -210,20 +188,10 @@ interface GuessData {
 export const updateGame = async (id: string, data: GuessData) => {
   'use server'
 
-  const session = await auth()
-
-  if (!session)
-    return {
-      data: null,
-      error: 'Unauthorized',
-    }
-
-  const supabase = createClient({
-    supabaseAccessToken: session.supabaseAccessToken,
-  })
+  const supabase = createClient()
 
   const { data: gameData, error: gErr } = await supabase
-    .from('games')
+    .from('school_games')
     .select('*')
     .eq('id', id)
     .single<Game>()
@@ -232,12 +200,6 @@ export const updateGame = async (id: string, data: GuessData) => {
     return {
       data: null,
       error: gErr?.message ?? null,
-    }
-
-  if (gameData.user_id !== session.user.id)
-    return {
-      data: null,
-      error: 'This game is not your game.',
     }
 
   if (gameData.state === 'finished')
@@ -320,7 +282,7 @@ export const updateGame = async (id: string, data: GuessData) => {
   updateData.state = isFinalRound ? 'finished' : 'started'
 
   const { data: updatedData, error: updatedErr } = await supabase
-    .from('games')
+    .from('school_games')
     .update<Partial<Game>>(updateData)
     .eq('id', id)
     .select()
@@ -332,52 +294,17 @@ export const updateGame = async (id: string, data: GuessData) => {
   }
 }
 
-export const deleteGame = async (id: string) => {
-  'use server'
+export const getSchoolRankedGames = async () => {
+  const supabase = createClient()
 
-  const session = await auth()
-
-  if (!session)
-    return {
-      data: null,
-      error: 'Unauthorized',
-    }
-
-  const supabase = createClient({
-    supabaseAccessToken: session.supabaseAccessToken,
-  })
-
-  const { data: gameData, error: gErr } = await supabase
-    .from('games')
+  const { data, error } = await supabase
+    .rpc('get_ranked_school_games', {
+      p_map_id: OFFICIAL_MAP_WORLD_ID,
+    })
     .select('*')
-    .eq('id', id)
-    .single<Game>()
-
-  if (!gameData || gErr)
-    return {
-      data: null,
-      error: gErr?.message ?? null,
-    }
-
-  if (gameData.user_id !== session.user.id)
-    return {
-      data: null,
-      error: gErr,
-    }
-
-  const { error: deletedErr } = await supabase
-    .from('games')
-    .delete()
-    .eq('id', id)
-
-  if (deletedErr)
-    return {
-      data: null,
-      error: deletedErr?.message ?? null,
-    }
 
   return {
-    data: true,
-    error: null,
+    data,
+    error: error?.message ?? null,
   }
 }

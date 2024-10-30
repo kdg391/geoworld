@@ -1,5 +1,3 @@
-import { auth } from '@/auth.js'
-
 import {
   OFFICIAL_MAP_COUNTRY_CODES,
   OFFICIAL_MAP_WORLD_ID,
@@ -19,10 +17,8 @@ export const GET = async (
 ) => {
   'use server'
 
-  const session = await auth()
-
   const supabase = createClient({
-    supabaseAccessToken: session?.supabaseAccessToken,
+    serviceRole: true,
   })
 
   const params = await segmentData.params

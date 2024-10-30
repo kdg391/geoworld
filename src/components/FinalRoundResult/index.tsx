@@ -1,6 +1,7 @@
 'use client'
 
 import dynamic from 'next/dynamic'
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { memo, useState } from 'react'
 
@@ -18,10 +19,10 @@ interface Props {
   mapData: Map
   settings: GameSettings
   totalScore: number
-  userId: string
+  name: string
 }
 
-const FinalRoundResult = ({ mapData, settings, totalScore, userId }: Props) => {
+const FinalRoundResult = ({ mapData, settings, totalScore, name }: Props) => {
   const router = useRouter()
 
   const [isLoading, setIsLoading] = useState(false)
@@ -34,7 +35,7 @@ const FinalRoundResult = ({ mapData, settings, totalScore, userId }: Props) => {
     const { data: gameData, error } = await createGame({
       mapData,
       settings,
-      userId,
+      name,
     })
 
     if (!gameData || error) {
@@ -62,7 +63,7 @@ const FinalRoundResult = ({ mapData, settings, totalScore, userId }: Props) => {
         >
           {t('final_round_result.replay')}
         </Button>
-        <Button variant="gray" size="l" onClick={() => router.push('/')}>
+        <Button as={Link} href="/" variant="gray" size="l">
           {t('final_round_result.exit')}
         </Button>
       </div>

@@ -79,7 +79,7 @@ const ResultMap = ({
       if (guess !== null) bounds.extend(guess)
     }
 
-    resultMapRef.current.fitBounds(bounds, 15)
+    resultMapRef.current.fitBounds(bounds, 20)
     resultMapRef.current.setCenter(bounds.getCenter())
   }
 

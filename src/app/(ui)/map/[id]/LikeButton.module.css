@@ -1,9 +1,0 @@
-.like-btn {
-  padding: 0;
-  height: 24px;
-  background-color: transparent;
-
-  &:global(.like) svg {
-    fill: var(--color);
-  }
-}

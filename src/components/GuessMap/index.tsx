@@ -48,7 +48,7 @@ const GuessMap = ({
   )
 
   const [mapSize, setMapSize] = useLocalStorage('mapSize', 1)
-  const [isMapPinned, setIsMapPinned] = useLocalStorage('isMapPinned', false)
+  const [isMapPinned, setIsMapPinned] = useLocalStorage('isMapPinned', true)
   const [isMapActive, setIsMapActive] = useState(isMapPinned)
   const [isMobileOpen, setIsMobileOpen] = useState(false)
 
@@ -67,7 +67,7 @@ const GuessMap = ({
       latLngBounds.extend(min)
       latLngBounds.extend(max)
 
-      guessMapRef.current.fitBounds(latLngBounds)
+      guessMapRef.current.fitBounds(latLngBounds, 20)
       guessMapRef.current.setCenter(latLngBounds.getCenter())
     } else {
       guessMapRef.current.setCenter(DEFAULT_MAP_CENTER)

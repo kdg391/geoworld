@@ -1,9 +1,0 @@
-[data-theme='light'] {
-  --email-provider: var(--gray-150);
-  --separator: var(--gray-250);
-}
-
-[data-theme='dark'] {
-  --email-provider: var(--gray-700);
-  --separator: var(--gray-500);
-}

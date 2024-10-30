@@ -20,12 +20,17 @@ export const formatTimeLeft = (timeLeft: number) => {
   return `${mins}:${secs}`
 }
 
-export const randomLatLng = (): google.maps.LatLngLiteral => {
-  const lat = Math.random() * 180 - 90
-  const lng = Math.random() * 360 - 180
+export const formatRankTime = (seconds: number) => {
+  const hour = Math.floor(seconds / 3600)
+  const min = Math.floor((seconds % 3600) / 60)
+  const sec = seconds % 60
 
-  return {
-    lat,
-    lng,
-  }
+  const arr = []
+
+  if (hour !== 0) arr.push(`${hour}시간`)
+  if (min !== 0) arr.push(`${min}분`)
+
+  arr.push(`${sec}초`)
+
+  return arr.join(' ')
 }

@@ -1,0 +1,15 @@
+.button {
+  position: absolute;
+  top: calc(var(--header-h) + 1rem);
+  right: 2rem;
+  z-index: 5;
+}
+
+.leaderboard-container {
+  position: absolute;
+  top: calc(var(--header-h) + 3.75rem);
+  right: 2rem;
+  z-index: 10;
+  background-color: var(--gray-800);
+  padding: 1rem;
+}

@@ -1,13 +1,35 @@
 'use server'
 
-import { auth } from '@/auth.js'
+import Image from 'next/image'
+import Link from 'next/link'
 
-import HeaderClient from './HeaderClient.js'
+import styles from './Header.module.css'
 
-const Header = async () => {
-  const session = await auth()
+import './Header.css'
 
-  return <HeaderClient session={session} />
-}
+const Header = async () => (
+  <header className={styles.header}>
+    <div>
+      <Link href="/" scroll={false} className="flex">
+        <Image
+          src="/assets/light.svg"
+          width={124}
+          height={24}
+          alt="GeoWorld Logo"
+          className="dark-hidden"
+          priority
+        />
+        <Image
+          src="/assets/dark.svg"
+          width={124}
+          height={24}
+          alt="GeoWorld Logo"
+          className="light-hidden"
+          priority
+        />
+      </Link>
+    </div>
+  </header>
+)
 
 export default Header

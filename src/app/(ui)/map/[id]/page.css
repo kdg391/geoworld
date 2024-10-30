@@ -1,7 +1,0 @@
-[data-theme='light'] {
-  --map-stat-bg: var(--gray-150);
-}
-
-[data-theme='dark'] {
-  --map-stat-bg: var(--gray-750);
-}

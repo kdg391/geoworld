@@ -1,5 +1,3 @@
-import { auth } from '@/auth.js'
-
 import { createClient } from '@/utils/supabase/server.js'
 
 import type { Game } from '@/types/index.js'
@@ -8,16 +6,12 @@ export const GET = async (
   _: Request,
   segmentData: { params: Promise<{ id: string }> },
 ) => {
-  const session = await auth()
-
-  const supabase = createClient({
-    supabaseAccessToken: session?.supabaseAccessToken,
-  })
+  const supabase = createClient()
 
   const params = await segmentData.params
 
   const { data, error } = await supabase
-    .from('games')
+    .from('school_games')
     .select('*')
     .eq('id', params.id)
     .single<Game>()
