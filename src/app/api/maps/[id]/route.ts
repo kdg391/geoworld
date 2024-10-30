@@ -17,9 +17,7 @@ export const GET = async (
 ) => {
   'use server'
 
-  const supabase = createClient({
-    serviceRole: true,
-  })
+  const supabase = createClient()
 
   const params = await segmentData.params
 
