@@ -35,6 +35,7 @@ type ButtonProps<C extends React.ElementType> = PolymorphicComponentPropWithRef<
   {
     full?: boolean
     isLoading?: boolean
+    leftIcon?: React.ReactNode
     size?: 's' | 'm' | 'l'
     variant?: 'primary' | 'secondary' | 'danger' | 'success' | 'gray'
   }
@@ -56,6 +57,7 @@ const Button: ButtonComponent = forwardRef(
       className,
       full = false,
       isLoading = false,
+      leftIcon,
       size,
       variant,
       ...props
@@ -77,7 +79,7 @@ const Button: ButtonComponent = forwardRef(
         )}
         {...props}
       >
-        {isLoading && <Spinner theme="dark" size={16} />}
+        {isLoading ? <Spinner theme="dark" size={16} /> : leftIcon}
         {children}
       </Element>
     )

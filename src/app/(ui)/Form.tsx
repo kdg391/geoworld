@@ -33,8 +33,12 @@ const Form = () => {
       <p className={styles.desc}>예시: 21001 홍길동</p>
 
       <div>
-        <SubmitButton formAction={action} variant="primary" size="m">
-          <Play size={16} fill="var(--color)" />
+        <SubmitButton
+          formAction={action}
+          leftIcon={<Play size={16} fill="var(--color)" />}
+          size="m"
+          variant="primary"
+        >
           플레이
         </SubmitButton>
       </div>
