@@ -26,7 +26,10 @@ const Form = () => {
 
   return (
     <form action={action} className={styles.form}>
-      <div>
+      <div className={styles.field}>
+        <label htmlFor="name" className={styles.label}>
+          학번과 이름을 입력해 주세요.
+        </label>
         <TextInput id="name" name="name" minLength={1} maxLength={20} />
       </div>
 

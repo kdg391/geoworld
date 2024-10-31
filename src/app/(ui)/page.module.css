@@ -14,5 +14,7 @@
 .title {
   font-size: 1.25rem;
   font-weight: 500;
-  margin-bottom: 0.75rem;
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: center;
 }

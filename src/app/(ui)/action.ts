@@ -12,7 +12,7 @@ const schema = z.object({
   name: z
     .string()
     .min(1, '이름을 입력해 주세요.')
-    .max(20, '이름이 너무 깁니다.')
+    .max(10, '이름이 너무 깁니다.')
     .trim(),
 })
 
@@ -36,7 +36,7 @@ export const playGame = async (_: unknown, formData: FormData) => {
       canPan: true,
       canZoom: true,
       rounds: 5,
-      timeLimit: 120,
+      timeLimit: 90,
     },
     name: validated.data.name,
   })

@@ -9,8 +9,6 @@ import { createClient } from '@/utils/supabase/server.js'
 
 import type { Map } from '@/types/index.js'
 
-export const revalidate = 60
-
 export const GET = async (
   _: Request,
   segmentData: { params: Promise<{ id: string }> },
@@ -66,5 +64,3 @@ export const GET = async (
     data,
   })
 }
-
-export const DELETE = async () => {}
