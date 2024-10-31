@@ -17,6 +17,7 @@ const GoogleApiProvider = ({ children }: Props) => {
       new Loader({
         apiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string,
         version: 'weekly',
+        language: 'ko',
       }),
     [],
   )
