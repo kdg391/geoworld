@@ -36,6 +36,7 @@ const RandomStreetView = () => {
       svPanoramaElRef.current as HTMLDivElement,
       {
         addressControl: false,
+        disableDefaultUI: true,
         fullscreenControl: false,
         motionTracking: false,
       },

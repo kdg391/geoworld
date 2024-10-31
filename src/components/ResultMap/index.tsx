@@ -2,8 +2,11 @@
 
 import dynamic from 'next/dynamic'
 import { useEffect, useRef } from 'react'
+import { createRoot } from 'react-dom/client'
 
 import useGoogleApi from '@/hooks/useGoogleApi.js'
+
+import ActualMarker from './ActualMarker.js'
 
 import styles from './index.module.css'
 
@@ -25,12 +28,6 @@ const polylineOptions: google.maps.PolylineOptions = {
       repeat: '8px',
     },
   ],
-}
-
-const actualPinOptions = {
-  background: '#18c92d',
-  borderColor: '#159925',
-  glyphColor: '#138720',
 }
 
 const GoogleMap = dynamic(() => import('../GoogleMap.js'))
@@ -98,10 +95,10 @@ const ResultMap = ({
 
     if (view === 'finalResult') {
       for (let i = 0; i < guessedLocations.length; i++) {
-        const actualPinBackground = new google.maps.marker.PinElement(
-          actualPinOptions,
-        )
-        actualPinBackground.style.cursor = 'pointer'
+        const container = document.createElement('div')
+        const div = createRoot(container)
+
+        div.render(<ActualMarker roundNumber={i + 1} isFinalResult />)
 
         const actualLoc = actualLocations[i]
 
@@ -111,7 +108,7 @@ const ResultMap = ({
             lat: actualLoc.lat,
             lng: actualLoc.lng,
           },
-          content: actualPinBackground.element,
+          content: container,
         })
 
         actualMarker.addListener('click', () => {
@@ -130,10 +127,10 @@ const ResultMap = ({
         guessedMarkersRef.current.push(guessedMarker)
       }
     } else {
-      const actualPinBackground = new google.maps.marker.PinElement(
-        actualPinOptions,
-      )
-      actualPinBackground.style.cursor = 'pointer'
+      const container = document.createElement('div')
+      const div = createRoot(container)
+
+      div.render(<ActualMarker roundNumber={round} isFinalResult={false} />)
 
       const actualLoc = actualLocations[round]
 
@@ -143,7 +140,7 @@ const ResultMap = ({
           lat: actualLoc.lat,
           lng: actualLoc.lng,
         },
-        content: actualPinBackground.element,
+        content: container,
       })
 
       actualMarker.addListener('click', () => {

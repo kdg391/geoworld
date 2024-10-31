@@ -9,7 +9,7 @@
   &:global(.active) {
     display: flex;
     position: absolute;
-    left: 1rem;
+    right: 1rem;
     bottom: 1rem;
     z-index: 4;
     width: 30%;
