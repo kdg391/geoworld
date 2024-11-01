@@ -2,8 +2,7 @@
 
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
-import { useFormState } from 'react-dom'
+import { useActionState, useState } from 'react'
 
 import { updateMap } from '@/actions/map.js'
 
@@ -59,7 +58,9 @@ const SaveMapModal = ({
     }
   }
 
-  const [state, action] = useFormState<State, FormData>(update, { error: null })
+  const [state, action] = useActionState<State, FormData>(update, {
+    error: null,
+  })
 
   const { t } = useTranslation('common')
 

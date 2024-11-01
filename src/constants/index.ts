@@ -57,6 +57,7 @@ export const OFFICIAL_COUNTRY_CODES = [
   'pt', // Portugal
   'ro', // Romania
   'rs', // Serbia
+  'ru', // Russia
   'se', // Sweden
   'sg', // Singapore
   'si', // Slovenia
@@ -126,6 +127,7 @@ export const FLAG_ENOJIS: Record<
   pt: '🇵🇹',
   ro: '🇷🇴',
   rs: '🇷🇸',
+  ru: '🇷🇺',
   se: '🇸🇪',
   sg: '🇸🇬',
   si: '🇸🇮',
@@ -195,6 +197,7 @@ export const OFFICIAL_MAP_COUNTRY_CODES: Record<
   'a9bd8f88-828c-4296-8c92-9d689e224907': 'pt',
   '4ddfbc5f-cdca-49dc-b684-f93dec9cf63b': 'ro',
   'b40ba73a-cd9e-4dbb-8f57-f05c15e27e59': 'rs',
+  'a6000e3e-ab1c-415b-849b-93d9289ee88d': 'ru',
   '9deee185-bf34-4784-a9dc-3cc6e8704e19': 'se',
   'c5c8fafc-ae48-47f0-ac1d-6fe04be77c28': 'sg',
   '34459445-c06e-42f7-be2e-268f78e8c69c': 'si',

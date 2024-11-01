@@ -1,6 +1,7 @@
 import { notFound, redirect } from 'next/navigation'
 
 import { getProfileByUsername } from '@/actions/profile.js'
+import { getUser } from '@/actions/user.js'
 
 interface Props {
   params: Promise<{
@@ -23,15 +24,7 @@ const User = async (props: Props) => {
     redirect(`/user/${profile.id}`)
   }
 
-  const { data: profile, error: profileErr } = await fetch(
-    `${process.env.NEXT_PUBLIC_URL}/api/users/${params.id}`,
-    {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    },
-  ).then((res) => res.json())
+  const { data: profile, error: profileErr } = await getUser(params.id)
 
   if (!profile || profileErr) notFound()
 
