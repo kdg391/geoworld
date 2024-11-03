@@ -233,7 +233,7 @@ const MapSettingsModal = ({
               id="time-limit"
               min={0}
               max={600}
-              step={30}
+              step={10}
               style={
                 {
                   '--value': `${(100 / 600) * timeLimit}%`,

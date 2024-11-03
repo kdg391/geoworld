@@ -16,17 +16,15 @@ import type { Profile } from '../types/index.js'
 export const getProfile = async (id: string) => {
   'use server'
 
-  const session = await auth()
-
-  const supabase = createClient({
-    supabaseAccessToken: session?.supabaseAccessToken,
-  })
-
-  const { data, error } = await supabase
-    .from('profiles')
-    .select('*')
-    .eq('id', id)
-    .maybeSingle<Profile>()
+  const { data, error } = await fetch(
+    `${process.env.NEXT_PUBLIC_URL}/api/users/${id}`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    },
+  ).then((res) => res.json())
 
   return {
     data,

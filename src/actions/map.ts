@@ -1,5 +1,6 @@
 'use server'
 
+import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 
 import { auth } from '../auth.js'
@@ -221,6 +222,7 @@ export const updateMap = async (
             lng: loc.lng,
           }),
           ...loc,
+          heading: loc.heading ?? 0,
         })),
       )
 
@@ -386,93 +388,56 @@ export const getLikes = async () => {
   }
 }
 
+export const getLike = async (mapId: string) => {
+  'use server'
+
+  const cookieStore = await cookies()
+
+  const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/likes/${mapId}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Cookie: cookieStore.toString(),
+    },
+  })
+
+  const data = await res.json()
+
+  return data
+}
+
 export const addLike = async (mapId: string) => {
   'use server'
 
-  const session = await auth()
+  const cookieStore = await cookies()
 
-  if (!session)
-    return {
-      data: null,
-      error: 'Unauthorized',
-    }
-
-  const supabase = createClient({
-    supabaseAccessToken: session.supabaseAccessToken,
+  const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/likes/${mapId}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Cookie: cookieStore.toString(),
+    },
   })
 
-  const { data } = await supabase
-    .from('likes')
-    .select()
-    .eq('user_id', session.user.id)
-    .eq('map_id', mapId)
-    .maybeSingle()
+  const data = await res.json()
 
-  if (data !== null)
-    return {
-      data: false,
-      error: 'The map is already liked.',
-    }
-
-  const { error } = await supabase.from('likes').insert({
-    map_id: mapId,
-    user_id: session.user.id,
-  })
-
-  if (error)
-    return {
-      data: false,
-      error: error.message,
-    }
-
-  return {
-    data: true,
-    error: null,
-  }
+  return data
 }
 
 export const deleteLike = async (mapId: string) => {
   'use server'
 
-  const session = await auth()
+  const cookieStore = await cookies()
 
-  if (!session)
-    return {
-      data: null,
-      error: 'Unauthorized',
-    }
-
-  const supabase = createClient({
-    supabaseAccessToken: session.supabaseAccessToken,
+  const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/likes/${mapId}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      Cookie: cookieStore.toString(),
+    },
   })
 
-  const { data } = await supabase
-    .from('likes')
-    .select()
-    .eq('user_id', session.user.id)
-    .eq('map_id', mapId)
-    .maybeSingle()
+  const data = await res.json()
 
-  if (data === null)
-    return {
-      data: false,
-      error: 'The map is not liked.',
-    }
-
-  const { error } = await supabase
-    .from('likes')
-    .delete()
-    .eq('user_id', session.user.id)
-    .eq('map_id', mapId)
-
-  if (error)
-    return {
-      data: false,
-      error: error.message,
-    }
-
-  return {
-    data: true,
-    error: null,
-  }
+  return data
 }

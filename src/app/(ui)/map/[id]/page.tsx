@@ -7,8 +7,8 @@ import { notFound } from 'next/navigation'
 
 import { auth } from '@/auth.js'
 
-import { getMap } from '@/actions/map.js'
-import { getUser } from '@/actions/user.js'
+import { getLike, getMap } from '@/actions/map.js'
+import { getProfile } from '@/actions/profile.js'
 
 import {
   FLAG_ENOJIS,
@@ -44,17 +44,8 @@ const Map = async (props: Props) => {
 
   if (!mapData || mErr) notFound()
 
-  const { data: creator } = await getUser(mapData.creator)
-
-  const { data: liked } = await fetch(
-    `${process.env.NEXT_PUBLIC_URL}/api/likes/${mapData.id}`,
-    {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    },
-  ).then((res) => res.json())
+  const { data: creator } = await getProfile(mapData.creator)
+  const { data: liked } = await getLike(mapData.id)
 
   const session = await auth()
 

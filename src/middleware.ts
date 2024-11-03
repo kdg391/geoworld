@@ -40,7 +40,6 @@ export default auth(async (request) => {
   const locale = getLocale(request)
 
   response.headers.set('x-next-pathname', pathname)
-
   response.headers.set('x-next-locale', locale)
 
   const cookieStore = await cookies()
