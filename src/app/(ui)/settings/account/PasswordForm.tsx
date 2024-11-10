@@ -31,7 +31,7 @@ const PasswordForm = () => {
   const [newPwChanges, setNewPwChanges] = useState(false)
   const [confirmPwChanges, setConfirmPwChanges] = useState(false)
 
-  const { t } = useTranslation('auth')
+  const { t } = useTranslation(['account', 'settings'])
 
   return (
     <>
@@ -102,7 +102,9 @@ const PasswordForm = () => {
           formAction={action}
           disabled={!oldPwChanges || !newPwChanges || !confirmPwChanges}
         >
-          {t('change_password')}
+          {t('change_password', {
+            ns: 'settings',
+          })}
         </SubmitButton>
       </form>
       {state.errors?.message && (

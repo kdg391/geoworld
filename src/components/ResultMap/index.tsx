@@ -28,6 +28,7 @@ const polylineOptions: google.maps.PolylineOptions = {
       repeat: '8px',
     },
   ],
+  clickable: false,
 }
 
 const GoogleMap = dynamic(() => import('../GoogleMap.js'))
@@ -76,8 +77,10 @@ const ResultMap = ({
       if (guess !== null) bounds.extend(guess)
     }
 
-    resultMapRef.current.fitBounds(bounds, 15)
     resultMapRef.current.setCenter(bounds.getCenter())
+    resultMapRef.current.fitBounds(bounds, {
+      bottom: 20,
+    })
   }
 
   const renderMarkers = () => {
@@ -224,6 +227,7 @@ const ResultMap = ({
         gestureHandling: 'greedy',
         zoomControl: true,
         mapId: process.env.NEXT_PUBLIC_GOOGLE_MAPS_MAP,
+        minZoom: 1,
       }}
       onLoaded={(map) => {
         resultMapRef.current = map

@@ -1,0 +1,7 @@
+{
+  "email": "Email",
+  "password": "Password",
+  "current_password": "Current Password",
+  "confirm_password": "Confirm Password",
+  "new_password": "New Password"
+}

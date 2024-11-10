@@ -40,7 +40,7 @@ export async function createTranslation(ns: string | string[]) {
   const i18nextInstance = await initI18next(lang, ns)
 
   return {
-    t: i18nextInstance.getFixedT(lang, ns),
+    t: i18nextInstance.getFixedT(null, Array.isArray(ns) ? ns[0] : ns),
   }
 }
 

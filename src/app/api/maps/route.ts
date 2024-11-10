@@ -14,7 +14,9 @@ export const POST = async (request: Request) => {
   if (!session)
     return Response.json(
       {
-        message: 'Unauthorized',
+        errors: {
+          message: 'Unauthorized',
+        },
       },
       {
         status: 401,
@@ -59,22 +61,17 @@ export const POST = async (request: Request) => {
   if (error)
     return Response.json(
       {
-        message: 'Database Error',
-        error: error.message,
-        code: 'database_error',
+        errors: {
+          message: 'Database Error',
+        },
       },
       {
         status: 500,
       },
     )
 
-  return Response.json(
-    {
-      data,
-      message: 'Successfully created the map',
-    },
-    {
-      status: 200,
-    },
-  )
+  return Response.json({
+    data,
+    message: 'Successfully created the map',
+  })
 }

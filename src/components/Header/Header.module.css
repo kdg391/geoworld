@@ -78,6 +78,11 @@
           &:hover {
             background-color: var(--header-selected);
           }
+
+          &.with-icon {
+            flex-direction: row-reverse;
+            justify-content: space-between;
+          }
         }
       }
     }

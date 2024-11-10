@@ -21,7 +21,7 @@ const SetupProfile = async () => {
 
   if (!session) redirect('/sign-in')
 
-  const { t } = await createTranslation('auth')
+  const { t } = await createTranslation('profile')
 
   const supabase = createClient({
     supabaseAccessToken: session.supabaseAccessToken,

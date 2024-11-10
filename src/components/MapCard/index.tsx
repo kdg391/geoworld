@@ -1,7 +1,7 @@
 'use client'
 
 // import Image from 'next/image'
-import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 
 import {
   FLAG_ENOJIS,
@@ -26,8 +26,6 @@ interface Props {
 }
 
 const MapCard = ({ mapData }: Props) => {
-  const router = useRouter()
-
   const { t } = useTranslation('common')
 
   return (
@@ -61,10 +59,10 @@ const MapCard = ({ mapData }: Props) => {
       </div>
       <div className={styles['map-actions']}>
         <Button
+          as={Link}
+          href={`/map/${mapData.id}`}
           variant="primary"
           size="m"
-          disabled={mapData.locations_count === 0}
-          onClick={() => router.push(`/map/${mapData.id}`)}
         >
           {t('play')}
         </Button>

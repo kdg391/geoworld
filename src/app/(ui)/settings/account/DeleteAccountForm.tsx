@@ -29,15 +29,21 @@ const DeleteAccountForm = () => {
   const [pwChanges, setPwChanges] = useState(false)
   const [confirmChanges, setConfirmChanges] = useState(false)
 
-  const { t } = useTranslation('auth')
+  const { t } = useTranslation(['account', 'settings'])
 
   return (
     <>
-      <h3>Delete Accoount</h3>
+      <h3>
+        {t('delete_account', {
+          ns: 'settings',
+        })}
+      </h3>
       <p>We will delete all of your data. It cannot be reversed.</p>
       <form action={action}>
         <div>
-          <label htmlFor="password">Enter your password to continue:</label>
+          <label htmlFor="password" className="mb-1">
+            Enter your password to continue:
+          </label>
           <TextInput
             type="password"
             id="password"
@@ -55,14 +61,13 @@ const DeleteAccountForm = () => {
             ))}
         </div>
         <div>
-          <label htmlFor="password">
+          <label htmlFor="password" className="mb-1">
             Type <strong>DELETE</strong> below:
           </label>
           <TextInput
             type="text"
             id="message"
             name="message"
-            className={styles.input}
             onChange={(event) => {
               setConfirmChanges(event.target.value === 'DELETE')
             }}
@@ -83,7 +88,9 @@ const DeleteAccountForm = () => {
           isLoading={false}
           disabled={!pwChanges || !confirmChanges}
         >
-          {t('delete_account')}
+          {t('delete_account', {
+            ns: 'settings',
+          })}
         </SubmitButton>
       </form>
       {state.errors?.message && (

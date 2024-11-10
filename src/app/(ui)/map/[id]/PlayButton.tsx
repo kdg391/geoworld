@@ -13,6 +13,9 @@ import type { Map } from '@/types/index.js'
 const Button = dynamic(() => import('@/components/common/Button/index.js'))
 const MapSettingsModal = dynamic(
   () => import('@/components/MapSettingsModal/index.js'),
+  {
+    loading: () => <></>,
+  },
 )
 
 interface Props {
@@ -39,7 +42,7 @@ const PlayButton = ({ mapData, userId }: Props) => {
             return
           }
 
-          setIsModalOpen((s) => !s)
+          setIsModalOpen(true)
         }}
       >
         {t('play')}

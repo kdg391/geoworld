@@ -1,6 +1,6 @@
 'use server'
 
-import { Earth, Scale, UsersRound } from 'lucide-react'
+import { BadgeCheck, Earth, Scale, UsersRound } from 'lucide-react'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
@@ -23,6 +23,7 @@ import styles from './page.module.css'
 
 import './page.css'
 
+const DeleteButton = dynamic(() => import('./DeleteButton.js'))
 const EditButton = dynamic(() => import('./EditButton.js'))
 const Leaderboard = dynamic(() => import('./Leaderboard.js'))
 const LikeButton = dynamic(() => import('./LikeButton.js'))
@@ -69,8 +70,10 @@ const Map = async (props: Props) => {
               />
             )}
             {mapData.name}
+            {mapData.type === 'official' && (
+              <BadgeCheck size={24} fill="var(--primary)" stroke="var(--bg)" />
+            )}
           </h1>
-          <p>{t(`map_type.${mapData.type}`)}</p>
           <p>{mapData.description}</p>
           {creator?.is_public && (
             <div>
@@ -83,7 +86,7 @@ const Map = async (props: Props) => {
             </div>
           )}
           <p>
-            {t('updated', {
+            {t('map:updated', {
               val: new Date(mapData.updated_at),
               formatParams: {
                 val: {
@@ -106,7 +109,7 @@ const Map = async (props: Props) => {
           <div className={styles.card}>
             <UsersRound size={24} />
             <div>
-              <div>{mapData.explorers.toLocaleString()}</div>
+              <div>{mapData.explorers_count.toLocaleString()}</div>
               <div>{t('map:explorers')}</div>
             </div>
           </div>
@@ -132,7 +135,10 @@ const Map = async (props: Props) => {
         <div>
           <PlayButton mapData={mapData} userId={session?.user.id} />
           {mapData.creator === session?.user.id && (
-            <EditButton mapId={mapData.id} />
+            <div className="flex">
+              <EditButton mapId={mapData.id} />
+              <DeleteButton mapId={mapData.id} />
+            </div>
           )}
         </div>
       </section>

@@ -47,16 +47,30 @@ export const POST = async (request: NextRequest) => {
     }>()
 
   if (!existingToken)
-    return Response.json({
-      error: 'The token does not exist',
-    })
+    return Response.json(
+      {
+        errors: {
+          message: 'The token does not exist',
+        },
+      },
+      {
+        status: 500,
+      },
+    )
 
   const hasExpired = new Date(existingToken.expires).getTime() < Date.now()
 
   if (hasExpired)
-    return Response.json({
-      error: 'The token has expired',
-    })
+    return Response.json(
+      {
+        errors: {
+          message: 'The token has expired',
+        },
+      },
+      {
+        status: 500,
+      },
+    )
 
   const { data: existingUser } = await supabase
     .from('users')
@@ -65,9 +79,16 @@ export const POST = async (request: NextRequest) => {
     .single<User>()
 
   if (!existingUser)
-    return Response.json({
-      error: 'The email does not exist',
-    })
+    return Response.json(
+      {
+        errors: {
+          message: 'The email does not exist',
+        },
+      },
+      {
+        status: 500,
+      },
+    )
 
   await supabase
     .from('users')

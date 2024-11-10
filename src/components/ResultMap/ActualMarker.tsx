@@ -9,7 +9,7 @@ type Props = {
   roundNumber?: number
 }
 
-const ActualMarker: React.FC<Props> = ({ roundNumber, isFinalResult }) => (
+const ActualMarker = ({ roundNumber, isFinalResult }: Props) => (
   <div className={styles.marker}>
     <div className={styles['actual-marker']}>
       {isFinalResult ? roundNumber : <Flag size={16} />}

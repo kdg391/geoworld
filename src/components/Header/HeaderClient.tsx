@@ -1,6 +1,6 @@
 'use client'
 
-import { Menu, X } from 'lucide-react'
+import { Heart, Home, MapPinned, Menu, Route, X } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
@@ -114,18 +114,31 @@ const HeaderClient = ({ session }: Props) => {
                   <nav className={styles['mobile-nav']}>
                     <ul>
                       <li>
-                        <Link href="/me/maps">{t('my_maps')}</Link>
+                        <Link href="/me/maps" className={styles['with-icon']}>
+                          <MapPinned size={16} />
+                          {t('my_maps')}
+                        </Link>
                       </li>
                       <li>
-                        <Link href="/me/likes">{t('liked_maps')}</Link>
+                        <Link href="/me/likes" className={styles['with-icon']}>
+                          <Heart size={16} />
+                          {t('liked_maps')}
+                        </Link>
                       </li>
                       <li>
-                        <Link href="/me/ongoing-games">
+                        <Link
+                          href="/me/ongoing-games"
+                          className={styles['with-icon']}
+                        >
+                          <Route size={16} />
                           {t('ongoing_games')}
                         </Link>
                       </li>
                       <li>
-                        <Link href="/home">{t('home')}</Link>
+                        <Link href="/home" className={styles['with-icon']}>
+                          <Home size={16} />
+                          {t('home')}
+                        </Link>
                       </li>
                     </ul>
                   </nav>

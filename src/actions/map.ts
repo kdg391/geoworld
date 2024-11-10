@@ -5,387 +5,131 @@ import { redirect } from 'next/navigation'
 
 import { auth } from '../auth.js'
 
-import { calculateMapBounds, calculateScoreFactor } from '../utils/game.js'
-import { getCountryFromCoordinates } from '../utils/map.js'
 import { createClient } from '../utils/supabase/server.js'
-import { createMapSchema } from '../utils/validations/map.js'
 
-import type { Coords, Location, Map } from '../types/index.js'
+import type { Coords, Location } from '../types/index.js'
 
 export const getMap = async (id: string) => {
-  const { data, error } = await fetch(
-    `${process.env.NEXT_PUBLIC_URL}/api/maps/${id}`,
-    {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    },
-  ).then((res) => res.json())
+  const cookieStore = await cookies()
 
-  return {
-    data,
-    error: error?.message ?? null,
-  }
+  const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/maps/${id}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Cookie: cookieStore.toString(),
+    },
+  })
+
+  const data = await res.json()
+
+  return data
 }
 
 export const createCommunityMap = async (_: unknown, formData: FormData) => {
   'use server'
 
-  const session = await auth()
+  const cookieStore = await cookies()
 
-  if (!session)
-    return {
-      errors: {
-        message: 'Unauthorized',
-      },
-    }
-
-  const supabase = createClient({
-    supabaseAccessToken: session.supabaseAccessToken,
+  const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/maps`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Cookie: cookieStore.toString(),
+    },
+    body: JSON.stringify({
+      name: formData.get('name'),
+      description: formData.get('description'),
+    }),
   })
 
-  const validated = await createMapSchema.safeParseAsync({
-    name: formData.get('name'),
-    description: formData.get('description'),
-  })
+  const data = await res.json()
 
-  if (!validated.success)
-    return {
-      errors: validated.error.flatten().fieldErrors,
-    }
+  if (!res.ok) return data
 
-  const { data: mData, error: mErr } = await supabase
-    .from('maps')
-    .insert<Partial<Map>>({
-      type: 'community',
-      name: validated.data.name,
-      description:
-        validated.data.description === '' ? null : validated.data.description,
-      is_published: false,
-      creator: session.user.id,
-    })
-    .select()
-    .single<Map>()
-
-  if (mErr)
-    return {
-      errors: {
-        message: mErr?.message,
-      },
-    }
-
-  redirect(`/map/${mData.id}/edit`)
+  redirect(`/map/${data.id}/edit`)
 }
 
 export const editCommunityMap = async (_: unknown, formData: FormData) => {
   'use server'
 
-  const session = await auth()
+  const cookieStore = await cookies()
 
-  if (!session)
-    return {
-      errors: {
-        message: 'Unauthorized',
-      },
-    }
-
-  const supabase = createClient({
-    supabaseAccessToken: session.supabaseAccessToken,
+  const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/maps/${''}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      Cookie: cookieStore.toString(),
+    },
+    body: JSON.stringify({
+      name: formData.get('name'),
+      description: formData.get('description'),
+    }),
   })
 
-  const validated = await createMapSchema.safeParseAsync({
-    name: formData.get('name'),
-    description: formData.get('description'),
-  })
+  const data = await res.json()
 
-  if (!validated.success)
-    return {
-      errors: validated.error.flatten().fieldErrors,
-    }
-
-  const { error: mErr } = await supabase
-    .from('maps')
-    .update<Partial<Map>>({
-      name: validated.data.name,
-      description:
-        validated.data.description === '' ? null : validated.data.description,
-    })
-    .eq('map_id', '')
-    .select()
-    .single<Map>()
-
-  if (mErr)
-    return {
-      errors: {
-        message: mErr?.message,
-      },
-    }
-
-  return {
-    errors: null,
-  }
+  return data
 }
 
 export const updateMap = async (
   id: string,
-  data: {
+  payload: {
     isPublished?: boolean
     locations?: Coords[]
   },
 ) => {
   'use server'
 
-  const session = await auth()
+  const cookieStore = await cookies()
 
-  if (!session)
-    return {
-      error: 'Unauthorized',
-    }
-
-  const supabase = createClient({
-    supabaseAccessToken: session.supabaseAccessToken,
+  const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/maps/${id}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      Cookie: cookieStore.toString(),
+    },
+    body: JSON.stringify(payload),
   })
 
-  const { data: mapData, error: mErr } = await supabase
-    .from('maps')
-    .select('*')
-    .eq('id', id)
-    .single<Map>()
+  const data = await res.json()
 
-  if (!mapData || mErr)
-    return {
-      error: mErr?.message ?? null,
-    }
-
-  if (mapData.creator !== session.user.id)
-    return {
-      error: mErr,
-    }
-
-  if (mapData.type === 'official' && session.user.role !== 'admin')
-    return {
-      error: null,
-    }
-
-  if (data.locations && data.locations.length > 0) {
-    const { data: oldLocs, error: lErr } = await supabase
-      .from('locations')
-      .select('*')
-      .eq('map_id', mapData.id)
-      .returns<Location[]>()
-
-    if (!oldLocs || lErr)
-      return {
-        error: lErr?.message ?? null,
-      }
-
-    const newLocs = data.locations
-
-    const adding = newLocs.filter((n) =>
-      oldLocs.every((o) => o.pano_id !== n.pano_id),
-    )
-    const updating = newLocs.filter((n) =>
-      oldLocs.some(
-        (o) =>
-          o.pano_id === n.pano_id &&
-          (o.heading !== n.heading || o.pitch !== n.pitch || o.zoom !== n.zoom),
-      ),
-    )
-    const removing = oldLocs.filter((o) =>
-      newLocs.every((n) => n.pano_id !== o.pano_id),
-    )
-
-    if (removing.length > 0) {
-      const { error: removedErr } = await supabase
-        .from('locations')
-        .delete()
-        .eq('map_id', mapData.id)
-        .in(
-          'pano_id',
-          removing.map((loc) => loc.pano_id),
-        )
-
-      if (removedErr)
-        return {
-          error: removedErr?.message ?? null,
-        }
-    }
-
-    if (adding.length > 0) {
-      const { error: insertedErr } = await supabase.from('locations').insert(
-        adding.map((loc) => ({
-          map_id: mapData.id,
-          user_id: session.user.id,
-          streak_location_code: getCountryFromCoordinates({
-            lat: loc.lat,
-            lng: loc.lng,
-          }),
-          ...loc,
-          heading: loc.heading ?? 0,
-        })),
-      )
-
-      if (insertedErr)
-        return {
-          error: insertedErr?.message ?? null,
-        }
-    }
-
-    if (updating.length > 0) {
-      const { error } = await supabase
-        .from('locations')
-        .upsert(updating)
-        .eq('map_id', mapData.id)
-
-      if (error)
-        return {
-          error: error.message ?? null,
-        }
-    }
-  }
-
-  const { data: updatedLocs, error: updatedLocsErr } = await supabase
-    .from('locations')
-    .select('*')
-    .eq('map_id', mapData.id)
-    .returns<Location[]>()
-
-  if (!updatedLocs || updatedLocsErr)
-    return {
-      error: updatedLocsErr?.message ?? null,
-    }
-
-  const bounds =
-    updatedLocs.length > 0
-      ? calculateMapBounds(
-          updatedLocs.map((loc) => ({
-            lat: loc.lat,
-            lng: loc.lng,
-          })),
-        )
-      : { min: { lat: 0, lng: 0 }, max: { lat: 0, lng: 0 } }
-  const scoreFactor = calculateScoreFactor(bounds)
-
-  const updateData: Partial<Map> = {
-    bounds,
-    locations_count: updatedLocs.length,
-    score_factor: scoreFactor,
-    updated_at: new Date().toISOString(),
-  }
-
-  const { error: updatedErr } = await supabase
-    .from('maps')
-    .update<Partial<Map>>(updateData)
-    .eq('id', mapData.id)
-    .single<Map>()
-
-  return {
-    error: updatedErr?.message ?? null,
-  }
+  return data
 }
 
 export const deleteMap = async (id: string) => {
   'use server'
 
-  const session = await auth()
+  const cookieStore = await cookies()
 
-  if (!session)
-    return {
-      data: null,
-      error: 'Unauthorized',
-    }
-
-  const supabase = createClient({
-    supabaseAccessToken: session.supabaseAccessToken,
+  const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/maps/${id}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      Cookie: cookieStore.toString(),
+    },
   })
 
-  const { data: mapData, error: mErr } = await supabase
-    .from('maps')
-    .select('*')
-    .eq('id', id)
-    .single<Map>()
+  const data = await res.json()
 
-  if (!mapData || mErr)
-    return {
-      data: null,
-      error: mErr?.message ?? null,
-    }
-
-  if (mapData.creator !== session.user.id)
-    return {
-      data: null,
-      error: mErr,
-    }
-
-  if (mapData.type === 'official' && session.user.role !== 'admin')
-    return {
-      data: null,
-      error: null,
-    }
-
-  const { error: deletedErr } = await supabase
-    .from('maps')
-    .delete()
-    .eq('id', mapData.id)
-
-  if (deletedErr)
-    return {
-      data: null,
-      error: deletedErr?.message ?? null,
-    }
-
-  return {
-    data: true,
-    error: null,
-  }
-}
-
-export const getLocations = async (mapId: string) => {
-  'use server'
-
-  const session = await auth()
-
-  const supabase = createClient({
-    supabaseAccessToken: session?.supabaseAccessToken,
-  })
-
-  const { data, error } = await supabase
-    .from('locations')
-    .select('*')
-    .eq('map_id', mapId)
-    .returns<Location[]>()
-
-  return {
-    data,
-    error: error?.message ?? null,
-  }
+  return data
 }
 
 export const getLikes = async () => {
   'use server'
 
-  const session = await auth()
+  const cookieStore = await cookies()
 
-  if (!session)
-    return {
-      data: null,
-      error: 'Unauthorized',
-    }
-
-  const supabase = createClient({
-    supabaseAccessToken: session.supabaseAccessToken,
+  const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/me/likes`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Cookie: cookieStore.toString(),
+    },
   })
 
-  const { data, error } = await supabase
-    .from('likes')
-    .select('*')
-    .eq('user_id', session.user.id)
+  const data = await res.json()
 
-  return {
-    data,
-    error: error?.message ?? null,
-  }
+  return data
 }
 
 export const getLike = async (mapId: string) => {
@@ -440,4 +184,25 @@ export const deleteLike = async (mapId: string) => {
   const data = await res.json()
 
   return data
+}
+
+export const getLocations = async (mapId: string) => {
+  'use server'
+
+  const session = await auth()
+
+  const supabase = createClient({
+    supabaseAccessToken: session?.supabaseAccessToken,
+  })
+
+  const { data, error } = await supabase
+    .from('locations')
+    .select('*')
+    .eq('map_id', mapId)
+    .returns<Location[]>()
+
+  return {
+    data,
+    error: error?.message ?? null,
+  }
 }

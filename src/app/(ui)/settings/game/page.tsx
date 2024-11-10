@@ -1,18 +1,21 @@
-'use client'
+'use server'
 
 import dynamic from 'next/dynamic'
+
+import { createTranslation } from '@/i18n/server.js'
 
 import styles from '../layout.module.css'
 
 const DistanceUnitSelect = dynamic(
   () => import('@/components/DistanceUnitSelect/index.js'),
-  { ssr: false },
 )
 
-const Game = () => {
+const Game = async () => {
+  const { t } = await createTranslation('settings')
+
   return (
     <section className={styles.section}>
-      <h1 className={styles.title}>Game Settings</h1>
+      <h1 className="text-2xl mb-4">{t('game_settings')}</h1>
       <div>
         <DistanceUnitSelect />
       </div>

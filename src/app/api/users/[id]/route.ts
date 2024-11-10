@@ -27,8 +27,9 @@ export const GET = async (
   if (error)
     return Response.json(
       {
-        message: 'Database Error',
-        error: error.message,
+        errors: {
+          message: 'Database Error',
+        },
         code: 'database_error',
       },
       {
@@ -39,7 +40,9 @@ export const GET = async (
   if (!data)
     return Response.json(
       {
-        message: 'User Not Found',
+        errors: {
+          message: 'User Not Found',
+        },
         code: 'user_not_found',
       },
       {
@@ -47,12 +50,7 @@ export const GET = async (
       },
     )
 
-  return Response.json(
-    {
-      data,
-    },
-    {
-      status: 200,
-    },
-  )
+  return Response.json({
+    data,
+  })
 }

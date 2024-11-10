@@ -11,7 +11,7 @@ import DeleteAccountForm from './DeleteAccountForm.js'
 const DeleteAccountButton = () => {
   const [isFormOpened, setIsFormOpened] = useState(false)
 
-  const { t } = useTranslation('auth')
+  const { t } = useTranslation('settings')
 
   return (
     <>

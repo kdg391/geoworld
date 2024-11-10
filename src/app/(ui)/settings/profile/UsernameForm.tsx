@@ -32,7 +32,7 @@ const UsernameForm = ({ username }: Props) => {
 
   const [changes, setChanges] = useState(false)
 
-  const { t } = useTranslation('auth')
+  const { t } = useTranslation(['profile', 'settings'])
 
   return (
     <>
@@ -67,7 +67,9 @@ const UsernameForm = ({ username }: Props) => {
           isLoading={false}
           disabled={!changes}
         >
-          {t('change_username')}
+          {t('change_username', {
+            ns: 'settings',
+          })}
         </SubmitButton>
       </form>
       {state.errors?.message && (

@@ -48,7 +48,7 @@ const GuessMap = ({
   )
 
   const [mapSize, setMapSize] = useLocalStorage('mapSize', 1)
-  const [isMapPinned, setIsMapPinned] = useLocalStorage('isMapPinned', false)
+  const [isMapPinned, setIsMapPinned] = useLocalStorage('isMapPinned', true)
   const [isMapActive, setIsMapActive] = useState(isMapPinned)
   const [isMobileOpen, setIsMobileOpen] = useState(false)
 
@@ -162,6 +162,7 @@ const GuessMap = ({
               draggableCursor: 'crosshair',
               fullscreenControl: false,
               mapId: process.env.NEXT_PUBLIC_GOOGLE_MAPS_MAP,
+              minZoom: 1,
               zoomControl: false,
             }}
             onLoaded={(map) => init(map)}

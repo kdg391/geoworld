@@ -71,7 +71,7 @@ const MapSettingsModal = ({
     setIsLoading(true)
 
     const { data: gameData, error } = await createGame({
-      mapData,
+      mapId: mapData.id,
       settings: {
         canMove,
         canPan,
@@ -79,7 +79,6 @@ const MapSettingsModal = ({
         rounds,
         timeLimit,
       },
-      userId,
     })
 
     if (!gameData || error) {

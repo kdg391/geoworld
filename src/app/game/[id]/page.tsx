@@ -153,10 +153,9 @@ const Game = (props: Props) => {
 
           {view === 'finalResult' && (
             <FinalRoundResult
-              mapData={mapData}
+              mapId={mapData.id}
               settings={gameData.settings}
               totalScore={gameData.total_score}
-              userId={gameData.user_id}
             />
           )}
         </div>

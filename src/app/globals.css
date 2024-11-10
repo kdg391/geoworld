@@ -1,3 +1,5 @@
+@tailwind utilities;
+
 * {
   box-sizing: border-box;
 }
@@ -172,10 +174,6 @@ textarea {
   margin: -1px;
   overflow: hidden;
   border: 0;
-}
-
-.flex {
-  display: flex;
 }
 
 /* .scroll-locked {

@@ -9,6 +9,7 @@ import useClickOutside from '@/hooks/useClickOutside.js'
 import { classNames } from '@/utils/index.js'
 
 import styles from './Dropdown.module.css'
+
 import './Dropdown.css'
 
 import type { Coords } from '@/types/index.js'

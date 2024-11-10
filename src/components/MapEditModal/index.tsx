@@ -74,7 +74,7 @@ const MapEditModal = ({ isEditing, isModalOpen, setIsModalOpen }: Props) => {
               variant="gray"
               size="m"
               type="button"
-              onClick={() => setIsModalOpen((o) => !o)}
+              onClick={() => setIsModalOpen(false)}
             >
               {t('cancel')}
             </Button>

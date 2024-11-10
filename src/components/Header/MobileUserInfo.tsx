@@ -26,7 +26,7 @@ const MobileUserInfo = ({ session }: Props) => {
     'id' | 'username' | 'display_name'
   > | null>(null)
 
-  const { t } = useTranslation(['common', 'auth'])
+  const { t } = useTranslation(['common', 'auth', 'settings'])
 
   useEffect(() => {
     const init = async () => {
@@ -87,20 +87,43 @@ const MobileUserInfo = ({ session }: Props) => {
           <UserRound size={24} />
         </div>
         <div>
-          <div>{profile.display_name}</div>
+          <div className={styles['display-name']}>{profile.display_name}</div>
           <div className={styles.username}>@{profile.username}</div>
         </div>
       </Link>
       <nav className={styles.nav}>
         <ul>
           <li>
-            <Link href="/settings/profile" scroll={false}>
-              <Settings size={18} />
-              {t('settings')}
+            <Link href="/dashboard" scroll={false}>
+              {t('dashboard')}
             </Link>
           </li>
           <li>
-            <div onClick={onSignOutClick}>
+            <Link
+              href="/settings/profile"
+              scroll={false}
+              className={styles['with-icon']}
+            >
+              <UserRound size={18} />
+              {t('profile_settings', {
+                ns: 'settings',
+              })}
+            </Link>
+          </li>
+          <li>
+            <Link
+              href="/settings/account"
+              scroll={false}
+              className={styles['with-icon']}
+            >
+              <Settings size={18} />
+              {t('account_settings', {
+                ns: 'settings',
+              })}
+            </Link>
+          </li>
+          <li>
+            <div onClick={onSignOutClick} className={styles['with-icon']}>
               <LogOut size={18} />
               {t('auth:sign_out')}
             </div>

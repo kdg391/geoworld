@@ -26,7 +26,7 @@ const Form = () => {
     errors: null,
   })
 
-  const { t } = useTranslation('auth')
+  const { t } = useTranslation('profile')
 
   return (
     <form action={action} className={styles.form}>

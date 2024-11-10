@@ -25,7 +25,9 @@ const Leaderboard = async ({ mapId }: Props) => {
 
   if (!data || error) return <p>Failed to load the leaderboard</p>
 
-  return data.length > 0 ? (
+  if (data.length === 0) return <p>No data</p>
+
+  return (
     <table>
       <thead>
         <tr>
@@ -48,8 +50,6 @@ const Leaderboard = async ({ mapId }: Props) => {
         ))}
       </tbody>
     </table>
-  ) : (
-    <p>No data</p>
   )
 }
 

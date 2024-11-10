@@ -3,24 +3,16 @@ import { redirect } from 'next/navigation'
 
 import { auth } from '@/auth.js'
 
-import { createTranslation } from '@/i18n/server.js'
+import { getProfile } from '@/actions/profile.js'
 
-import type { Profile } from '@/types/index.js'
+import { createTranslation } from '@/i18n/server.js'
 
 const Dashboard = async () => {
   const session = await auth()
 
   if (!session) redirect('/sign-in')
 
-  const { data: profile } = (await fetch(
-    `${process.env.NEXT_PUBLIC_URL}/api/users/${session.user.id}`,
-    {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    },
-  ).then((res) => res.json())) as { data: Profile | null }
+  const { data: profile } = await getProfile(session.user.id)
 
   if (!profile) redirect('/sign-in')
 

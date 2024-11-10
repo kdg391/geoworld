@@ -13,14 +13,10 @@ const AuthButtons = () => {
 
   return (
     <div className={styles['auth-buttons']}>
-      <Link href="/sign-in">{t('sign_in')}</Link>
-      <Button
-        as={Link}
-        href="/sign-up"
-        variant="primary"
-        size="m"
-        className="no-underline"
-      >
+      <Link href="/sign-in" className="hover:underline">
+        {t('sign_in')}
+      </Link>
+      <Button as={Link} href="/sign-up" variant="primary" size="m">
         {t('sign_up')}
       </Button>
     </div>

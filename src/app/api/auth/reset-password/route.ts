@@ -44,9 +44,9 @@ export const POST = async (request: Request) => {
   if (userErr)
     return Response.json(
       {
-        message: 'Database Error',
-        error: userErr.message,
-        code: 'database_error',
+        errors: {
+          message: 'Database Error',
+        },
       },
       {
         status: 500,
@@ -63,7 +63,9 @@ export const POST = async (request: Request) => {
     if (error)
       return Response.json(
         {
-          error: 'Database Error',
+          errors: {
+            message: 'Database Error',
+          },
         },
         {
           status: 500,
@@ -91,7 +93,9 @@ export const POST = async (request: Request) => {
       if (err instanceof Error)
         return Response.json(
           {
-            message: 'Something went wrong!',
+            errors: {
+              message: 'Something went wrong!',
+            },
           },
           {
             status: 500,
@@ -100,12 +104,7 @@ export const POST = async (request: Request) => {
     }
   }
 
-  return Response.json(
-    {
-      message: 'An email has been sent to you to reset your password.',
-    },
-    {
-      status: 200,
-    },
-  )
+  return Response.json({
+    message: 'An email has been sent to you to reset your password.',
+  })
 }

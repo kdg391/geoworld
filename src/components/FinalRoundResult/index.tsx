@@ -10,18 +10,17 @@ import { useTranslation } from '@/i18n/client.js'
 
 import styles from '../RoundResult/index.module.css'
 
-import type { GameSettings, Map } from '@/types/index.js'
+import type { GameSettings } from '@/types/index.js'
 
 const Button = dynamic(() => import('../common/Button/index.js'))
 
 interface Props {
-  mapData: Map
+  mapId: string
   settings: GameSettings
   totalScore: number
-  userId: string
 }
 
-const FinalRoundResult = ({ mapData, settings, totalScore, userId }: Props) => {
+const FinalRoundResult = ({ mapId, settings, totalScore }: Props) => {
   const router = useRouter()
 
   const [isLoading, setIsLoading] = useState(false)
@@ -32,9 +31,8 @@ const FinalRoundResult = ({ mapData, settings, totalScore, userId }: Props) => {
     setIsLoading(true)
 
     const { data: gameData, error } = await createGame({
-      mapData,
+      mapId,
       settings,
-      userId,
     })
 
     if (!gameData || error) {
@@ -62,7 +60,11 @@ const FinalRoundResult = ({ mapData, settings, totalScore, userId }: Props) => {
         >
           {t('final_round_result.replay')}
         </Button>
-        <Button variant="gray" size="l" onClick={() => router.push('/')}>
+        <Button
+          variant="gray"
+          size="l"
+          onClick={() => router.push(`/map/${mapId}`)}
+        >
           {t('final_round_result.exit')}
         </Button>
       </div>

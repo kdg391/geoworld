@@ -32,7 +32,7 @@ const EmailForm = ({ email }: Props) => {
 
   const [changes, setChanges] = useState(false)
 
-  const { t } = useTranslation('auth')
+  const { t } = useTranslation(['account', 'settings'])
 
   return (
     <>
@@ -61,7 +61,9 @@ const EmailForm = ({ email }: Props) => {
           isLoading={false}
           disabled={!changes}
         >
-          {t('change_email')}
+          {t('change_email', {
+            ns: 'settings',
+          })}
         </SubmitButton>
       </form>
       {state.errors?.message && (

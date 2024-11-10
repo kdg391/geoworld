@@ -50,25 +50,31 @@ export const GET = async (request: NextRequest) => {
     .returns<Map[]>()
 
   if (data) {
-    const { t } = await createTranslation('common')
+    const { t } = await createTranslation(['common', 'country'])
 
     for (const map of data) {
       map.name =
         map.id === OFFICIAL_MAP_WORLD_ID
           ? t('world')
           : map.id in OFFICIAL_MAP_COUNTRY_CODES
-            ? t(`country.${OFFICIAL_MAP_COUNTRY_CODES[map.id]}`)
+            ? t(`country:${OFFICIAL_MAP_COUNTRY_CODES[map.id]}`)
             : map.name
     }
   }
 
-  return Response.json(
-    {
-      data,
-      error: error?.message ?? null,
-    },
-    {
-      status: 200,
-    },
-  )
+  if (error)
+    return Response.json(
+      {
+        errors: {
+          message: 'Database Error',
+        },
+      },
+      {
+        status: 500,
+      },
+    )
+
+  return Response.json({
+    data,
+  })
 }

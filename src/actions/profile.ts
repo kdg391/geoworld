@@ -1,5 +1,6 @@
 'use server'
 
+import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 
 import { auth } from '../auth.js'
@@ -16,20 +17,19 @@ import type { Profile } from '../types/index.js'
 export const getProfile = async (id: string) => {
   'use server'
 
-  const { data, error } = await fetch(
-    `${process.env.NEXT_PUBLIC_URL}/api/users/${id}`,
-    {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    },
-  ).then((res) => res.json())
+  const cookieStore = await cookies()
 
-  return {
-    data,
-    error: error?.message ?? null,
-  }
+  const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/users/${id}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Cookie: cookieStore.toString(),
+    },
+  })
+
+  const data = await res.json()
+
+  return data
 }
 
 export const getProfileByUsername = async (username: string) => {

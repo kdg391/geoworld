@@ -35,28 +35,36 @@ const Account = async () => {
 
   if (!user || userErr) redirect('/sign-in')
 
-  const { t } = await createTranslation('auth')
+  const { t } = await createTranslation(['account', 'settings'])
 
   return (
     <section className={styles.section}>
-      <h1 className={styles.title}>Account Settings</h1>
+      <h1 className="text-2xl mb-4">
+        {t('account_settings', {
+          ns: 'settings',
+        })}
+      </h1>
       <section className={styles.setting}>
-        <h2 className={styles['title-h2']}>{t('email')}</h2>
+        <h2 className="text-xl mb-2">{t('email')}</h2>
         <div>
           <EmailForm email={session.user.email} />
         </div>
       </section>
       {user.hashed_password && (
         <section className={styles.setting}>
-          <h2 className={styles['title-h2']}>{t('password')}</h2>
+          <h2 className="text-xl mb-2">{t('password')}</h2>
           <div>
             <PasswordForm />
           </div>
         </section>
       )}
       <section className={styles.setting}>
-        <h2 className={styles['title-h2']}>{t('delete_account')}</h2>
-        <p>
+        <h2 className="text-xl mb-2">
+          {t('delete_account', {
+            ns: 'settings',
+          })}
+        </h2>
+        <p className="mb-2">
           Clicking the Delete button will immediately delete the account. It
           cannot be reversed.
         </p>

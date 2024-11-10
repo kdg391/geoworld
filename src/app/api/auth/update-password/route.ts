@@ -44,7 +44,9 @@ export const PUT = async (request: NextRequest) => {
   if (!data || tokenErr)
     return Response.json(
       {
-        message: 'Cannot find the token',
+        errors: {
+          message: 'Cannot find the token',
+        },
       },
       {
         status: 400,
@@ -63,19 +65,16 @@ export const PUT = async (request: NextRequest) => {
   if (error)
     return Response.json(
       {
-        message: 'Failed to update your password',
+        errors: {
+          message: 'Failed to update your password',
+        },
       },
       {
         status: 500,
       },
     )
 
-  return Response.json(
-    {
-      message: 'Successfully updated the password',
-    },
-    {
-      status: 200,
-    },
-  )
+  return Response.json({
+    message: 'Successfully updated the password',
+  })
 }

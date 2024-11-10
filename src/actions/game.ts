@@ -1,12 +1,12 @@
 'use server'
 
+import { cookies } from 'next/headers'
+
 import { auth } from '../auth.js'
 
 import { OFFICIAL_MAP_WORLD_ID } from '../constants/index.js'
 
-import { calculateDistance, calculateRoundScore } from '../utils/game.js'
 import { createClient } from '../utils/supabase/server.js'
-import { getGameSettingsSchema } from '../utils/validations/game.js'
 
 import type {
   Game,
@@ -128,78 +128,44 @@ export const startGameRound = async (id: string) => {
   }
 }
 
-export const createGame = async ({
-  mapData,
-  settings,
-  userId,
-}: {
-  mapData: Map
+export const getGame = async (id: string) => {
+  'use server'
+
+  const cookieStore = await cookies()
+
+  const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/games/${id}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      Cookie: cookieStore.toString(),
+    },
+  })
+
+  const data = await res.json()
+
+  return data
+}
+
+export const createGame = async (payload: {
+  mapId: string
   settings: GameSettings
-  userId: string
 }) => {
   'use server'
 
-  const session = await auth()
+  const cookieStore = await cookies()
 
-  const supabase = createClient({
-    supabaseAccessToken: session?.supabaseAccessToken,
+  const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/games`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Cookie: cookieStore.toString(),
+    },
+    body: JSON.stringify(payload),
   })
 
-  const settingsSchema = getGameSettingsSchema(mapData.locations_count)
-  const validated = await settingsSchema.safeParseAsync(settings)
+  const data = await res.json()
 
-  if (!validated.success)
-    return {
-      data: null,
-      error: validated.error.flatten().fieldErrors,
-    }
-
-  const { data: location, error: lErr } = await supabase
-    .rpc('get_random_locations', {
-      p_map_id: mapData.id === OFFICIAL_MAP_WORLD_ID ? null : mapData.id,
-      p_count: 1,
-    })
-    .select('*')
-    .single<Location>()
-
-  if (!location || lErr)
-    return {
-      data: null,
-      error: lErr?.message ?? null,
-    }
-
-  const actualLocation: RoundLocation = {
-    lat: location.lat,
-    lng: location.lng,
-    heading: location.heading,
-    pitch: location.pitch,
-    zoom: location.zoom,
-    pano_id: location.pano_id,
-    streak_location_code: location.streak_location_code,
-    started_at: new Date().toISOString(),
-    ended_at: null,
-  }
-
-  const { data, error } = await supabase
-    .from('games')
-    .insert<Partial<Game>>({
-      bounds: null,
-      guesses: [],
-      map_id: mapData.id,
-      mode: 'standard',
-      round: 0,
-      rounds: [actualLocation],
-      settings,
-      state: 'started',
-      user_id: userId,
-    })
-    .select()
-    .single<Game>()
-
-  return {
-    data,
-    error: error?.message ?? null,
-  }
+  return data
 }
 
 interface GuessData {
@@ -207,177 +173,39 @@ interface GuessData {
   timedOut: boolean
 }
 
-export const updateGame = async (id: string, data: GuessData) => {
+export const updateGame = async (id: string, payload: GuessData) => {
   'use server'
 
-  const session = await auth()
+  const cookieStore = await cookies()
 
-  if (!session)
-    return {
-      data: null,
-      error: 'Unauthorized',
-    }
-
-  const supabase = createClient({
-    supabaseAccessToken: session.supabaseAccessToken,
+  const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/games/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      Cookie: cookieStore.toString(),
+    },
+    body: JSON.stringify(payload),
   })
 
-  const { data: gameData, error: gErr } = await supabase
-    .from('games')
-    .select('*')
-    .eq('id', id)
-    .single<Game>()
+  const data = await res.json()
 
-  if (!gameData || gErr)
-    return {
-      data: null,
-      error: gErr?.message ?? null,
-    }
-
-  if (gameData.user_id !== session.user.id)
-    return {
-      data: null,
-      error: 'This game is not your game.',
-    }
-
-  if (gameData.state === 'finished')
-    return {
-      data: null,
-      error: 'This game is finished.',
-    }
-
-  const { data: mapData, error: mErr } = await supabase
-    .from('maps')
-    .select('*')
-    .eq('id', gameData.map_id)
-    .single<Map>()
-
-  if (!mapData || mErr)
-    return {
-      data: null,
-      error: mErr?.message ?? null,
-    }
-
-  const updateData: Partial<Game> = {}
-
-  const isFinalRound = gameData.round === gameData.settings.rounds - 1
-
-  const distance = {
-    imperial: data.guessedLocation
-      ? calculateDistance(
-          data.guessedLocation,
-          gameData.rounds[gameData.round],
-          'imperial',
-        )
-      : 0,
-    metric: data.guessedLocation
-      ? calculateDistance(
-          data.guessedLocation,
-          gameData.rounds[gameData.round],
-          'metric',
-        )
-      : 0,
-  }
-
-  const timedOutWithGuess = data.timedOut && data.guessedLocation !== null
-
-  const score =
-    data.timedOut && data.guessedLocation === null
-      ? 0
-      : calculateRoundScore(distance.metric, mapData.score_factor)
-
-  const now = new Date()
-
-  const time = data.timedOut
-    ? gameData.settings.timeLimit
-    : Math.floor(
-        (now.getTime() -
-          new Date(gameData.rounds[gameData.round].started_at).getTime()) /
-          1000,
-      )
-
-  const rounds = [...gameData.rounds]
-
-  rounds[gameData.round] = {
-    ...rounds[gameData.round],
-    ended_at: now.toISOString(),
-  }
-
-  updateData.rounds = rounds
-  updateData.guesses = [
-    ...gameData.guesses,
-    {
-      distance,
-      position: data.guessedLocation,
-      score,
-      time,
-      timedOut: data.timedOut,
-      timedOutWithGuess,
-    },
-  ]
-  updateData.total_score = gameData.total_score + score
-  updateData.total_time = gameData.total_time + time
-  updateData.state = isFinalRound ? 'finished' : 'started'
-
-  const { data: updatedData, error: updatedErr } = await supabase
-    .from('games')
-    .update<Partial<Game>>(updateData)
-    .eq('id', id)
-    .select()
-    .single<Game>()
-
-  return {
-    data: updatedData,
-    error: updatedErr?.message ?? null,
-  }
+  return data
 }
 
 export const deleteGame = async (id: string) => {
   'use server'
 
-  const session = await auth()
+  const cookieStore = await cookies()
 
-  if (!session)
-    return {
-      data: null,
-      error: 'Unauthorized',
-    }
-
-  const supabase = createClient({
-    supabaseAccessToken: session.supabaseAccessToken,
+  const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/games/${id}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      Cookie: cookieStore.toString(),
+    },
   })
 
-  const { data: gameData, error: gErr } = await supabase
-    .from('games')
-    .select('*')
-    .eq('id', id)
-    .single<Game>()
+  const data = await res.json()
 
-  if (!gameData || gErr)
-    return {
-      data: null,
-      error: gErr?.message ?? null,
-    }
-
-  if (gameData.user_id !== session.user.id)
-    return {
-      data: null,
-      error: gErr,
-    }
-
-  const { error: deletedErr } = await supabase
-    .from('games')
-    .delete()
-    .eq('id', id)
-
-  if (deletedErr)
-    return {
-      data: null,
-      error: deletedErr?.message ?? null,
-    }
-
-  return {
-    data: true,
-    error: null,
-  }
+  return data
 }

@@ -1,8 +1,8 @@
 import { createTranslation } from '@/i18n/server.js'
 
-import type { Metadata } from 'next'
-
 import styles from './page.module.css'
+
+import type { Metadata } from 'next'
 
 export const revalidate = 60
 

@@ -43,13 +43,19 @@ export const GET = async (request: NextRequest) => {
     })
     .returns<Map[]>()
 
-  return Response.json(
-    {
-      data: maps,
-      error: error?.message ?? null,
-    },
-    {
-      status: 200,
-    },
-  )
+  if (error)
+    return Response.json(
+      {
+        errors: {
+          message: 'Database Error',
+        },
+      },
+      {
+        status: 500,
+      },
+    )
+
+  return Response.json({
+    data: maps,
+  })
 }

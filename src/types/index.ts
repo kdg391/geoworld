@@ -43,7 +43,7 @@ export interface Map {
   creator: string
   is_published: boolean
   average_score: number
-  explorers: number
+  explorers_count: number
   locations_count: number
   likes_count: number
   score_factor: number
@@ -51,6 +51,12 @@ export interface Map {
     min: google.maps.LatLngLiteral
     max: google.maps.LatLngLiteral
   } | null
+  country_code: string | null
+}
+
+// todo
+export interface _Map extends Map {
+  liked_by_user: boolean | null // null if not signed in
 }
 
 export interface ControlSettings {
@@ -108,10 +114,6 @@ export type GameView = 'game' | 'result' | 'finalResult'
 
 export interface Game {
   id: string
-  bounds: {
-    min: google.maps.LatLngLiteral
-    max: google.maps.LatLngLiteral
-  } | null
   guesses: Guess[]
   map_id: string
   mode: GameMode

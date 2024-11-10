@@ -23,19 +23,23 @@ const Profile = async () => {
   if (!profile || error) redirect('/sign-in')
   if (!profile.display_name || !profile.username) redirect('/setup-profile')
 
-  const { t } = await createTranslation('auth')
+  const { t } = await createTranslation(['profile', 'settings'])
 
   return (
     <section className={styles.section}>
-      <h1 className={styles.title}>Profile Settings</h1>
+      <h1 className="text-2xl mb-4">
+        {t('profile_settings', {
+          ns: 'settings',
+        })}
+      </h1>
       <section className={styles.setting}>
-        <h2 className={styles['title-h2']}>{t('display_name')}</h2>
+        <h2 className="text-xl mb-2">{t('display_name')}</h2>
         <div>
           <DisplayNameForm displayName={profile.display_name} />
         </div>
       </section>
       <section className={styles.setting}>
-        <h2 className={styles['title-h2']}>{t('username')}</h2>
+        <h2 className="text-xl mb-2">{t('username')}</h2>
         <div>
           <UsernameForm username={profile.username} />
         </div>

@@ -11,7 +11,9 @@ export const GET = async (
   if (!session)
     return Response.json(
       {
-        message: 'Unauthorized',
+        errors: {
+          message: 'Unauthorized',
+        },
       },
       {
         status: 401,
@@ -34,7 +36,9 @@ export const GET = async (
   if (error)
     return Response.json(
       {
-        error: 'Database Error',
+        errors: {
+          message: 'Database Error',
+        },
       },
       {
         status: 500,
@@ -55,7 +59,9 @@ export const POST = async (
   if (!session)
     return Response.json(
       {
-        message: 'Unauthorized',
+        errors: {
+          message: 'Unauthorized',
+        },
       },
       {
         status: 401,
@@ -76,9 +82,16 @@ export const POST = async (
     .maybeSingle()
 
   if (data !== null)
-    return Response.json({
-      error: 'The map is already liked.',
-    })
+    return Response.json(
+      {
+        errors: {
+          message: 'The map is already liked.',
+        },
+      },
+      {
+        status: 500,
+      },
+    )
 
   const { error } = await supabase.from('likes').insert({
     map_id: params.id,
@@ -88,7 +101,9 @@ export const POST = async (
   if (error)
     return Response.json(
       {
-        error: error.message,
+        errors: {
+          message: 'Database Error',
+        },
       },
       {
         status: 500,
@@ -109,7 +124,9 @@ export const DELETE = async (
   if (!session)
     return Response.json(
       {
-        message: 'Unauthorized',
+        errors: {
+          message: 'Unauthorized',
+        },
       },
       {
         status: 401,
@@ -130,9 +147,16 @@ export const DELETE = async (
     .maybeSingle()
 
   if (data === null)
-    return Response.json({
-      error: 'The map is not liked.',
-    })
+    return Response.json(
+      {
+        errors: {
+          message: 'The map is not liked.',
+        },
+      },
+      {
+        status: 500,
+      },
+    )
 
   const { error } = await supabase
     .from('likes')
@@ -143,7 +167,9 @@ export const DELETE = async (
   if (error)
     return Response.json(
       {
-        error: 'Database Error',
+        errors: {
+          message: 'Database Error',
+        },
       },
       {
         status: 500,

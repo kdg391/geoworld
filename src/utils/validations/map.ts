@@ -1,16 +1,20 @@
 import { z } from 'zod'
 
+export const mapNameSchema = z
+  .string()
+  .trim()
+  .min(1, 'The name has to be filled.')
+  .max(20, 'The name cannot be more than 20 characters.')
+
+export const mapDescriptionSchema = z
+  .string()
+  .trim()
+  .max(60, 'The description cannot be less than 60 characters.')
+  .nullable()
+
 export const createMapSchema = z.object({
-  name: z
-    .string()
-    .trim()
-    .min(1, 'The name has to be filled.')
-    .max(20, 'The name cannot be more than 20 characters.'),
-  description: z
-    .string()
-    .trim()
-    .max(60, 'The description cannot be less than 60 characters.')
-    .nullable(),
+  name: mapNameSchema,
+  description: mapDescriptionSchema,
 })
 
 export const mapParamsSchema = z.object({
