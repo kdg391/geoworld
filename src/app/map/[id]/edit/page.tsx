@@ -1,5 +1,6 @@
 'use client'
 
+import { SquarePen } from 'lucide-react'
 import dynamic from 'next/dynamic'
 import { notFound } from 'next/navigation'
 import { useSession } from 'next-auth/react'
@@ -9,13 +10,18 @@ import { getLocations, getMap } from '@/actions/map.js'
 
 import useGoogleApi from '@/hooks/useGoogleApi.js'
 
+import { useTranslation } from '@/i18n/client.js'
+
 import styles from './page.module.css'
 
 import type { Coords, Map } from '@/types/index.js'
 
+const BuilderMap = dynamic(() => import('@/components/BuilderMap/index.js'))
 const Button = dynamic(() => import('@/components/common/Button/index.js'))
-const Dropdown = dynamic(() => import('./Dropdown.js'))
-const EditMap = dynamic(() => import('@/components/EditMap/index.js'))
+const MapSettingsModal = dynamic(
+  () => import('@/components/MapSettingsModal/index.js'),
+)
+const MenuButton = dynamic(() => import('./MenuButton.js'))
 const SaveMapModal = dynamic(() => import('@/components/SaveMapModal/index.js'))
 
 interface Props {
@@ -37,6 +43,7 @@ const Edit = (props: Props) => {
   const [haveLocationsChanged, setHaveLocationsChanged] = useState(false)
 
   const [isSaveModalOpen, setIsSaveModalOpen] = useState(false)
+  const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false)
 
   const position = useRef<google.maps.LatLngLiteral | null>(null)
   const heading = useRef<number>(0)
@@ -44,10 +51,14 @@ const Edit = (props: Props) => {
   const zoom = useRef<number>(0)
   const panoId = useRef<string | null>(null)
 
+  const mapRef = useRef<google.maps.Map | null>(null)
+
   const svPanoramaElRef = useRef<HTMLDivElement | null>(null)
   const svPanoramaRef = useRef<google.maps.StreetViewPanorama | null>(null)
 
   const svServiceRef = useRef<google.maps.StreetViewService | null>(null)
+
+  const { t } = useTranslation('map-builder')
 
   useEffect(() => {
     if (status === 'loading') return
@@ -156,9 +167,11 @@ const Edit = (props: Props) => {
       .then(({ data }) => {
         if (!data.location || !data.location.latLng) return
 
+        const heading = data.links?.[0].heading ?? 0
+
         svPanoramaRef.current?.setPano(data.location.pano)
         svPanoramaRef.current?.setPov({
-          heading: selectedLocation.heading,
+          heading,
           pitch: selectedLocation.pitch,
         })
         svPanoramaRef.current?.setZoom(selectedLocation.zoom)
@@ -229,35 +242,61 @@ const Edit = (props: Props) => {
 
   return (
     <>
-      <main className={styles.main}>
-        <div className={styles.container}>
-          <EditMap
-            addNewLocation={addNewLocation}
-            locations={locations}
-            setSelectedLocation={setSelectedLocation}
-          />
-          <div ref={svPanoramaElRef} className={styles['street-view']}></div>
+      <div className={styles.header}>
+        <div className="flex">
+          <div></div>
+          <div>{mapData.name}</div>
+          <button onClick={() => setIsSettingsModalOpen(true)}>
+            <SquarePen size={16} />
+          </button>
         </div>
-      </main>
-
-      <div className={styles.footer}>
-        <span>{locations.length} Locations</span>
-        <div className={styles['footer-actions']}>
+        <div className="flex">
+          {/* <MapTypeSelect map={mapRef.current} /> */}
           <Button
             variant="primary"
             size="m"
             disabled={!haveLocationsChanged}
             onClick={() => setIsSaveModalOpen(true)}
           >
-            Save Map
+            {t('save_map')}
           </Button>
+          <MenuButton
+            clearLocations={clearLocations}
+            locations={locations}
+            setLocations={setLocations}
+            mapId={params.id}
+          />
+        </div>
+      </div>
+
+      <main className={styles.main}>
+        <div className={styles.container}>
+          <BuilderMap
+            addNewLocation={addNewLocation}
+            locations={locations}
+            setSelectedLocation={setSelectedLocation}
+            onLoaded={(map) => {
+              mapRef.current = map
+            }}
+          />
+          <div ref={svPanoramaElRef} className={styles['street-view']}></div>
+        </div>
+      </main>
+
+      <div className={styles.footer}>
+        <span>
+          {t('locations', {
+            count: locations.length,
+          })}
+        </span>
+        <div className={styles['footer-actions']}>
           <Button
             variant="primary"
             size="m"
             disabled={selectedLocation === null}
             onClick={onUpdateClick}
           >
-            Update
+            {t('update_location')}
           </Button>
           <Button
             variant="danger"
@@ -265,16 +304,17 @@ const Edit = (props: Props) => {
             disabled={selectedLocation === null}
             onClick={handleRemoveLocation}
           >
-            Remove
+            {t('remove_location')}
           </Button>
-
-          <Dropdown
-            clearLocations={clearLocations}
-            locations={locations}
-            setLocations={setLocations}
-          />
         </div>
       </div>
+
+      <MapSettingsModal
+        isEditing
+        isModalOpen={isSettingsModalOpen}
+        setIsModalOpen={setIsSettingsModalOpen}
+        mapData={mapData}
+      />
 
       <SaveMapModal
         defaultChecked={mapData.is_published}

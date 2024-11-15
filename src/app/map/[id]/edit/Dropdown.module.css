@@ -5,7 +5,7 @@
     display: flex;
     flex-direction: column;
     position: absolute;
-    bottom: 36px;
+    top: 36px;
     right: 8px;
     z-index: 3;
 

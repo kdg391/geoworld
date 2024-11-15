@@ -86,7 +86,8 @@ const Map = async (props: Props) => {
             </div>
           )}
           <p>
-            {t('map:updated', {
+            {t('updated', {
+              ns: 'map',
               val: new Date(mapData.updated_at),
               formatParams: {
                 val: {

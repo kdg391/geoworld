@@ -15,7 +15,7 @@ import { mapParamsSchema } from '@/utils/validations/map.js'
 import type { NextRequest } from 'next/server'
 import type { Map } from '@/types/index.js'
 
-export const revalidate = 60
+// export const revalidate = 60
 
 export const GET = async (request: NextRequest) => {
   const searchParams = request.nextUrl.searchParams

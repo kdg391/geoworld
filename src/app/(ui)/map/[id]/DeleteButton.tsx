@@ -8,7 +8,7 @@ import { useActionState, useState } from 'react'
 import { deleteMap } from '@/actions/map.js'
 
 const Button = dynamic(() => import('@/components/common/Button/index.js'))
-const Modal = dynamic(() => import('@/components/Modal/index.js'))
+const Modal = dynamic(() => import('@/components/common/Modal/index.js'))
 
 interface FormState {
   errors: {

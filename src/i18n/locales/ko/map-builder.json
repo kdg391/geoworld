@@ -1,0 +1,15 @@
+{
+  "save_map": "맵 저장",
+  "locations_one": "위치 {{count}}개",
+  "locations_other": "위치 {{count}}개",
+  "update_location": "위치 업데이트",
+  "remove_location": "위치 제거",
+  "import_json": "JSON 불러오기",
+  "export_json": "JSON 내보내기",
+  "clear_all_locations": "모든 위치 지우기",
+  "delete_map": "맵 삭제",
+  "type.roadmap": "로드맵",
+  "type.hybrid": "하이브리드",
+  "type.satellite": "위성",
+  "type.terrain": "지형"
+}

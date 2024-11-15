@@ -5,7 +5,7 @@ import { useState } from 'react'
 import { useTranslation } from '@/i18n/client.js'
 
 import Button from '@/components/common/Button/index.js'
-import Modal from '@/components/Modal/index.js'
+import Modal from '@/components/common/Modal/index.js'
 import DeleteAccountForm from './DeleteAccountForm.js'
 
 const DeleteAccountButton = () => {

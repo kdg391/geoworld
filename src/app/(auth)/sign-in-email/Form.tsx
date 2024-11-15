@@ -25,13 +25,15 @@ const Form = () => {
     errors: null,
   })
 
-  const { t } = useTranslation('auth')
+  const { t } = useTranslation(['auth', 'account'])
 
   return (
     <form action={action} className={styles.form}>
       <div>
         <label htmlFor="email" className={styles.label}>
-          {t('email')}
+          {t('email', {
+            ns: 'account',
+          })}
         </label>
         <TextInput
           type="email"

@@ -1,0 +1,10 @@
+{
+  "title": "게임 설정",
+  "move": "이동",
+  "pan": "팬",
+  "zoom": "줌",
+  "rounds": "라운드",
+  "round_time": "라운드 시간",
+  "no_time_limit": "시간 제한 없음",
+  "round_time_format": "{{minutes, number(unitDisplay: narrow)}} {{seconds, number(unitDisplay: narrow)}}"
+}

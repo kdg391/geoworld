@@ -3,5 +3,6 @@
   "password": "비밀번호",
   "current_password": "현재 비밀번호",
   "confirm_password": "비밀번호 확인",
-  "new_password": "새 비밀번호"
+  "new_password": "새 비밀번호",
+  "confirm_new_password": "새 비밀번호 확인"
 }

@@ -6,6 +6,7 @@ import { ChevronDown, ChevronUp } from 'lucide-react'
 import { classNames } from '@/utils/index.js'
 
 import styles from './index.module.css'
+
 import './index.css'
 
 const cssPosition = {

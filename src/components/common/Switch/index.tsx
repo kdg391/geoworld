@@ -1,11 +1,5 @@
 import styles from './index.module.css'
 
-interface Props {
-  defaultChecked?: boolean
-  id?: string
-  onChange?: React.ChangeEventHandler<HTMLInputElement>
-}
-
 const Switch = ({
   defaultChecked,
   id,
@@ -14,8 +8,7 @@ const Switch = ({
 }: React.DetailedHTMLProps<
   React.InputHTMLAttributes<HTMLInputElement>,
   HTMLInputElement
-> &
-  Props) => (
+>) => (
   <label htmlFor={id} className={styles.switch}>
     <input
       type="checkbox"

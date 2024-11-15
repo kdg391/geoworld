@@ -1,0 +1,15 @@
+{
+  "save_map": "Save Map",
+  "locations_one": "{{count}} Location",
+  "locations_other": "{{count}} Locations",
+  "update_location": "Update Location",
+  "remove_location": "Remove Location",
+  "import_json": "Import JSON",
+  "export_json": "Export JSON",
+  "clear_all_locations": "Clear All Locations",
+  "delete_map": "Delete Map",
+  "type.roadmap": "Roadmap",
+  "type.hybrid": "Hybrid",
+  "type.satellite": "Satellite",
+  "type.terrain": "Terrain"
+}

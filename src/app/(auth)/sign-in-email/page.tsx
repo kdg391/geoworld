@@ -22,7 +22,7 @@ const SignIn = async () => {
 
       <p className={styles.msg}>
         <span>Is your account created with Discord or credentials?</span>
-        <Link href="/sign-in" className={styles['ml-4']}>
+        <Link href="/sign-in" className="ml-1">
           {t('sign_in')}
         </Link>
       </p>

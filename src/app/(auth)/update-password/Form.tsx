@@ -30,14 +30,16 @@ const Form = ({ token }: Props) => {
     errors: null,
   })
 
-  const { t } = useTranslation('auth')
+  const { t } = useTranslation(['auth', 'account'])
 
   return (
     <form action={action} className={styles.form}>
       <input type="hidden" value={token} name="token" hidden />
       <div>
         <label htmlFor="password" className={styles.label}>
-          {t('new_password')}
+          {t('new_password', {
+            ns: 'account',
+          })}
         </label>
         <TextInput
           type="password"
@@ -55,7 +57,9 @@ const Form = ({ token }: Props) => {
       </div>
       <div>
         <label htmlFor="confirm-password" className={styles.label}>
-          {t('confirm_password')}
+          {t('new_confirm_password', {
+            ns: 'account',
+          })}
         </label>
         <TextInput
           type="password"

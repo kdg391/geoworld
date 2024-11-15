@@ -1,4 +1,4 @@
-.input {
+.textarea {
   border: 1px solid var(--input-border);
   font-size: 1rem;
   padding: 0.5rem 0.75rem;
@@ -6,7 +6,7 @@
   border-radius: 0.5rem;
   transition: border 0.25s;
   background-color: var(--input-bg);
-  height: 36px;
+  resize: none;
 
   &:focus {
     border: 1px solid var(--primary);

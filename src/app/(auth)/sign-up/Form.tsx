@@ -31,13 +31,15 @@ const Form = () => {
     },
   )
 
-  const { t } = useTranslation('auth')
+  const { t } = useTranslation(['auth', 'account'])
 
   return (
     <form action={action} className={styles.form}>
       <div>
         <label htmlFor="email" className={styles.label}>
-          {t('email')}
+          {t('email', {
+            ns: 'account',
+          })}
         </label>
         <TextInput
           type="email"
@@ -56,7 +58,9 @@ const Form = () => {
       </div>
       <div>
         <label htmlFor="password" className={styles.label}>
-          {t('password')}
+          {t('password', {
+            ns: 'account',
+          })}
         </label>
         <TextInput
           type="password"
@@ -74,7 +78,9 @@ const Form = () => {
       </div>
       <div>
         <label htmlFor="confirm-password" className={styles.label}>
-          {t('confirm_password')}
+          {t('confirm_password', {
+            ns: 'account',
+          })}
         </label>
         <TextInput
           type="password"

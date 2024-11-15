@@ -21,8 +21,6 @@ const SetupProfile = async () => {
 
   if (!session) redirect('/sign-in')
 
-  const { t } = await createTranslation('profile')
-
   const supabase = createClient({
     supabaseAccessToken: session.supabaseAccessToken,
   })
@@ -36,6 +34,8 @@ const SetupProfile = async () => {
   if (!profile) redirect('/sign-in')
 
   if (profile.display_name && profile.username) redirect('/dashboard')
+
+  const { t } = await createTranslation('profile')
 
   return (
     <div className={styles['form-container']}>

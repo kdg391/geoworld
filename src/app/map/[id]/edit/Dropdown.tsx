@@ -1,10 +1,9 @@
 'use client'
 
-import { Download, Ellipsis, MapPinX, Upload } from 'lucide-react'
-import { useRef } from 'react'
+import { Download, MapPinX, Trash, Upload } from 'lucide-react'
 import { createPortal } from 'react-dom'
 
-import useClickOutside from '@/hooks/useClickOutside.js'
+import { useTranslation } from '@/i18n/client.js'
 
 import { classNames } from '@/utils/index.js'
 
@@ -15,15 +14,21 @@ import './Dropdown.css'
 import type { Coords } from '@/types/index.js'
 
 interface Props {
-  clearLocations: () => void
   locations: Coords[]
   setLocations: React.Dispatch<React.SetStateAction<Coords[]>>
+  isDropdownOpen: boolean
+  setIsClearConfirmOpen: React.Dispatch<React.SetStateAction<boolean>>
+  setIsDeleteConfirmOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const Dropdown = ({ clearLocations, locations, setLocations }: Props) => {
-  const containerRef = useRef<HTMLDivElement | null>(null)
-
-  const [isDropdownOpen, setIsDropdownOpen] = useClickOutside(containerRef)
+const Dropdown = ({
+  locations,
+  setLocations,
+  isDropdownOpen,
+  setIsClearConfirmOpen,
+  setIsDeleteConfirmOpen,
+}: Props) => {
+  const { t } = useTranslation('map-builder')
 
   const onFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!event.target.files) return
@@ -85,53 +90,36 @@ const Dropdown = ({ clearLocations, locations, setLocations }: Props) => {
     URL.revokeObjectURL(url)
   }
 
-  return (
-    <div ref={containerRef}>
-      <button
-        onClick={() => {
-          setIsDropdownOpen((o) => !o)
-        }}
-      >
-        <Ellipsis size={18} />
-      </button>
-
-      {createPortal(
-        <ul
-          className={classNames(
-            styles.dropdown,
-            isDropdownOpen ? 'active' : '',
-          )}
-        >
-          <li>
-            <input
-              type="file"
-              name="file"
-              id="file"
-              hidden
-              onChange={onFileChange}
-            />
-            <label htmlFor="file">
-              <Upload size={18} />
-              Import JSON
-            </label>
-          </li>
-          <li onClick={onExportClick}>
-            <Download size={18} />
-            Export JSON
-          </li>
-          <li
-            onClick={() => {
-              if (confirm('Are you sure you want to clear all locations?'))
-                clearLocations()
-            }}
-          >
-            <MapPinX size={18} />
-            Clear All Locations
-          </li>
-        </ul>,
-        document.body,
-      )}
-    </div>
+  return createPortal(
+    <ul className={classNames(styles.dropdown, isDropdownOpen ? 'active' : '')}>
+      <li>
+        <input
+          type="file"
+          name="file"
+          id="file"
+          accept=".json,.txt"
+          hidden
+          onChange={onFileChange}
+        />
+        <label htmlFor="file">
+          <Upload size={18} />
+          {t('import_json')}
+        </label>
+      </li>
+      <li onClick={onExportClick}>
+        <Download size={18} />
+        {t('export_json')}
+      </li>
+      <li onClick={() => setIsClearConfirmOpen(true)}>
+        <MapPinX size={18} />
+        {t('clear_all_locations')}
+      </li>
+      <li onClick={() => setIsDeleteConfirmOpen(true)}>
+        <Trash size={18} />
+        {t('delete_map')}
+      </li>
+    </ul>,
+    document.body,
   )
 }
 

@@ -11,7 +11,7 @@ import { useTranslation } from '@/i18n/client.js'
 import type { Coords } from '@/types/index.js'
 
 const Button = dynamic(() => import('../common/Button/index.js'))
-const Modal = dynamic(() => import('../Modal/index.js'))
+const Modal = dynamic(() => import('../common/Modal/index.js'))
 const SubmitButton = dynamic(() => import('../common/SubmitButton/index.js'))
 const Switch = dynamic(() => import('../common/Switch/index.js'))
 

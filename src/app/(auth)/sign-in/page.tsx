@@ -60,7 +60,7 @@ const SignIn = async () => {
 
         <p className={styles.msg}>
           <span>{t('do_not_have_account')}</span>
-          <Link href="/sign-up" className={styles['ml-4']}>
+          <Link href="/sign-up" className="ml-1">
             {t('sign_up')}
           </Link>
         </p>

@@ -1,19 +1,20 @@
+import { forwardRef } from 'react'
+
+import { classNames } from '@/utils/index.js'
+
 import styles from './index.module.css'
 
-interface Props {
-  defaultChecked?: boolean
-  id?: string
-  onChange?: React.ChangeEventHandler<HTMLInputElement>
-}
-
-const Checkbox = ({ defaultChecked, id, onChange }: Props) => (
-  <input
-    type="checkbox"
-    id={id}
-    defaultChecked={defaultChecked}
-    onChange={onChange}
-    className={styles.checkbox}
-  />
+const Checkbox = forwardRef<HTMLInputElement, React.ComponentProps<'input'>>(
+  ({ className = '', defaultChecked, id, onChange, ...props }) => (
+    <input
+      {...props}
+      type="checkbox"
+      id={id}
+      defaultChecked={defaultChecked}
+      onChange={onChange}
+      className={classNames(styles.checkbox, className)}
+    />
+  ),
 )
 
 export default Checkbox

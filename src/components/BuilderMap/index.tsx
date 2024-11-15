@@ -13,9 +13,15 @@ interface Props {
   addNewLocation: (loc: google.maps.LatLngLiteral, panoId: string) => void
   locations: Coords[]
   setSelectedLocation: React.Dispatch<React.SetStateAction<Coords | null>>
+  onLoaded: (map: google.maps.Map) => void
 }
 
-const EditMap = ({ addNewLocation, locations, setSelectedLocation }: Props) => {
+const BuilderMap = ({
+  addNewLocation,
+  locations,
+  setSelectedLocation,
+  onLoaded,
+}: Props) => {
   const mapRef = useRef<google.maps.Map | null>(null)
   const markers = useRef<google.maps.marker.AdvancedMarkerElement[]>([])
 
@@ -24,6 +30,8 @@ const EditMap = ({ addNewLocation, locations, setSelectedLocation }: Props) => {
   }, [locations])
 
   const initMap = (map: google.maps.Map) => {
+    onLoaded(map)
+
     mapRef.current = map
 
     const svLayer = new google.maps.StreetViewCoverageLayer()
@@ -92,9 +100,9 @@ const EditMap = ({ addNewLocation, locations, setSelectedLocation }: Props) => {
         mapId: process.env.NEXT_PUBLIC_GOOGLE_MAPS_MAP,
       }}
       onLoaded={(map) => initMap(map)}
-      className={styles['edit-map']}
+      className={styles['builder-map']}
     />
   )
 }
 
-export default EditMap
+export default BuilderMap

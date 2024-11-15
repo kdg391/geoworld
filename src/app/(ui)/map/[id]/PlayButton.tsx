@@ -11,8 +11,8 @@ import { useTranslation } from '@/i18n/client.js'
 import type { Map } from '@/types/index.js'
 
 const Button = dynamic(() => import('@/components/common/Button/index.js'))
-const MapSettingsModal = dynamic(
-  () => import('@/components/MapSettingsModal/index.js'),
+const GameSettingsModal = dynamic(
+  () => import('@/components/GameSettingsModal/index.js'),
   {
     loading: () => <></>,
   },
@@ -48,7 +48,7 @@ const PlayButton = ({ mapData, userId }: Props) => {
         {t('play')}
       </Button>
 
-      <MapSettingsModal
+      <GameSettingsModal
         isModalOpen={isModalOpen}
         setIsModalOpen={setIsModalOpen}
         mapData={mapData}

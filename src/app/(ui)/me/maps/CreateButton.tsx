@@ -4,14 +4,16 @@ import dynamic from 'next/dynamic'
 import { useState } from 'react'
 
 const Button = dynamic(() => import('@/components/common/Button/index.js'))
-const MapEditModal = dynamic(() => import('@/components/MapEditModal/index.js'))
+const MapSettingsModal = dynamic(
+  () => import('@/components/MapSettingsModal/index.js'),
+)
 
 const CreateButton = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   return (
     <>
-      <MapEditModal
+      <MapSettingsModal
         isEditing={false}
         isModalOpen={isModalOpen}
         setIsModalOpen={setIsModalOpen}
