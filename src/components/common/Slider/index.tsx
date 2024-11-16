@@ -17,4 +17,6 @@ const Slider = forwardRef<HTMLInputElement, React.ComponentProps<'input'>>(
   ),
 )
 
+Slider.displayName = 'Slider'
+
 export default Slider

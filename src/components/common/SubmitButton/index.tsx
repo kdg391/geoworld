@@ -3,12 +3,9 @@
 import dynamic from 'next/dynamic'
 import { useFormStatus } from 'react-dom'
 
-import type { ComponentProps } from 'react'
-
 const Button = dynamic(() => import('../Button/index.js'))
 
-type Props = ComponentProps<'button'> & {
-  disabled?: boolean
+interface Props {
   full?: boolean
   isLoading?: boolean
   size?: 's' | 'm' | 'l'
@@ -25,7 +22,7 @@ const SubmitButton = ({
   variant = 'primary',
   pendingText,
   ...props
-}: Props) => {
+}: React.ComponentProps<'button'> & Props) => {
   'use client'
 
   const { pending, action } = useFormStatus()

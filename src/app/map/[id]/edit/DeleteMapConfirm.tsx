@@ -33,10 +33,7 @@ const DeleteMapConfirm = ({ isOpen, setIsOpen, mapId }: Props) => {
     router.push('/')
   }
 
-  const [state, action] = useActionState<FormState, FormData>(
-    deleteMapAction,
-    {},
-  )
+  const [, action] = useActionState<FormState, FormData>(deleteMapAction, {})
 
   const { t } = useTranslation('common')
 

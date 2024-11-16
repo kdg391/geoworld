@@ -18,4 +18,6 @@ const NumberInput = forwardRef<HTMLInputElement, React.ComponentProps<'input'>>(
   ),
 )
 
+NumberInput.displayName = 'NumberInput'
+
 export default NumberInput

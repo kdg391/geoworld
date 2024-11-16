@@ -5,10 +5,7 @@ const Switch = ({
   id,
   onChange,
   ...props
-}: React.DetailedHTMLProps<
-  React.InputHTMLAttributes<HTMLInputElement>,
-  HTMLInputElement
->) => (
+}: React.ComponentProps<'input'>) => (
   <label htmlFor={id} className={styles.switch}>
     <input
       type="checkbox"

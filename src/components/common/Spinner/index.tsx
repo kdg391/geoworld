@@ -17,11 +17,7 @@ const Spinner = ({
   size,
   theme = 'auto',
   ...props
-}: Props &
-  React.DetailedHTMLProps<
-    React.HTMLAttributes<SVGSVGElement>,
-    SVGSVGElement
-  >) => {
+}: React.ComponentProps<'svg'> & Props) => {
   const { resolvedTheme } = useTheme()
 
   if (!resolvedTheme) return

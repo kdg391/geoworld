@@ -75,6 +75,8 @@ const Header = forwardRef<HTMLDivElement, React.ComponentProps<'div'>>(
   ),
 )
 
+Header.displayName = 'Header'
+
 const Title = forwardRef<HTMLHeadingElement, React.ComponentProps<'div'>>(
   ({ children, className = '', ...props }, ref) => (
     <h2 {...props} ref={ref} className={classNames(styles.title, className)}>
@@ -82,6 +84,8 @@ const Title = forwardRef<HTMLHeadingElement, React.ComponentProps<'div'>>(
     </h2>
   ),
 )
+
+Title.displayName = 'Title'
 
 const CloseButton = forwardRef<
   HTMLButtonElement,
@@ -101,6 +105,8 @@ const CloseButton = forwardRef<
   )
 })
 
+CloseButton.displayName = 'CloseButton'
+
 const Content = forwardRef<HTMLDivElement, React.ComponentProps<'div'>>(
   ({ children, className = '', ...props }, ref) => (
     <div {...props} ref={ref} className={classNames(styles.content, className)}>
@@ -109,14 +115,21 @@ const Content = forwardRef<HTMLDivElement, React.ComponentProps<'div'>>(
   ),
 )
 
-const Description = forwardRef<
-  HTMLParagraphElement,
-  React.ComponentProps<'div'>
->(({ children, className = '', ...props }, ref) => (
-  <p {...props} ref={ref} className={classNames(styles.description, className)}>
-    {children}
-  </p>
-))
+Content.displayName = 'Content'
+
+const Description = forwardRef<HTMLParagraphElement, React.ComponentProps<'p'>>(
+  ({ children, className = '', ...props }, ref) => (
+    <p
+      {...props}
+      ref={ref}
+      className={classNames(styles.description, className)}
+    >
+      {children}
+    </p>
+  ),
+)
+
+Description.displayName = 'Description'
 
 const Actions = forwardRef<HTMLDivElement, React.ComponentProps<'div'>>(
   ({ children, className = '', ...props }, ref) => (
@@ -126,6 +139,8 @@ const Actions = forwardRef<HTMLDivElement, React.ComponentProps<'div'>>(
   ),
 )
 
+Actions.displayName = 'Actions'
+
 const Footer = forwardRef<HTMLDivElement, React.ComponentProps<'div'>>(
   ({ children, className = '', ...props }, ref) => (
     <div {...props} ref={ref} className={classNames(styles.footer, className)}>
@@ -133,6 +148,8 @@ const Footer = forwardRef<HTMLDivElement, React.ComponentProps<'div'>>(
     </div>
   ),
 )
+
+Footer.displayName = 'Footer'
 
 Modal.Header = Header
 Modal.Title = Title

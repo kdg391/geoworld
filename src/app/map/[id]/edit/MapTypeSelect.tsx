@@ -11,8 +11,6 @@ interface Props {
 }
 
 const MapTypeSelect = ({ map }: Props) => {
-  if (!map) return
-
   const { t } = useTranslation('map-builder')
 
   const items = useMemo(
@@ -36,6 +34,8 @@ const MapTypeSelect = ({ map }: Props) => {
     ],
     [t],
   )
+
+  if (!map) return
 
   return (
     <Select

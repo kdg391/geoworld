@@ -17,4 +17,6 @@ const TextInput = forwardRef<HTMLInputElement, React.ComponentProps<'input'>>(
   ),
 )
 
+TextInput.displayName = 'TextInput'
+
 export default TextInput
