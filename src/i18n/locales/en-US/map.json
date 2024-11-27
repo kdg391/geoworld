@@ -6,5 +6,11 @@
   "locations_one": "Location",
   "locations_other": "Locations",
   "leaderboard": "Leaderboard",
-  "updated": "Updated {{val, datetime}}"
+  "leaderboard.rank": "Rank",
+  "leaderboard.user": "User",
+  "leaderboard.score": "Score",
+  "leaderboard.time": "Time",
+  "updated": "Updated {{val, datetime}}",
+  "edit": "Edit",
+  "delete": "Delete"
 }

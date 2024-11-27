@@ -1,0 +1,11 @@
+[data-theme='light'] .spinner-system,
+.spinner-light {
+  --spinner-bg: #222;
+  --spinner: var(--black);
+}
+
+[data-theme='dark'] .spinner-system,
+.spinner-dark {
+  --spinner-bg: #eee;
+  --spinner: var(--white);
+}

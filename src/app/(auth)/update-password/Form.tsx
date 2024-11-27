@@ -42,6 +42,7 @@ const Form = ({ token }: Props) => {
           })}
         </label>
         <TextInput
+          fullWidth
           type="password"
           id="password"
           name="password"
@@ -62,6 +63,7 @@ const Form = ({ token }: Props) => {
           })}
         </label>
         <TextInput
+          fullWidth
           type="password"
           id="confirm-password"
           name="confirm-password"

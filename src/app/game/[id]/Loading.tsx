@@ -1,6 +1,8 @@
-import styles from './Loading.module.css'
+'use client'
 
 import Spinner from '@/components/common/Spinner/index.js'
+
+import styles from './Loading.module.css'
 
 const Loading = () => (
   <div className={styles.container}>

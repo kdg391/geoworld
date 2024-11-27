@@ -56,7 +56,7 @@ const Map = async (props: Props) => {
     <>
       <section>
         <div>
-          <h1 className={styles.title}>
+          <div className={styles['map-info']}>
             {mapData.type === 'official' && (
               <Twemoji
                 emoji={
@@ -69,22 +69,26 @@ const Map = async (props: Props) => {
                 height={24}
               />
             )}
-            {mapData.name}
-            {mapData.type === 'official' && (
-              <BadgeCheck size={24} fill="var(--primary)" stroke="var(--bg)" />
-            )}
-          </h1>
-          <p>{mapData.description}</p>
-          {creator?.is_public && (
             <div>
-              <span>
-                Created by{' '}
-                <Link href={`/user/${mapData.creator}`}>
-                  {creator.display_name}
-                </Link>
-              </span>
+              <h1 className={styles.name}>{mapData.name}</h1>
+              {mapData.type === 'official' && (
+                <BadgeCheck
+                  size={24}
+                  fill="var(--primary)"
+                  stroke="var(--bg)"
+                />
+              )}
             </div>
-          )}
+          </div>
+          <p className={styles.description}>{mapData.description}</p>
+          <div>
+            <span>
+              Created by{' '}
+              <Link href={`/user/${mapData.creator}`}>
+                {creator.display_name}
+              </Link>
+            </span>
+          </div>
           <p>
             {t('updated', {
               ns: 'map',
@@ -119,8 +123,9 @@ const Map = async (props: Props) => {
             <div>
               <div>{mapData.locations_count.toLocaleString()}</div>
               <div>
-                {t('map:locations', {
+                {t('locations', {
                   count: mapData.locations_count,
+                  ns: 'map',
                 })}
               </div>
             </div>
@@ -129,7 +134,11 @@ const Map = async (props: Props) => {
             <LikeButton defaultLiked={liked} mapId={mapData.id} />
             <div>
               <div>{mapData.likes_count.toLocaleString()}</div>
-              <div>{t('map:likes')}</div>
+              <div>
+                {t('likes', {
+                  ns: 'map',
+                })}
+              </div>
             </div>
           </div>
         </div>

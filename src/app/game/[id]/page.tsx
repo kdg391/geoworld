@@ -1,7 +1,6 @@
 'use client'
 
 import dynamic from 'next/dynamic'
-import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { use, useCallback, useEffect, useState } from 'react'
 
@@ -97,15 +96,7 @@ const Game = (props: Props) => {
     [gameData, markerPosition],
   )
 
-  if (mapData === null)
-    return (
-      <section>
-        <h1>Map Not Found</h1>
-        <Link href="/">Go to Home</Link>
-      </section>
-    )
-
-  if (gameData === null) notFound()
+  if (mapData === null || gameData === null) notFound()
 
   if (!mapData || !gameData) return <Loading />
 

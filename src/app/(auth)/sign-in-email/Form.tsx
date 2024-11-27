@@ -36,6 +36,7 @@ const Form = () => {
           })}
         </label>
         <TextInput
+          fullWidth
           type="email"
           id="email"
           name="email"

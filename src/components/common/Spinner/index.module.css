@@ -1,15 +1,5 @@
 .spinner {
   animation: spin 1s infinite linear;
-
-  &:global(.light) {
-    --spinner-bg: #222;
-    --spinner: var(--black);
-  }
-
-  &:global(.dark) {
-    --spinner-bg: #eee;
-    --spinner: var(--white);
-  }
 }
 
 @keyframes spin {

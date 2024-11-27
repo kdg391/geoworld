@@ -1,7 +1,7 @@
 'use client'
 
 import dynamic from 'next/dynamic'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import useGoogleApi from '@/hooks/useGoogleApi.js'
 
@@ -26,6 +26,8 @@ const StreetView = ({ location, settings, view }: Props) => {
   const svServiceRef = useRef<google.maps.StreetViewService | null>(null)
 
   const posHistoryRef = useRef<google.maps.LatLngLiteral[]>([])
+
+  const [isStreetViewLoaded, setIsStreetViewLoaded] = useState(false)
 
   const { isGoogleLoaded } = useGoogleApi()
 
@@ -73,6 +75,8 @@ const StreetView = ({ location, settings, view }: Props) => {
     })
 
     loadPanorama()
+
+    setIsStreetViewLoaded(true)
   }
 
   const loadPanorama = () => {
@@ -139,16 +143,13 @@ const StreetView = ({ location, settings, view }: Props) => {
   }, [view])
 
   useEffect(() => {
-    if (view !== 'game') return
     if (settings.canPan) return
+    if (!isStreetViewLoaded) return
+    if (view !== 'game') return
 
     const widgetScene = document.querySelector('.widget-scene')
 
-    const disablePan = (event: Event) => {
-      if (settings.canPan) return
-
-      event.stopPropagation()
-    }
+    const disablePan = (event: Event) => event.stopPropagation()
 
     widgetScene?.addEventListener('mousedown', disablePan)
     widgetScene?.addEventListener('touchstart', disablePan)
@@ -159,7 +160,7 @@ const StreetView = ({ location, settings, view }: Props) => {
       widgetScene?.removeEventListener('touchstart', disablePan)
       widgetScene?.removeEventListener('pointerdown', disablePan)
     }
-  }, [view])
+  }, [settings.canPan, isStreetViewLoaded, view])
 
   return (
     <div>

@@ -10,12 +10,16 @@ import useClickOutside from '@/hooks/useClickOutside.js'
 
 import styles from './MenuButton.module.css'
 
+import './MenuButton.css'
+
 import type { Coords } from '@/types/index.js'
 
 const ClearLocationsConfirm = dynamic(
   () => import('./ClearLocationsConfirm.js'),
 )
-const DeleteMapConfirm = dynamic(() => import('./DeleteMapConfirm.js'))
+const DeleteMapConfirm = dynamic(
+  () => import('@/components/DeleteMapConfirm/index.js'),
+)
 const Dropdown = dynamic(() => import('./Dropdown.js'))
 
 interface Props {

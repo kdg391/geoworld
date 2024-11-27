@@ -4,6 +4,8 @@ import { SquarePen } from 'lucide-react'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/navigation'
 
+import { useTranslation } from '@/i18n/client.js'
+
 const Button = dynamic(() => import('@/components/common/Button/index.js'))
 
 interface Props {
@@ -13,6 +15,8 @@ interface Props {
 const EditButton = ({ mapId }: Props) => {
   const router = useRouter()
 
+  const { t } = useTranslation('map')
+
   return (
     <Button
       variant="primary"
@@ -20,7 +24,7 @@ const EditButton = ({ mapId }: Props) => {
       onClick={() => router.push(`/map/${mapId}/edit`)}
     >
       <SquarePen size={16} />
-      Edit
+      {t('edit')}
     </Button>
   )
 }

@@ -71,6 +71,7 @@ const ThemeProvider = ({ children }: Props) => {
       if (event.key !== 'theme') return
 
       const value = event.newValue ?? 'system'
+
       if (!['light', 'dark', 'system'].includes(value)) return
 
       setTheme(value as Theme)

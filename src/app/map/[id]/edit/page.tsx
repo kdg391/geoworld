@@ -94,9 +94,9 @@ const Edit = (props: Props) => {
   }, [status])
 
   useEffect(() => {
-    const onBeforeUnload = (event: Event) => {
-      if (!haveLocationsChanged) return
+    if (!haveLocationsChanged) return
 
+    const onBeforeUnload = (event: Event) => {
       event.preventDefault()
       event.returnValue = true
     }

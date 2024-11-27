@@ -35,6 +35,7 @@ const Form = () => {
           {t('username')}
         </label>
         <TextInput
+          fullWidth
           type="text"
           id="username"
           name="username"
@@ -59,6 +60,7 @@ const Form = () => {
           {t('display_name')}
         </label>
         <TextInput
+          fullWidth
           type="text"
           id="display-name"
           name="display-name"

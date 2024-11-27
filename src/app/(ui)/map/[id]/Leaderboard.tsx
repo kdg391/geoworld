@@ -4,6 +4,8 @@ import Link from 'next/link'
 
 import { auth } from '@/auth.js'
 
+import { createTranslation } from '@/i18n/server.js'
+
 import { createClient } from '@/utils/supabase/server.js'
 
 interface Props {
@@ -23,6 +25,8 @@ const Leaderboard = async ({ mapId }: Props) => {
     })
     .select('*')
 
+  const { t } = await createTranslation('map')
+
   if (!data || error) return <p>Failed to load the leaderboard</p>
 
   if (data.length === 0) return <p>No data</p>
@@ -31,10 +35,10 @@ const Leaderboard = async ({ mapId }: Props) => {
     <table>
       <thead>
         <tr>
-          <th>Rank</th>
-          <th>User</th>
-          <th>Score</th>
-          <th>Time</th>
+          <th>{t('leaderboard.rank')}</th>
+          <th>{t('leaderboard.user')}</th>
+          <th>{t('leaderboard.score')}</th>
+          <th>{t('leaderboard.time')}</th>
         </tr>
       </thead>
       <tbody>

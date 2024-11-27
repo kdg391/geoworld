@@ -1,9 +1,9 @@
 [data-theme='light'] {
-  --actual-marker-bg: var(--gray-100);
-  --actual-marker-border: var(--gray-200);
+  --guess-marker-bg: var(--gray-100);
+  --guess-marker-border: var(--gray-200);
 }
 
 [data-theme='dark'] {
-  --actual-marker-bg: var(--gray-800);
-  --actual-marker-border: var(--gray-900);
+  --guess-marker-bg: var(--gray-800);
+  --guess-marker-border: var(--gray-900);
 }

@@ -6,5 +6,11 @@
   "locations_one": "위치",
   "locations_other": "위치",
   "leaderboard": "리더보드",
-  "updated": "업데이트: {{val, datetime}}"
+  "leaderboard.rank": "랭크",
+  "leaderboard.user": "유저",
+  "leaderboard.score": "점수",
+  "leaderboard.time": "시간",
+  "updated": "업데이트: {{val, datetime}}",
+  "edit": "수정",
+  "delete": "삭제"
 }

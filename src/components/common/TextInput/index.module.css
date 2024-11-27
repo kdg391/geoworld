@@ -18,7 +18,7 @@
     user-select: none;
   }
 
-  &:global(.full) {
+  &:global(.full-width) {
     width: 100%;
   }
 }

@@ -35,19 +35,23 @@ const DeleteMapConfirm = ({ isOpen, setIsOpen, mapId }: Props) => {
 
   const [, action] = useActionState<FormState, FormData>(deleteMapAction, {})
 
-  const { t } = useTranslation('common')
+  const { t } = useTranslation(['common', 'map-builder'])
 
   return (
     <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
       <Modal.Header>
-        <Modal.Title>Delete this map</Modal.Title>
-        <Modal.CloseButton onClick={() => setIsOpen(false)} />
+        <Modal.Title>
+          {t('delete_map.title', {
+            ns: 'map-builder',
+          })}
+        </Modal.Title>
+        <Modal.CloseButton />
       </Modal.Header>
       <Modal.Content>
         <Modal.Description>
-          Are you sure you want to delete this map?
-          <br />
-          It cannot be reserved.
+          {t('delete_map.content', {
+            ns: 'map-builder',
+          })}
         </Modal.Description>
       </Modal.Content>
       <Modal.Footer>

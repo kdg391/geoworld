@@ -1,0 +1,7 @@
+[data-theme='light'] {
+  --builder-menu: var(--gray-200);
+}
+
+[data-theme='dark'] {
+  --builder-menu: var(--gray-800);
+}

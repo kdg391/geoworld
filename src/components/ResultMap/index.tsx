@@ -7,6 +7,7 @@ import { createRoot } from 'react-dom/client'
 import useGoogleApi from '@/hooks/useGoogleApi.js'
 
 import ActualMarker from './ActualMarker.js'
+import GuessMarker from './GuessMarker.js'
 
 import styles from './index.module.css'
 
@@ -98,10 +99,10 @@ const ResultMap = ({
 
     if (view === 'finalResult') {
       for (let i = 0; i < guessedLocations.length; i++) {
-        const container = document.createElement('div')
-        const div = createRoot(container)
+        const actualContainer = document.createElement('div')
+        const actualDiv = createRoot(actualContainer)
 
-        div.render(<ActualMarker roundNumber={i + 1} isFinalResult />)
+        actualDiv.render(<ActualMarker roundNumber={i + 1} isFinalResult />)
 
         const actualLoc = actualLocations[i]
 
@@ -111,7 +112,7 @@ const ResultMap = ({
             lat: actualLoc.lat,
             lng: actualLoc.lng,
           },
-          content: container,
+          content: actualContainer,
         })
 
         actualMarker.addListener('click', () => {
@@ -121,19 +122,27 @@ const ResultMap = ({
           )
         })
 
+        const guessContainer = document.createElement('div')
+        const guessDiv = createRoot(guessContainer)
+
+        guessDiv.render(<GuessMarker />)
+
         const guessedMarker = new google.maps.marker.AdvancedMarkerElement({
           map: resultMapRef.current,
           position: guessedLocations[i].position,
+          content: guessContainer,
         })
 
         actualMarkersRef.current.push(actualMarker)
         guessedMarkersRef.current.push(guessedMarker)
       }
     } else {
-      const container = document.createElement('div')
-      const div = createRoot(container)
+      const actualContainer = document.createElement('div')
+      const actualDiv = createRoot(actualContainer)
 
-      div.render(<ActualMarker roundNumber={round} isFinalResult={false} />)
+      actualDiv.render(
+        <ActualMarker roundNumber={round} isFinalResult={false} />,
+      )
 
       const actualLoc = actualLocations[round]
 
@@ -143,7 +152,7 @@ const ResultMap = ({
           lat: actualLoc.lat,
           lng: actualLoc.lng,
         },
-        content: container,
+        content: actualContainer,
       })
 
       actualMarker.addListener('click', () => {
@@ -153,9 +162,15 @@ const ResultMap = ({
         )
       })
 
+      const guessContainer = document.createElement('div')
+      const guessDiv = createRoot(guessContainer)
+
+      guessDiv.render(<GuessMarker />)
+
       const guessedMarker = new google.maps.marker.AdvancedMarkerElement({
         map: resultMapRef.current,
         position: guessedLocations[round].position,
+        content: guessContainer,
       })
 
       actualMarkersRef.current.push(actualMarker)

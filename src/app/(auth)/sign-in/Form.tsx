@@ -41,6 +41,7 @@ const Form = () => {
           })}
         </label>
         <TextInput
+          fullWidth
           type="email"
           id="email"
           name="email"
@@ -62,6 +63,7 @@ const Form = () => {
           })}
         </label>
         <TextInput
+          fullWidth
           type="password"
           id="password"
           name="password"

@@ -2,42 +2,23 @@
 
 import { Trash } from 'lucide-react'
 import dynamic from 'next/dynamic'
-import { useRouter } from 'next/navigation'
-import { useActionState, useState } from 'react'
+import { useState } from 'react'
 
-import { deleteMap } from '@/actions/map.js'
+import { useTranslation } from '@/i18n/client.js'
 
 const Button = dynamic(() => import('@/components/common/Button/index.js'))
-const Modal = dynamic(() => import('@/components/common/Modal/index.js'))
-
-interface FormState {
-  errors: {
-    message?: string
-  } | null
-}
+const DeleteMapConfirm = dynamic(
+  () => import('@/components/DeleteMapConfirm/index.js'),
+)
 
 interface Props {
   mapId: string
 }
 
 const DeleteButton = ({ mapId }: Props) => {
-  const router = useRouter()
-
   const [isModalOpen, setIsModalOpen] = useState(false)
 
-  const deleteAction = async () => {
-    'use client'
-
-    const { errors } = await deleteMap(mapId)
-
-    if (errors) return errors
-
-    router.push('/')
-  }
-
-  const [state, action] = useActionState<FormState, FormData>(deleteAction, {
-    errors: null,
-  })
+  const { t } = useTranslation('map')
 
   return (
     <>
@@ -47,31 +28,14 @@ const DeleteButton = ({ mapId }: Props) => {
         onClick={() => setIsModalOpen((o) => !o)}
       >
         <Trash size={16} />
-        Delete
+        {t('delete')}
       </Button>
 
-      <Modal isOpen={isModalOpen} setIsOpen={setIsModalOpen}>
-        <div>
-          <div>Are you sure you want to delete this map?</div>
-          <p>It cannot be recovered.</p>
-          <form action={action}>
-            <div className="flex">
-              <Button
-                variant="gray"
-                size="m"
-                type="button"
-                onClick={() => setIsModalOpen(false)}
-              >
-                Cancel
-              </Button>
-              <Button variant="danger" size="m" type="submit">
-                Delete
-              </Button>
-            </div>
-            {state.errors?.message && <p>{state.errors.message}</p>}
-          </form>
-        </div>
-      </Modal>
+      <DeleteMapConfirm
+        isOpen={isModalOpen}
+        setIsOpen={setIsModalOpen}
+        mapId={mapId}
+      />
     </>
   )
 }
