@@ -2,9 +2,6 @@ import { match as matchLocale } from '@formatjs/intl-localematcher'
 import Negotiator from 'negotiator'
 import { cookies } from 'next/headers'
 import { NextResponse, type NextRequest } from 'next/server'
-import NextAuth from 'next-auth'
-
-import authConfig from './auth.config.js'
 
 import {
   DEFAULT_LOCALE,
@@ -27,9 +24,7 @@ function getLocale(request: NextRequest): string {
   return locale
 }
 
-const { auth } = NextAuth(authConfig)
-
-export default auth(async (request) => {
+export const middleware = async (request: NextRequest) => {
   const response = NextResponse.next({
     request: {
       headers: request.headers,
@@ -40,43 +35,81 @@ export default auth(async (request) => {
   const locale = getLocale(request)
 
   response.headers.set('x-next-pathname', pathname)
-  response.headers.set('x-next-locale', locale)
 
   const cookieStore = await cookies()
 
   if (!cookieStore.has(LANGUAGE_COOKIE))
     cookieStore.set(LANGUAGE_COOKIE, locale)
 
-  const session = request.auth
+  if (request.method === 'GET') {
+    const token = request.cookies.get('session')?.value ?? null
 
-  if (!session) {
-    if (
-      pathname.startsWith('/dashboard') ||
-      pathname.startsWith('/game') ||
-      pathname === '/settings/account' ||
-      pathname === '/settings/profile' ||
-      (pathname.startsWith('/map') && pathname.endsWith('/edit')) ||
-      pathname === '/setup-profile'
-    ) {
-      const url = new URL('/sign-in', request.url)
-      url.searchParams.set('next', pathname)
-
-      return NextResponse.redirect(url)
+    if (token !== null) {
+      response.cookies.set('session', token, {
+        path: '/',
+        maxAge: 60 * 60 * 24 * 30,
+        sameSite: 'lax',
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+      })
     }
-  } else {
-    if (pathname === '/') {
-      const url = new URL('/dashboard', request.url)
 
-      return NextResponse.redirect(url)
-    } else if (pathname === '/sign-in' || pathname === '/sign-up') {
-      const url = new URL('/dashboard', request.url)
+    /*const session = token ? await validateSessionToken(token) : null
 
-      return NextResponse.redirect(url)
-    }
+    if (!session) {
+      if (
+        pathname.startsWith('/dashboard') ||
+        pathname.startsWith('/game') ||
+        pathname === '/settings/account' ||
+        pathname === '/settings/profile' ||
+        (pathname.startsWith('/map') && pathname.endsWith('/edit')) ||
+        pathname === '/setup-profile'
+      ) {
+        const url = new URL('/sign-in', request.url)
+        url.searchParams.set('next', pathname)
+
+        return NextResponse.redirect(url)
+      }
+    } else {
+      if (pathname === '/') {
+        const url = new URL('/dashboard', request.url)
+
+        return NextResponse.redirect(url)
+      } else if (pathname === '/sign-in' || pathname === '/sign-up') {
+        const url = new URL('/dashboard', request.url)
+
+        return NextResponse.redirect(url)
+      }
+    }*/
+
+    return response
   }
 
-  return response
-})
+  const originHeader = request.headers.get('Origin')
+  const hostHeader = request.headers.get('Host')
+
+  if (originHeader === null || hostHeader === null)
+    return new NextResponse(null, {
+      status: 403,
+    })
+
+  let origin: URL
+
+  try {
+    origin = new URL(originHeader)
+  } catch {
+    return new NextResponse(null, {
+      status: 403,
+    })
+  }
+
+  if (origin.host !== hostHeader)
+    return new NextResponse(null, {
+      status: 403,
+    })
+
+  return NextResponse.next()
+}
 
 export const config = {
   matcher: [

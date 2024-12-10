@@ -10,11 +10,12 @@ import styles from './Caption.module.css'
 const Caption = () => {
   'use client'
 
-  const { t } = useTranslation('auth')
+  const { i18n, t } = useTranslation('auth')
 
   return (
     <p className={styles.caption}>
       <Trans
+        i18n={i18n}
         i18nKey="caption"
         t={t}
         components={[

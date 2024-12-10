@@ -11,7 +11,7 @@ import Modal from '../common/Modal/index.js'
 
 import styles from './index.module.css'
 
-import type { Map } from '@/types/index.js'
+import type { Map } from '@/types/map.js'
 
 const Button = dynamic(() => import('../common/Button/index.js'))
 const SubmitButton = dynamic(() => import('../common/SubmitButton/index.js'))

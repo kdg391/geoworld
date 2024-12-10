@@ -7,7 +7,8 @@ import useGoogleApi from '@/hooks/useGoogleApi.js'
 
 import styles from './index.module.css'
 
-import type { ControlSettings, GameView, RoundLocation } from '@/types/index.js'
+import type { ControlSettings, GameView } from '@/types/game.js'
+import type { RoundLocation } from '@/types/location.js'
 
 const StreetViewControls = dynamic(
   () => import('../StreetViewControls/index.js'),

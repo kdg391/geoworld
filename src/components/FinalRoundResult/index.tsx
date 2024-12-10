@@ -10,7 +10,7 @@ import { useTranslation } from '@/i18n/client.js'
 
 import styles from '../RoundResult/index.module.css'
 
-import type { GameSettings } from '@/types/index.js'
+import type { GameSettings } from '@/types/game.js'
 
 const Button = dynamic(() => import('../common/Button/index.js'))
 
@@ -30,12 +30,12 @@ const FinalRoundResult = ({ mapId, settings, totalScore }: Props) => {
   const onReplayClick = async () => {
     setIsLoading(true)
 
-    const { data: gameData, error } = await createGame({
+    const { data: gameData, errors } = await createGame({
       mapId,
       settings,
     })
 
-    if (!gameData || error) {
+    if (!gameData || errors) {
       setIsLoading(false)
       return
     }

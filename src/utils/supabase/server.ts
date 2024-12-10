@@ -14,7 +14,7 @@ export const createClient = ({
       : process.env.SUPABASE_ANON_KEY) as string,
     {
       db: {
-        schema: 'next_auth',
+        schema: 'lucia_auth',
       },
       ...(supabaseAccessToken
         ? {

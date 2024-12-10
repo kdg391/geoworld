@@ -1,10 +1,8 @@
 'use server'
 
-// import { Mail } from 'lucide-react'
+import { Mail } from 'lucide-react'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
-
-import { signInDiscord } from '@/actions/auth.js'
 
 import { createTranslation } from '@/i18n/server.js'
 
@@ -31,17 +29,15 @@ const SignUp = async () => {
 
         <div className={styles.providers}>
           <div>
-            <form action={signInDiscord}>
-              <button
-                type="submit"
-                className={classNames(styles['provider-btn'], 'discord')}
-              >
-                <Discord size={16} />
-                {t('continue_with_discord')}
-              </button>
-            </form>
+            <Link
+              href="/api/auth/discord"
+              className={classNames(styles['provider-btn'], 'discord')}
+            >
+              <Discord size={16} />
+              {t('continue_with_discord')}
+            </Link>
           </div>
-          {/*<div>
+          <div>
             <Link
               href="/sign-in-email"
               className={classNames(styles['provider-btn'], 'email')}
@@ -49,7 +45,7 @@ const SignUp = async () => {
               <Mail size={16} />
               {t('continue_with_email')}
             </Link>
-          </div>*/}
+          </div>
         </div>
 
         <div className={styles.separator}>
@@ -67,6 +63,7 @@ const SignUp = async () => {
           </Link>
         </p>
       </div>
+
       <Caption />
     </>
   )

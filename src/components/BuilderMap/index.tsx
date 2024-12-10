@@ -5,7 +5,7 @@ import { useEffect, useRef } from 'react'
 
 import styles from './index.module.css'
 
-import type { Coords } from '@/types/index.js'
+import type { Coords } from '@/types/location.js'
 
 const GoogleMap = dynamic(() => import('../GoogleMap.js'))
 

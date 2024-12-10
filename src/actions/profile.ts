@@ -3,8 +3,9 @@
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 
-import { auth } from '../auth.js'
+import { getCurrentSession } from '../session.js'
 
+import { snakeCaseToCamelCase } from '../utils/index.js'
 import { createClient } from '../utils/supabase/server.js'
 import {
   changeDisplayNameSchema,
@@ -12,7 +13,7 @@ import {
   setupProfileSchema,
 } from '../utils/validations/profile.js'
 
-import type { Profile } from '../types/index.js'
+import type { APIProfile, Profile } from '../types/profile.js'
 
 export const getProfile = async (id: string) => {
   'use server'
@@ -27,15 +28,26 @@ export const getProfile = async (id: string) => {
     },
   })
 
-  const data = await res.json()
+  const { data, errors } = (await res.json()) as {
+    data?: APIProfile | null
+    errors?: { message: string } | null
+  }
 
-  return data
+  return {
+    data: data
+      ? ({
+          ...snakeCaseToCamelCase<Profile>(data),
+          updatedAt: new Date(data.updated_at),
+        } as Profile)
+      : null,
+    errors: errors ?? null,
+  }
 }
 
 export const getProfileByUsername = async (username: string) => {
   'use server'
 
-  const session = await auth()
+  const { session } = await getCurrentSession()
 
   const supabase = createClient({
     supabaseAccessToken: session?.supabaseAccessToken,
@@ -45,22 +57,26 @@ export const getProfileByUsername = async (username: string) => {
     .from('profiles')
     .select('*')
     .eq('username', username)
-    .maybeSingle<Profile>()
+    .maybeSingle<APIProfile>()
 
   return {
-    data,
-    error: error?.message ?? null,
+    data: data ? snakeCaseToCamelCase<Profile>(data) : null,
+    errors: error
+      ? {
+          message: error.message,
+        }
+      : null,
   }
 }
 
 export const changeDisplayName = async (_: unknown, formData: FormData) => {
   'use server'
 
-  const session = await auth()
+  const { session, user } = await getCurrentSession()
 
   if (!session) redirect('/sign-in')
 
-  if (session.user.role !== 'user')
+  if (user.role !== 'user')
     return {
       errors: {
         message: 'You cannot change your display name.',
@@ -71,16 +87,12 @@ export const changeDisplayName = async (_: unknown, formData: FormData) => {
     supabaseAccessToken: session.supabaseAccessToken,
   })
 
-  const { data: profile, error: pErr } = await supabase
-    .from('profiles')
-    .select('*')
-    .eq('id', session.user.id)
-    .single<Profile>()
+  const { data: profile } = await getProfile(user.id)
 
-  if (!profile || pErr) redirect('/sign-in')
+  if (!profile) redirect('/sign-in')
 
   const validated = await changeDisplayNameSchema.safeParseAsync({
-    oldName: profile.display_name,
+    oldName: profile.displayName,
     newName: formData.get('display-name'),
   })
 
@@ -91,26 +103,32 @@ export const changeDisplayName = async (_: unknown, formData: FormData) => {
 
   const { error } = await supabase
     .from('profiles')
-    .update<Partial<Profile>>({
+    .update<Partial<APIProfile>>({
       display_name: validated.data.newName,
+      updated_at: new Date().toISOString(),
     })
-    .eq('id', session.user.id)
+    .eq('id', user.id)
+
+  if (error)
+    return {
+      errors: {
+        message: 'Something went wrong!',
+      },
+    }
 
   return {
-    errors: {
-      message: error?.message,
-    },
+    errors: null,
   }
 }
 
 export const changeUsername = async (_: unknown, formData: FormData) => {
   'use server'
 
-  const session = await auth()
+  const { session, user } = await getCurrentSession()
 
   if (!session) redirect('/sign-in')
 
-  if (session.user.role !== 'user')
+  if (user.role !== 'user')
     return {
       errors: {
         message: 'You cannot change your username.',
@@ -121,13 +139,9 @@ export const changeUsername = async (_: unknown, formData: FormData) => {
     supabaseAccessToken: session.supabaseAccessToken,
   })
 
-  const { data: profile, error: pErr } = await supabase
-    .from('profiles')
-    .select('*')
-    .eq('id', session.user.id)
-    .single<Profile>()
+  const { data: profile } = await getProfile(user.id)
 
-  if (!profile || pErr) redirect('/sign-in')
+  if (!profile) redirect('/sign-in')
 
   const validated = await changeUsernameSchema.safeParseAsync({
     oldName: profile.username,
@@ -161,20 +175,26 @@ export const changeUsername = async (_: unknown, formData: FormData) => {
 
   const { error } = await supabase
     .from('profiles')
-    .update<Partial<Profile>>({
+    .update<Partial<APIProfile>>({
       username: validated.data.newName,
+      updated_at: new Date().toISOString(),
     })
-    .eq('id', session.user.id)
+    .eq('id', user.id)
+
+  if (error)
+    return {
+      errors: {
+        message: error.message,
+      },
+    }
 
   return {
-    errors: {
-      message: error?.message,
-    },
+    errors: null,
   }
 }
 
 export const setupProfile = async (_: unknown, formData: FormData) => {
-  const session = await auth()
+  const { session, user } = await getCurrentSession()
 
   if (!session) redirect('/sign-in')
 
@@ -182,17 +202,13 @@ export const setupProfile = async (_: unknown, formData: FormData) => {
     supabaseAccessToken: session.supabaseAccessToken,
   })
 
-  const { data: profile, error: pErr } = await supabase
-    .from('profiles')
-    .select('*')
-    .eq('id', session.user.id)
-    .single<Profile>()
+  const { data: profile } = await getProfile(user.id)
 
-  if (!profile || pErr) redirect('/sign-in')
+  if (!profile) redirect('/sign-in')
 
   const validated = await setupProfileSchema.safeParseAsync({
-    username: formData.get('username'),
     displayName: formData.get('display-name'),
+    username: formData.get('username'),
   })
 
   if (!validated.success)
@@ -216,17 +232,18 @@ export const setupProfile = async (_: unknown, formData: FormData) => {
   if (uNameErr)
     return {
       errors: {
-        username: [uNameErr.message],
+        username: ['Something went wrong!'],
       },
     }
 
   const { error } = await supabase
     .from('profiles')
-    .update<Partial<Profile>>({
-      username: validated.data.username,
+    .update<Partial<APIProfile>>({
       display_name: validated.data.displayName,
+      username: validated.data.username,
+      updated_at: new Date().toISOString(),
     })
-    .eq('id', session.user.id)
+    .eq('id', user.id)
 
   if (error)
     return {

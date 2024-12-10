@@ -3,22 +3,23 @@
 import dynamic from 'next/dynamic'
 import { redirect } from 'next/navigation'
 
-import { auth } from '@/auth.js'
+import { getCurrentSession } from '@/session.js'
 
 import { createTranslation } from '@/i18n/server.js'
 
+import { snakeCaseToCamelCase } from '@/utils/index.js'
 import { createClient } from '@/utils/supabase/server.js'
 
 import MapCard from '@/components/MapCard/index.js'
 
-import type { Map } from '@/types/index.js'
+import type { APIMap, Map } from '@/types/map.js'
 
 const CreateButton = dynamic(() => import('./CreateButton.js'))
 
 const Maps = async () => {
   'use server'
 
-  const session = await auth()
+  const { session, user } = await getCurrentSession()
 
   if (!session) redirect('/sign-in?next=/dashboard/maps')
 
@@ -26,17 +27,19 @@ const Maps = async () => {
     supabaseAccessToken: session.supabaseAccessToken,
   })
 
-  const { data: myMaps, error: mErr } = await supabase
+  const { data, error } = await supabase
     .from('maps')
     .select('*')
-    .eq('creator', session.user.id)
+    .eq('creator', user.id)
     .eq('type', 'community')
     .order('updated_at', {
       ascending: false,
     })
-    .returns<Map[]>()
+    .returns<APIMap[]>()
 
-  if (!myMaps || mErr) return
+  if (!data || error) return
+
+  const maps = snakeCaseToCamelCase<Map[]>(data)
 
   const { t } = await createTranslation('common')
 
@@ -44,7 +47,13 @@ const Maps = async () => {
     <section>
       <h1>{t('my_maps')}</h1>
       <CreateButton />
-      <div>{myMaps?.map((m) => <MapCard key={m.id} mapData={m} />)}</div>
+      <div>
+        {maps.length > 0 ? (
+          maps.map((m) => <MapCard key={m.id} mapData={m} />)
+        ) : (
+          <p>No maps</p>
+        )}
+      </div>
     </section>
   )
 }

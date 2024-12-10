@@ -2,7 +2,7 @@
 
 import { redirect } from 'next/navigation'
 
-import { auth } from '@/auth.js'
+import { getCurrentSession } from '@/session.js'
 
 import { createTranslation } from '@/i18n/server.js'
 
@@ -13,7 +13,7 @@ import { createClient } from '@/utils/supabase/server.js'
 const OngoingGames = async () => {
   'use server'
 
-  const session = await auth()
+  const { session, user } = await getCurrentSession()
 
   if (!session) redirect('/sign-in?next=/dashboard/likes')
 
@@ -25,8 +25,8 @@ const OngoingGames = async () => {
     .from('games')
     .select('id, created_at, map:map_id(name)')
     .match({
-      user_id: session.user.id,
       state: 'started',
+      user_id: user.id,
     })
     .returns<{ id: string; created_at: string; map: { name: string } }[]>()
 

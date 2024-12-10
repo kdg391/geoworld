@@ -1,7 +1,5 @@
 import { z } from 'zod'
 
-// import { usernameSchema } from './profile.js'
-
 export const emailSchema = z
   .string()
   .trim()

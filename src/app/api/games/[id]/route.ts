@@ -1,18 +1,19 @@
 import { z } from 'zod'
 
-import { auth } from '@/auth.js'
+import { getCurrentSession } from '@/session.js'
 
 import { calculateDistance, calculateRoundScore } from '@/utils/game.js'
 
 import { createClient } from '@/utils/supabase/server.js'
 
-import type { Game, Map } from '@/types/index.js'
+import type { APIGame } from '@/types/game.js'
+import type { APIMap } from '@/types/map.js'
 
 export const GET = async (
   _: Request,
   segmentData: { params: Promise<{ id: string }> },
 ) => {
-  const session = await auth()
+  const { session } = await getCurrentSession()
 
   const supabase = createClient({
     supabaseAccessToken: session?.supabaseAccessToken,
@@ -24,7 +25,7 @@ export const GET = async (
     .from('games')
     .select('*')
     .eq('id', params.id)
-    .single<Game>()
+    .single<APIGame>()
 
   if (error)
     return Response.json(
@@ -69,7 +70,7 @@ export const PUT = async (
   request: Request,
   segmentData: { params: Promise<{ id: string }> },
 ) => {
-  const session = await auth()
+  const { session, user } = await getCurrentSession()
 
   if (!session)
     return Response.json(
@@ -93,7 +94,7 @@ export const PUT = async (
     .from('games')
     .select('*')
     .eq('id', params.id)
-    .single<Game>()
+    .single<APIGame>()
 
   if (gErr)
     return Response.json(
@@ -107,7 +108,7 @@ export const PUT = async (
       },
     )
 
-  if (gameData.user_id !== session.user.id)
+  if (gameData.user_id !== user.id)
     return Response.json(
       {
         errors: {
@@ -135,7 +136,7 @@ export const PUT = async (
     .from('maps')
     .select('*')
     .eq('id', gameData.map_id)
-    .single<Map>()
+    .single<APIMap>()
 
   if (mErr)
     return Response.json(
@@ -163,7 +164,7 @@ export const PUT = async (
       },
     )
 
-  const updateData: Partial<Game> = {}
+  const updateData: Partial<APIGame> = {}
 
   const isFinalRound = gameData.round === gameData.settings.rounds - 1
 
@@ -195,7 +196,7 @@ export const PUT = async (
   const now = new Date()
 
   const time = validated.data.timedOut
-    ? gameData.settings.timeLimit
+    ? gameData.settings.time_limit
     : Math.floor(
         (now.getTime() -
           new Date(gameData.rounds[gameData.round].started_at).getTime()) /
@@ -217,8 +218,8 @@ export const PUT = async (
       position: validated.data.guessedLocation,
       score,
       time,
-      timedOut: validated.data.timedOut,
-      timedOutWithGuess,
+      timed_out: validated.data.timedOut,
+      timed_out_with_guess: timedOutWithGuess,
     },
   ]
   updateData.total_score = gameData.total_score + score
@@ -227,16 +228,16 @@ export const PUT = async (
 
   const { data: updatedData, error: updatedErr } = await supabase
     .from('games')
-    .update<Partial<Game>>(updateData)
+    .update<Partial<APIGame>>(updateData)
     .eq('id', params.id)
     .select()
-    .single<Game>()
+    .single<APIGame>()
 
   if (updatedErr)
     return Response.json(
       {
         errors: {
-          message: updatedErr.message,
+          message: 'Something went wrong!',
         },
       },
       {
@@ -253,7 +254,7 @@ export const DELETE = async (
   _: Request,
   segmentData: { params: Promise<{ id: string }> },
 ) => {
-  const session = await auth()
+  const { session, user } = await getCurrentSession()
 
   if (!session)
     return Response.json(
@@ -277,7 +278,7 @@ export const DELETE = async (
     .from('games')
     .select('*')
     .eq('id', params.id)
-    .single<Game>()
+    .single<APIGame>()
 
   if (gErr)
     return Response.json(
@@ -291,7 +292,7 @@ export const DELETE = async (
       },
     )
 
-  if (gameData.user_id !== session.user.id)
+  if (gameData.user_id !== user.id)
     return Response.json(
       {
         errors: {

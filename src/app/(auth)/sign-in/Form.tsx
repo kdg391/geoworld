@@ -3,14 +3,14 @@
 import Link from 'next/link'
 import { useActionState } from 'react'
 
-import { signInCredentials } from '@/actions/auth.js'
+import { signInWithCredentials } from '@/actions/auth.js'
 
 import { useTranslation } from '@/i18n/client.js'
 
-import styles from '../page.module.css'
-
 import SubmitButton from '@/components/common/SubmitButton/index.js'
 import TextInput from '@/components/common/TextInput/index.js'
+
+import styles from '../page.module.css'
 
 interface FormState {
   errors: {
@@ -24,7 +24,7 @@ const Form = () => {
   'use client'
 
   const [state, action] = useActionState<FormState, FormData>(
-    signInCredentials,
+    signInWithCredentials,
     {
       errors: null,
     },

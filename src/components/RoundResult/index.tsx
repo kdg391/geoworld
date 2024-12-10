@@ -13,7 +13,8 @@ import styles from './index.module.css'
 
 import './index.css'
 
-import type { DistanceUnit, Game, GameView, Guess } from '@/types/index.js'
+import type { Game, GameView, Guess } from '@/types/game.js'
+import type { DistanceUnit } from '@/types/index.js'
 
 const Button = dynamic(() => import('../common/Button/index.js'))
 
@@ -44,7 +45,7 @@ const RoundResult = ({
     } else {
       setIsLoading(true)
 
-      const { data: gData, error: gErr } = await startGameRound(gameId)
+      const { data: gData, errors: gErr } = await startGameRound(gameId)
 
       setIsLoading(false)
 

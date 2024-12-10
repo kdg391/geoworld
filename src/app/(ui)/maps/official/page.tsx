@@ -13,7 +13,7 @@ import SkeletonMapCard from '@/components/MapCard/Skeleton.js'
 import styles from '../community/page.module.css'
 import homeStyles from '../../page.module.css'
 
-import type { Map } from '@/types/index.js'
+import type { Map } from '@/types/map.js'
 
 const Button = dynamic(() => import('@/components/common/Button/index.js'))
 

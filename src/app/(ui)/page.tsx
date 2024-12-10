@@ -2,6 +2,9 @@
 
 import dynamic from 'next/dynamic'
 // import Image from 'next/image'
+import { redirect } from 'next/navigation'
+
+import { getCurrentSession } from '@/session.js'
 
 import { createTranslation } from '@/i18n/server.js'
 
@@ -13,6 +16,10 @@ const Description = dynamic(() => import('./Description.js'))
 const PlayButton = dynamic(() => import('./PlayButton.js'))
 
 const Home = async () => {
+  const { session } = await getCurrentSession()
+
+  if (session) redirect('/dashboard')
+
   const { t } = await createTranslation('common')
 
   return (

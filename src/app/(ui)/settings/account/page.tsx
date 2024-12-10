@@ -2,24 +2,24 @@
 
 import { redirect } from 'next/navigation'
 
-import { auth } from '@/auth.js'
+import { getCurrentSession } from '@/session.js'
 
 import { createTranslation } from '@/i18n/server.js'
 
 import { createClient } from '@/utils/supabase/server.js'
 
-import styles from '../layout.module.css'
-
 import DeleteAccountButton from './DeleteAccountButton.js'
 import EmailForm from './EmailForm.js'
 import PasswordForm from './PasswordForm.js'
 
-import type { User } from '@/types/index.js'
+import styles from '../layout.module.css'
+
+import type { APIAccount } from '@/types/account.js'
 
 const Account = async () => {
   'use server'
 
-  const session = await auth()
+  const { session, user } = await getCurrentSession()
 
   if (!session) redirect('/sign-in')
 
@@ -27,13 +27,14 @@ const Account = async () => {
     supabaseAccessToken: session.supabaseAccessToken,
   })
 
-  const { data: user, error: userErr } = await supabase
-    .from('users')
+  const { data: accountData } = await supabase
+    .from('accounts')
     .select('*')
-    .eq('id', session.user.id)
-    .single<User>()
-
-  if (!user || userErr) redirect('/sign-in')
+    .match({
+      provider: 'credentials',
+      user_id: user.id,
+    })
+    .single<APIAccount>()
 
   const { t } = await createTranslation(['account', 'settings'])
 
@@ -47,10 +48,10 @@ const Account = async () => {
       <section className={styles.setting}>
         <h2 className="text-xl mb-2">{t('email')}</h2>
         <div>
-          <EmailForm email={session.user.email} />
+          <EmailForm email={user.email} />
         </div>
       </section>
-      {user.hashed_password && (
+      {accountData?.hashed_password && (
         <section className={styles.setting}>
           <h2 className="text-xl mb-2">{t('password')}</h2>
           <div>

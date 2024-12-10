@@ -14,22 +14,20 @@ const User = async (props: Props) => {
   const id = decodeURIComponent(params.id)
 
   if (id.startsWith('@')) {
-    const { data: profile, error: profileErr } = await getProfileByUsername(
-      id.slice(1),
-    )
+    const { data: profile } = await getProfileByUsername(id.slice(1))
 
-    if (!profile || profileErr) notFound()
+    if (!profile) notFound()
 
     redirect(`/user/${profile.id}`)
   }
 
-  const { data: profile, error: profileErr } = await getProfile(params.id)
+  const { data: profile } = await getProfile(params.id)
 
-  if (!profile || profileErr) notFound()
+  if (!profile) notFound()
 
   return (
     <section>
-      <h1>{profile.display_name}</h1>
+      <h1>{profile.displayName}</h1>
       <p>@{profile.username}</p>
     </section>
   )

@@ -6,10 +6,10 @@ import { deleteAccount } from '@/actions/auth.js'
 
 import { useTranslation } from '@/i18n/client.js'
 
-import styles from '../layout.module.css'
-
 import SubmitButton from '@/components/common/SubmitButton/index.js'
 import TextInput from '@/components/common/TextInput/index.js'
+
+import styles from '../layout.module.css'
 
 interface FormState {
   errors: {
@@ -66,8 +66,8 @@ const DeleteAccountForm = () => {
           </label>
           <TextInput
             type="text"
-            id="message"
-            name="message"
+            id="confirm-message"
+            name="confirm-message"
             onChange={(event) => {
               setConfirmChanges(event.target.value === 'DELETE')
             }}

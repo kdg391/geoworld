@@ -2,9 +2,10 @@
 
 import { LogOut, Settings, UserRound } from 'lucide-react'
 import Link from 'next/link'
-import { signOut } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 
+import { signOut } from '@/actions/auth.js'
 import { getProfile } from '@/actions/profile.js'
 
 import useClickOutside from '@/hooks/useClickOutside.js'
@@ -17,18 +18,25 @@ import styles from './UserInfo.module.css'
 
 import './UserInfo.css'
 
-import type { Session } from 'next-auth'
-import type { Profile } from '@/types/index.js'
+import type { Session } from '@/session.js'
+import type { Profile } from '@/types/profile.js'
+import type { User } from '@/types/user.js'
 
 interface Props {
   session: Session | null
+  user: User | null
 }
 
-const UserInfo = ({ session }: Props) => {
+const UserInfo = ({ session, user }: Props) => {
   const containerRef = useRef<HTMLDivElement | null>(null)
 
+  const router = useRouter()
+
   const [isLoading, setIsLoading] = useState(true)
-  const [profile, setProfile] = useState<Profile | null>(null)
+  const [profile, setProfile] = useState<Pick<
+    Profile,
+    'id' | 'displayName' | 'username'
+  > | null>(null)
 
   const [isDropdownOpen, setIsDropdownOpen] = useClickOutside(containerRef)
 
@@ -41,44 +49,53 @@ const UserInfo = ({ session }: Props) => {
 
   useEffect(() => {
     const init = async () => {
-      if (!session) return
+      if (!session || !user) return
 
-      const pCache = localStorage.getItem('profileCache')
-      const pCacheUpdated = localStorage.getItem('profileCacheUpdated')
+      const pCache = localStorage.getItem('profile-cache')
 
-      if (
-        pCache &&
-        pCacheUpdated &&
-        Date.now() - parseInt(pCacheUpdated) < 60 * 60 * 24 * 1000
-      ) {
-        setProfile(JSON.parse(pCache))
+      if (pCache !== null) {
+        const profileCache = JSON.parse(pCache)
+
+        if (Date.now() - profileCache.lastUpdated < 60 * 60 * 24 * 1000)
+          setProfile(profileCache.data)
 
         return
       }
 
-      const { data: pData, error: pErr } = await getProfile(session.user.id)
+      const { data: pData } = await getProfile(user.id)
 
-      if (!pData || pErr) return
+      if (
+        pData === null ||
+        pData.displayName === null ||
+        pData.username === null
+      )
+        return
 
-      setProfile(pData)
+      setProfile({
+        id: pData.id,
+        displayName: pData.displayName,
+        username: pData.username,
+      })
 
       try {
         localStorage.setItem(
-          'profileCache',
+          'profile-cache',
           JSON.stringify({
-            id: pData.id,
-            display_name: pData.display_name,
-            username: pData.username,
+            data: {
+              id: pData.id,
+              displayName: pData.displayName,
+              username: pData.username,
+            },
+            lastUpdated: Date.now(),
           }),
         )
-        localStorage.setItem('profileCacheUpdated', String(Date.now()))
       } catch {
         //
       }
     }
 
     init().then(() => setIsLoading(false))
-  }, [])
+  }, [session, user])
 
   if (isLoading || !profile) return
 
@@ -90,7 +107,10 @@ const UserInfo = ({ session }: Props) => {
 
     try {
       await signOut()
-    } catch {}
+    } catch {
+    } finally {
+      router.push('/')
+    }
   }
 
   return (
@@ -99,7 +119,7 @@ const UserInfo = ({ session }: Props) => {
         className={styles['display-name']}
         onClick={() => setIsDropdownOpen((o) => !o)}
       >
-        {profile.display_name}
+        {profile.displayName}
       </div>
 
       <ul

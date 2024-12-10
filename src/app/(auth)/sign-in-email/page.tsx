@@ -21,7 +21,7 @@ const SignIn = async () => {
       <Form />
 
       <p className={styles.msg}>
-        <span>Is your account created with Discord or credentials?</span>
+        <span>{t('already_account')}</span>
         <Link href="/sign-in" className="ml-1">
           {t('sign_in')}
         </Link>

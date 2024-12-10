@@ -18,13 +18,15 @@ import styles from './Header.module.css'
 
 import './Header.css'
 
-import type { Session } from 'next-auth'
+import type { Session } from '@/session.js'
+import type { User } from '@/types/user.js'
 
 interface Props {
   session: Session | null
+  user: User | null
 }
 
-const HeaderClient = ({ session }: Props) => {
+const HeaderClient = ({ session, user }: Props) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   const { t } = useTranslation(['common', 'auth'])
@@ -72,7 +74,11 @@ const HeaderClient = ({ session }: Props) => {
           </ul>
         </nav>
 
-        {session ? <UserInfo session={session} /> : <AuthButtons />}
+        {session && user ? (
+          <UserInfo session={session} user={user} />
+        ) : (
+          <AuthButtons />
+        )}
       </div>
 
       {/* Mobile */}
@@ -94,8 +100,8 @@ const HeaderClient = ({ session }: Props) => {
           <>
             <div className={styles['mobile-menu']}>
               <div className={styles['mobile-nav-wrapper']}>
-                {session ? (
-                  <MobileUserInfo session={session} />
+                {session && user ? (
+                  <MobileUserInfo session={session} user={user} />
                 ) : (
                   <MobileAuthButtons />
                 )}

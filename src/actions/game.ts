@@ -2,29 +2,28 @@
 
 import { cookies } from 'next/headers'
 
-import { auth } from '../auth.js'
+import { getCurrentSession } from '../session.js'
 
 import { OFFICIAL_MAP_WORLD_ID } from '../constants/index.js'
 
+import { snakeCaseToCamelCase } from '../utils/index.js'
 import { createClient } from '../utils/supabase/server.js'
 
-import type {
-  Game,
-  GameSettings,
-  Location,
-  Map,
-  RoundLocation,
-} from '../types/index.js'
+import type { APIGame, Game, GameSettings } from '../types/game.js'
+import type { APILocation, APIRoundLocation } from '@/types/location.js'
+import type { APIMap } from '../types/map.js'
 
 export const startGameRound = async (id: string) => {
   'use server'
 
-  const session = await auth()
+  const { session, user } = await getCurrentSession()
 
   if (!session)
     return {
       data: null,
-      error: 'Unauthorized',
+      errors: {
+        message: 'Unauthorized',
+      },
     }
 
   const supabase = createClient({
@@ -35,42 +34,66 @@ export const startGameRound = async (id: string) => {
     .from('games')
     .select('*')
     .eq('id', id)
-    .single<Game>()
+    .single<APIGame>()
 
-  if (!gameData || gErr)
+  if (!gameData)
     return {
       data: null,
-      error: gErr?.message ?? null,
+      errors: {
+        message: 'Failed to load the game',
+      },
     }
 
-  if (gameData.user_id !== session.user.id)
+  if (gErr)
     return {
       data: null,
-      error: 'This game is not your game.',
+      errors: {
+        message: 'Database Error',
+      },
+    }
+
+  if (gameData.user_id !== user.id)
+    return {
+      data: null,
+      errors: {
+        message: 'This game is not your game.',
+      },
     }
 
   if (gameData.state === 'finished')
     return {
       data: null,
-      error: 'This game is finished.',
+      errors: {
+        message: 'This game is finished.',
+      },
     }
 
   const { data: mapData, error: mErr } = await supabase
     .from('maps')
     .select('*')
     .eq('id', gameData.map_id)
-    .single<Map>()
+    .single<APIMap>()
 
-  if (!mapData || mErr)
+  if (!mapData)
     return {
       data: null,
-      error: mErr?.message ?? null,
+      errors: {
+        message: 'Failed to load the map',
+      },
+    }
+
+  if (mErr)
+    return {
+      data: null,
+      errors: {
+        message: 'Database Error',
+      },
     }
 
   const isFinalRound = gameData.round === gameData.settings.rounds - 1
 
   if (!isFinalRound && gameData.rounds.length === gameData.guesses.length) {
-    let location: Location
+    let location: APILocation
 
     do {
       const { data: lData, error: lErr } = await supabase
@@ -79,12 +102,22 @@ export const startGameRound = async (id: string) => {
           p_count: 1,
         })
         .select('*')
-        .single<Location>()
+        .single<APILocation>()
 
-      if (!lData || lErr)
+      if (!lData)
         return {
           data: null,
-          error: lErr?.message ?? null,
+          errors: {
+            message: 'Failed to load the location',
+          },
+        }
+
+      if (lErr)
+        return {
+          data: null,
+          errors: {
+            message: 'Database Error',
+          },
         }
 
       location = lData
@@ -92,7 +125,7 @@ export const startGameRound = async (id: string) => {
       gameData.rounds.find((r) => r.pano_id === location.pano_id) !== undefined
     )
 
-    const actualLocation: RoundLocation = {
+    const actualLocation: APIRoundLocation = {
       lat: location.lat,
       lng: location.lng,
       heading: location.heading,
@@ -104,27 +137,65 @@ export const startGameRound = async (id: string) => {
       ended_at: null,
     }
 
-    const updateData: Partial<Game> = {}
+    const updateData: Partial<APIGame> = {}
 
     updateData.round = isFinalRound ? gameData.round : gameData.round + 1
     updateData.rounds = [...gameData.rounds, actualLocation]
 
     const { data: updatedData, error: updatedErr } = await supabase
       .from('games')
-      .update<Partial<Game>>(updateData)
+      .update<Partial<APIGame>>(updateData)
       .eq('id', id)
       .select()
-      .single<Game>()
+      .single<APIGame>()
+
+    if (updatedErr)
+      return {
+        data: null,
+        errors: {
+          message: 'Database Error',
+        },
+      }
 
     return {
-      data: updatedData,
-      error: updatedErr?.message ?? null,
+      data: updatedData
+        ? ({
+            ...snakeCaseToCamelCase<Game>(updatedData),
+            rounds: updatedData.rounds.map((r) => ({
+              heading: r.heading,
+              lat: r.lat,
+              lng: r.lng,
+              panoId: r.pano_id,
+              streakLocationCode: r.streak_location_code,
+              pitch: r.pitch,
+              zoom: r.zoom,
+              startedAt: new Date(r.started_at),
+              endedAt: r.ended_at ? new Date(r.ended_at) : null,
+            })),
+          } as Game)
+        : null,
+      errors: null,
     }
   }
 
   return {
-    data: gameData,
-    error: null,
+    data: gameData
+      ? ({
+          ...snakeCaseToCamelCase<Game>(gameData),
+          rounds: gameData.rounds.map((r) => ({
+            heading: r.heading,
+            lat: r.lat,
+            lng: r.lng,
+            panoId: r.pano_id,
+            streakLocationCode: r.streak_location_code,
+            pitch: r.pitch,
+            zoom: r.zoom,
+            startedAt: new Date(r.started_at),
+            endedAt: r.ended_at ? new Date(r.ended_at) : null,
+          })),
+        } as Game)
+      : null,
+    errors: null,
   }
 }
 
@@ -141,9 +212,32 @@ export const getGame = async (id: string) => {
     },
   })
 
-  const data = await res.json()
+  const { data, errors } = (await res.json()) as {
+    data?: APIGame
+    errors?: {
+      message: string
+    }
+  }
 
-  return data
+  return {
+    data: data
+      ? ({
+          ...snakeCaseToCamelCase<Game>(data),
+          rounds: data.rounds.map((r) => ({
+            heading: r.heading,
+            lat: r.lat,
+            lng: r.lng,
+            panoId: r.pano_id,
+            streakLocationCode: r.streak_location_code,
+            pitch: r.pitch,
+            zoom: r.zoom,
+            startedAt: new Date(r.started_at),
+            endedAt: r.ended_at ? new Date(r.ended_at) : null,
+          })),
+        } as Game)
+      : null,
+    errors: errors ?? null,
+  }
 }
 
 export const createGame = async (payload: {
@@ -163,9 +257,35 @@ export const createGame = async (payload: {
     body: JSON.stringify(payload),
   })
 
-  const data = await res.json()
+  const { data, errors } = (await res.json()) as {
+    data?: APIGame
+    errors?: {
+      mapId?: string[]
+      message?: string
+      rounds?: string[]
+      settings?: string[]
+    }
+  }
 
-  return data
+  return {
+    data: data
+      ? ({
+          ...snakeCaseToCamelCase<Game>(data),
+          rounds: data.rounds.map((r) => ({
+            heading: r.heading,
+            lat: r.lat,
+            lng: r.lng,
+            panoId: r.pano_id,
+            streakLocationCode: r.streak_location_code,
+            pitch: r.pitch,
+            zoom: r.zoom,
+            startedAt: new Date(r.started_at),
+            endedAt: r.ended_at ? new Date(r.ended_at) : null,
+          })),
+        } as Game)
+      : null,
+    errors: errors ?? null,
+  }
 }
 
 interface GuessData {
@@ -187,9 +307,34 @@ export const updateGame = async (id: string, payload: GuessData) => {
     body: JSON.stringify(payload),
   })
 
-  const data = await res.json()
+  const { data, errors } = (await res.json()) as {
+    data?: APIGame
+    errors?: {
+      guessedLocation?: string[]
+      timedOut?: string[]
+      message?: string
+    }
+  }
 
-  return data
+  return {
+    data: data
+      ? ({
+          ...snakeCaseToCamelCase<Game>(data),
+          rounds: data.rounds.map((r) => ({
+            heading: r.heading,
+            lat: r.lat,
+            lng: r.lng,
+            panoId: r.pano_id,
+            streakLocationCode: r.streak_location_code,
+            pitch: r.pitch,
+            zoom: r.zoom,
+            startedAt: new Date(r.started_at),
+            endedAt: r.ended_at ? new Date(r.ended_at) : null,
+          })),
+        } as Game)
+      : null,
+    errors: errors ?? null,
+  }
 }
 
 export const deleteGame = async (id: string) => {
@@ -205,7 +350,15 @@ export const deleteGame = async (id: string) => {
     },
   })
 
-  const data = await res.json()
+  const { data, errors } = (await res.json()) as {
+    data?: boolean
+    errors?: {
+      message: string
+    }
+  }
 
-  return data
+  return {
+    data: data ?? false,
+    errors: errors ?? null,
+  }
 }

@@ -11,7 +11,8 @@ import GuessMarker from './GuessMarker.js'
 
 import styles from './index.module.css'
 
-import type { GameView, Guess, RoundLocation } from '@/types/index.js'
+import type { GameView, Guess } from '@/types/game.js'
+import type { RoundLocation } from '@/types/location.js'
 
 const lineSymbol: google.maps.Symbol = {
   path: 'M 0,-1 0,1',
@@ -117,7 +118,7 @@ const ResultMap = ({
 
         actualMarker.addListener('click', () => {
           window.open(
-            `https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${actualLoc.lat},${actualLoc.lng}&heading=${actualLoc.heading}&pitch=${actualLoc.pitch}&fov=180&pano=${actualLoc.pano_id}`,
+            `https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${actualLoc.lat},${actualLoc.lng}&heading=${actualLoc.heading}&pitch=${actualLoc.pitch}&fov=180&pano=${actualLoc.panoId}`,
             '_blank',
           )
         })
@@ -157,7 +158,7 @@ const ResultMap = ({
 
       actualMarker.addListener('click', () => {
         window.open(
-          `https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${actualLoc.lat},${actualLoc.lng}&heading=${actualLoc.heading}&pitch=${actualLoc.pitch}&fov=180&pano=${actualLoc.pano_id}`,
+          `https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${actualLoc.lat},${actualLoc.lng}&heading=${actualLoc.heading}&pitch=${actualLoc.pitch}&fov=180&pano=${actualLoc.panoId}`,
           '_blank',
         )
       })

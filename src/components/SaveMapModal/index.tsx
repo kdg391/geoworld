@@ -8,7 +8,7 @@ import { updateMap } from '@/actions/map.js'
 
 import { useTranslation } from '@/i18n/client.js'
 
-import type { Coords } from '@/types/index.js'
+import type { Coords } from '@/types/location.js'
 
 const Button = dynamic(() => import('../common/Button/index.js'))
 const Modal = dynamic(() => import('../common/Modal/index.js'))
@@ -41,14 +41,14 @@ const SaveMapModal = ({
   const update = async () => {
     'use client'
 
-    const { error: mErr } = await updateMap(mapId, {
+    const { errors: mErr } = await updateMap(mapId, {
       isPublished: checked,
       locations,
     })
 
     if (mErr)
       return {
-        error: mErr,
+        error: mErr.message ?? null,
       }
 
     router.push('/')

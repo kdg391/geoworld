@@ -1,50 +1,66 @@
 'use server'
 
-import { cookies } from 'next/headers'
+import { cookies, headers } from 'next/headers'
 import { redirect } from 'next/navigation'
 
-import { auth } from '../auth.js'
+import { getCurrentSession } from '../session.js'
 
+import { snakeCaseToCamelCase } from '../utils/index.js'
 import { createClient } from '../utils/supabase/server.js'
 
-import type { Coords, Location } from '../types/index.js'
+import type { APILocation, Coords, Location } from '../types/location.js'
+import type { APIMap, Map } from '../types/map.js'
 
 export const getMap = async (id: string) => {
-  const cookieStore = await cookies()
-
   const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/maps/${id}`, {
     method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      Cookie: cookieStore.toString(),
-    },
+    headers: await headers(),
   })
 
-  const data = await res.json()
+  const { data, errors } = (await res.json()) as {
+    data?: APIMap
+    errors?: {
+      message: string
+    }
+  }
 
-  return data
+  return {
+    data: data
+      ? ({
+          ...snakeCaseToCamelCase<Map>(data),
+          createdAt: new Date(data.created_at),
+          updatedAt: new Date(data.updated_at),
+        } as Map)
+      : null,
+    errors: errors ?? null,
+  }
 }
 
 export const createCommunityMap = async (_: unknown, formData: FormData) => {
   'use server'
 
-  const cookieStore = await cookies()
-
   const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/maps`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Cookie: cookieStore.toString(),
-    },
+    headers: await headers(),
     body: JSON.stringify({
       name: formData.get('name'),
       description: formData.get('description'),
     }),
   })
 
-  const data = await res.json()
+  const { data, errors } = (await res.json()) as {
+    data?: Map
+    errors?: {
+      name?: string[]
+      description?: string[]
+      message?: string
+    }
+  }
 
-  if (!res.ok) return data
+  if (!data)
+    return {
+      errors: errors ?? null,
+    }
 
   redirect(`/map/${data.id}/edit`)
 }
@@ -53,8 +69,13 @@ export const editCommunityMap = async (_: unknown, formData: FormData) => {
   'use server'
 
   const cookieStore = await cookies()
+  const headerStore = await headers()
 
-  const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/maps/${''}`, {
+  const nextUrl = headerStore.get('next-url') as string
+
+  const mapId = new URL(nextUrl).pathname.split('/')[3]
+
+  const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/maps/${mapId}`, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
@@ -66,9 +87,19 @@ export const editCommunityMap = async (_: unknown, formData: FormData) => {
     }),
   })
 
-  const data = await res.json()
+  const { errors } = (await res.json()) as {
+    errors?: {
+      name?: string[]
+      description?: string[]
+      isPublished?: string[]
+      locations?: string[]
+      message?: string
+    }
+  }
 
-  return data
+  return {
+    errors: errors ?? null,
+  }
 }
 
 export const updateMap = async (
@@ -91,9 +122,27 @@ export const updateMap = async (
     body: JSON.stringify(payload),
   })
 
-  const data = await res.json()
+  const { data, errors } = (await res.json()) as {
+    data?: APIMap
+    errors?: {
+      name?: string[]
+      description?: string[]
+      isPublished?: string[]
+      locations?: string[]
+      message?: string
+    } | null
+  }
 
-  return data
+  return {
+    data: data
+      ? ({
+          ...snakeCaseToCamelCase<Map>(data),
+          createdAt: new Date(data.created_at),
+          updatedAt: new Date(data.updated_at),
+        } as Map)
+      : null,
+    errors: errors ?? null,
+  }
 }
 
 export const deleteMap = async (id: string) => {
@@ -109,9 +158,17 @@ export const deleteMap = async (id: string) => {
     },
   })
 
-  const data = await res.json()
+  const { data, errors } = (await res.json()) as {
+    data?: boolean
+    errors?: {
+      message: string
+    }
+  }
 
-  return data
+  return {
+    data: data ?? false,
+    errors: errors ?? null,
+  }
 }
 
 export const getLikes = async () => {
@@ -189,7 +246,7 @@ export const deleteLike = async (mapId: string) => {
 export const getLocations = async (mapId: string) => {
   'use server'
 
-  const session = await auth()
+  const { session } = await getCurrentSession()
 
   const supabase = createClient({
     supabaseAccessToken: session?.supabaseAccessToken,
@@ -199,10 +256,18 @@ export const getLocations = async (mapId: string) => {
     .from('locations')
     .select('*')
     .eq('map_id', mapId)
-    .returns<Location[]>()
+    .returns<APILocation[]>()
+
+  if (error)
+    return {
+      data: null,
+      errors: {
+        message: 'Something went wrong!',
+      },
+    }
 
   return {
-    data,
-    error: error?.message ?? null,
+    data: snakeCaseToCamelCase<Location[]>(data),
+    errors: null,
   }
 }

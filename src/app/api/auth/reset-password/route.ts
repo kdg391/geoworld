@@ -1,12 +1,11 @@
 import { z } from 'zod'
 
-import { sendEmail } from '@/utils/email.js'
-
+import { resend } from '@/utils/email/index.js'
+import ResetPasswordTemplate from '@/utils/email/templates/reset-password.js'
 import { createClient } from '@/utils/supabase/server.js'
-
 import { emailSchema } from '@/utils/validations/auth.js'
 
-import type { User } from '@/types/index.js'
+import type { APIUser } from '@/types/user.js'
 
 const schema = z.object({
   emaIl: emailSchema,
@@ -39,7 +38,7 @@ export const POST = async (request: Request) => {
     .from('users')
     .select('*')
     .eq('email', validated.data.emaIl)
-    .single<User>()
+    .single<APIUser>()
 
   if (userErr)
     return Response.json(
@@ -83,11 +82,14 @@ export const POST = async (request: Request) => {
     const url = `${process.env.NEXT_PUBLIC_URL}/update-password?token=${token}`
 
     try {
-      await sendEmail({
-        html: `<h1>Reset your password</h1><a href="${url}">Click to reset</a>`,
+      await resend.emails.send({
+        from: `GeoWorld <${process.env.RESEND_EMAIL_FROM}>`,
+        to: user.email,
         subject: 'Reset your password',
         text: `Please go to ${url} to reset your password`,
-        to: user.email,
+        react: ResetPasswordTemplate({
+          resetPasswordLink: url,
+        }),
       })
     } catch (err) {
       if (err instanceof Error)

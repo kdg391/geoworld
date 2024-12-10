@@ -1,8 +1,8 @@
-import { auth } from '@/auth.js'
+import { getCurrentSession } from '@/session.js'
 
 import { createClient } from '@/utils/supabase/server.js'
 
-import type { Profile } from '@/types/index.js'
+import type { APIProfile } from '@/types/profile.js'
 
 export const revalidate = 300
 
@@ -10,7 +10,7 @@ export const GET = async (
   _: Request,
   segmentData: { params: Promise<{ id: string }> },
 ) => {
-  const session = await auth()
+  const { session } = await getCurrentSession()
 
   const supabase = createClient({
     supabaseAccessToken: session?.supabaseAccessToken,
@@ -22,7 +22,7 @@ export const GET = async (
     .from('profiles')
     .select('*')
     .eq('id', params.id)
-    .maybeSingle<Profile>()
+    .maybeSingle<APIProfile>()
 
   if (error)
     return Response.json(

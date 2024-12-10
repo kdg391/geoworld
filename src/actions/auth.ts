@@ -1,13 +1,26 @@
 'use server'
 
-import bcrypt from 'bcryptjs'
+import { hash, verify } from '@node-rs/argon2'
 import { revalidatePath } from 'next/cache'
-import { headers } from 'next/headers'
+import { cookies, headers } from 'next/headers'
 import { redirect } from 'next/navigation'
-import { AuthError } from 'next-auth'
 
-import { auth, signIn, signOut } from '../auth.js'
+import {
+  createEmailVerificationRequest,
+  sendVerificationEmail,
+  // setEmailVerificationRequestCookie,
+} from '../email-verification.js'
+import {
+  createSession,
+  deleteSessionTokenCookie,
+  // generateSessionToken,
+  getCurrentSession,
+  invalidateSession,
+  setSessionTokenCookie,
+} from '../session.js'
+import { generateSessionToken } from '../session-utils.js'
 
+import { resend } from '../utils/email/index.js'
 import { createClient } from '../utils/supabase/server.js'
 import {
   changeEmailSchema,
@@ -20,7 +33,22 @@ import {
   updatePasswordSchema,
 } from '../utils/validations/auth.js'
 
-import type { User } from '@/types/index.js'
+import type { APIAccount } from '@/types/account.js'
+import type { APIUser } from '@/types/user.js'
+
+export const signOut = async () => {
+  const { session } = await getCurrentSession()
+
+  if (!session)
+    return {
+      errors: {
+        message: 'Unauthorized',
+      },
+    }
+
+  await invalidateSession(session.id)
+  await deleteSessionTokenCookie()
+}
 
 export const signUpCredentials = async (_: unknown, formData: FormData) => {
   'use server'
@@ -56,26 +84,32 @@ export const signUpCredentials = async (_: unknown, formData: FormData) => {
   if (emailErr)
     return {
       errors: {
-        email: [emailErr.message],
+        email: ['Something went wrong!'],
       },
     }
 
-  const hashedPassword = await bcrypt.hash(validated.data.password, 10)
+  const hashedPassword = await hash(validated.data.password, {
+    memoryCost: 19456,
+    timeCost: 2,
+    outputLen: 32,
+    parallelism: 1,
+  })
 
   const { data: user, error: userErr } = await supabase
     .from('users')
-    .insert({
+    .insert<Partial<APIUser>>({
+      created_at: new Date().toISOString(),
       email: validated.data.email,
-      emailVerified: null,
-      hashed_password: hashedPassword,
+      email_verified: false,
+      email_verified_at: null,
     })
     .select()
-    .single()
+    .single<APIUser>()
 
   if (userErr)
     return {
       errors: {
-        message: userErr.message,
+        message: 'Something went wrong!',
       },
     }
 
@@ -87,30 +121,57 @@ export const signUpCredentials = async (_: unknown, formData: FormData) => {
   if (profileErr)
     return {
       errors: {
-        message: profileErr.message,
+        message: 'Something went wrong!',
       },
     }
 
-  const { error: accountErr } = await supabase.from('accounts').insert({
-    provider: 'credentials',
-    providerAccountId: user.id,
-    type: 'credentials',
-    userId: user.id,
-  })
+  const { error: accountErr } = await supabase
+    .from('accounts')
+    .insert<Partial<APIAccount>>({
+      provider: 'credentials',
+      account_id: user.id,
+      user_id: user.id,
+      hashed_password: hashedPassword,
+    })
 
   if (accountErr)
     return {
       errors: {
-        message: accountErr.message,
+        message: 'Something went wrong!',
       },
     }
 
-  revalidatePath('/sign-in', 'layout')
+  const emailVerificationRequest = await createEmailVerificationRequest(
+    user.id,
+    user.email,
+  )
 
-  return redirect('/sign-in')
+  await sendVerificationEmail(
+    emailVerificationRequest.email,
+    emailVerificationRequest.code,
+  )
+  // await setEmailVerificationRequestCookie(emailVerificationRequest)
+  const cookieStore = await cookies()
+
+  cookieStore.set('email_verification', emailVerificationRequest.id, {
+    httpOnly: true,
+    path: '/',
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    expires: emailVerificationRequest.expiresAt,
+  })
+
+  const sessionToken = generateSessionToken()
+  const session = await createSession(sessionToken, user.id)
+
+  await setSessionTokenCookie(sessionToken, session.expiresAt)
+
+  revalidatePath('/', 'layout')
+
+  return redirect('/verify-email')
 }
 
-export const signInCredentials = async (_: unknown, formData: FormData) => {
+export const signInWithCredentials = async (_: unknown, formData: FormData) => {
   'use server'
 
   const validated = await signInCredentialsSchema.safeParseAsync({
@@ -125,8 +186,8 @@ export const signInCredentials = async (_: unknown, formData: FormData) => {
 
   let redirectTo = '/dashboard'
 
-  const headersList = await headers()
-  const referrer = headersList.get('referer')
+  const headerStore = await headers()
+  const referrer = headerStore.get('referer')
 
   if (referrer) {
     const next = new URL(referrer).searchParams.get('next')
@@ -134,39 +195,66 @@ export const signInCredentials = async (_: unknown, formData: FormData) => {
     if (next) redirectTo = next
   }
 
-  try {
-    await signIn('credentials', {
-      email: validated.data.email,
-      password: validated.data.password,
-      redirectTo,
-    })
-  } catch (err) {
-    if (err instanceof AuthError) {
-      switch (err.type) {
-        case 'CredentialsSignin':
-          return {
-            errors: {
-              message: 'Email or password is incorrect.',
-            },
-          }
-        default:
-          return {
-            errors: {
-              message: 'Something went wrong!',
-            },
-          }
-      }
+  const supabase = createClient({
+    serviceRole: true,
+  })
+
+  const { data: user } = await supabase
+    .from('users')
+    .select('*')
+    .eq('email', validated.data.email)
+    .single<APIUser>()
+
+  if (user === null)
+    return {
+      errors: {
+        message: 'Email or password is incorrect.',
+      },
     }
 
-    throw err
-  }
+  const { data: account } = await supabase
+    .from('accounts')
+    .select('*')
+    .match({
+      provider: 'credentials',
+      user_id: user.id,
+    })
+    .single<APIAccount>()
 
-  return {
-    errors: null,
-  }
+  if (account === null)
+    return {
+      errors: {
+        message: 'Email or password is incorrect.',
+      },
+    }
+
+  const isPwMatched = await verify(
+    account.hashed_password as string,
+    validated.data.password,
+    {
+      memoryCost: 19456,
+      timeCost: 2,
+      outputLen: 32,
+      parallelism: 1,
+    },
+  )
+
+  if (!isPwMatched)
+    return {
+      errors: {
+        message: 'Email or password is incorrect.',
+      },
+    }
+
+  const sessionToken = generateSessionToken()
+  const session = await createSession(sessionToken, user.id)
+
+  await setSessionTokenCookie(sessionToken, session.expiresAt)
+
+  redirect(redirectTo)
 }
 
-export const signInEmail = async (_: unknown, formData: FormData) => {
+export const signInWithEmail = async (_: unknown, formData: FormData) => {
   'use server'
 
   const validated = await signInEmailSchema.safeParseAsync({
@@ -180,8 +268,8 @@ export const signInEmail = async (_: unknown, formData: FormData) => {
 
   let redirectTo = '/dashboard'
 
-  const headersList = await headers()
-  const referrer = headersList.get('referer')
+  const headerStore = await headers()
+  const referrer = headerStore.get('referer')
 
   if (referrer) {
     const next = new URL(referrer).searchParams.get('next')
@@ -189,58 +277,41 @@ export const signInEmail = async (_: unknown, formData: FormData) => {
     if (next) redirectTo = next
   }
 
-  try {
-    await signIn('resend', {
-      email: validated.data.email,
-      redirectTo,
-    })
-  } catch (err) {
-    if (err instanceof AuthError)
-      return {
-        errors: {
-          message: 'Something went wrong!',
-        },
-      }
+  const supabase = createClient({
+    serviceRole: true,
+  })
 
-    throw err
+  const { data: existingUser } = await supabase
+    .from('users')
+    .select('*')
+    .eq('email', validated.data.email)
+    .single<APIUser>()
+
+  const token = crypto.randomUUID()
+
+  const url = `${process.env.NEXT_PUBLIC_URL}/magic-link/${token}`
+
+  await resend.emails.send({
+    from: `GeoWorld <${process.env.RESEND_EMAIL_FROM}>`,
+    to: validated.data.email,
+    subject: 'Sign In to GeoWorld',
+    text: '',
+    html: `<a href="${url}">Sign In</a>`,
+  })
+
+  if (existingUser !== null) {
+    const sessionToken = generateSessionToken()
+    const session = await createSession(sessionToken, existingUser.id)
+
+    await setSessionTokenCookie(sessionToken, session.expiresAt)
   }
 
-  return {
-    errors: null,
-  }
-}
+  const sessionToken = generateSessionToken()
+  const session = await createSession(sessionToken, '')
 
-export const signInDiscord = async () => {
-  'use server'
+  await setSessionTokenCookie(sessionToken, session.expiresAt)
 
-  let redirectTo = '/dashboard'
-
-  const headersList = await headers()
-  const referrer = headersList.get('referer')
-
-  if (referrer) {
-    const next = new URL(referrer).searchParams.get('next')
-
-    if (next) redirectTo = next
-  }
-
-  try {
-    await signIn('discord', {
-      redirectTo,
-    })
-  } catch (err) {
-    if (err instanceof AuthError) return /*{
-        errors: {
-          message: 'Something went wrong!',
-        },
-      }*/
-
-    throw err
-  }
-
-  return /*{
-    errors: null,
-  }*/
+  redirect(redirectTo)
 }
 
 export const resetPassword = async (_: unknown, formData: FormData) => {
@@ -276,7 +347,7 @@ export const resetPassword = async (_: unknown, formData: FormData) => {
     if (err instanceof Error)
       return {
         errors: {
-          message: err.message,
+          message: 'Database Error',
         },
       }
 
@@ -323,7 +394,7 @@ export const updatePassword = async (_: unknown, formData: FormData) => {
     if (err instanceof Error)
       return {
         errors: {
-          message: err.message,
+          message: 'Database Error',
         },
       }
 
@@ -338,11 +409,11 @@ export const updatePassword = async (_: unknown, formData: FormData) => {
 export const changeEmail = async (_: unknown, formData: FormData) => {
   'use server'
 
-  const session = await auth()
+  const { session, user } = await getCurrentSession()
 
   if (!session) redirect('/sign-in')
 
-  if (session.user.role !== 'user')
+  if (user.role !== 'user')
     return {
       errors: {
         message: 'You cannot change your email.',
@@ -353,8 +424,8 @@ export const changeEmail = async (_: unknown, formData: FormData) => {
     supabaseAccessToken: session.supabaseAccessToken,
   })
 
-  if (session.user.emailVerified) {
-    const emailConfirmedAt = new Date(session.user.emailVerified).getTime()
+  if (user.emailVerified) {
+    const emailConfirmedAt = user.emailVerifiedAt.getTime()
 
     if (Date.now() - emailConfirmedAt < 60 * 60 * 24 * 7 * 1000)
       return {
@@ -365,7 +436,7 @@ export const changeEmail = async (_: unknown, formData: FormData) => {
   }
 
   const validated = await changeEmailSchema.safeParseAsync({
-    oldEmail: session.user.email,
+    oldEmail: user.email,
     newEmail: formData.get('email'),
   })
 
@@ -383,7 +454,7 @@ export const changeEmail = async (_: unknown, formData: FormData) => {
   if (eErr)
     return {
       errors: {
-        message: eErr.message,
+        message: 'Database Error',
       },
     }
 
@@ -400,23 +471,28 @@ export const changeEmail = async (_: unknown, formData: FormData) => {
       email: validated.data.newEmail,
       emailVerified: null,
     })
-    .eq('id', session.user.id)
+    .eq('id', user.id)
+
+  if (error)
+    return {
+      errors: {
+        message: 'Database Error',
+      },
+    }
 
   return {
-    errors: {
-      message: error?.message,
-    },
+    errors: null,
   }
 }
 
 export const changePassword = async (_: unknown, formData: FormData) => {
   'use server'
 
-  const session = await auth()
+  const { session, user } = await getCurrentSession()
 
   if (!session) redirect('/sign-in')
 
-  if (session.user.role !== 'user')
+  if (user.role !== 'user')
     return {
       errors: {
         message: 'You cannot change your password.',
@@ -438,22 +514,25 @@ export const changePassword = async (_: unknown, formData: FormData) => {
       errors: validated.error.flatten().fieldErrors,
     }
 
-  const { data, error } = await supabase
-    .from('users')
+  const { data: account } = await supabase
+    .from('accounts')
     .select('*')
-    .eq('id', session.user.id)
-    .single<User>()
+    .match({
+      provider: 'credentials',
+      user_id: user.id,
+    })
+    .single<APIAccount>()
 
-  if (!data || error)
+  if (account === null)
     return {
       errors: {
         message: 'Failed to load your data.',
       },
     }
 
-  const isPwMatched = await bcrypt.compare(
+  const isPwMatched = await verify(
+    account.hashed_password as string,
     validated.data.oldPassword,
-    data.hashed_password as string,
   )
 
   if (!isPwMatched)
@@ -463,14 +542,19 @@ export const changePassword = async (_: unknown, formData: FormData) => {
       },
     }
 
-  const hashedPassword = await bcrypt.hash(validated.data.newPassword, 10)
+  const hashedPassword = await hash(validated.data.newPassword, {
+    memoryCost: 19456,
+    timeCost: 2,
+    outputLen: 32,
+    parallelism: 1,
+  })
 
   const { error: updatedErr } = await supabase
-    .from('users')
-    .update({
+    .from('accounts')
+    .update<Partial<APIAccount>>({
       hashed_password: hashedPassword,
     })
-    .eq('id', session.user.id)
+    .eq('user_id', user.id)
 
   return {
     errors: {
@@ -482,20 +566,16 @@ export const changePassword = async (_: unknown, formData: FormData) => {
 export const deleteAccount = async (_: unknown, formData: FormData) => {
   'use server'
 
-  const session = await auth()
+  const { session, user } = await getCurrentSession()
 
   if (!session) redirect('/sign-in')
 
-  if (session.user.role !== 'user')
+  if (user.role !== 'user')
     return {
       errors: {
         message: 'You cannot delete your account.',
       },
     }
-
-  const supabase = createClient({
-    supabaseAccessToken: session.supabaseAccessToken,
-  })
 
   const validated = await deleteAccountSchema.safeParseAsync({
     password: formData.get('password'),
@@ -507,19 +587,21 @@ export const deleteAccount = async (_: unknown, formData: FormData) => {
       errors: validated.error.flatten().fieldErrors,
     }
 
-  await signOut()
+  const supabase = createClient({
+    serviceRole: true,
+  })
 
-  const { error } = await supabase
-    .from('users')
-    .delete()
-    .eq('id', session.user.id)
+  const { error } = await supabase.from('users').delete().eq('id', user.id)
 
   if (error)
     return {
       errors: {
-        message: error.message,
+        message: 'Something went wrong!',
       },
     }
+
+  await invalidateSession(session.id)
+  await deleteSessionTokenCookie()
 
   revalidatePath('/', 'layout')
   redirect('/')

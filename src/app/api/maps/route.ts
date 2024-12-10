@@ -1,15 +1,15 @@
-import { auth } from '@/auth.js'
+import { getCurrentSession } from '@/session.js'
 
 import { createClient } from '@/utils/supabase/server.js'
 
 import { createMapSchema } from '@/utils/validations/map.js'
 
-import type { Map } from '@/types/index.js'
+import type { APIMap } from '@/types/map.js'
 
 export const POST = async (request: Request) => {
   'use server'
 
-  const session = await auth()
+  const { session, user } = await getCurrentSession()
 
   if (!session)
     return Response.json(
@@ -47,16 +47,16 @@ export const POST = async (request: Request) => {
 
   const { data, error } = await supabase
     .from('maps')
-    .insert<Partial<Map>>({
+    .insert<Partial<APIMap>>({
       type: 'community',
       name: validated.data.name,
       description:
         validated.data.description === '' ? null : validated.data.description,
       is_published: false,
-      creator: session.user.id,
+      creator: user.id,
     })
     .select()
-    .single<Map>()
+    .single<APIMap>()
 
   if (error)
     return Response.json(

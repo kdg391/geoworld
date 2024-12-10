@@ -11,7 +11,7 @@ import styles from './Dropdown.module.css'
 
 import './Dropdown.css'
 
-import type { Coords } from '@/types/index.js'
+import type { Coords } from '@/types/location.js'
 
 interface Props {
   locations: Coords[]
@@ -53,7 +53,7 @@ const Dropdown = ({
           heading: loc.heading,
           pitch: loc.pitch,
           zoom: loc.zoom,
-          pano_id: loc.pano_id ?? loc.panoId,
+          panoId: loc.panoId ?? loc.pano_id,
         })),
       )
     })
@@ -69,7 +69,7 @@ const Dropdown = ({
         heading: loc.heading,
         pitch: loc.pitch,
         zoom: loc.zoom,
-        pano_id: loc.pano_id,
+        pano_id: loc.panoId,
       })),
     )
 

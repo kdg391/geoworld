@@ -11,7 +11,8 @@ import useGoogleApi from '@/hooks/useGoogleApi.js'
 
 import styles from './page.module.css'
 
-import type { Game, GameView, Map } from '@/types/index.js'
+import type { Game, GameView } from '@/types/game.js'
+import type { Map } from '@/types/map.js'
 
 import Loading from './Loading.js'
 
@@ -45,7 +46,7 @@ const Game = (props: Props) => {
 
   useEffect(() => {
     const loadGame = async () => {
-      const { data: gData, error: gDataErr } = await startGameRound(params.id)
+      const { data: gData, errors: gDataErr } = await startGameRound(params.id)
 
       if (!gData) {
         setGameData(null)
@@ -53,13 +54,12 @@ const Game = (props: Props) => {
       }
       if (gDataErr) return
 
-      const { data: mData, error: mDataErr } = await getMap(gData.map_id)
+      const { data: mData } = await getMap(gData.mapId)
 
       if (!mData) {
         setMapData(null)
         return
       }
-      if (mDataErr) return
 
       if (!isGoogleLoaded) await loadGoogleApi()
 
@@ -78,7 +78,7 @@ const Game = (props: Props) => {
       if (!gameData) return
 
       if (markerPosition || timedOut) {
-        const { data: updatedData, error: uErr } = await updateGame(
+        const { data: updatedData, errors: uErr } = await updateGame(
           gameData.id,
           {
             guessedLocation: markerPosition,
@@ -110,7 +110,7 @@ const Game = (props: Props) => {
           round={gameData.round}
           rounds={gameData.settings.rounds}
           timeLimit={gameData.settings.timeLimit}
-          totalScore={gameData.total_score}
+          totalScore={gameData.totalScore}
         />
       )}
 
@@ -146,7 +146,7 @@ const Game = (props: Props) => {
             <FinalRoundResult
               mapId={mapData.id}
               settings={gameData.settings}
-              totalScore={gameData.total_score}
+              totalScore={gameData.totalScore}
             />
           )}
         </div>

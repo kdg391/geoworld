@@ -1,5 +1,3 @@
-import { SessionProvider } from 'next-auth/react'
-
 import { createTranslation } from '@/i18n/server.js'
 
 import GoogleApiProvider from '@/providers/GoogleApiProvider.js'
@@ -19,9 +17,5 @@ export default async function Layout({
 }: {
   children: React.ReactNode
 }) {
-  return (
-    <GoogleApiProvider>
-      <SessionProvider>{children}</SessionProvider>
-    </GoogleApiProvider>
-  )
+  return <GoogleApiProvider>{children}</GoogleApiProvider>
 }

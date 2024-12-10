@@ -15,7 +15,8 @@ import Button from '../common/Button/index.js'
 
 import styles from './index.module.css'
 
-import type { GameView, Map } from '@/types/index.js'
+import type { GameView } from '@/types/game.js'
+import type { Map } from '@/types/map.js'
 
 const GoogleMap = dynamic(() => import('../GoogleMap.js'))
 const GuessMapControls = dynamic(() => import('../GuessMapControls/index.js'))

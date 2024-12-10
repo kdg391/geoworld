@@ -2,28 +2,30 @@
 
 import { LogOut, Settings, UserRound } from 'lucide-react'
 import Link from 'next/link'
-import { signOut } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 
+import { signOut } from '@/actions/auth.js'
 import { getProfile } from '@/actions/profile.js'
 
 import { useTranslation } from '@/i18n/client.js'
 
 import styles from './MobileUserInfo.module.css'
 
-import type { Session } from 'next-auth'
-import type { Profile } from '@/types/index.js'
+import type { Session } from '@/session.js'
+import type { Profile } from '@/types/profile.js'
+import type { User } from '@/types/user.js'
 
 interface Props {
   session: Session
+  user: User
 }
 
-const MobileUserInfo = ({ session }: Props) => {
+const MobileUserInfo = ({ user }: Props) => {
   const [isLoading, setIsLoading] = useState(true)
 
   const [profile, setProfile] = useState<Pick<
     Profile,
-    'id' | 'username' | 'display_name'
+    'id' | 'username' | 'displayName'
   > | null>(null)
 
   const { t } = useTranslation(['common', 'auth', 'settings'])
@@ -43,18 +45,22 @@ const MobileUserInfo = ({ session }: Props) => {
         return
       }
 
-      const { data: pData, error: pErr } = await getProfile(session.user.id)
+      const { data: pData } = await getProfile(user.id)
 
-      if (!pData || pErr) return
+      if (!pData) return
 
-      setProfile(pData)
+      setProfile({
+        id: pData.id,
+        displayName: pData.displayName,
+        username: pData.username,
+      })
 
       try {
         localStorage.setItem(
           'profileCache',
           JSON.stringify({
             id: pData.id,
-            display_name: pData.display_name,
+            displayName: pData.displayName,
             username: pData.username,
           }),
         )
@@ -87,7 +93,7 @@ const MobileUserInfo = ({ session }: Props) => {
           <UserRound size={24} />
         </div>
         <div>
-          <div className={styles['display-name']}>{profile.display_name}</div>
+          <div className={styles['display-name']}>{profile.displayName}</div>
           <div className={styles.username}>@{profile.username}</div>
         </div>
       </Link>

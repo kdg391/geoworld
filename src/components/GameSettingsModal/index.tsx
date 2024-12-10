@@ -21,7 +21,7 @@ import Modal from '../common/Modal/index.js'
 
 import styles from './index.module.css'
 
-import type { Map } from '@/types/index.js'
+import type { Map } from '@/types/map.js'
 
 const Button = dynamic(() => import('../common/Button/index.js'))
 const NumberInput = dynamic(() => import('../common/NumberInput/index.js'))
@@ -48,9 +48,9 @@ const GameSettingsModal = ({
   const [canPan, setCanPan] = useState(true)
   const [canZoom, setCanZoom] = useState(true)
   const [rounds, setRounds] = useState(
-    mapData.locations_count > DEFAULT_ROUNDS
+    mapData.locationsCount > DEFAULT_ROUNDS
       ? DEFAULT_ROUNDS
-      : mapData.locations_count,
+      : mapData.locationsCount,
   )
   const [timeLimit, setTimeLimit] = useState<number>(0)
 
@@ -59,7 +59,7 @@ const GameSettingsModal = ({
   const { t } = useTranslation(['common', 'game-settings'])
 
   const maxRounds =
-    mapData.locations_count > MAX_ROUNDS ? MAX_ROUNDS : mapData.locations_count
+    mapData.locationsCount > MAX_ROUNDS ? MAX_ROUNDS : mapData.locationsCount
 
   const onPlayClick = async () => {
     if (!userId) {
@@ -69,7 +69,7 @@ const GameSettingsModal = ({
 
     setIsLoading(true)
 
-    const { data: gameData, error } = await createGame({
+    const { data: gameData, errors } = await createGame({
       mapId: mapData.id,
       settings: {
         canMove,
@@ -80,7 +80,7 @@ const GameSettingsModal = ({
       },
     })
 
-    if (!gameData || error) {
+    if (!gameData || errors) {
       setIsLoading(false)
       return
     }

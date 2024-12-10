@@ -12,7 +12,7 @@ import styles from './MenuButton.module.css'
 
 import './MenuButton.css'
 
-import type { Coords } from '@/types/index.js'
+import type { Coords } from '@/types/location.js'
 
 const ClearLocationsConfirm = dynamic(
   () => import('./ClearLocationsConfirm.js'),

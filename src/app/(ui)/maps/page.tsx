@@ -6,7 +6,7 @@ import { createTranslation } from '@/i18n/server.js'
 import styles from './page.module.css'
 import homeStyles from '../page.module.css'
 
-import type { Map } from '@/types/index.js'
+import type { Map } from '@/types/map.js'
 
 const MapCard = dynamic(() => import('@/components/MapCard/index.js'))
 

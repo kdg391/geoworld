@@ -5,7 +5,7 @@ import { createClient } from '@/utils/supabase/server.js'
 import { emailSchema } from '@/utils/validations/auth.js'
 
 import type { NextRequest } from 'next/server'
-import type { User } from '@/types/index.js'
+import type { APIUser } from '@/types/user.js'
 
 const schema = z.object({
   email: emailSchema,
@@ -37,10 +37,11 @@ export const POST = async (request: NextRequest) => {
   })
 
   const { data: existingToken } = await supabase
-    .from('verification_tokens')
+    .from('email_verification_tokens')
     .select('*')
     .eq('token', validated.data.token)
     .single<{
+      id: string
       expires: string
       identifier: string
       token: string
@@ -74,15 +75,15 @@ export const POST = async (request: NextRequest) => {
 
   const { data: existingUser } = await supabase
     .from('users')
-    .select('*')
+    .select('id')
     .eq('email', existingToken.identifier)
-    .single<User>()
+    .single<Pick<APIUser, 'id'>>()
 
   if (!existingUser)
     return Response.json(
       {
         errors: {
-          message: 'The email does not exist',
+          message: 'Forbidden',
         },
       },
       {
@@ -92,14 +93,15 @@ export const POST = async (request: NextRequest) => {
 
   await supabase
     .from('users')
-    .update({
+    .update<Partial<APIUser>>({
       email: existingToken.identifier,
-      emailVerified: new Date().toISOString(),
+      email_verified: true,
+      email_verified_at: new Date().toISOString(),
     })
     .eq('id', existingUser.id)
 
   await supabase
-    .from('verification_tokens')
+    .from('email_verification_tokens')
     .delete()
     .eq('token', existingToken.token)
 

@@ -1,22 +1,25 @@
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 
-import { auth } from '@/auth.js'
+import { getCurrentSession } from '@/session.js'
 
 import { getProfile } from '@/actions/profile.js'
 
 import { createTranslation } from '@/i18n/server.js'
 
 const Dashboard = async () => {
-  const session = await auth()
+  const { session, user } = await getCurrentSession()
 
   if (!session) redirect('/sign-in')
 
-  const { data: profile } = await getProfile(session.user.id)
+  const { data: profile } = await getProfile(user.id)
 
-  if (!profile) redirect('/sign-in')
-
-  if (!profile.display_name || !profile.username) redirect('/setup-profile')
+  if (
+    profile === null ||
+    profile.displayName === null ||
+    profile.username === null
+  )
+    redirect('/setup-profile')
 
   const { t } = await createTranslation('common')
 

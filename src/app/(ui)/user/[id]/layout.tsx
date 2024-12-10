@@ -17,15 +17,15 @@ export const generateMetadata = async (props: Props): Promise<Metadata> => {
 
   const { t } = await createTranslation('common')
 
-  const { data: pData, error: pErr } = await getProfile(params.id)
+  const { data: profile } = await getProfile(params.id)
 
-  if (!pData || pErr)
+  if (!profile)
     return {
       title: `${t('user')} - GeoWorld`,
     }
 
   return {
-    title: `${pData.display_name} - ${t('user')} - GeoWorld`,
+    title: `${profile.displayName} - ${t('user')} - GeoWorld`,
   }
 }
 

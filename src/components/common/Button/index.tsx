@@ -6,8 +6,6 @@ import styles from './index.module.css'
 
 import Spinner from '../Spinner/index.js'
 
-import type React from 'react'
-
 type PolymorphicRef<C extends React.ElementType> =
   React.ComponentPropsWithRef<C>['ref']
 

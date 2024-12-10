@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
-import { auth } from '@/auth.js'
+import { getCurrentSession } from '@/session.js'
 
 import { getLike, getMap } from '@/actions/map.js'
 import { getProfile } from '@/actions/profile.js'
@@ -41,14 +41,14 @@ const Map = async (props: Props) => {
 
   const params = await props.params
 
-  const { data: mapData, error: mErr } = await getMap(params.id)
+  const { data: mapData } = await getMap(params.id)
 
-  if (!mapData || mErr) notFound()
+  if (!mapData) notFound()
 
   const { data: creator } = await getProfile(mapData.creator)
   const { data: liked } = await getLike(mapData.id)
 
-  const session = await auth()
+  const { user } = await getCurrentSession()
 
   const { t } = await createTranslation(['common', 'map'])
 
@@ -81,18 +81,20 @@ const Map = async (props: Props) => {
             </div>
           </div>
           <p className={styles.description}>{mapData.description}</p>
-          <div>
-            <span>
-              Created by{' '}
-              <Link href={`/user/${mapData.creator}`}>
-                {creator.display_name}
-              </Link>
-            </span>
-          </div>
+          {creator && (
+            <div>
+              <span>
+                Created by{' '}
+                <Link href={`/user/${mapData.creator}`}>
+                  {creator.displayName}
+                </Link>
+              </span>
+            </div>
+          )}
           <p>
             {t('updated', {
               ns: 'map',
-              val: new Date(mapData.updated_at),
+              val: new Date(mapData.updatedAt),
               formatParams: {
                 val: {
                   year: 'numeric',
@@ -107,24 +109,24 @@ const Map = async (props: Props) => {
           <div className={styles.card}>
             <Scale size={24} />
             <div>
-              <div>{mapData.average_score.toLocaleString()}</div>
+              <div>{mapData.averageScore.toLocaleString()}</div>
               <div>{t('map:avg_score')}</div>
             </div>
           </div>
           <div className={styles.card}>
             <UsersRound size={24} />
             <div>
-              <div>{mapData.explorers_count.toLocaleString()}</div>
+              <div>{mapData.explorersCount.toLocaleString()}</div>
               <div>{t('map:explorers')}</div>
             </div>
           </div>
           <div className={styles.card}>
             <Earth size={24} />
             <div>
-              <div>{mapData.locations_count.toLocaleString()}</div>
+              <div>{mapData.locationsCount.toLocaleString()}</div>
               <div>
                 {t('locations', {
-                  count: mapData.locations_count,
+                  count: mapData.locationsCount,
                   ns: 'map',
                 })}
               </div>
@@ -133,7 +135,7 @@ const Map = async (props: Props) => {
           <div className={styles.card}>
             <LikeButton defaultLiked={liked} mapId={mapData.id} />
             <div>
-              <div>{mapData.likes_count.toLocaleString()}</div>
+              <div>{mapData.likesCount.toLocaleString()}</div>
               <div>
                 {t('likes', {
                   ns: 'map',
@@ -143,8 +145,8 @@ const Map = async (props: Props) => {
           </div>
         </div>
         <div>
-          <PlayButton mapData={mapData} userId={session?.user.id} />
-          {mapData.creator === session?.user.id && (
+          <PlayButton mapData={mapData} userId={user?.id} />
+          {mapData.creator === user?.id && (
             <div className="flex">
               <EditButton mapId={mapData.id} />
               <DeleteButton mapId={mapData.id} />

@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-import { auth } from '@/auth.js'
+import { getCurrentSession } from '@/session.js'
 
 import { OFFICIAL_MAP_WORLD_ID } from '@/constants/index.js'
 
@@ -8,7 +8,9 @@ import { createClient } from '@/utils/supabase/server.js'
 
 import { gameSettingsSchema } from '@/utils/validations/game.js'
 
-import type { Game, Location, Map, RoundLocation } from '@/types/index.js'
+import type { APIGame } from '@/types/game.js'
+import type { APIRoundLocation, Location } from '@/types/location'
+import type { APIMap } from '@/types/map.js'
 
 const mapIdSchema = z.object({
   mapId: z.string().uuid(),
@@ -29,7 +31,7 @@ const settingsSchema = z
   })
 
 export const POST = async (request: Request) => {
-  const session = await auth()
+  const { session, user } = await getCurrentSession()
 
   if (!session)
     return Response.json(
@@ -45,14 +47,14 @@ export const POST = async (request: Request) => {
 
   const body = await request.json()
 
-  const validatedMapId = await mapIdSchema.safeParseAsync({
+  const validatedMap = await mapIdSchema.safeParseAsync({
     mapId: body.mapId,
   })
 
-  if (!validatedMapId.success)
+  if (!validatedMap.success)
     return Response.json(
       {
-        errors: validatedMapId.error.flatten().fieldErrors,
+        errors: validatedMap.error.flatten().fieldErrors,
       },
       {
         status: 401,
@@ -66,8 +68,8 @@ export const POST = async (request: Request) => {
   const { data: mapData, error: mapErr } = await supabase
     .from('maps')
     .select('*')
-    .eq('id', validatedMapId.data.mapId)
-    .single<Map>()
+    .eq('id', validatedMap.data.mapId)
+    .single<APIMap>()
 
   if (mapErr)
     return Response.json(
@@ -116,32 +118,38 @@ export const POST = async (request: Request) => {
       },
     )
 
-  const actualLocation: RoundLocation = {
+  const actualLocation: APIRoundLocation = {
     lat: location.lat,
     lng: location.lng,
     heading: location.heading,
     pitch: location.pitch,
     zoom: location.zoom,
-    pano_id: location.pano_id,
-    streak_location_code: location.streak_location_code,
+    pano_id: location.panoId,
+    streak_location_code: location.streakLocationCode,
     started_at: new Date().toISOString(),
     ended_at: null,
   }
 
   const { data, error } = await supabase
     .from('games')
-    .insert<Partial<Game>>({
+    .insert<Partial<APIGame>>({
       guesses: [],
       map_id: mapData.id,
       mode: 'standard',
       round: 0,
       rounds: [actualLocation],
-      settings: validated.data.settings,
+      settings: {
+        can_move: validated.data.settings.canMove,
+        can_pan: validated.data.settings.canPan,
+        can_zooom: validated.data.settings.canZoom,
+        rounds: validated.data.settings.rounds,
+        time_limit: validated.data.settings.timeLimit,
+      },
       state: 'started',
-      user_id: session.user.id,
+      user_id: user.id,
     })
     .select()
-    .single<Game>()
+    .single<APIGame>()
 
   if (error)
     return Response.json(

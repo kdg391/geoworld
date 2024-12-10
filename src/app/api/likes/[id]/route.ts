@@ -1,4 +1,4 @@
-import { auth } from '@/auth.js'
+import { getCurrentSession } from '@/session.js'
 
 import { createClient } from '@/utils/supabase/server.js'
 
@@ -6,7 +6,7 @@ export const GET = async (
   _: Request,
   segmentData: { params: Promise<{ id: string }> },
 ) => {
-  const session = await auth()
+  const { session, user } = await getCurrentSession()
 
   if (!session)
     return Response.json(
@@ -29,7 +29,7 @@ export const GET = async (
   const { data, error } = await supabase
     .from('likes')
     .select('*')
-    .eq('user_id', session.user.id)
+    .eq('user_id', user.id)
     .eq('map_id', params.id)
     .maybeSingle()
 
@@ -54,7 +54,7 @@ export const POST = async (
   _: Request,
   segmentData: { params: Promise<{ id: string }> },
 ) => {
-  const session = await auth()
+  const { session, user } = await getCurrentSession()
 
   if (!session)
     return Response.json(
@@ -77,7 +77,7 @@ export const POST = async (
   const { data } = await supabase
     .from('likes')
     .select()
-    .eq('user_id', session.user.id)
+    .eq('user_id', user.id)
     .eq('map_id', params.id)
     .maybeSingle()
 
@@ -95,7 +95,7 @@ export const POST = async (
 
   const { error } = await supabase.from('likes').insert({
     map_id: params.id,
-    user_id: session.user.id,
+    user_id: user.id,
   })
 
   if (error)
@@ -119,7 +119,7 @@ export const DELETE = async (
   _: Request,
   segmentData: { params: Promise<{ id: string }> },
 ) => {
-  const session = await auth()
+  const { session, user } = await getCurrentSession()
 
   if (!session)
     return Response.json(
@@ -142,7 +142,7 @@ export const DELETE = async (
   const { data } = await supabase
     .from('likes')
     .select()
-    .eq('user_id', session.user.id)
+    .eq('user_id', user.id)
     .eq('map_id', params.id)
     .maybeSingle()
 
@@ -161,7 +161,7 @@ export const DELETE = async (
   const { error } = await supabase
     .from('likes')
     .delete()
-    .eq('user_id', session.user.id)
+    .eq('user_id', user.id)
     .eq('map_id', params.id)
 
   if (error)

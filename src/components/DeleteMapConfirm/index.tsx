@@ -17,7 +17,9 @@ interface Props {
 }
 
 interface FormState {
-  message?: string
+  errors?: {
+    message: string
+  } | null
 }
 
 const DeleteMapConfirm = ({ isOpen, setIsOpen, mapId }: Props) => {
@@ -28,9 +30,14 @@ const DeleteMapConfirm = ({ isOpen, setIsOpen, mapId }: Props) => {
 
     const res = await deleteMap(mapId)
 
-    if (res.errors) return res
+    if (res.errors)
+      return {
+        errors: res.errors,
+      }
 
     router.push('/')
+
+    return {}
   }
 
   const [, action] = useActionState<FormState, FormData>(deleteMapAction, {})

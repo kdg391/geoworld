@@ -8,7 +8,7 @@ import { DEFAULT_ROUNDS } from '@/constants/game.js'
 
 import { useTranslation } from '@/i18n/client.js'
 
-import type { Map } from '@/types/index.js'
+import type { Map } from '@/types/map.js'
 
 const Button = dynamic(() => import('@/components/common/Button/index.js'))
 const GameSettingsModal = dynamic(
@@ -35,7 +35,7 @@ const PlayButton = ({ mapData, userId }: Props) => {
       <Button
         variant="primary"
         size="m"
-        disabled={mapData.locations_count <= DEFAULT_ROUNDS}
+        disabled={mapData.locationsCount <= DEFAULT_ROUNDS}
         onClick={() => {
           if (!userId) {
             router.push(`/sign-in?next=/map/${mapData.id}`)

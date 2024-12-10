@@ -12,14 +12,14 @@ import {
 
 import { useTranslation } from '@/i18n/client.js'
 
+import Button from '../common/Button/index.js'
+import Twemoji from '../Twemoji.js'
+
 import styles from './index.module.css'
 
 import './index.css'
 
-import type { Map } from '@/types/index.js'
-
-import Button from '../common/Button/index.js'
-import Twemoji from '../Twemoji.js'
+import type { Map } from '@/types/map.js'
 
 interface Props {
   mapData: Map

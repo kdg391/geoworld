@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-import { auth } from '@/auth.js'
+import { getCurrentSession } from '@/session.js'
 
 import {
   OFFICIAL_MAP_COUNTRY_CODES,
@@ -16,7 +16,8 @@ import { createClient } from '@/utils/supabase/server.js'
 
 import { mapDescriptionSchema, mapNameSchema } from '@/utils/validations/map.js'
 
-import type { Location, Map } from '@/types/index.js'
+import type { APILocation, Location } from '@/types/location.js'
+import type { APIMap } from '@/types/map.js'
 
 export const GET = async (
   _: Request,
@@ -24,7 +25,7 @@ export const GET = async (
 ) => {
   'use server'
 
-  const session = await auth()
+  const { session } = await getCurrentSession()
 
   const supabase = createClient({
     supabaseAccessToken: session?.supabaseAccessToken,
@@ -36,7 +37,7 @@ export const GET = async (
     .from('maps')
     .select('*')
     .eq('id', params.id)
-    .maybeSingle<Map>()
+    .single<APIMap>()
 
   if (error)
     return Response.json(
@@ -44,7 +45,6 @@ export const GET = async (
         errors: {
           message: 'Database Error',
         },
-        code: 'database_error',
       },
       {
         status: 500,
@@ -57,7 +57,6 @@ export const GET = async (
         errors: {
           message: 'Map Not Found',
         },
-        code: 'map_not_found',
       },
       {
         status: 404,
@@ -88,7 +87,7 @@ const schema = z.object({
         lat: z.number(),
         lng: z.number(),
         heading: z.number(),
-        pano_id: z.string(),
+        panoId: z.string(),
         pitch: z.number(),
         zoom: z.number(),
       }),
@@ -102,7 +101,7 @@ export const PATCH = async (
   request: Request,
   segmentData: { params: Promise<{ id: string }> },
 ) => {
-  const session = await auth()
+  const { session, user } = await getCurrentSession()
 
   if (!session)
     return Response.json(
@@ -126,7 +125,7 @@ export const PATCH = async (
     .from('maps')
     .select('*')
     .eq('id', params.id)
-    .single<Map>()
+    .single<APIMap>()
 
   if (mapErr)
     return Response.json(
@@ -152,7 +151,7 @@ export const PATCH = async (
       },
     )
 
-  if (mapData.creator !== session.user.id)
+  if (mapData.creator !== user.id)
     return Response.json(
       {
         errors: {
@@ -164,7 +163,7 @@ export const PATCH = async (
       },
     )
 
-  if (mapData.type === 'official' && session.user.role !== 'admin')
+  if (mapData.type === 'official' && user.role !== 'admin')
     return Response.json(
       {
         errors: {
@@ -179,10 +178,10 @@ export const PATCH = async (
   const body = await request.json()
 
   const validated = await schema.safeParseAsync({
-    isPublished: body.isPublished,
-    locations: body.locations,
     name: body.name,
     description: body.description,
+    isPublished: body.isPublished,
+    locations: body.locations,
   })
 
   if (!validated.success)
@@ -195,7 +194,7 @@ export const PATCH = async (
       },
     )
 
-  const updateData: Partial<Map> = {}
+  const updateData: Partial<APIMap> = {}
 
   if (validated.data.locations && validated.data.locations.length > 0) {
     const { data: oldLocs, error: lErr } = await supabase
@@ -231,17 +230,17 @@ export const PATCH = async (
     const newLocs = validated.data.locations
 
     const adding = newLocs.filter((n) =>
-      oldLocs.every((o) => o.pano_id !== n.pano_id),
+      oldLocs.every((o) => o.panoId !== n.panoId),
     )
     const updating = newLocs.filter((n) =>
       oldLocs.some(
         (o) =>
-          o.pano_id === n.pano_id &&
+          o.panoId === n.panoId &&
           (o.heading !== n.heading || o.pitch !== n.pitch || o.zoom !== n.zoom),
       ),
     )
     const removing = oldLocs.filter((o) =>
-      newLocs.every((n) => n.pano_id !== o.pano_id),
+      newLocs.every((n) => n.panoId !== o.panoId),
     )
 
     if (removing.length > 0) {
@@ -251,7 +250,7 @@ export const PATCH = async (
         .eq('map_id', mapData.id)
         .in(
           'pano_id',
-          removing.map((loc) => loc.pano_id),
+          removing.map((loc) => loc.panoId),
         )
 
       if (removedErr)
@@ -268,18 +267,24 @@ export const PATCH = async (
     }
 
     if (adding.length > 0) {
-      const { error: insertedErr } = await supabase.from('locations').insert(
-        adding.map((loc) => ({
-          map_id: mapData.id,
-          user_id: session.user.id,
-          streak_location_code: getCountryFromCoordinates({
+      const { error: insertedErr } = await supabase
+        .from('locations')
+        .insert<Partial<APILocation>[]>(
+          adding.map((loc) => ({
+            map_id: mapData.id,
+            user_id: user.id,
+            streak_location_code: getCountryFromCoordinates({
+              lat: loc.lat,
+              lng: loc.lng,
+            }),
             lat: loc.lat,
             lng: loc.lng,
-          }),
-          ...loc,
-          heading: loc.heading ?? 0,
-        })),
-      )
+            heading: loc.heading ?? 0,
+            pano_id: loc.panoId,
+            pitch: loc.pitch,
+            zoom: loc.zoom,
+          })),
+        )
 
       if (insertedErr)
         return Response.json(
@@ -370,11 +375,12 @@ export const PATCH = async (
 
   updateData.updated_at = new Date().toISOString()
 
-  const { error: updatedErr } = await supabase
+  const { data: updatedData, error: updatedErr } = await supabase
     .from('maps')
-    .update<Partial<Map>>(updateData)
+    .update<Partial<APIMap>>(updateData)
     .eq('id', mapData.id)
-    .single<Map>()
+    .select()
+    .single<APIMap>()
 
   if (updatedErr)
     return Response.json(
@@ -389,6 +395,7 @@ export const PATCH = async (
     )
 
   return Response.json({
+    data: updatedData,
     message: 'Successfully updated the map',
   })
 }
@@ -397,7 +404,7 @@ export const DELETE = async (
   _: Request,
   segmentData: { params: Promise<{ id: string }> },
 ) => {
-  const session = await auth()
+  const { session, user } = await getCurrentSession()
 
   if (!session)
     return Response.json(
@@ -421,7 +428,7 @@ export const DELETE = async (
     .from('maps')
     .select('*')
     .eq('id', params.id)
-    .single<Map>()
+    .single<APIMap>()
 
   if (mapErr)
     return Response.json(
@@ -447,7 +454,7 @@ export const DELETE = async (
       },
     )
 
-  if (mapData.creator !== session.user.id)
+  if (mapData.creator !== user.id)
     return Response.json(
       {
         errors: {
@@ -460,7 +467,7 @@ export const DELETE = async (
     )
 
   if (mapData.type === 'official') {
-    if (session.user.role !== 'admin')
+    if (user.role !== 'admin')
       return Response.json(
         {
           errors: {

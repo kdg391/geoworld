@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 
-import { auth } from '@/auth.js'
+import { getCurrentSession } from '@/session.js'
 
 import { createTranslation } from '@/i18n/server.js'
 
@@ -13,7 +13,7 @@ interface Props {
 }
 
 const Leaderboard = async ({ mapId }: Props) => {
-  const session = await auth()
+  const { session } = await getCurrentSession()
 
   const supabase = createClient({
     supabaseAccessToken: session?.supabaseAccessToken,

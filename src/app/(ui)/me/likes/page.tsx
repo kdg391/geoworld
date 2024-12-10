@@ -2,20 +2,20 @@
 
 import { redirect } from 'next/navigation'
 
-import { auth } from '@/auth.js'
+import { getCurrentSession } from '@/session.js'
 
 import { createTranslation } from '@/i18n/server.js'
 
 import { createClient } from '@/utils/supabase/server.js'
 
-import type { Map } from '@/types/index.js'
-
 import MapCard from '@/components/MapCard/index.js'
+
+import type { Map } from '@/types/map.js'
 
 const Likes = async () => {
   'use server'
 
-  const session = await auth()
+  const { session, user } = await getCurrentSession()
 
   if (!session) redirect('/sign-in?next=/dashboard/likes')
 
@@ -26,7 +26,7 @@ const Likes = async () => {
   const { data: likedMaps, error: lErr } = await supabase
     .from('likes')
     .select('map_id')
-    .eq('user_id', session.user.id)
+    .eq('user_id', user.id)
     .returns<{ map_id: string }[]>()
 
   if (!likedMaps || lErr) return

@@ -1,9 +1,9 @@
-import { auth } from '@/auth.js'
+import { getCurrentSession } from '@/session.js'
 
 import { createClient } from '@/utils/supabase/server.js'
 
 export const GET = async () => {
-  const session = await auth()
+  const { session, user } = await getCurrentSession()
 
   if (!session)
     return Response.json(
@@ -24,7 +24,7 @@ export const GET = async () => {
   const { data, error } = await supabase
     .from('likes')
     .select('*')
-    .eq('user_id', session.user.id)
+    .eq('user_id', user.id)
 
   if (error)
     return Response.json(

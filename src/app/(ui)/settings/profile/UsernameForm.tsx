@@ -6,10 +6,10 @@ import { changeUsername } from '@/actions/profile.js'
 
 import { useTranslation } from '@/i18n/client.js'
 
-import styles from '../layout.module.css'
-
 import SubmitButton from '@/components/common/SubmitButton/index.js'
 import TextInput from '@/components/common/TextInput/index.js'
+
+import styles from '../layout.module.css'
 
 interface FormState {
   errors: {

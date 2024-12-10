@@ -10,7 +10,7 @@ import styles from './index.module.css'
 
 import './index.css'
 
-import type { RoundLocation } from '@/types/index.js'
+import type { RoundLocation } from '@/types/location.js'
 
 interface Props {
   finishRound: (timedOut: boolean) => Promise<void>
@@ -37,7 +37,7 @@ const GameStatus = ({
   const [timeLeft, setTimeLeft] = useState<number>(() => {
     const currentTime = new Date().getTime()
     const timeElapsed = Math.floor(
-      (currentTime - new Date(location.started_at).getTime()) / 1000,
+      (currentTime - location.startedAt.getTime()) / 1000,
     )
     const left = timeLimit - timeElapsed
 
@@ -82,7 +82,7 @@ const GameStatus = ({
       } else {
         const currentTime = new Date().getTime()
         const timeElapsed = Math.floor(
-          (currentTime - new Date(location.started_at).getTime()) / 1000,
+          (currentTime - location.startedAt.getTime()) / 1000,
         )
         const left = timeLimit - timeElapsed
 
