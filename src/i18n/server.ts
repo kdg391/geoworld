@@ -2,7 +2,7 @@
 
 import { createInstance } from 'i18next'
 import resourcesToBackend from 'i18next-resources-to-backend'
-import { cookies } from 'next/headers'
+import { cookies, headers } from 'next/headers'
 import { initReactI18next } from 'react-i18next/initReactI18next'
 
 import {
@@ -47,7 +47,13 @@ export async function createTranslation(ns: string | string[]) {
 export async function getLocale() {
   const cookieStore = await cookies()
 
-  const locale = cookieStore.get(LANGUAGE_COOKIE)?.value ?? DEFAULT_LOCALE
+  let locale = cookieStore.get(LANGUAGE_COOKIE)?.value
+
+  if (!locale) {
+    const headerStore = await headers()
+
+    locale = headerStore.get('x-next-locale') ?? DEFAULT_LOCALE
+  }
 
   return locale as Locales
 }

@@ -35,6 +35,7 @@ export const middleware = async (request: NextRequest) => {
   const locale = getLocale(request)
 
   response.headers.set('x-next-pathname', pathname)
+  response.headers.set('x-next-locale', locale)
 
   const cookieStore = await cookies()
 
@@ -53,34 +54,6 @@ export const middleware = async (request: NextRequest) => {
         secure: process.env.NODE_ENV === 'production',
       })
     }
-
-    /*const session = token ? await validateSessionToken(token) : null
-
-    if (!session) {
-      if (
-        pathname.startsWith('/dashboard') ||
-        pathname.startsWith('/game') ||
-        pathname === '/settings/account' ||
-        pathname === '/settings/profile' ||
-        (pathname.startsWith('/map') && pathname.endsWith('/edit')) ||
-        pathname === '/setup-profile'
-      ) {
-        const url = new URL('/sign-in', request.url)
-        url.searchParams.set('next', pathname)
-
-        return NextResponse.redirect(url)
-      }
-    } else {
-      if (pathname === '/') {
-        const url = new URL('/dashboard', request.url)
-
-        return NextResponse.redirect(url)
-      } else if (pathname === '/sign-in' || pathname === '/sign-up') {
-        const url = new URL('/dashboard', request.url)
-
-        return NextResponse.redirect(url)
-      }
-    }*/
 
     return response
   }

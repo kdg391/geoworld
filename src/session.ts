@@ -8,9 +8,11 @@ import {
 import jwt from 'jsonwebtoken'
 import { cookies, headers } from 'next/headers.js'
 import { cache } from 'react'
+import { UAParser } from 'ua-parser-js'
 
 import { createClient } from './utils/supabase/server.js'
 
+import type { IBrowser, ICPU, IDevice, IEngine, IOS } from 'ua-parser-js'
 import type { APIUser, User } from './types/user.js'
 
 export type SessionValidationResult =
@@ -27,13 +29,16 @@ export interface APISession {
   id: string
   user_id: string
   expires_at: string
-  created_at?: string
-  ip_address?: string
-  user_agent?: {
-    'user-agent': string | null
-    'sec-ch-ua-mobile': string | null
-    'sec-ch-ua-model': string | null
-    'sec-ch-ua-platform': string | null
+  created_at: string
+  ip_address: string | null
+  user_agent: string | null
+  user_agent_data: {
+    browser: IBrowser
+    cpu: ICPU
+    device: IDevice
+    engine: IEngine
+    os: IOS
+    ua: string
   }
 }
 
@@ -42,12 +47,15 @@ export interface Session {
   userId: string
   expiresAt: Date
   createdAt?: Date
-  ipAddress?: string
-  userAgent?: {
-    'user-agent': string | null
-    'sec-ch-ua-mobile': string | null
-    'sec-ch-ua-model': string | null
-    'sec-ch-ua-platform': string | null
+  ipAddress?: string | null
+  userAgent?: string | null
+  userAgentData?: {
+    browser: IBrowser
+    cpu: ICPU
+    device: IDevice
+    engine: IEngine
+    os: IOS
+    ua: string
   }
   supabaseAccessToken?: string
 }
@@ -65,7 +73,19 @@ export async function createSession(
     expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30),
   }
 
-  const headersStore = await headers()
+  const headerStore = await headers()
+
+  let ipAddress: string | null
+
+  const forwardedFor = headerStore.get('x-forwarded-for')
+
+  if (forwardedFor) ipAddress = forwardedFor.split(',')[0] ?? null
+
+  ipAddress = headerStore.get('x-real-ip') ?? null
+
+  const userAgentData = await UAParser(
+    Object.fromEntries(headerStore.entries()),
+  ).withClientHints()
 
   const supabase = createClient({
     serviceRole: true,
@@ -76,11 +96,15 @@ export async function createSession(
     created_at: new Date().toISOString(),
     user_id: session.userId,
     expires_at: session.expiresAt.toISOString(),
-    user_agent: {
-      'user-agent': headersStore.get('user-agent'),
-      'sec-ch-ua-mobile': headersStore.get('sec-ch-ua-mobile'),
-      'sec-ch-ua-model': headersStore.get('sec-ch-ua-model'),
-      'sec-ch-ua-platform': headersStore.get('sec-ch-ua-platform'),
+    ip_address: ipAddress,
+    user_agent: headerStore.get('user-agent'),
+    user_agent_data: {
+      browser: userAgentData.browser,
+      cpu: userAgentData.cpu,
+      device: userAgentData.device,
+      engine: userAgentData.engine,
+      os: userAgentData.os,
+      ua: userAgentData.ua,
     },
   })
 
