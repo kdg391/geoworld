@@ -2,7 +2,7 @@
 
 import { useActionState, useState } from 'react'
 
-import { changeEmail } from '@/actions/auth.js'
+import { changeEmail } from '@/actions/account.js'
 
 import { useTranslation } from '@/i18n/client.js'
 

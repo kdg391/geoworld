@@ -27,14 +27,14 @@ const Account = async () => {
     supabaseAccessToken: session.supabaseAccessToken,
   })
 
-  const { data: accountData } = await supabase
+  const { data: credentialsData } = await supabase
     .from('accounts')
     .select('*')
     .match({
       provider: 'credentials',
       user_id: user.id,
     })
-    .single<APIAccount>()
+    .maybeSingle<APIAccount>()
 
   const { t } = await createTranslation(['account', 'settings'])
 
@@ -51,7 +51,7 @@ const Account = async () => {
           <EmailForm email={user.email} />
         </div>
       </section>
-      {accountData?.hashed_password && (
+      {credentialsData?.hashed_password && (
         <section className={styles.setting}>
           <h2 className="text-xl mb-2">{t('password')}</h2>
           <div>

@@ -37,6 +37,7 @@ export async function getUserEmailVerificationRequest(
     userId: row.user_id,
     code: row.code,
     email: row.email,
+    createdAt: new Date(row.created_at),
     expiresAt: new Date(row.expires_at),
   }
 
@@ -57,7 +58,9 @@ export async function createEmailVerificationRequest(
   const id = encodeBase32(idBytes).toLowerCase()
 
   const code = generateRandomOTP()
-  const expiresAt = new Date(Date.now() + 1000 * 60 * 10)
+
+  const now = new Date()
+  const expiresAt = new Date(now.getTime() + 1000 * 60 * 10)
 
   const supabase = createClient({
     serviceRole: true,
@@ -70,6 +73,7 @@ export async function createEmailVerificationRequest(
       user_id: userId,
       code,
       email,
+      created_at: now.toISOString(),
       expires_at: expiresAt.toISOString(),
     })
 
@@ -78,6 +82,7 @@ export async function createEmailVerificationRequest(
     userId,
     code,
     email,
+    createdAt: now,
     expiresAt,
   }
 
@@ -112,7 +117,7 @@ export async function sendVerificationEmail(
   })
 }
 
-/*export async function setEmailVerificationRequestCookie(
+export async function setEmailVerificationRequestCookie(
   request: EmailVerificationRequest,
 ): Promise<void> {
   'use server'
@@ -140,7 +145,7 @@ export async function deleteEmailVerificationRequestCookie(): Promise<void> {
     sameSite: 'lax',
     maxAge: 0,
   })
-}*/
+}
 
 export async function getUserEmailVerificationRequestFromRequest(): Promise<EmailVerificationRequest | null> {
   'use server'
@@ -156,18 +161,8 @@ export async function getUserEmailVerificationRequestFromRequest(): Promise<Emai
   if (id === null) return null
 
   const request = await getUserEmailVerificationRequest(user.id, id)
-  console.log(request)
 
-  // if (request === null) await deleteEmailVerificationRequestCookie()
-  if (request === null) {
-    cookieStore.set('email_verification', '', {
-      httpOnly: true,
-      path: '/',
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: 0,
-    })
-  }
+  if (request === null) await deleteEmailVerificationRequestCookie()
 
   return request
 }
@@ -177,6 +172,7 @@ export interface APIEmailVerificationRequest {
   user_id: string
   code: string
   email: string
+  created_at: string
   expires_at: string
 }
 
@@ -185,5 +181,6 @@ export interface EmailVerificationRequest {
   userId: string
   code: string
   email: string
+  createdAt: Date
   expiresAt: Date
 }

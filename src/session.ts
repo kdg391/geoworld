@@ -8,11 +8,9 @@ import {
 import jwt from 'jsonwebtoken'
 import { cookies, headers } from 'next/headers.js'
 import { cache } from 'react'
-import { UAParser } from 'ua-parser-js'
 
 import { createClient } from './utils/supabase/server.js'
 
-import type { IBrowser, ICPU, IDevice, IEngine, IOS } from 'ua-parser-js'
 import type { APIUser, User } from './types/user.js'
 
 export type SessionValidationResult =
@@ -32,31 +30,15 @@ export interface APISession {
   created_at: string
   ip_address: string | null
   user_agent: string | null
-  user_agent_data: {
-    browser: IBrowser
-    cpu: ICPU
-    device: IDevice
-    engine: IEngine
-    os: IOS
-    ua: string
-  }
 }
 
 export interface Session {
   id: string
   userId: string
   expiresAt: Date
-  createdAt?: Date
-  ipAddress?: string | null
-  userAgent?: string | null
-  userAgentData?: {
-    browser: IBrowser
-    cpu: ICPU
-    device: IDevice
-    engine: IEngine
-    os: IOS
-    ua: string
-  }
+  createdAt: Date
+  ipAddress: string | null
+  userAgent: string | null
   supabaseAccessToken?: string
 }
 
@@ -67,25 +49,26 @@ export async function createSession(
   'use server'
 
   const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)))
-  const session: Session = {
-    id: sessionId,
-    userId,
-    expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30),
-  }
-
-  const headerStore = await headers()
 
   let ipAddress: string | null
+
+  const headerStore = await headers()
 
   const forwardedFor = headerStore.get('x-forwarded-for')
 
   if (forwardedFor) ipAddress = forwardedFor.split(',')[0] ?? null
+  else ipAddress = headerStore.get('x-real-ip') ?? null
 
-  ipAddress = headerStore.get('x-real-ip') ?? null
+  const now = new Date()
 
-  const userAgentData = await UAParser(
-    Object.fromEntries(headerStore.entries()),
-  ).withClientHints()
+  const session: Session = {
+    id: sessionId,
+    userId,
+    expiresAt: new Date(now.getTime() + 1000 * 60 * 60 * 24 * 30),
+    createdAt: now,
+    ipAddress,
+    userAgent: headerStore.get('user-agent'),
+  }
 
   const supabase = createClient({
     serviceRole: true,
@@ -93,31 +76,23 @@ export async function createSession(
 
   await supabase.from('sessions').insert<APISession>({
     id: session.id,
-    created_at: new Date().toISOString(),
+    created_at: session.createdAt.toISOString(),
     user_id: session.userId,
     expires_at: session.expiresAt.toISOString(),
-    ip_address: ipAddress,
-    user_agent: headerStore.get('user-agent'),
-    user_agent_data: {
-      browser: userAgentData.browser,
-      cpu: userAgentData.cpu,
-      device: userAgentData.device,
-      engine: userAgentData.engine,
-      os: userAgentData.os,
-      ua: userAgentData.ua,
-    },
+    ip_address: session.ipAddress,
+    user_agent: session.userAgent,
   })
 
   const { data: user } = await supabase
     .from('users')
     .select('email')
     .eq('id', session.userId)
-    .single()
+    .maybeSingle()
 
   if (user) {
     const payload = {
       aud: 'authenticated',
-      exp: Math.floor(new Date(session.expiresAt).getTime() / 1000),
+      exp: Math.floor(session.expiresAt.getTime() / 1000),
       sub: session.userId,
       email: user.email,
       role: 'authenticated',
@@ -145,7 +120,7 @@ export async function validateSessionToken(
 
   const { data: sessionData } = await supabase
     .from('sessions')
-    .select('id, user_id, expires_at')
+    .select('*')
     .eq('id', sessionId)
     .single<APISession>()
 
@@ -184,9 +159,7 @@ export async function validateSessionToken(
     id: sessionData.id,
     userId: sessionData.user_id,
     expiresAt: new Date(sessionData.expires_at),
-    createdAt: sessionData.created_at
-      ? new Date(sessionData.created_at)
-      : undefined,
+    createdAt: new Date(sessionData.created_at),
     ipAddress: sessionData.ip_address,
     userAgent: sessionData.user_agent,
     supabaseAccessToken,

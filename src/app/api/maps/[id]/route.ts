@@ -37,7 +37,7 @@ export const GET = async (
     .from('maps')
     .select('*')
     .eq('id', params.id)
-    .single<APIMap>()
+    .maybeSingle<APIMap>()
 
   if (error)
     return Response.json(

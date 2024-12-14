@@ -12,6 +12,7 @@ import { createClient } from '@/utils/supabase/server.js'
 
 import type { OAuth2Tokens } from 'arctic'
 import type { APIAccount } from '@/types/account.js'
+import type { APIProfile } from '@/types/profile.js'
 import type { APIUser } from '@/types/user.js'
 
 interface DiscordUser {
@@ -91,19 +92,18 @@ export async function GET(request: Request): Promise<Response> {
     serviceRole: true,
   })
 
-  const { data: existingUser } = await supabase
+  const { data: existingAccount } = await supabase
     .from('accounts')
-    .select()
+    .select('*')
     .match({
-      type: 'oauth',
       provider: 'discord',
-      providerAccountId: discordUser.id,
+      account_id: discordUser.id,
     })
-    .single()
+    .maybeSingle<APIAccount>()
 
-  if (existingUser !== null) {
+  if (existingAccount !== null) {
     const sessionToken = generateSessionToken()
-    const session = await createSession(sessionToken, existingUser.id)
+    const session = await createSession(sessionToken, existingAccount.user_id)
 
     await setSessionTokenCookie(sessionToken, session.expiresAt)
 
@@ -117,7 +117,7 @@ export async function GET(request: Request): Promise<Response> {
 
   const now = new Date().toISOString()
 
-  const { data: user } = await supabase
+  const { data: user, error: userErr } = await supabase
     .from('users')
     .insert<Partial<APIUser>>({
       created_at: now,
@@ -127,9 +127,14 @@ export async function GET(request: Request): Promise<Response> {
       role: 'user',
     })
     .select()
-    .single()
+    .single<APIUser>()
 
-  const { error } = await supabase
+  if (userErr)
+    return Response.json(null, {
+      status: 500,
+    })
+
+  const { error: accountErr } = await supabase
     .from('accounts')
     .insert<Partial<APIAccount>>({
       provider: 'discord',
@@ -137,13 +142,33 @@ export async function GET(request: Request): Promise<Response> {
       user_id: user.id,
     })
 
-  if (error)
-    return Response.json(
-      {},
-      {
-        status: 500,
+  if (accountErr)
+    return Response.json(null, {
+      status: 500,
+    })
+
+  const avatarUrl = discordUser.avatar
+    ? `https://cdn.discordapp.com/avatars/${discordUser.id}/${discordUser.avatar}.png`
+    : `https://cdn.discordapp.com/embed/avatars/${
+        discordUser.discriminator === '0'
+          ? Number(BigInt(discordUser.id) >> 22n) % 6
+          : parseInt(discordUser.discriminator) % 5
+      }.png`
+
+  const { error: profileErr } = await supabase
+    .from('profiles')
+    .insert<Partial<APIProfile>>({
+      id: user.id,
+      avatar: {
+        url: avatarUrl,
       },
-    )
+      is_public: true,
+    })
+
+  if (profileErr)
+    return new Response(null, {
+      status: 500,
+    })
 
   const sessionToken = generateSessionToken()
   const session = await createSession(sessionToken, user.id)

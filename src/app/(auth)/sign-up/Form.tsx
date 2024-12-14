@@ -2,7 +2,7 @@
 
 import { useActionState } from 'react'
 
-import { signUpCredentials } from '@/actions/auth.js'
+import { signUpWithCredentials } from '@/actions/auth.js'
 
 import { useTranslation } from '@/i18n/client.js'
 
@@ -25,7 +25,7 @@ const Form = () => {
   'use client'
 
   const [state, action] = useActionState<FormState, FormData>(
-    signUpCredentials,
+    signUpWithCredentials,
     {
       errors: null,
     },

@@ -1,6 +1,8 @@
 export interface APIProfile {
   id: string
-  avatar: null
+  avatar: {
+    url: string | null
+  } | null
   bio: string | null
   display_name: string | null
   username: string | null
@@ -10,7 +12,9 @@ export interface APIProfile {
 
 export interface Profile {
   id: string
-  avatar: null
+  avatar: {
+    url: string | null
+  } | null
   bio: string | null
   displayName: string | null
   username: string | null

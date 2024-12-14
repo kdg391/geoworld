@@ -2,7 +2,7 @@
 
 import { useActionState, useState } from 'react'
 
-import { deleteAccount } from '@/actions/auth.js'
+import { deleteAccount } from '@/actions/account.js'
 
 import { useTranslation } from '@/i18n/client.js'
 

@@ -35,7 +35,7 @@ const SignIn = async () => {
         <div className={styles.providers}>
           <div>
             <Link
-              href="/api/auth/discord"
+              href="/sign-in/discord"
               className={classNames(styles['provider-btn'], 'discord')}
             >
               <Discord size={16} />
@@ -44,7 +44,7 @@ const SignIn = async () => {
           </div>
           <div>
             <Link
-              href="/sign-in-email"
+              href="/sign-in/email"
               className={classNames(styles['provider-btn'], 'email')}
             >
               <Mail size={16} />

@@ -81,7 +81,7 @@ const Form = () => {
         <p className={styles['error-msg']}>{state.errors.message}</p>
       )}
       <p className={styles.msg}>
-        <Link href="/reset-password">{t('forgot_password')}</Link>
+        <Link href="/forgot-password">{t('forgot_password')}</Link>
       </p>
       <SubmitButton full formAction={action} className={styles.button}>
         {t('sign_in')}

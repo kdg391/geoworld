@@ -36,14 +36,15 @@ export const signInEmailSchema = z.object({
   email: emailSchema,
 })
 
-export const resetPasswordSchema = z.object({
+export const forgotPasswordSchema = z.object({
   email: emailSchema,
 })
 
-export const updatePasswordSchema = z
+export const resetPasswordSchema = z
   .object({
     password: passwordSchema,
     confirmPassword: z.string(),
+    token: z.string(),
   })
   .superRefine(({ password, confirmPassword }, ctx) => {
     if (password !== confirmPassword) {

@@ -19,6 +19,7 @@ const baseUrl = process.env.NEXT_PUBLIC_URL as string
 
 export const VerifyEmailTemplate = ({ validationCode }: Props) => (
   <Html>
+    <Preview>Verify your email address</Preview>
     <Head>
       <meta name="color-scheme" content="light dark" />
       <meta name="supported-color-schemes" content="light dark" />
@@ -36,7 +37,6 @@ export const VerifyEmailTemplate = ({ validationCode }: Props) => (
 `}
       </style>
     </Head>
-    <Preview>Verify your email address</Preview>
     <Body style={main}>
       <Container style={container}>
         <Section style={logoContainer}>

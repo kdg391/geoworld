@@ -9,7 +9,7 @@ import { useTranslation } from '@/i18n/client.js'
 import SubmitButton from '@/components/common/SubmitButton/index.js'
 import TextInput from '@/components/common/TextInput/index.js'
 
-import styles from '../page.module.css'
+import styles from '../../page.module.css'
 
 interface FormState {
   errors: {
@@ -55,7 +55,7 @@ const Form = () => {
         <p className={styles['error-msg']}>{state.errors.message}</p>
       )}
       <SubmitButton full formAction={action} className={styles.button}>
-        {t('sign_in')}
+        Continue with Email
       </SubmitButton>
     </form>
   )

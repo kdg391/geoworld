@@ -6,11 +6,15 @@ import { getCurrentSession } from '../session.js'
 
 import { OFFICIAL_MAP_WORLD_ID } from '../constants/index.js'
 
-import { snakeCaseToCamelCase } from '../utils/index.js'
+import { camelCaseToSnakeCase, snakeCaseToCamelCase } from '../utils/index.js'
 import { createClient } from '../utils/supabase/server.js'
 
 import type { APIGame, Game, GameSettings } from '../types/game.js'
-import type { APILocation, APIRoundLocation } from '@/types/location.js'
+import type {
+  APILocation,
+  APIRoundLocation,
+  RoundLocation,
+} from '../types/location.js'
 import type { APIMap } from '../types/map.js'
 
 export const startGameRound = async (id: string) => {
@@ -48,7 +52,7 @@ export const startGameRound = async (id: string) => {
     return {
       data: null,
       errors: {
-        message: 'Database Error',
+        message: 'Something went wrong!',
       },
     }
 
@@ -153,7 +157,7 @@ export const startGameRound = async (id: string) => {
       return {
         data: null,
         errors: {
-          message: 'Database Error',
+          message: 'Something went wrong!',
         },
       }
 
@@ -162,13 +166,7 @@ export const startGameRound = async (id: string) => {
         ? ({
             ...snakeCaseToCamelCase<Game>(updatedData),
             rounds: updatedData.rounds.map((r) => ({
-              heading: r.heading,
-              lat: r.lat,
-              lng: r.lng,
-              panoId: r.pano_id,
-              streakLocationCode: r.streak_location_code,
-              pitch: r.pitch,
-              zoom: r.zoom,
+              ...camelCaseToSnakeCase<RoundLocation>(r),
               startedAt: new Date(r.started_at),
               endedAt: r.ended_at ? new Date(r.ended_at) : null,
             })),
@@ -183,13 +181,7 @@ export const startGameRound = async (id: string) => {
       ? ({
           ...snakeCaseToCamelCase<Game>(gameData),
           rounds: gameData.rounds.map((r) => ({
-            heading: r.heading,
-            lat: r.lat,
-            lng: r.lng,
-            panoId: r.pano_id,
-            streakLocationCode: r.streak_location_code,
-            pitch: r.pitch,
-            zoom: r.zoom,
+            ...camelCaseToSnakeCase<RoundLocation>(r),
             startedAt: new Date(r.started_at),
             endedAt: r.ended_at ? new Date(r.ended_at) : null,
           })),

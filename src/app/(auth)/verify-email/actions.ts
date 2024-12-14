@@ -1,16 +1,15 @@
 'use server'
 
-import { cookies } from 'next/headers'
-import { redirect } from 'next/navigation'
+import { redirect } from 'next/navigation.js'
 
 import {
   createEmailVerificationRequest,
-  // deleteEmailVerificationRequestCookie,
+  deleteEmailVerificationRequestCookie,
   deleteUserEmailVerificationRequest,
   getUserEmailVerificationRequestFromRequest,
   sendVerificationEmail,
   // sendVerificationEmailBucket,
-  // setEmailVerificationRequestCookie,
+  setEmailVerificationRequestCookie,
 } from '@/email-verification.js'
 import { sendVerificationEmailBucket } from '@/email-verification-utils.js'
 import { ExpiringTokenBucket } from '@/rate-limit.js'
@@ -18,6 +17,8 @@ import { globalPOSTRateLimit } from '@/request.js'
 import { getCurrentSession } from '@/session.js'
 
 import { createClient } from '@/utils/supabase/server.js'
+
+import type { APIUser } from '@/types/user.js'
 
 const bucket = new ExpiringTokenBucket<string>(5, 60 * 30)
 
@@ -100,25 +101,16 @@ export async function verifyEmailAction(
 
   await supabase
     .from('users')
-    .update({
+    .update<Partial<APIUser>>({
       email: verificationRequest.email,
       email_verified: true,
       email_verified_at: new Date().toISOString(),
     })
     .eq('id', user.id)
 
-  // await deleteEmailVerificationRequestCookie()
-  const cookieStore = await cookies()
+  await deleteEmailVerificationRequestCookie()
 
-  cookieStore.set('email_verification', '', {
-    httpOnly: true,
-    path: '/',
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
-    maxAge: 0,
-  })
-
-  return redirect('/')
+  return redirect('/dashboard')
 }
 
 export async function resendEmailVerificationCodeAction(): Promise<ActionResult> {
@@ -169,17 +161,7 @@ export async function resendEmailVerificationCodeAction(): Promise<ActionResult>
     verificationRequest.email,
     verificationRequest.code,
   )
-
-  // await setEmailVerificationRequestCookie(verificationRequest)
-  const cookieStore = await cookies()
-
-  cookieStore.set('email_verification', verificationRequest.id, {
-    httpOnly: true,
-    path: '/',
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
-    expires: verificationRequest.expiresAt,
-  })
+  await setEmailVerificationRequestCookie(verificationRequest)
 
   return {
     message: 'A new code was sent to your inbox.',

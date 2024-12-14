@@ -2,7 +2,7 @@
 
 import { useActionState } from 'react'
 
-import { resetPassword } from '@/actions/auth.js'
+import { forgotPassword } from '@/actions/password.js'
 
 import { useTranslation } from '@/i18n/client.js'
 
@@ -21,7 +21,7 @@ interface FormState {
 const Form = () => {
   'use client'
 
-  const [state, action] = useActionState<FormState, FormData>(resetPassword, {
+  const [state, action] = useActionState<FormState, FormData>(forgotPassword, {
     errors: null,
   })
 

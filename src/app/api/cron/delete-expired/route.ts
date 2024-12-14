@@ -56,11 +56,28 @@ export async function GET(request: Request) {
   const date3 = new Date()
 
   const { error: vErr } = await supabase
-    .from('verification_tokens')
+    .from('email_verification_codes')
     .delete()
     .lte('expires', date3.toISOString())
 
   if (vErr)
+    return Response.json(
+      {
+        message: 'Something went wrong',
+      },
+      {
+        status: 500,
+      },
+    )
+
+  const date4 = new Date()
+
+  const { error: mErr } = await supabase
+    .from('magic_link_tokens')
+    .delete()
+    .lte('expires', date4.toISOString())
+
+  if (mErr)
     return Response.json(
       {
         message: 'Something went wrong',

@@ -13,14 +13,14 @@ import {
 } from '@react-email/components'
 
 interface Props {
-  resetPasswordLink: string
+  magicLinkUrl: string
 }
 
 const baseUrl = process.env.NEXT_PUBLIC_URL as string
 
-export const ResetPasswordTemplate = ({ resetPasswordLink }: Props) => (
+export const MagicLinkTemplate = ({ magicLinkUrl }: Props) => (
   <Html>
-    <Preview>Reset your password</Preview>
+    <Preview>Sign in to GeoWorld</Preview>
     <Head />
     <Body style={main}>
       <Container style={container}>
@@ -32,9 +32,9 @@ export const ResetPasswordTemplate = ({ resetPasswordLink }: Props) => (
             alt="GeoWorld"
           />
         </Section>
-        <Heading style={h1}>Reset your password</Heading>
+        <Heading style={h1}>Sign in to GeoWorld</Heading>
         <Text style={heroText}>
-          To reset your password, click the button below.
+          To sign in to your account, click the button below.
         </Text>
 
         <Button
@@ -51,9 +51,9 @@ export const ResetPasswordTemplate = ({ resetPasswordLink }: Props) => (
             width: '200px',
             padding: '14px 7px',
           }}
-          href={resetPasswordLink}
+          href={magicLinkUrl}
         >
-          Reset Password
+          Sign In
         </Button>
 
         <Text style={text}>
@@ -86,7 +86,7 @@ export const ResetPasswordTemplate = ({ resetPasswordLink }: Props) => (
   </Html>
 )
 
-export default ResetPasswordTemplate
+export default MagicLinkTemplate
 
 const footerLink = {
   color: '#b7b7b7',

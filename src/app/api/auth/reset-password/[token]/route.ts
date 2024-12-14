@@ -4,26 +4,29 @@ import { z } from 'zod'
 import { createClient } from '@/utils/supabase/server.js'
 
 import type { NextRequest } from 'next/server'
+import type { APIPasswordResetToken } from '@/password-reset.js'
 import type { APIAccount } from '@/types/account.js'
 import type { APIUser } from '@/types/user.js'
+import { passwordOptions } from '@/password'
 
 const schema = z.object({
   password: z.string(),
-  token: z.string().uuid(),
 })
 
-export const PUT = async (request: NextRequest) => {
+export const POST = async (
+  request: NextRequest,
+  segmentData: { params: Promise<{ token: string }> },
+) => {
   const body = await request.json()
 
   const validated = await schema.safeParseAsync({
     password: body.password,
-    token: body.token,
   })
 
   if (!validated.success)
     return Response.json(
       {
-        message: 'Invalid Body',
+        message: 'Invalid body',
         errors: validated.error.flatten().fieldErrors,
         code: 'invalid_body',
       },
@@ -32,6 +35,8 @@ export const PUT = async (request: NextRequest) => {
       },
     )
 
+  const params = await segmentData.params
+
   const supabase = createClient({
     serviceRole: true,
   })
@@ -39,14 +44,14 @@ export const PUT = async (request: NextRequest) => {
   const { data } = await supabase
     .from('password_reset_tokens')
     .select('*')
-    .eq('token', validated.data.token)
-    .maybeSingle()
+    .eq('token', params.token)
+    .maybeSingle<APIPasswordResetToken>()
 
   if (!data)
     return Response.json(
       {
         errors: {
-          message: 'Cannot find the token',
+          message: 'Invalid token',
         },
       },
       {
@@ -54,18 +59,16 @@ export const PUT = async (request: NextRequest) => {
       },
     )
 
-  const hashedPassword = await hash(validated.data.password, {
-    memoryCost: 19456,
-    timeCost: 2,
-    outputLen: 32,
-    parallelism: 1,
-  })
+  if (Date.now() >= new Date(data.expires_at).getTime())
+    return Response.json(null, {
+      status: 400,
+    })
 
   const { data: user } = await supabase
     .from('users')
     .select('*')
     .eq('email', data.email)
-    .single<APIUser>()
+    .maybeSingle<APIUser>()
 
   if (user === null)
     return Response.json(
@@ -79,12 +82,17 @@ export const PUT = async (request: NextRequest) => {
       },
     )
 
+  const hashedPassword = await hash(validated.data.password, passwordOptions)
+
   const { error } = await supabase
     .from('accounts')
     .update<Partial<APIAccount>>({
       hashed_password: hashedPassword,
     })
-    .eq('user_id', user.id)
+    .match({
+      provider: 'credentials',
+      user_id: user.id,
+    })
 
   if (error)
     return Response.json(
@@ -98,7 +106,14 @@ export const PUT = async (request: NextRequest) => {
       },
     )
 
-  return Response.json({
-    message: 'Successfully updated the password',
-  })
+  return Response.json(
+    {
+      message: 'Successfully updated the password',
+    },
+    {
+      headers: {
+        'Referrer-Policy': 'strict-origin',
+      },
+    },
+  )
 }

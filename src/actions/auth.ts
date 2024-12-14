@@ -1,15 +1,17 @@
 'use server'
 
 import { hash, verify } from '@node-rs/argon2'
-import { revalidatePath } from 'next/cache'
-import { cookies, headers } from 'next/headers'
-import { redirect } from 'next/navigation'
+import { revalidatePath } from 'next/cache.js'
+import { headers } from 'next/headers.js'
+import { redirect } from 'next/navigation.js'
 
 import {
   createEmailVerificationRequest,
   sendVerificationEmail,
-  // setEmailVerificationRequestCookie,
+  setEmailVerificationRequestCookie,
 } from '../email-verification.js'
+import { createMagicLinkToken } from '../magic-link.js'
+import { passwordOptions } from '../password.js'
 import {
   createSession,
   deleteSessionTokenCookie,
@@ -21,16 +23,12 @@ import {
 import { generateSessionToken } from '../session-utils.js'
 
 import { resend } from '../utils/email/index.js'
+import MagicLinkTemplate from '@/utils/email/templates/magic-link.js'
 import { createClient } from '../utils/supabase/server.js'
 import {
-  changeEmailSchema,
-  changePasswordSchema,
-  deleteAccountSchema,
-  resetPasswordSchema,
   signInCredentialsSchema,
   signInEmailSchema,
   signUpSchema,
-  updatePasswordSchema,
 } from '../utils/validations/auth.js'
 
 import type { APIAccount } from '@/types/account.js'
@@ -50,7 +48,7 @@ export const signOut = async () => {
   await deleteSessionTokenCookie()
 }
 
-export const signUpCredentials = async (_: unknown, formData: FormData) => {
+export const signUpWithCredentials = async (_: unknown, formData: FormData) => {
   'use server'
 
   const validated = await signUpSchema.safeParseAsync({
@@ -88,12 +86,7 @@ export const signUpCredentials = async (_: unknown, formData: FormData) => {
       },
     }
 
-  const hashedPassword = await hash(validated.data.password, {
-    memoryCost: 19456,
-    timeCost: 2,
-    outputLen: 32,
-    parallelism: 1,
-  })
+  const hashedPassword = await hash(validated.data.password, passwordOptions)
 
   const { data: user, error: userErr } = await supabase
     .from('users')
@@ -150,16 +143,7 @@ export const signUpCredentials = async (_: unknown, formData: FormData) => {
     emailVerificationRequest.email,
     emailVerificationRequest.code,
   )
-  // await setEmailVerificationRequestCookie(emailVerificationRequest)
-  const cookieStore = await cookies()
-
-  cookieStore.set('email_verification', emailVerificationRequest.id, {
-    httpOnly: true,
-    path: '/',
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
-    expires: emailVerificationRequest.expiresAt,
-  })
+  await setEmailVerificationRequestCookie(emailVerificationRequest)
 
   const sessionToken = generateSessionToken()
   const session = await createSession(sessionToken, user.id)
@@ -231,12 +215,7 @@ export const signInWithCredentials = async (_: unknown, formData: FormData) => {
   const isPwMatched = await verify(
     account.hashed_password as string,
     validated.data.password,
-    {
-      memoryCost: 19456,
-      timeCost: 2,
-      outputLen: 32,
-      parallelism: 1,
-    },
+    passwordOptions,
   )
 
   if (!isPwMatched)
@@ -266,343 +245,18 @@ export const signInWithEmail = async (_: unknown, formData: FormData) => {
       errors: validated.error.flatten().fieldErrors,
     }
 
-  let redirectTo = '/dashboard'
-
-  const headerStore = await headers()
-  const referrer = headerStore.get('referer')
-
-  if (referrer) {
-    const next = new URL(referrer).searchParams.get('next')
-
-    if (next) redirectTo = next
-  }
-
-  const supabase = createClient({
-    serviceRole: true,
-  })
-
-  const { data: existingUser } = await supabase
-    .from('users')
-    .select('*')
-    .eq('email', validated.data.email)
-    .single<APIUser>()
-
-  const token = crypto.randomUUID()
+  const token = await createMagicLinkToken(validated.data.email)
 
   const url = `${process.env.NEXT_PUBLIC_URL}/magic-link/${token}`
 
   await resend.emails.send({
     from: `GeoWorld <${process.env.RESEND_EMAIL_FROM}>`,
     to: validated.data.email,
-    subject: 'Sign In to GeoWorld',
-    text: '',
-    html: `<a href="${url}">Sign In</a>`,
+    subject: 'Sign in to GeoWorld',
+    react: MagicLinkTemplate({
+      magicLinkUrl: url,
+    }),
   })
 
-  if (existingUser !== null) {
-    const sessionToken = generateSessionToken()
-    const session = await createSession(sessionToken, existingUser.id)
-
-    await setSessionTokenCookie(sessionToken, session.expiresAt)
-  }
-
-  const sessionToken = generateSessionToken()
-  const session = await createSession(sessionToken, '')
-
-  await setSessionTokenCookie(sessionToken, session.expiresAt)
-
-  redirect(redirectTo)
-}
-
-export const resetPassword = async (_: unknown, formData: FormData) => {
-  'use server'
-
-  const validated = await resetPasswordSchema.safeParseAsync({
-    email: formData.get('email'),
-  })
-
-  if (!validated.success)
-    return {
-      errors: validated.error.flatten().fieldErrors,
-    }
-
-  try {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_URL}/api/auth/reset-password`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: validated.data.email,
-        }),
-      },
-    )
-
-    const data = await response.json()
-
-    if (data?.error) throw new Error('Something went wrong!')
-  } catch (err) {
-    if (err instanceof Error)
-      return {
-        errors: {
-          message: 'Database Error',
-        },
-      }
-
-    return {
-      errors: null,
-    }
-  }
-
-  redirect('/email-has-sent')
-}
-
-export const updatePassword = async (_: unknown, formData: FormData) => {
-  'use server'
-
-  const validated = await updatePasswordSchema.safeParseAsync({
-    password: formData.get('password'),
-    confirmPassword: formData.get('confirm-password'),
-  })
-
-  if (!validated.success)
-    return {
-      errors: validated.error.flatten().fieldErrors,
-    }
-
-  try {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_URL}/api/auth/update-password`,
-      {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          token: formData.get('token'),
-          password: validated.data.password,
-        }),
-      },
-    )
-
-    const data = await response.json()
-
-    if (data.error) throw new Error('Something went wrong!')
-  } catch (err) {
-    if (err instanceof Error)
-      return {
-        errors: {
-          message: 'Database Error',
-        },
-      }
-
-    return {
-      errors: null,
-    }
-  }
-
-  redirect('/sign-in')
-}
-
-export const changeEmail = async (_: unknown, formData: FormData) => {
-  'use server'
-
-  const { session, user } = await getCurrentSession()
-
-  if (!session) redirect('/sign-in')
-
-  if (user.role !== 'user')
-    return {
-      errors: {
-        message: 'You cannot change your email.',
-      },
-    }
-
-  const supabase = createClient({
-    supabaseAccessToken: session.supabaseAccessToken,
-  })
-
-  if (user.emailVerified) {
-    const emailConfirmedAt = user.emailVerifiedAt.getTime()
-
-    if (Date.now() - emailConfirmedAt < 60 * 60 * 24 * 7 * 1000)
-      return {
-        errors: {
-          message: 'The email can be changed one week after the last change.',
-        },
-      }
-  }
-
-  const validated = await changeEmailSchema.safeParseAsync({
-    oldEmail: user.email,
-    newEmail: formData.get('email'),
-  })
-
-  if (!validated.success)
-    return {
-      errors: validated.error.flatten().fieldErrors,
-    }
-
-  const { data: emailExists, error: eErr } = await supabase
-    .rpc('check_email_exists', {
-      p_email: validated.data.newEmail,
-    })
-    .returns<boolean>()
-
-  if (eErr)
-    return {
-      errors: {
-        message: 'Database Error',
-      },
-    }
-
-  if (emailExists)
-    return {
-      errors: {
-        message: 'The email is already registered.',
-      },
-    }
-
-  const { error } = await supabase
-    .from('users')
-    .update({
-      email: validated.data.newEmail,
-      emailVerified: null,
-    })
-    .eq('id', user.id)
-
-  if (error)
-    return {
-      errors: {
-        message: 'Database Error',
-      },
-    }
-
-  return {
-    errors: null,
-  }
-}
-
-export const changePassword = async (_: unknown, formData: FormData) => {
-  'use server'
-
-  const { session, user } = await getCurrentSession()
-
-  if (!session) redirect('/sign-in')
-
-  if (user.role !== 'user')
-    return {
-      errors: {
-        message: 'You cannot change your password.',
-      },
-    }
-
-  const supabase = createClient({
-    supabaseAccessToken: session.supabaseAccessToken,
-  })
-
-  const validated = await changePasswordSchema.safeParseAsync({
-    oldPassword: formData.get('old-password'),
-    newPassword: formData.get('new-password'),
-    confirmPassword: formData.get('confirm-password'),
-  })
-
-  if (!validated.success)
-    return {
-      errors: validated.error.flatten().fieldErrors,
-    }
-
-  const { data: account } = await supabase
-    .from('accounts')
-    .select('*')
-    .match({
-      provider: 'credentials',
-      user_id: user.id,
-    })
-    .single<APIAccount>()
-
-  if (account === null)
-    return {
-      errors: {
-        message: 'Failed to load your data.',
-      },
-    }
-
-  const isPwMatched = await verify(
-    account.hashed_password as string,
-    validated.data.oldPassword,
-  )
-
-  if (!isPwMatched)
-    return {
-      errors: {
-        oldPassword: ['The old password is not matched.'],
-      },
-    }
-
-  const hashedPassword = await hash(validated.data.newPassword, {
-    memoryCost: 19456,
-    timeCost: 2,
-    outputLen: 32,
-    parallelism: 1,
-  })
-
-  const { error: updatedErr } = await supabase
-    .from('accounts')
-    .update<Partial<APIAccount>>({
-      hashed_password: hashedPassword,
-    })
-    .eq('user_id', user.id)
-
-  return {
-    errors: {
-      message: updatedErr?.message,
-    },
-  }
-}
-
-export const deleteAccount = async (_: unknown, formData: FormData) => {
-  'use server'
-
-  const { session, user } = await getCurrentSession()
-
-  if (!session) redirect('/sign-in')
-
-  if (user.role !== 'user')
-    return {
-      errors: {
-        message: 'You cannot delete your account.',
-      },
-    }
-
-  const validated = await deleteAccountSchema.safeParseAsync({
-    password: formData.get('password'),
-    confirmMessage: formData.get('confirm-message'),
-  })
-
-  if (!validated.success)
-    return {
-      errors: validated.error.flatten().fieldErrors,
-    }
-
-  const supabase = createClient({
-    serviceRole: true,
-  })
-
-  const { error } = await supabase.from('users').delete().eq('id', user.id)
-
-  if (error)
-    return {
-      errors: {
-        message: 'Something went wrong!',
-      },
-    }
-
-  await invalidateSession(session.id)
-  await deleteSessionTokenCookie()
-
-  revalidatePath('/', 'layout')
   redirect('/')
 }

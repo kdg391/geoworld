@@ -2,14 +2,14 @@
 
 import { useActionState } from 'react'
 
-import { updatePassword } from '@/actions/auth.js'
+import { resetPassword } from '@/actions/password.js'
 
 import { useTranslation } from '@/i18n/client.js'
 
 import SubmitButton from '@/components/common/SubmitButton/index.js'
 import TextInput from '@/components/common/TextInput/index.js'
 
-import styles from '../page.module.css'
+import styles from '../../page.module.css'
 
 interface FormState {
   errors: {
@@ -26,7 +26,7 @@ interface Props {
 const Form = ({ token }: Props) => {
   'use client'
 
-  const [state, action] = useActionState<FormState, FormData>(updatePassword, {
+  const [state, action] = useActionState<FormState, FormData>(resetPassword, {
     errors: null,
   })
 

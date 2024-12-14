@@ -24,6 +24,9 @@ function getLocale(request: NextRequest): string {
   return locale
 }
 
+const getHighEntropyValues =
+  'Sec-CH-UA-Full-Version-List, Sec-CH-UA-Mobile, Sec-CH-UA-Model, Sec-CH-UA-Platform, Sec-CH-UA-Platform-Version, Sec-CH-UA-Arch, Sec-CH-UA-Bitness'
+
 export const middleware = async (request: NextRequest) => {
   const response = NextResponse.next({
     request: {
@@ -36,6 +39,9 @@ export const middleware = async (request: NextRequest) => {
 
   response.headers.set('x-next-pathname', pathname)
   response.headers.set('x-next-locale', locale)
+
+  response.headers.set('Accept-CH', getHighEntropyValues)
+  response.headers.set('Critical-CH', getHighEntropyValues)
 
   const cookieStore = await cookies()
 
@@ -53,6 +59,10 @@ export const middleware = async (request: NextRequest) => {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
       })
+    }
+
+    if (pathname === '/forgot-password') {
+      response.headers.set('Referrer-Policy', 'strict-origin')
     }
 
     return response

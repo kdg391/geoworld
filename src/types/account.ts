@@ -1,6 +1,6 @@
 export interface APIAccount {
   id: string
-  provider: 'credentials' | 'discord'
+  provider: 'credentials' | 'email' | 'discord'
   account_id: string
   user_id: string
   access_token: string | null
@@ -14,7 +14,7 @@ export interface APIAccount {
 
 export interface Account {
   id: string
-  provider: 'credentials' | 'discord'
+  provider: 'credentials' | 'email' | 'discord'
   accountId: string
   userId: string
   accessToken: string | null
