@@ -1,10 +1,10 @@
 import { redirect } from 'next/navigation'
 
-import { getCurrentSession } from '@/session.js'
-
 import { getProfile } from '@/actions/profile.js'
 
 import { createTranslation } from '@/i18n/server.js'
+
+import { getCurrentSession } from '@/lib/session.js'
 
 import DisplayNameForm from './DisplayNameForm.js'
 import UsernameForm from './UsernameForm.js'
@@ -28,19 +28,19 @@ const Profile = async () => {
 
   return (
     <section className={styles.section}>
-      <h1 className="text-2xl mb-4">
+      <h1 className={styles.title}>
         {t('profile_settings', {
           ns: 'settings',
         })}
       </h1>
       <section className={styles.setting}>
-        <h2 className="text-xl mb-2">{t('display_name')}</h2>
+        <h2 className={styles['setting-title']}>{t('display_name')}</h2>
         <div>
           <DisplayNameForm displayName={profile.displayName} />
         </div>
       </section>
       <section className={styles.setting}>
-        <h2 className="text-xl mb-2">{t('username')}</h2>
+        <h2 className={styles['setting-title']}>{t('username')}</h2>
         <div>
           <UsernameForm username={profile.username} />
         </div>

@@ -1,64 +1,43 @@
 'use client'
 
-import Link from 'next/link'
 import { useActionState } from 'react'
 
-import { signInWithCredentials } from '@/actions/auth.js'
+import { resetPassword } from '@/actions/auth.js'
 
 import { useTranslation } from '@/i18n/client.js'
 
 import SubmitButton from '@/components/common/SubmitButton/index.js'
 import TextInput from '@/components/common/TextInput/index.js'
 
-import styles from '../page.module.css'
+import styles from '../../page.module.css'
 
 interface FormState {
   errors: {
-    email?: string[]
     password?: string[]
+    confirmPassword?: string[]
     message?: string
   } | null
 }
 
-const Form = () => {
+interface Props {
+  token: string
+}
+
+const Form = ({ token }: Props) => {
   'use client'
 
-  const [state, action] = useActionState<FormState, FormData>(
-    signInWithCredentials,
-    {
-      errors: null,
-    },
-  )
+  const [state, action] = useActionState<FormState, FormData>(resetPassword, {
+    errors: null,
+  })
 
   const { t } = useTranslation(['auth', 'account'])
 
   return (
     <form action={action} className={styles.form}>
-      <div>
-        <label htmlFor="email" className={styles.label}>
-          {t('email', {
-            ns: 'account',
-          })}
-        </label>
-        <TextInput
-          fullWidth
-          type="email"
-          id="email"
-          name="email"
-          placeholder="me@example.com"
-          required
-          className={styles.input}
-        />
-        {state.errors?.email &&
-          state.errors.email.map((msg) => (
-            <p key={msg} className={styles['error-msg']}>
-              {msg}
-            </p>
-          ))}
-      </div>
+      <input type="hidden" value={token} name="token" hidden />
       <div>
         <label htmlFor="password" className={styles.label}>
-          {t('password', {
+          {t('new_password', {
             ns: 'account',
           })}
         </label>
@@ -77,14 +56,32 @@ const Form = () => {
             </p>
           ))}
       </div>
+      <div>
+        <label htmlFor="confirm-password" className={styles.label}>
+          {t('new_confirm_password', {
+            ns: 'account',
+          })}
+        </label>
+        <TextInput
+          fullWidth
+          type="password"
+          id="confirm-password"
+          name="confirm-password"
+          required
+          className={styles.input}
+        />
+        {state.errors?.confirmPassword &&
+          state.errors.confirmPassword.map((msg) => (
+            <p key={msg} className={styles['error-msg']}>
+              {msg}
+            </p>
+          ))}
+      </div>
       {state.errors?.message && (
         <p className={styles['error-msg']}>{state.errors.message}</p>
       )}
-      <p className={styles.msg}>
-        <Link href="/forgot-password">{t('forgot_password')}</Link>
-      </p>
       <SubmitButton full formAction={action} className={styles.button}>
-        {t('sign_in')}
+        {t('update_password')}
       </SubmitButton>
     </form>
   )

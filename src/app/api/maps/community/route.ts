@@ -1,6 +1,6 @@
-import { getCurrentSession } from '@/session.js'
+import { MAPS_PAGE_LIMIT } from '@/constants/map.js'
 
-import { MAPS_PAGE_LIMIT } from '@/constants/index.js'
+import { getCurrentSession } from '@/lib/session.js'
 
 import { createClient } from '@/utils/supabase/server.js'
 

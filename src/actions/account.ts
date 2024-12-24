@@ -4,12 +4,12 @@ import { hash, verify } from '@node-rs/argon2'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 
-import { passwordOptions } from '@/password.js'
+import { passwordOptions } from '@/lib/password.js'
 import {
   deleteSessionTokenCookie,
   getCurrentSession,
   invalidateSession,
-} from '@/session.js'
+} from '@/lib/session.js'
 
 import { createClient } from '@/utils/supabase/server.js'
 import {
@@ -135,7 +135,7 @@ export const changePassword = async (_: unknown, formData: FormData) => {
       provider: 'credentials',
       user_id: user.id,
     })
-    .single<APIAccount>()
+    .maybeSingle<APIAccount>()
 
   if (account === null)
     return {

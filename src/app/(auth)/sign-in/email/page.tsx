@@ -4,7 +4,7 @@ import Link from 'next/link'
 
 import { createTranslation } from '@/i18n/server.js'
 
-import Form from './Form.js'
+import Form from './form.js'
 
 import styles from '../../page.module.css'
 
@@ -15,8 +15,8 @@ const SignIn = async () => {
 
   return (
     <div className={styles['form-container']}>
-      <h1 className={styles['form-title']}>Sign in to GeoWorld</h1>
-      <p className={styles['form-description']}>{t('email_sign_in_desc')}</p>
+      <h1 className={styles['form-title']}>{t('continue_with_email')}</h1>
+      <p className={styles['form-description']}>{t('email_sign_in.desc')}</p>
 
       <Form />
 

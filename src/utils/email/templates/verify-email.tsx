@@ -24,7 +24,14 @@ export const VerifyEmailTemplate = ({ validationCode }: Props) => (
       <meta name="color-scheme" content="light dark" />
       <meta name="supported-color-schemes" content="light dark" />
       <style>
-        {`
+        {`.dark-mode-hide {
+  display: block;
+}
+
+.dark-mode-show {
+  display: none;
+}
+
 @media (prefers-color-scheme: dark) {
   .dark-mode-hide {
     display: none !important;
@@ -33,8 +40,7 @@ export const VerifyEmailTemplate = ({ validationCode }: Props) => (
   .dark-mode-show {
     display: block !important;
   }
-}
-`}
+}`}
       </style>
     </Head>
     <Body style={main}>

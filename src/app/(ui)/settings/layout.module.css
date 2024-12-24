@@ -8,6 +8,17 @@
   padding: 1rem;
 }
 
+.title {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.setting-title {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+  margin-bottom: 0.5rem;
+}
+
 .setting {
   border: 1px solid var(--setting-border);
   border-radius: 0.5rem;

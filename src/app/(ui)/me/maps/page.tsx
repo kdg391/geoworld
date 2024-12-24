@@ -3,9 +3,9 @@
 import dynamic from 'next/dynamic'
 import { redirect } from 'next/navigation'
 
-import { getCurrentSession } from '@/session.js'
-
 import { createTranslation } from '@/i18n/server.js'
+
+import { getCurrentSession } from '@/lib/session.js'
 
 import { snakeCaseToCamelCase } from '@/utils/index.js'
 import { createClient } from '@/utils/supabase/server.js'
@@ -21,7 +21,7 @@ const Maps = async () => {
 
   const { session, user } = await getCurrentSession()
 
-  if (!session) redirect('/sign-in?next=/dashboard/maps')
+  if (!session) redirect('/sign-in?next=/me/maps')
 
   const supabase = createClient({
     supabaseAccessToken: session.supabaseAccessToken,

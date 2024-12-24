@@ -18,7 +18,7 @@ import styles from './Header.module.css'
 
 import './Header.css'
 
-import type { Session } from '@/session.js'
+import type { Session } from '@/lib/session.js'
 import type { User } from '@/types/user.js'
 
 interface Props {
@@ -26,7 +26,7 @@ interface Props {
   user: User | null
 }
 
-const HeaderClient = ({ session, user }: Props) => {
+const ClientHeader = ({ session, user }: Props) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   const { t } = useTranslation(['common', 'auth'])
@@ -97,70 +97,68 @@ const HeaderClient = ({ session, user }: Props) => {
         </button>
 
         {isMenuOpen && (
-          <>
-            <div className={styles['mobile-menu']}>
-              <div className={styles['mobile-nav-wrapper']}>
-                {session && user ? (
-                  <MobileUserInfo session={session} user={user} />
-                ) : (
-                  <MobileAuthButtons />
-                )}
+          <div className={styles['mobile-menu']}>
+            <div className={styles['mobile-nav-wrapper']}>
+              {session && user ? (
+                <MobileUserInfo session={session} user={user} />
+              ) : (
+                <MobileAuthButtons />
+              )}
 
+              <nav className={styles['mobile-nav']}>
+                <ul>
+                  <li>
+                    <Link href="/maps" scroll={false}>
+                      {t('maps')}
+                    </Link>
+                  </li>
+                </ul>
+              </nav>
+
+              {session !== null && (
                 <nav className={styles['mobile-nav']}>
                   <ul>
                     <li>
-                      <Link href="/maps" scroll={false}>
-                        {t('maps')}
+                      <Link href="/me/maps" className={styles['with-icon']}>
+                        <MapPinned size={16} />
+                        {t('my_maps')}
+                      </Link>
+                    </li>
+                    <li>
+                      <Link href="/me/likes" className={styles['with-icon']}>
+                        <Heart size={16} />
+                        {t('liked_maps')}
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        href="/me/ongoing-games"
+                        className={styles['with-icon']}
+                      >
+                        <Route size={16} />
+                        {t('ongoing_games')}
+                      </Link>
+                    </li>
+                    <li>
+                      <Link href="/home" className={styles['with-icon']}>
+                        <Home size={16} />
+                        {t('home')}
                       </Link>
                     </li>
                   </ul>
                 </nav>
-
-                {session !== null && (
-                  <nav className={styles['mobile-nav']}>
-                    <ul>
-                      <li>
-                        <Link href="/me/maps" className={styles['with-icon']}>
-                          <MapPinned size={16} />
-                          {t('my_maps')}
-                        </Link>
-                      </li>
-                      <li>
-                        <Link href="/me/likes" className={styles['with-icon']}>
-                          <Heart size={16} />
-                          {t('liked_maps')}
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          href="/me/ongoing-games"
-                          className={styles['with-icon']}
-                        >
-                          <Route size={16} />
-                          {t('ongoing_games')}
-                        </Link>
-                      </li>
-                      <li>
-                        <Link href="/home" className={styles['with-icon']}>
-                          <Home size={16} />
-                          {t('home')}
-                        </Link>
-                      </li>
-                    </ul>
-                  </nav>
-                )}
-              </div>
-
-              <div
-                className={styles.backdrop}
-                onClick={() => setIsMenuOpen((o) => !o)}
-              ></div>
+              )}
             </div>
-          </>
+
+            <div
+              className={styles.backdrop}
+              onClick={() => setIsMenuOpen((o) => !o)}
+            ></div>
+          </div>
         )}
       </div>
     </header>
   )
 }
 
-export default HeaderClient
+export default ClientHeader

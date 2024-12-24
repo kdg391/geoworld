@@ -1,4 +1,5 @@
 import dynamic from 'next/dynamic'
+import { cookies } from 'next/headers'
 import Link from 'next/link'
 
 import { createTranslation } from '@/i18n/server.js'
@@ -11,11 +12,26 @@ import type { Map } from '@/types/map.js'
 const MapCard = dynamic(() => import('@/components/MapCard/index.js'))
 
 const Maps = async () => {
+  const cookieStore = await cookies()
+
   const { data: officialMaps } = (await fetch(
     `${process.env.NEXT_PUBLIC_URL}/api/maps/official?page=0`,
+    {
+      headers: {
+        'Content-Type': 'application/json',
+        Cookie: cookieStore.toString(),
+      },
+    },
   ).then((res) => res.json())) as { data: Map[] | null }
+
   const { data: communityMaps } = (await fetch(
     `${process.env.NEXT_PUBLIC_URL}/api/maps/community?page=0`,
+    {
+      headers: {
+        'Content-Type': 'application/json',
+        Cookie: cookieStore.toString(),
+      },
+    },
   ).then((res) => res.json())) as { data: Map[] | null }
 
   const { t } = await createTranslation('common')

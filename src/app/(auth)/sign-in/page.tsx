@@ -3,13 +3,13 @@ import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 
-import { getCurrentSession } from '@/session.js'
-
 import { createTranslation } from '@/i18n/server.js'
+
+import { getCurrentSession } from '@/lib/session.js'
 
 import { classNames } from '@/utils/index.js'
 
-import Form from './Form.js'
+import Form from './form.js'
 import Discord from '@/components/icons/Discord.js'
 
 import styles from '../page.module.css'

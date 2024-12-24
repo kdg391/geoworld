@@ -2,13 +2,13 @@
 
 import { redirect } from 'next/navigation'
 
-import { getCurrentSession } from '@/session.js'
-
 import { getProfile } from '@/actions/profile.js'
 
 import { createTranslation } from '@/i18n/server.js'
 
-import Form from './Form.js'
+import { getCurrentSession } from '@/lib/session.js'
+
+import Form from './form.js'
 
 import styles from '../page.module.css'
 

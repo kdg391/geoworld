@@ -3,7 +3,7 @@
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 
-import { getCurrentSession } from '../session.js'
+import { getCurrentSession } from '../lib/session.js'
 
 import { snakeCaseToCamelCase } from '../utils/index.js'
 import { createClient } from '../utils/supabase/server.js'

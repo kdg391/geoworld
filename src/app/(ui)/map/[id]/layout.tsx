@@ -1,3 +1,5 @@
+import { getMap } from '@/actions/map.js'
+
 import { createTranslation } from '@/i18n/server.js'
 
 import styles from './page.module.css'
@@ -15,15 +17,7 @@ interface Props {
 export const generateMetadata = async (props: Props): Promise<Metadata> => {
   const params = await props.params
 
-  const { data: mapData, error: mErr } = await fetch(
-    `${process.env.NEXT_PUBLIC_URL}/api/maps/${params.id}`,
-    {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    },
-  ).then((res) => res.json())
+  const { data: mapData, errors: mErr } = await getMap(params.id)
 
   const { t } = await createTranslation('common')
 

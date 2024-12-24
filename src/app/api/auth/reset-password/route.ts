@@ -3,7 +3,7 @@ import { z } from 'zod'
 import {
   createPasswordResetToken,
   type APIPasswordResetToken,
-} from '@/password-reset.js'
+} from '@/lib/password-reset.js'
 
 import { resend } from '@/utils/email/index.js'
 import ResetPasswordTemplate from '@/utils/email/templates/reset-password.js'

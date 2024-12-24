@@ -1,8 +1,8 @@
 import { redirect } from 'next/navigation'
 
-import { getCurrentSession } from '@/session.js'
+import { getCurrentSession } from '@/lib/session.js'
 
-import P from './p.js'
+import ClientPage from './page.client.js'
 
 interface Props {
   params: Promise<{
@@ -17,7 +17,7 @@ const Page = async (props: Props) => {
 
   if (!session) redirect('/sign-in')
 
-  return <P params={params} session={session} user={user} />
+  return <ClientPage params={params} user={user} />
 }
 
 export default Page

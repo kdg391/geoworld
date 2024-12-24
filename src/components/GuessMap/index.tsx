@@ -5,7 +5,8 @@ import dynamic from 'next/dynamic'
 import { useEffect, useRef, useState } from 'react'
 import { useLocalStorage } from 'usehooks-ts'
 
-import { DEFAULT_MAP_CENTER, OFFICIAL_MAP_WORLD_ID } from '@/constants/index.js'
+import { OFFICIAL_MAP_WORLD_ID } from '@/constants/index.js'
+import { DEFAULT_MAP_CENTER } from '@/constants/map.js'
 
 import { useTranslation } from '@/i18n/client.js'
 

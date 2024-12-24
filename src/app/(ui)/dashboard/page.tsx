@@ -1,11 +1,11 @@
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 
-import { getCurrentSession } from '@/session.js'
-
 import { getProfile } from '@/actions/profile.js'
 
 import { createTranslation } from '@/i18n/server.js'
+
+import { getCurrentSession } from '@/lib/session.js'
 
 const Dashboard = async () => {
   const { session, user } = await getCurrentSession()

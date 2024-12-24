@@ -1,12 +1,12 @@
 import { cookies } from 'next/headers.js'
 
-import { discord } from '@/oauth.js'
+import { discord } from '@/lib/oauth.js'
 import {
   // generateSessionToken,
   createSession,
   setSessionTokenCookie,
-} from '@/session.js'
-import { generateSessionToken } from '@/session-utils.js'
+} from '@/lib/session.js'
+import { generateSessionToken } from '@/lib/session-utils.js'
 
 import { createClient } from '@/utils/supabase/server.js'
 
@@ -130,7 +130,7 @@ export async function GET(request: Request): Promise<Response> {
     .single<APIUser>()
 
   if (userErr)
-    return Response.json(null, {
+    return new Response(null, {
       status: 500,
     })
 
@@ -143,7 +143,7 @@ export async function GET(request: Request): Promise<Response> {
     })
 
   if (accountErr)
-    return Response.json(null, {
+    return new Response(null, {
       status: 500,
     })
 
@@ -178,7 +178,7 @@ export async function GET(request: Request): Promise<Response> {
   return new Response(null, {
     status: 302,
     headers: {
-      Location: '/',
+      Location: '/setup-profile',
     },
   })
 }

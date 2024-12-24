@@ -9,12 +9,12 @@ import { getMap } from '@/actions/map.js'
 
 import useGoogleApi from '@/hooks/useGoogleApi.js'
 
+import Loading from './Loading.js'
+
 import styles from './page.module.css'
 
 import type { Game, GameView } from '@/types/game.js'
 import type { Map } from '@/types/map.js'
-
-import Loading from './Loading.js'
 
 const FinalRoundResult = dynamic(
   () => import('@/components/FinalRoundResult/index.js'),

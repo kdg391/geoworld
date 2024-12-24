@@ -2,12 +2,12 @@ import {
   // generateSessionToken,
   createSession,
   setSessionTokenCookie,
-} from '@/session.js'
-import { generateSessionToken } from '@/session-utils.js'
+} from '@/lib/session.js'
+import { generateSessionToken } from '@/lib/session-utils.js'
 
 import { createClient } from '@/utils/supabase/server.js'
 
-import type { APIMagicLinkToken } from '@/magic-link.js'
+import type { APIMagicLinkToken } from '@/lib/magic-link.js'
 import type { APIAccount } from '@/types/account.js'
 import type { APIProfile } from '@/types/profile.js'
 import type { APIUser } from '@/types/user.js'
@@ -31,7 +31,7 @@ export async function GET(
     .maybeSingle<APIMagicLinkToken>()
 
   if (mErr)
-    return Response.json(null, {
+    return new Response(null, {
       status: 500,
     })
 
@@ -43,7 +43,7 @@ export async function GET(
   await supabase.from('magic_link_tokens').delete().eq('id', magicLinkData.id)
 
   if (Date.now() >= new Date(magicLinkData.expires_at).getTime())
-    return Response.json(null, {
+    return new Response(null, {
       status: 400,
     })
 

@@ -2,9 +2,9 @@ import { forwardRef } from 'react'
 
 import { classNames } from '@/utils/index.js'
 
-import styles from './index.module.css'
-
 import Spinner from '../Spinner/index.js'
+
+import styles from './index.module.css'
 
 type PolymorphicRef<C extends React.ElementType> =
   React.ComponentPropsWithRef<C>['ref']

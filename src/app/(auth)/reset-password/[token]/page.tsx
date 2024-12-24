@@ -6,7 +6,7 @@ import { createTranslation } from '@/i18n/server.js'
 
 import { createClient } from '@/utils/supabase/server.js'
 
-import Form from './Form.js'
+import Form from './form.js'
 
 import styles from '../../page.module.css'
 

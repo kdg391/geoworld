@@ -7,9 +7,9 @@ import { generateRandomOTP } from './code.js'
 // import { ExpiringTokenBucket } from './rate-limit.js'
 import { getCurrentSession } from './session.js'
 
-import { resend } from './utils/email/index.js'
-import VerifyEmailTemplate from './utils/email/templates/verify-email.js'
-import { createClient } from './utils/supabase/server.js'
+import { resend } from '../utils/email/index.js'
+import VerifyEmailTemplate from '../utils/email/templates/verify-email.js'
+import { createClient } from '../utils/supabase/server.js'
 
 export async function getUserEmailVerificationRequest(
   userId: string,

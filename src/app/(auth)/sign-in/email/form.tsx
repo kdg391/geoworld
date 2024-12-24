@@ -2,14 +2,14 @@
 
 import { useActionState } from 'react'
 
-import { forgotPassword } from '@/actions/password.js'
+import { signInWithEmail } from '@/actions/auth.js'
 
 import { useTranslation } from '@/i18n/client.js'
 
 import SubmitButton from '@/components/common/SubmitButton/index.js'
 import TextInput from '@/components/common/TextInput/index.js'
 
-import styles from '../page.module.css'
+import styles from '../../page.module.css'
 
 interface FormState {
   errors: {
@@ -21,7 +21,7 @@ interface FormState {
 const Form = () => {
   'use client'
 
-  const [state, action] = useActionState<FormState, FormData>(forgotPassword, {
+  const [state, action] = useActionState<FormState, FormData>(signInWithEmail, {
     errors: null,
   })
 
@@ -55,7 +55,7 @@ const Form = () => {
         <p className={styles['error-msg']}>{state.errors.message}</p>
       )}
       <SubmitButton full formAction={action} className={styles.button}>
-        {t('reset_password')}
+        {t('continue_with_email')}
       </SubmitButton>
     </form>
   )

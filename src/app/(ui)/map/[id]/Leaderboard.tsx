@@ -2,9 +2,9 @@
 
 import Link from 'next/link'
 
-import { getCurrentSession } from '@/session.js'
-
 import { createTranslation } from '@/i18n/server.js'
+
+import { getCurrentSession } from '@/lib/session.js'
 
 import { createClient } from '@/utils/supabase/server.js'
 

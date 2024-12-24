@@ -1,4 +1,4 @@
-import { getCurrentSession } from '@/session.js'
+import { getCurrentSession } from '@/lib/session.js'
 
 import { createClient } from '@/utils/supabase/server.js'
 

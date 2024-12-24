@@ -1,12 +1,12 @@
-import { getCurrentSession } from '@/session.js'
-
 import {
-  MAPS_PAGE_LIMIT,
   OFFICIAL_MAP_COUNTRY_CODES,
   OFFICIAL_MAP_WORLD_ID,
 } from '@/constants/index.js'
+import { MAPS_PAGE_LIMIT } from '@/constants/map.js'
 
 import { createTranslation } from '@/i18n/server.js'
+
+import { getCurrentSession } from '@/lib/session.js'
 
 import { createClient } from '@/utils/supabase/server.js'
 

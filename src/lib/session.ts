@@ -9,9 +9,9 @@ import jwt from 'jsonwebtoken'
 import { cookies, headers } from 'next/headers.js'
 import { cache } from 'react'
 
-import { createClient } from './utils/supabase/server.js'
+import { createClient } from '../utils/supabase/server.js'
 
-import type { APIUser, User } from './types/user.js'
+import type { APIUser, User } from '../types/user.js'
 
 export type SessionValidationResult =
   | {
@@ -50,11 +50,11 @@ export async function createSession(
 
   const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)))
 
-  let ipAddress: string | null
-
   const headerStore = await headers()
 
   const forwardedFor = headerStore.get('x-forwarded-for')
+
+  let ipAddress: string | null
 
   if (forwardedFor) ipAddress = forwardedFor.split(',')[0] ?? null
   else ipAddress = headerStore.get('x-real-ip') ?? null

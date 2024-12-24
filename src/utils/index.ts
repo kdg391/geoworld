@@ -80,3 +80,47 @@ export const camelCaseToSnakeCase = <T>(item: unknown): T => {
     ]),
   ) as T
 }
+
+const unitsInSec = [
+  60,
+  60 * 60,
+  60 * 60 * 24,
+  60 * 60 * 24 * 7,
+  60 * 60 * 24 * 30,
+  60 * 60 * 24 * 365,
+  Infinity,
+]
+
+const unitStrings = [
+  'second',
+  'minute',
+  'hour',
+  'day',
+  'week',
+  'month',
+  'year',
+] as const
+
+export const formatRelativeTime = (
+  date: Date,
+  locales?: Intl.LocalesArgument,
+) => {
+  const secondsDiff = Math.round((date.getTime() - Date.now()) / 1000)
+
+  const unitIndex = unitsInSec.findIndex(
+    (cutoff) => cutoff > Math.abs(secondsDiff),
+  )
+
+  const divisor = unitIndex ? unitsInSec[unitIndex - 1] : 1
+
+  const formatter = new Intl.RelativeTimeFormat(locales ?? 'en', {
+    numeric: 'auto',
+  })
+
+  const relativeTime = formatter.format(
+    Math.floor(secondsDiff / divisor),
+    unitStrings[unitIndex],
+  )
+
+  return relativeTime
+}

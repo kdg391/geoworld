@@ -1,13 +1,14 @@
 import { hash } from '@node-rs/argon2'
 import { z } from 'zod'
 
+import { passwordOptions } from '@/lib/password.js'
+
 import { createClient } from '@/utils/supabase/server.js'
 
 import type { NextRequest } from 'next/server'
-import type { APIPasswordResetToken } from '@/password-reset.js'
+import type { APIPasswordResetToken } from '@/lib/password-reset.js'
 import type { APIAccount } from '@/types/account.js'
 import type { APIUser } from '@/types/user.js'
-import { passwordOptions } from '@/password'
 
 const schema = z.object({
   password: z.string(),

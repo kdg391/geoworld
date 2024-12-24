@@ -1,8 +1,8 @@
 import { z } from 'zod'
 
-import { getCurrentSession } from '@/session.js'
-
 import { OFFICIAL_MAP_WORLD_ID } from '@/constants/index.js'
+
+import { getCurrentSession } from '@/lib/session.js'
 
 import { createClient } from '@/utils/supabase/server.js'
 

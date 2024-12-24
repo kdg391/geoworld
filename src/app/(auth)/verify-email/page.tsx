@@ -8,9 +8,9 @@ import {
   ResendEmailVerificationCodeForm,
 } from './form.js'
 
-import { getUserEmailVerificationRequestFromRequest } from '@/email-verification.js'
-import { globalGETRateLimit } from '@/request.js'
-import { getCurrentSession } from '@/session.js'
+import { getUserEmailVerificationRequestFromRequest } from '@/lib/email-verification.js'
+import { globalGETRateLimit } from '@/lib/request.js'
+import { getCurrentSession } from '@/lib/session.js'
 
 export default async function Page() {
   'use server'
@@ -24,6 +24,7 @@ export default async function Page() {
   // TODO: Ideally we'd sent a new verification email automatically if the previous one is expired,
   // but we can't set cookies inside server components.
   const verificationRequest = await getUserEmailVerificationRequestFromRequest()
+  console.log(verificationRequest)
 
   if (verificationRequest === null && user.emailVerified) return redirect('/')
 

@@ -14,16 +14,22 @@ const ClearLocationsConfirm = ({
   isOpen,
   setIsOpen,
 }: Props) => {
-  const { t } = useTranslation(['common'])
+  const { t } = useTranslation(['common', 'map-builder'])
 
   return (
     <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
       <Modal.Header>
-        <Modal.Title>Clear All Locations</Modal.Title>
+        <Modal.Title>
+          {t('clear_all_locations.title', {
+            ns: 'map-builder',
+          })}
+        </Modal.Title>
       </Modal.Header>
       <Modal.Content>
         <Modal.Description>
-          Are you sure you want to clear all locations?
+          {t('clear_all_locations.desc', {
+            ns: 'map-builder',
+          })}
         </Modal.Description>
       </Modal.Content>
       <Modal.Footer>
@@ -32,7 +38,9 @@ const ClearLocationsConfirm = ({
             {t('cancel')}
           </Button>
           <Button size="s" variant="danger" onClick={() => clearLocations()}>
-            Clear
+            {t('clear', {
+              ns: 'map-builder',
+            })}
           </Button>
         </Modal.Actions>
       </Modal.Footer>

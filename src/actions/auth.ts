@@ -9,9 +9,9 @@ import {
   createEmailVerificationRequest,
   sendVerificationEmail,
   setEmailVerificationRequestCookie,
-} from '../email-verification.js'
-import { createMagicLinkToken } from '../magic-link.js'
-import { passwordOptions } from '../password.js'
+} from '../lib/email-verification.js'
+import { createMagicLinkToken } from '../lib/magic-link.js'
+import { passwordOptions } from '../lib/password.js'
 import {
   createSession,
   deleteSessionTokenCookie,
@@ -19,13 +19,15 @@ import {
   getCurrentSession,
   invalidateSession,
   setSessionTokenCookie,
-} from '../session.js'
-import { generateSessionToken } from '../session-utils.js'
+} from '../lib/session.js'
+import { generateSessionToken } from '../lib/session-utils.js'
 
 import { resend } from '../utils/email/index.js'
-import MagicLinkTemplate from '@/utils/email/templates/magic-link.js'
+import MagicLinkTemplate from '../utils/email/templates/magic-link.js'
 import { createClient } from '../utils/supabase/server.js'
 import {
+  forgotPasswordSchema,
+  resetPasswordSchema,
   signInCredentialsSchema,
   signInEmailSchema,
   signUpSchema,
@@ -192,7 +194,7 @@ export const signInWithCredentials = async (_: unknown, formData: FormData) => {
   if (user === null)
     return {
       errors: {
-        message: 'Email or password is incorrect.',
+        message: 'invalid_credentials',
       },
     }
 
@@ -208,7 +210,7 @@ export const signInWithCredentials = async (_: unknown, formData: FormData) => {
   if (account === null)
     return {
       errors: {
-        message: 'Email or password is incorrect.',
+        message: 'invalid_credentials',
       },
     }
 
@@ -221,7 +223,7 @@ export const signInWithCredentials = async (_: unknown, formData: FormData) => {
   if (!isPwMatched)
     return {
       errors: {
-        message: 'Email or password is incorrect.',
+        message: 'invalid_credentials',
       },
     }
 
@@ -259,4 +261,96 @@ export const signInWithEmail = async (_: unknown, formData: FormData) => {
   })
 
   redirect('/')
+}
+
+export const forgotPassword = async (_: unknown, formData: FormData) => {
+  'use server'
+
+  const validated = await forgotPasswordSchema.safeParseAsync({
+    email: formData.get('email'),
+  })
+
+  if (!validated.success)
+    return {
+      errors: validated.error.flatten().fieldErrors,
+    }
+
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_URL}/api/auth/reset-password`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: validated.data.email,
+        }),
+      },
+    )
+
+    const data = await response.json()
+
+    if (data?.errors) throw new Error('Something went wrong!')
+  } catch (err) {
+    if (err instanceof Error)
+      return {
+        errors: {
+          message: 'Something went wrong!',
+        },
+      }
+
+    return {
+      errors: null,
+    }
+  }
+
+  redirect('/email-has-sent')
+}
+
+export const resetPassword = async (_: unknown, formData: FormData) => {
+  'use server'
+
+  const validated = await resetPasswordSchema.safeParseAsync({
+    password: formData.get('password'),
+    confirmPassword: formData.get('confirm-password'),
+    token: formData.get('token'),
+  })
+
+  if (!validated.success)
+    return {
+      errors: validated.error.flatten().fieldErrors,
+    }
+
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_URL}/api/auth/reset-password/${validated.data.token}`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          password: validated.data.password,
+        }),
+      },
+    )
+
+    const data = await response.json()
+
+    if (data.errors) throw new Error('Something went wrong!')
+  } catch (err) {
+    if (err instanceof Error)
+      return {
+        errors: {
+          message: 'Something went wrong!',
+        },
+      }
+
+    return {
+      errors: null,
+    }
+  }
+
+  redirect('/sign-in')
 }

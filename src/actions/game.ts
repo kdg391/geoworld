@@ -2,9 +2,9 @@
 
 import { cookies } from 'next/headers'
 
-import { getCurrentSession } from '../session.js'
-
 import { OFFICIAL_MAP_WORLD_ID } from '../constants/index.js'
+
+import { getCurrentSession } from '../lib/session.js'
 
 import { camelCaseToSnakeCase, snakeCaseToCamelCase } from '../utils/index.js'
 import { createClient } from '../utils/supabase/server.js'
@@ -38,7 +38,7 @@ export const startGameRound = async (id: string) => {
     .from('games')
     .select('*')
     .eq('id', id)
-    .single<APIGame>()
+    .maybeSingle<APIGame>()
 
   if (!gameData)
     return {
@@ -76,7 +76,7 @@ export const startGameRound = async (id: string) => {
     .from('maps')
     .select('*')
     .eq('id', gameData.map_id)
-    .single<APIMap>()
+    .maybeSingle<APIMap>()
 
   if (!mapData)
     return {
@@ -106,7 +106,7 @@ export const startGameRound = async (id: string) => {
           p_count: 1,
         })
         .select('*')
-        .single<APILocation>()
+        .maybeSingle<APILocation>()
 
       if (!lData)
         return {

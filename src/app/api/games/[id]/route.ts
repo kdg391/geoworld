@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-import { getCurrentSession } from '@/session.js'
+import { getCurrentSession } from '@/lib/session.js'
 
 import { calculateDistance, calculateRoundScore } from '@/utils/game.js'
 

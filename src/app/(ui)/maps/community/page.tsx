@@ -3,7 +3,7 @@
 import dynamic from 'next/dynamic'
 import { useEffect, useState } from 'react'
 
-import { MAPS_PAGE_LIMIT } from '@/constants/index.js'
+import { MAPS_PAGE_LIMIT } from '@/constants/map.js'
 
 import { useTranslation } from '@/i18n/client.js'
 

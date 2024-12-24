@@ -13,7 +13,6 @@ import { useTranslation } from '@/i18n/client.js'
 
 import styles from './page.module.css'
 
-import type { Session } from '@/session.js'
 import type { Coords } from '@/types/location.js'
 import type { Map } from '@/types/map.js'
 import type { User } from '@/types/user.js'
@@ -30,11 +29,10 @@ interface Props {
   params: {
     id: string
   }
-  session: Session
   user: User
 }
 
-const Edit = ({ params, session, user }: Props) => {
+const ClientPage = ({ params, user }: Props) => {
   const { isGoogleLoaded, loadGoogleApi } = useGoogleApi()
 
   const [mapData, setMapData] = useState<Map | null>()
@@ -62,11 +60,6 @@ const Edit = ({ params, session, user }: Props) => {
 
   useEffect(() => {
     const init = async () => {
-      if (!session) {
-        setMapData(null)
-        return
-      }
-
       const { data: mapData, errors: mErr } = await getMap(params.id)
 
       if (!mapData || mErr || mapData.creator !== user.id) {
@@ -325,4 +318,4 @@ const Edit = ({ params, session, user }: Props) => {
   )
 }
 
-export default Edit
+export default ClientPage

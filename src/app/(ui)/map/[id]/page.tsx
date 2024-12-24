@@ -5,8 +5,6 @@ import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
-import { getCurrentSession } from '@/session.js'
-
 import { getLike, getMap } from '@/actions/map.js'
 import { getProfile } from '@/actions/profile.js'
 
@@ -18,6 +16,8 @@ import {
 } from '@/constants/index.js'
 
 import { createTranslation } from '@/i18n/server.js'
+
+import { getCurrentSession } from '@/lib/session.js'
 
 import styles from './page.module.css'
 

@@ -1,7 +1,7 @@
 import { generateState } from 'arctic'
 import { cookies } from 'next/headers.js'
 
-import { discord } from '@/oauth.js'
+import { discord } from '@/lib/oauth.js'
 
 export async function GET() {
   const state = generateState()

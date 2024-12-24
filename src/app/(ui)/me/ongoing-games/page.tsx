@@ -2,9 +2,9 @@
 
 import { redirect } from 'next/navigation'
 
-import { getCurrentSession } from '@/session.js'
-
 import { createTranslation } from '@/i18n/server.js'
+
+import { getCurrentSession } from '@/lib/session.js'
 
 import { createClient } from '@/utils/supabase/server.js'
 
@@ -15,7 +15,7 @@ const OngoingGames = async () => {
 
   const { session, user } = await getCurrentSession()
 
-  if (!session) redirect('/sign-in?next=/dashboard/likes')
+  if (!session) redirect('/sign-in?next=/me/ongoing-games')
 
   const supabase = createClient({
     supabaseAccessToken: session.supabaseAccessToken,

@@ -15,7 +15,7 @@ const Game = async () => {
 
   return (
     <section className={styles.section}>
-      <h1 className="text-2xl mb-4">{t('game_settings')}</h1>
+      <h1 className={styles.title}>{t('game_settings')}</h1>
       <div>
         <DistanceUnitSelect />
       </div>

@@ -1,7 +1,7 @@
 import { sha256 } from '@oslojs/crypto/sha2'
 import { encodeBase32, encodeHexLowerCase } from '@oslojs/encoding'
 
-import { createClient } from './utils/supabase/server.js'
+import { createClient } from '../utils/supabase/server.js'
 
 export async function createMagicLinkToken(email: string): Promise<string> {
   'use server'

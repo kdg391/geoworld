@@ -9,7 +9,7 @@ export const emailSchema = z
 export const passwordSchema = z
   .string()
   .min(8, 'The password must be at least 8 characters.')
-  .max(60, 'The password must be at most 60 characters.')
+  .max(96, 'The password must be at most 96 characters.')
 
 export const signUpSchema = z
   .object({

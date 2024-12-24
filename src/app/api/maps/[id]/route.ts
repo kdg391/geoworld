@@ -1,13 +1,13 @@
 import { z } from 'zod'
 
-import { getCurrentSession } from '@/session.js'
-
 import {
   OFFICIAL_MAP_COUNTRY_CODES,
   OFFICIAL_MAP_WORLD_ID,
 } from '@/constants/index.js'
 
 import { createTranslation } from '@/i18n/server.js'
+
+import { getCurrentSession } from '@/lib/session.js'
 
 import { calculateMapBounds, calculateScoreFactor } from '@/utils/game.js'
 import { getCountryFromCoordinates } from '@/utils/map.js'

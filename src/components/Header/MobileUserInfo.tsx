@@ -1,7 +1,8 @@
 'use client'
 
 import { LogOut, Settings, UserRound } from 'lucide-react'
-import Link from 'next/link'
+import Link from 'next/link.js'
+import { useRouter } from 'next/navigation.js'
 import { useEffect, useState } from 'react'
 
 import { signOut } from '@/actions/auth.js'
@@ -11,7 +12,7 @@ import { useTranslation } from '@/i18n/client.js'
 
 import styles from './MobileUserInfo.module.css'
 
-import type { Session } from '@/session.js'
+import type { Session } from '@/lib/session.js'
 import type { Profile } from '@/types/profile.js'
 import type { User } from '@/types/user.js'
 
@@ -20,7 +21,9 @@ interface Props {
   user: User
 }
 
-const MobileUserInfo = ({ user }: Props) => {
+const MobileUserInfo = ({ session, user }: Props) => {
+  const router = useRouter()
+
   const [isLoading, setIsLoading] = useState(true)
 
   const [profile, setProfile] = useState<Pick<
@@ -32,22 +35,27 @@ const MobileUserInfo = ({ user }: Props) => {
 
   useEffect(() => {
     const init = async () => {
-      const pCache = localStorage.getItem('profileCache')
-      const pCacheUpdated = localStorage.getItem('profileCacheUpdated')
+      if (!session || !user) return
 
-      if (
-        pCache &&
-        pCacheUpdated &&
-        Date.now() - parseInt(pCacheUpdated) < 60 * 60 * 24 * 1000
-      ) {
-        setProfile(JSON.parse(pCache))
+      const pCache = localStorage.getItem('profileCache')
+
+      if (pCache !== null) {
+        const profileCache = JSON.parse(pCache)
+
+        if (Date.now() - profileCache.lastUpdated < 60 * 60 * 24 * 1000)
+          setProfile(profileCache.data)
 
         return
       }
 
       const { data: pData } = await getProfile(user.id)
 
-      if (!pData) return
+      if (
+        pData === null ||
+        pData.displayName === null ||
+        pData.username === null
+      )
+        return
 
       setProfile({
         id: pData.id,
@@ -59,12 +67,14 @@ const MobileUserInfo = ({ user }: Props) => {
         localStorage.setItem(
           'profileCache',
           JSON.stringify({
-            id: pData.id,
-            displayName: pData.displayName,
-            username: pData.username,
+            data: {
+              id: pData.id,
+              displayName: pData.displayName,
+              username: pData.username,
+            },
+            lastUpdated: Date.now(),
           }),
         )
-        localStorage.setItem('profileCacheUpdated', String(Date.now()))
       } catch {
         //
       }
@@ -78,12 +88,12 @@ const MobileUserInfo = ({ user }: Props) => {
   const onSignOutClick = async () => {
     if (localStorage.getItem('profileCache'))
       localStorage.removeItem('profileCache')
-    if (localStorage.getItem('profileCacheUpdated'))
-      localStorage.removeItem('profileCacheUpdated')
 
     try {
       await signOut()
-    } catch {}
+    } finally {
+      router.push('/')
+    }
   }
 
   return (

@@ -56,7 +56,7 @@ const DeleteMapConfirm = ({ isOpen, setIsOpen, mapId }: Props) => {
       </Modal.Header>
       <Modal.Content>
         <Modal.Description>
-          {t('delete_map.content', {
+          {t('delete_map.desc', {
             ns: 'map-builder',
           })}
         </Modal.Description>

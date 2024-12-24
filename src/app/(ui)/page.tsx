@@ -4,9 +4,9 @@ import dynamic from 'next/dynamic'
 // import Image from 'next/image'
 import { redirect } from 'next/navigation'
 
-import { getCurrentSession } from '@/session.js'
-
 import { createTranslation } from '@/i18n/server.js'
+
+import { getCurrentSession } from '@/lib/session.js'
 
 import styles from './page.module.css'
 

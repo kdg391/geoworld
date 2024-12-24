@@ -3,7 +3,7 @@
 import { cookies, headers } from 'next/headers'
 import { redirect } from 'next/navigation'
 
-import { getCurrentSession } from '../session.js'
+import { getCurrentSession } from '../lib/session.js'
 
 import { snakeCaseToCamelCase } from '../utils/index.js'
 import { createClient } from '../utils/supabase/server.js'
@@ -12,9 +12,14 @@ import type { APILocation, Coords, Location } from '../types/location.js'
 import type { APIMap, Map } from '../types/map.js'
 
 export const getMap = async (id: string) => {
+  const cookieStore = await cookies()
+
   const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/maps/${id}`, {
     method: 'GET',
-    headers: await headers(),
+    headers: {
+      'Content-Type': 'application/json',
+      Cookie: cookieStore.toString(),
+    },
   })
 
   const { data, errors } = (await res.json()) as {
@@ -39,9 +44,14 @@ export const getMap = async (id: string) => {
 export const createCommunityMap = async (_: unknown, formData: FormData) => {
   'use server'
 
+  const cookieStore = await cookies()
+
   const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/maps`, {
     method: 'POST',
-    headers: await headers(),
+    headers: {
+      'Content-Type': 'application/json',
+      Cookie: cookieStore.toString(),
+    },
     body: JSON.stringify({
       name: formData.get('name'),
       description: formData.get('description'),

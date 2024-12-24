@@ -10,11 +10,11 @@ import {
   sendVerificationEmail,
   // sendVerificationEmailBucket,
   setEmailVerificationRequestCookie,
-} from '@/email-verification.js'
-import { sendVerificationEmailBucket } from '@/email-verification-utils.js'
-import { ExpiringTokenBucket } from '@/rate-limit.js'
-import { globalPOSTRateLimit } from '@/request.js'
-import { getCurrentSession } from '@/session.js'
+} from '@/lib/email-verification.js'
+import { sendVerificationEmailBucket } from '@/lib/email-verification-utils.js'
+import { ExpiringTokenBucket } from '@/lib/rate-limit.js'
+import { globalPOSTRateLimit } from '@/lib/request.js'
+import { getCurrentSession } from '@/lib/session.js'
 
 import { createClient } from '@/utils/supabase/server.js'
 

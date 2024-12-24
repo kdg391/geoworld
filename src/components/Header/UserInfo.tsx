@@ -18,7 +18,7 @@ import styles from './UserInfo.module.css'
 
 import './UserInfo.css'
 
-import type { Session } from '@/session.js'
+import type { Session } from '@/lib/session.js'
 import type { Profile } from '@/types/profile.js'
 import type { User } from '@/types/user.js'
 
@@ -51,7 +51,7 @@ const UserInfo = ({ session, user }: Props) => {
     const init = async () => {
       if (!session || !user) return
 
-      const pCache = localStorage.getItem('profile-cache')
+      const pCache = localStorage.getItem('profileCache')
 
       if (pCache !== null) {
         const profileCache = JSON.parse(pCache)
@@ -79,7 +79,7 @@ const UserInfo = ({ session, user }: Props) => {
 
       try {
         localStorage.setItem(
-          'profile-cache',
+          'profileCache',
           JSON.stringify({
             data: {
               id: pData.id,
@@ -102,12 +102,9 @@ const UserInfo = ({ session, user }: Props) => {
   const onSignOutClick = async () => {
     if (localStorage.getItem('profileCache'))
       localStorage.removeItem('profileCache')
-    if (localStorage.getItem('profileCacheUpdated'))
-      localStorage.removeItem('profileCacheUpdated')
 
     try {
       await signOut()
-    } catch {
     } finally {
       router.push('/')
     }
