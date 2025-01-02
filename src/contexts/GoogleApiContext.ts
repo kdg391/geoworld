@@ -1,7 +1,7 @@
 import { createContext } from 'react'
 
 export interface ContextValue {
-  isGoogleLoaded: boolean
+  isGoogleApiLoaded: boolean
   loadGoogleApi: () => Promise<void>
 }
 

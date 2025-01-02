@@ -9,9 +9,9 @@ import { getCurrentSession } from '@/lib/session.js'
 import { createClient } from '@/utils/supabase/server.js'
 
 import DeleteAccountButton from './DeleteAccountButton.js'
-import EmailForm from './EmailForm.js'
-import PasswordForm from './PasswordForm.js'
-import SessionManager from './SessionManager.js'
+import EmailForm from './email-form.js'
+import PasswordForm from './password-form.js'
+import SessionManager from './session-manager.js'
 
 import styles from '../layout.module.css'
 
@@ -22,7 +22,7 @@ const Account = async () => {
 
   const { session, user } = await getCurrentSession()
 
-  if (!session) redirect('/sign-in')
+  if (!session) redirect('/sign-in?next=/settings/account')
 
   const supabase = createClient({
     supabaseAccessToken: session.supabaseAccessToken,

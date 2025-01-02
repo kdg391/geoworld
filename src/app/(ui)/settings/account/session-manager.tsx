@@ -1,12 +1,4 @@
-import {
-  Gamepad,
-  Laptop,
-  Smartphone,
-  TabletSmartphone,
-  TvMinimal,
-} from 'lucide-react'
 import { redirect } from 'next/navigation'
-import { UAParser } from 'ua-parser-js'
 
 import {
   getCurrentSession,
@@ -14,10 +6,11 @@ import {
   type Session,
 } from '@/lib/session.js'
 
-import { formatRelativeTime, snakeCaseToCamelCase } from '@/utils/index.js'
+import { snakeCaseToCamelCase } from '@/utils/index.js'
 import { createClient } from '@/utils/supabase/server.js'
 
 import SignOutAllSessionsForm from './SignOutAllSessionsForm.js'
+import SessionItem from './session-item.js'
 
 const SessionManager = async () => {
   'use server'
@@ -46,7 +39,7 @@ const SessionManager = async () => {
       </div>
       <div>
         <div>Other Sessions</div>
-        {sessions
+        {sessions && sessions.length > 0
           ? sessions.map((s) => (
               <SessionItem
                 key={s.id}
@@ -60,44 +53,6 @@ const SessionManager = async () => {
           : 'No sessions'}
       </div>
       <SignOutAllSessionsForm />
-    </div>
-  )
-}
-
-const SessionItem = ({ session }: { session: Session }) => {
-  const parsedUA = session.userAgent
-    ? new UAParser(session.userAgent).getResult()
-    : null
-
-  const relativeTime = formatRelativeTime(session.createdAt)
-
-  return (
-    <div>
-      {parsedUA && (
-        <div
-          style={{
-            display: 'flex',
-          }}
-        >
-          {parsedUA.device.type === 'mobile' ? (
-            <Smartphone size={16} />
-          ) : parsedUA.device.type === 'tablet' ? (
-            <TabletSmartphone size={16} />
-          ) : parsedUA.device.type === 'console' ? (
-            <Gamepad size={16} />
-          ) : parsedUA.device.type === 'smarttv' ? (
-            <TvMinimal size={16} />
-          ) : (
-            <Laptop size={16} />
-          )}
-          <div>{`${parsedUA.browser.name}, ${parsedUA.os.name}`}</div>
-        </div>
-      )}
-      <div>{relativeTime}</div>
-
-      <form action={undefined}>
-        <button type="submit">Sign Out</button>
-      </form>
     </div>
   )
 }

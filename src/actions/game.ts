@@ -216,13 +216,7 @@ export const getGame = async (id: string) => {
       ? ({
           ...snakeCaseToCamelCase<Game>(data),
           rounds: data.rounds.map((r) => ({
-            heading: r.heading,
-            lat: r.lat,
-            lng: r.lng,
-            panoId: r.pano_id,
-            streakLocationCode: r.streak_location_code,
-            pitch: r.pitch,
-            zoom: r.zoom,
+            ...snakeCaseToCamelCase<RoundLocation>(r),
             startedAt: new Date(r.started_at),
             endedAt: r.ended_at ? new Date(r.ended_at) : null,
           })),

@@ -58,7 +58,7 @@ const ResultMap = ({
   )
   const polylinesRef = useRef<google.maps.Polyline[]>([])
 
-  const { isGoogleLoaded } = useGoogleApi()
+  const { isGoogleApiLoaded } = useGoogleApi()
 
   const fitMapBounds = () => {
     if (!resultMapRef.current) return
@@ -226,14 +226,14 @@ const ResultMap = ({
   }
 
   useEffect(() => {
-    if (!isGoogleLoaded) return
+    if (!isGoogleApiLoaded) return
     if (guessedLocations.length === 0) return
     if (!(view === 'result' || view === 'finalResult')) return
 
     renderMarkers()
     renderPolylines()
     fitMapBounds()
-  }, [isGoogleLoaded, actualLocations, guessedLocations, view])
+  }, [isGoogleApiLoaded, actualLocations, guessedLocations, view])
 
   return (
     <GoogleMap

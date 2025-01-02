@@ -10,7 +10,7 @@ interface Props {
 }
 
 const GoogleApiProvider = ({ children }: Props) => {
-  const [isGoogleLoaded, setIsGoogleLoaded] = useState(false)
+  const [isGoogleApiLoaded, setIsGoogleLoaded] = useState(false)
 
   const loader = useMemo(
     () =>
@@ -22,7 +22,7 @@ const GoogleApiProvider = ({ children }: Props) => {
   )
 
   const loadGoogleApi = useCallback(async () => {
-    if (isGoogleLoaded) return
+    if (isGoogleApiLoaded) return
 
     await loader.importLibrary('core')
     await loader.importLibrary('maps')
@@ -30,11 +30,11 @@ const GoogleApiProvider = ({ children }: Props) => {
     await loader.importLibrary('streetView')
 
     setIsGoogleLoaded(true)
-  }, [isGoogleLoaded, loader])
+  }, [isGoogleApiLoaded, loader])
 
   const providerValue = useMemo(
-    () => ({ isGoogleLoaded, loadGoogleApi }),
-    [isGoogleLoaded, loadGoogleApi],
+    () => ({ isGoogleApiLoaded, loadGoogleApi }),
+    [isGoogleApiLoaded, loadGoogleApi],
   )
 
   return (

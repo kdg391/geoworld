@@ -58,6 +58,9 @@ const MapSettingsModal = ({
         </Modal.Title>
       </Modal.Header>
       <form action={action}>
+        {mapData && (
+          <input hidden type="hidden" value={mapData.id} name="map-id" />
+        )}
         <Modal.Content>
           <div className={styles.field}>
             <label htmlFor="name">

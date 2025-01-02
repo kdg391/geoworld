@@ -15,7 +15,7 @@ import styles from '../page.module.css'
 
 import '../page.css'
 
-const Caption = dynamic(() => import('../Caption.js'))
+const Caption = dynamic(() => import('../caption.js'))
 
 const SignUp = async () => {
   'use server'

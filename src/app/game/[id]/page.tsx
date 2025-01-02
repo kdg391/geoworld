@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic'
 import { notFound } from 'next/navigation'
 import { use, useCallback, useEffect, useState } from 'react'
 
-import { startGameRound, updateGame } from '@/actions/game.js'
+import { getGame, startGameRound, updateGame } from '@/actions/game.js'
 import { getMap } from '@/actions/map.js'
 
 import useGoogleApi from '@/hooks/useGoogleApi.js'
@@ -42,31 +42,49 @@ const Game = (props: Props) => {
   const [markerPosition, setMarkerPosition] =
     useState<google.maps.LatLngLiteral | null>(null)
 
-  const { isGoogleLoaded, loadGoogleApi } = useGoogleApi()
+  const { isGoogleApiLoaded, loadGoogleApi } = useGoogleApi()
 
   useEffect(() => {
     const loadGame = async () => {
-      const { data: gData, errors: gDataErr } = await startGameRound(params.id)
+      const { data, errors } = await getGame(params.id)
 
-      if (!gData) {
+      if (!data || errors) {
         setGameData(null)
         return
       }
-      if (gDataErr) return
 
-      const { data: mData } = await getMap(gData.mapId)
+      let g: Game
+
+      if (data.state !== 'finished') {
+        const { data: gData, errors: gDataErr } = await startGameRound(
+          params.id,
+        )
+
+        if (!gData || gDataErr) {
+          setGameData(null)
+          return
+        }
+
+        g = gData
+
+        setGameData(gData)
+      } else {
+        setGameData(data)
+        g = data
+      }
+
+      const { data: mData } = await getMap(data.mapId)
 
       if (!mData) {
         setMapData(null)
         return
       }
 
-      if (!isGoogleLoaded) await loadGoogleApi()
+      if (!isGoogleApiLoaded) await loadGoogleApi()
 
-      setGameData(gData)
       setMapData(mData)
 
-      if (gData.state === 'finished') setView('result')
+      if (g.state === 'finished') setView('result')
       else setView('game')
     }
 

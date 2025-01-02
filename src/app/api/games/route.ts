@@ -69,7 +69,7 @@ export const POST = async (request: Request) => {
     .from('maps')
     .select('*')
     .eq('id', validatedMap.data.mapId)
-    .single<APIMap>()
+    .maybeSingle<APIMap>()
 
   if (mapErr)
     return Response.json(
@@ -82,6 +82,20 @@ export const POST = async (request: Request) => {
         status: 500,
       },
     )
+
+  if (!mapData)
+    return Response.json(
+      {
+        errors: {
+          message: 'Map Not Found',
+        },
+      },
+      {
+        status: 404,
+      },
+    )
+
+  console.log(body.settings)
 
   const validated = await settingsSchema.safeParseAsync({
     rounds: mapData.locations_count,

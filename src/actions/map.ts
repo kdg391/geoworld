@@ -1,6 +1,6 @@
 'use server'
 
-import { cookies, headers } from 'next/headers'
+import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 
 import { getCurrentSession } from '../lib/session.js'
@@ -79,23 +79,21 @@ export const editCommunityMap = async (_: unknown, formData: FormData) => {
   'use server'
 
   const cookieStore = await cookies()
-  const headerStore = await headers()
 
-  const nextUrl = headerStore.get('next-url') as string
-
-  const mapId = new URL(nextUrl).pathname.split('/')[3]
-
-  const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/maps/${mapId}`, {
-    method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json',
-      Cookie: cookieStore.toString(),
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_URL}/api/maps/${formData.get('map-id')}`,
+    {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Cookie: cookieStore.toString(),
+      },
+      body: JSON.stringify({
+        name: formData.get('name'),
+        description: formData.get('description'),
+      }),
     },
-    body: JSON.stringify({
-      name: formData.get('name'),
-      description: formData.get('description'),
-    }),
-  })
+  )
 
   const { errors } = (await res.json()) as {
     errors?: {

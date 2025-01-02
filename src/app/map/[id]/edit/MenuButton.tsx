@@ -18,7 +18,7 @@ const ClearLocationsConfirm = dynamic(
   () => import('./ClearLocationsConfirm.js'),
 )
 const DeleteMapConfirm = dynamic(
-  () => import('@/components/DeleteMapConfirm/index.js'),
+  () => import('@/components/DeleteMapDialog/index.js'),
 )
 const Dropdown = dynamic(() => import('./Dropdown.js'))
 

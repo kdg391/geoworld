@@ -6,8 +6,8 @@ import { createTranslation } from '@/i18n/server.js'
 
 import { getCurrentSession } from '@/lib/session.js'
 
-import DisplayNameForm from './DisplayNameForm.js'
-import UsernameForm from './UsernameForm.js'
+import DisplayNameForm from './display-name-form.js'
+import UsernameForm from './username-form.js'
 
 import styles from '../layout.module.css'
 
@@ -16,7 +16,7 @@ const Profile = async () => {
 
   const { session, user } = await getCurrentSession()
 
-  if (!session) redirect('/sign-in')
+  if (!session) redirect('/sign-in?next=/settings/profile')
 
   const { data: profile } = await getProfile(user.id)
 

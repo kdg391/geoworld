@@ -2,8 +2,8 @@ import { cookies } from 'next/headers.js'
 
 import { discord } from '@/lib/oauth.js'
 import {
-  // generateSessionToken,
   createSession,
+  // generateSessionToken,
   setSessionTokenCookie,
 } from '@/lib/session.js'
 import { generateSessionToken } from '@/lib/session-utils.js'

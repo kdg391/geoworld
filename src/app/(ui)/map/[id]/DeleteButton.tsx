@@ -7,8 +7,8 @@ import { useState } from 'react'
 import { useTranslation } from '@/i18n/client.js'
 
 const Button = dynamic(() => import('@/components/common/Button/index.js'))
-const DeleteMapConfirm = dynamic(
-  () => import('@/components/DeleteMapConfirm/index.js'),
+const DeleteMapDialog = dynamic(
+  () => import('@/components/DeleteMapDialog/index.js'),
 )
 
 interface Props {
@@ -31,7 +31,7 @@ const DeleteButton = ({ mapId }: Props) => {
         {t('delete')}
       </Button>
 
-      <DeleteMapConfirm
+      <DeleteMapDialog
         isOpen={isModalOpen}
         setIsOpen={setIsModalOpen}
         mapId={mapId}

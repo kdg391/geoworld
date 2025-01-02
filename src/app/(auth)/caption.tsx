@@ -5,7 +5,7 @@ import { Trans } from 'react-i18next'
 
 import { useTranslation } from '@/i18n/client.js'
 
-import styles from './Caption.module.css'
+import styles from './caption.module.css'
 
 const Caption = () => {
   'use client'

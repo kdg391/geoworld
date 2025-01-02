@@ -33,7 +33,7 @@ interface Props {
 }
 
 const ClientPage = ({ params, user }: Props) => {
-  const { isGoogleLoaded, loadGoogleApi } = useGoogleApi()
+  const { isGoogleApiLoaded, loadGoogleApi } = useGoogleApi()
 
   const [mapData, setMapData] = useState<Map | null>()
   const [locations, setLocations] = useState<Coords[]>([])
@@ -76,7 +76,7 @@ const ClientPage = ({ params, user }: Props) => {
         return
       }
 
-      if (!isGoogleLoaded) await loadGoogleApi()
+      if (!isGoogleApiLoaded) await loadGoogleApi()
 
       setLocations(lData)
     }
@@ -100,10 +100,10 @@ const ClientPage = ({ params, user }: Props) => {
   }, [haveLocationsChanged])
 
   useEffect(() => {
-    if (!isGoogleLoaded) return
+    if (!isGoogleApiLoaded) return
 
     initStreetView()
-  }, [isGoogleLoaded])
+  }, [isGoogleApiLoaded])
 
   useEffect(() => {
     loadPanorama()
@@ -146,12 +146,12 @@ const ClientPage = ({ params, user }: Props) => {
     })
   }
 
-  const loadPanorama = () => {
+  const loadPanorama = async () => {
     if (!svPanoramaRef.current) return
     if (!svServiceRef.current) return
     if (!selectedLocation) return
 
-    svServiceRef.current
+    await svServiceRef.current
       .getPanorama({
         location: selectedLocation,
       })

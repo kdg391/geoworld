@@ -37,6 +37,8 @@ import type { APIAccount } from '@/types/account.js'
 import type { APIUser } from '@/types/user.js'
 
 export const signOut = async () => {
+  'use server'
+
   const { session } = await getCurrentSession()
 
   if (!session)
@@ -48,6 +50,68 @@ export const signOut = async () => {
 
   await invalidateSession(session.id)
   await deleteSessionTokenCookie()
+}
+
+export const signOutSession = async (_: unknown, formData: FormData) => {
+  'use server'
+
+  const { session } = await getCurrentSession()
+
+  if (!session)
+    return {
+      errors: {
+        message: 'Unauthorized',
+      },
+    }
+
+  const sessionId = formData.get('session-id')
+
+  if (sessionId) {
+    await invalidateSession(sessionId.toString())
+
+    if (session.id === sessionId) await deleteSessionTokenCookie()
+  }
+
+  return {
+    errors: null,
+  }
+}
+
+export const signOutAllSessions = async () => {
+  'use server'
+
+  const { session, user } = await getCurrentSession()
+
+  if (!session)
+    return {
+      errors: {
+        message: 'Unauthorized',
+      },
+    }
+
+  const supabase = createClient({
+    serviceRole: true,
+  })
+
+  const { error } = await supabase
+    .from('sessions')
+    .delete()
+    .eq('user_id', user.id)
+    .neq('id', session.id)
+
+  if (error)
+    return {
+      errors: {
+        message: 'Something went wrong!',
+      },
+    }
+
+  await invalidateSession(session.id)
+  await deleteSessionTokenCookie()
+
+  return {
+    errors: null,
+  }
 }
 
 export const signUpWithCredentials = async (_: unknown, formData: FormData) => {

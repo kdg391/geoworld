@@ -28,11 +28,11 @@ const StreetView = ({ location, settings, view }: Props) => {
 
   const posHistoryRef = useRef<google.maps.LatLngLiteral[]>([])
 
-  const [isStreetViewLoaded, setIsStreetViewLoaded] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
 
-  const { isGoogleLoaded } = useGoogleApi()
+  const { isGoogleApiLoaded } = useGoogleApi()
 
-  const init = () => {
+  const init = async () => {
     const svPanorama = new google.maps.StreetViewPanorama(
       svPanoramaElRef.current as HTMLDivElement,
       {
@@ -75,42 +75,49 @@ const StreetView = ({ location, settings, view }: Props) => {
         posHistoryRef.current.push(position)
     })
 
-    loadPanorama()
-
-    setIsStreetViewLoaded(true)
+    await loadPanorama()
   }
 
-  const loadPanorama = () => {
+  const loadPanorama = async () => {
     if (!svPanoramaRef.current) return
     if (!svServiceRef.current) return
 
     if (!location) return
 
-    svServiceRef.current
-      .getPanorama({
+    setIsLoading(true)
+
+    let res: google.maps.StreetViewResponse
+
+    try {
+      res = await svServiceRef.current.getPanorama({
         location: {
           lat: location.lat,
           lng: location.lng,
         },
       })
-      .then(({ data }) => {
-        if (!data.location) return
+    } catch (err) {
+      console.error(err)
 
-        const heading =
-          location.heading === 0
-            ? (data.links?.[0].heading ?? 0)
-            : location.heading
+      return
+    }
 
-        svPanoramaRef.current?.setPano(data.location.pano)
-        svPanoramaRef.current?.setPov({
-          heading,
-          pitch: location.pitch,
-        })
-        svPanoramaRef.current?.setZoom(location.zoom)
+    const { data } = res
 
-        posHistoryRef.current = []
-      })
-      .catch(console.error)
+    if (!data.location) return
+
+    const heading =
+      location.heading === 0 ? (data.links?.[0].heading ?? 0) : location.heading
+
+    svPanoramaRef.current?.setPano(data.location.pano)
+    svPanoramaRef.current?.setPov({
+      heading,
+      pitch: location.pitch,
+    })
+    svPanoramaRef.current?.setZoom(location.zoom)
+
+    posHistoryRef.current = []
+
+    setIsLoading(false)
   }
 
   const onReturnToStartClick = () => {
@@ -132,10 +139,10 @@ const StreetView = ({ location, settings, view }: Props) => {
   }
 
   useEffect(() => {
-    if (!isGoogleLoaded) return
+    if (!isGoogleApiLoaded) return
 
     init()
-  }, [isGoogleLoaded])
+  }, [isGoogleApiLoaded])
 
   useEffect(() => {
     if (view !== 'game') return
@@ -145,12 +152,12 @@ const StreetView = ({ location, settings, view }: Props) => {
 
   useEffect(() => {
     if (settings.canPan) return
-    if (!isStreetViewLoaded) return
     if (view !== 'game') return
-
-    const widgetScene = document.querySelector('.widget-scene')
+    if (isLoading) return
 
     const disablePan = (event: Event) => event.stopPropagation()
+
+    const widgetScene = document.querySelector('.widget-scene')
 
     widgetScene?.addEventListener('mousedown', disablePan)
     widgetScene?.addEventListener('touchstart', disablePan)
@@ -161,7 +168,7 @@ const StreetView = ({ location, settings, view }: Props) => {
       widgetScene?.removeEventListener('touchstart', disablePan)
       widgetScene?.removeEventListener('pointerdown', disablePan)
     }
-  }, [settings.canPan, isStreetViewLoaded, view])
+  }, [settings.canPan, view, isLoading])
 
   return (
     <div>

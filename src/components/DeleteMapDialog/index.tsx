@@ -22,7 +22,7 @@ interface FormState {
   } | null
 }
 
-const DeleteMapConfirm = ({ isOpen, setIsOpen, mapId }: Props) => {
+const DeleteMapDialog = ({ isOpen, setIsOpen, mapId }: Props) => {
   const router = useRouter()
 
   const deleteMapAction = async () => {
@@ -82,4 +82,4 @@ const DeleteMapConfirm = ({ isOpen, setIsOpen, mapId }: Props) => {
   )
 }
 
-export default DeleteMapConfirm
+export default DeleteMapDialog

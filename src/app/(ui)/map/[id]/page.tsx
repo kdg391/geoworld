@@ -25,8 +25,10 @@ import './page.css'
 
 const DeleteButton = dynamic(() => import('./DeleteButton.js'))
 const EditButton = dynamic(() => import('./EditButton.js'))
-const Leaderboard = dynamic(() => import('./Leaderboard.js'))
 const LikeButton = dynamic(() => import('./LikeButton.js'))
+const MapLeaderboard = dynamic(
+  () => import('@/components/MapLeaderboard/index.js'),
+)
 const PlayButton = dynamic(() => import('./PlayButton.js'))
 const Twemoji = dynamic(() => import('@/components/Twemoji.js'))
 
@@ -156,7 +158,7 @@ const Map = async (props: Props) => {
       </section>
       <section>
         <h2>{t('map:leaderboard')}</h2>
-        <Leaderboard mapId={mapData.id} />
+        <MapLeaderboard mapId={mapData.id} />
       </section>
     </>
   )
