@@ -428,7 +428,7 @@ export const DELETE = async (
     .from('maps')
     .select('*')
     .eq('id', params.id)
-    .single<APIMap>()
+    .maybeSingle<APIMap>()
 
   if (mapErr)
     return Response.json(

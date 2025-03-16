@@ -1,9 +1,13 @@
 import Link from 'next/link'
 
-const NotFound = async () => {
+interface Props {
+  title?: string
+}
+
+const NotFound = async ({ title }: Props) => {
   return (
     <div>
-      <h1>Map Not Found</h1>
+      <h1>{title ?? 'Not Found'}</h1>
       <Link href="/">Back to Home</Link>
     </div>
   )

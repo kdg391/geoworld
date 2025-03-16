@@ -39,6 +39,7 @@ const LanguageSelect = () => {
       showLabel={false}
       menuPlacement="top"
       onSelectedItemChange={async ({ selectedItem }) => {
+        if (selectedItem === null) return
         if (selectedItem.value === i18n.language) return
 
         i18n.changeLanguage(selectedItem.value)

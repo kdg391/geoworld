@@ -32,6 +32,7 @@ export const GET = async () => {
         errors: {
           message: 'Database Error',
         },
+        code: 'database_error',
       },
       {
         status: 500,

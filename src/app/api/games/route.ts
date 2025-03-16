@@ -95,8 +95,6 @@ export const POST = async (request: Request) => {
       },
     )
 
-  console.log(body.settings)
-
   const validated = await settingsSchema.safeParseAsync({
     rounds: mapData.locations_count,
     settings: body.settings,

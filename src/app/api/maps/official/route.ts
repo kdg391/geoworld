@@ -13,7 +13,7 @@ import { createClient } from '@/utils/supabase/server.js'
 import { mapParamsSchema } from '@/utils/validations/map.js'
 
 import type { NextRequest } from 'next/server'
-import type { APIMap } from '@/types/map.js'
+// import type { APIMap } from '@/types/map.js'
 
 // export const revalidate = 60
 
@@ -47,7 +47,6 @@ export const GET = async (request: NextRequest) => {
       p_offset: validated.data.page * MAPS_PAGE_LIMIT,
       p_limit: MAPS_PAGE_LIMIT,
     })
-    .returns<APIMap[]>()
 
   if (data) {
     const { t } = await createTranslation(['common', 'country'])

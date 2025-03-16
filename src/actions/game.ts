@@ -258,13 +258,7 @@ export const createGame = async (payload: {
       ? ({
           ...snakeCaseToCamelCase<Game>(data),
           rounds: data.rounds.map((r) => ({
-            heading: r.heading,
-            lat: r.lat,
-            lng: r.lng,
-            panoId: r.pano_id,
-            streakLocationCode: r.streak_location_code,
-            pitch: r.pitch,
-            zoom: r.zoom,
+            ...snakeCaseToCamelCase<RoundLocation>(r),
             startedAt: new Date(r.started_at),
             endedAt: r.ended_at ? new Date(r.ended_at) : null,
           })),
@@ -276,7 +270,9 @@ export const createGame = async (payload: {
 
 interface GuessData {
   guessedLocation: google.maps.LatLngLiteral | null
+  round: number
   timedOut: boolean
+  streakLocationCode?: string
 }
 
 export const updateGame = async (id: string, payload: GuessData) => {
@@ -297,7 +293,9 @@ export const updateGame = async (id: string, payload: GuessData) => {
     data?: APIGame
     errors?: {
       guessedLocation?: string[]
+      round?: string[]
       timedOut?: string[]
+      streakLocationCode?: string[]
       message?: string
     }
   }
@@ -307,13 +305,7 @@ export const updateGame = async (id: string, payload: GuessData) => {
       ? ({
           ...snakeCaseToCamelCase<Game>(data),
           rounds: data.rounds.map((r) => ({
-            heading: r.heading,
-            lat: r.lat,
-            lng: r.lng,
-            panoId: r.pano_id,
-            streakLocationCode: r.streak_location_code,
-            pitch: r.pitch,
-            zoom: r.zoom,
+            ...snakeCaseToCamelCase<RoundLocation>(r),
             startedAt: new Date(r.started_at),
             endedAt: r.ended_at ? new Date(r.ended_at) : null,
           })),

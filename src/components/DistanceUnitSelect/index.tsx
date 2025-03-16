@@ -38,6 +38,8 @@ const DistanceUnitSelect = () => {
       label={t('distance_unit')}
       menuPlacement="bottom"
       onSelectedItemChange={({ selectedItem }) => {
+        if (selectedItem === null) return
+
         setDistanceUnit(selectedItem.value as DistanceUnit)
       }}
       selectedItem={distanceUnitOptions.find(

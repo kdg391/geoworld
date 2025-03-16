@@ -25,7 +25,7 @@ export const GET = async (
     .from('games')
     .select('*')
     .eq('id', params.id)
-    .single<APIGame>()
+    .maybeSingle<APIGame>()
 
   if (error)
     return Response.json(
@@ -63,6 +63,8 @@ const bodySchema = z.object({
       lng: z.number(),
     })
     .nullable(),
+  round: z.number(),
+  streakLocationCode: z.string().optional(),
   timedOut: z.boolean(),
 })
 
@@ -94,7 +96,7 @@ export const PUT = async (
     .from('games')
     .select('*')
     .eq('id', params.id)
-    .single<APIGame>()
+    .maybeSingle<APIGame>()
 
   if (gErr)
     return Response.json(
@@ -105,6 +107,18 @@ export const PUT = async (
       },
       {
         status: 500,
+      },
+    )
+
+  if (!gameData)
+    return Response.json(
+      {
+        errors: {
+          message: 'Game Not Found',
+        },
+      },
+      {
+        status: 404,
       },
     )
 
@@ -136,7 +150,19 @@ export const PUT = async (
     .from('maps')
     .select('*')
     .eq('id', gameData.map_id)
-    .single<APIMap>()
+    .maybeSingle<APIMap>()
+
+  if (!mapData)
+    return Response.json(
+      {
+        errors: {
+          message: 'Map Not Found',
+        },
+      },
+      {
+        status: 404,
+      },
+    )
 
   if (mErr)
     return Response.json(
@@ -164,9 +190,24 @@ export const PUT = async (
       },
     )
 
+  if (gameData.guesses.length === validated.data.round + 1)
+    return Response.json(
+      {
+        errors: {
+          message: 'You have already guessed this round.',
+        },
+      },
+      {
+        status: 400,
+      },
+    )
+
   const updateData: Partial<APIGame> = {}
 
-  const isFinalRound = gameData.round === gameData.settings.rounds - 1
+  let isFinalRound = false
+
+  if (gameData.mode === 'standard')
+    isFinalRound = gameData.round === gameData.settings.rounds - 1
 
   const distance = {
     imperial: validated.data.guessedLocation
@@ -197,11 +238,9 @@ export const PUT = async (
 
   const time = validated.data.timedOut
     ? gameData.settings.time_limit
-    : Math.floor(
-        (now.getTime() -
-          new Date(gameData.rounds[gameData.round].started_at).getTime()) /
-          1000,
-      )
+    : (now.getTime() -
+        new Date(gameData.rounds[gameData.round].started_at).getTime()) /
+      1000
 
   const rounds = [...gameData.rounds]
 
@@ -278,7 +317,19 @@ export const DELETE = async (
     .from('games')
     .select('*')
     .eq('id', params.id)
-    .single<APIGame>()
+    .maybeSingle<APIGame>()
+
+  if (!gameData)
+    return Response.json(
+      {
+        errors: {
+          message: 'Game Not Found',
+        },
+      },
+      {
+        status: 404,
+      },
+    )
 
   if (gErr)
     return Response.json(

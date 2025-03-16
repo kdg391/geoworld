@@ -22,7 +22,7 @@ interface Props {
   gameId: string
   guessedRound: Guess
   isFinished: boolean
-  setGameData: React.Dispatch<React.SetStateAction<Game | null | undefined>>
+  setGameData: React.Dispatch<React.SetStateAction<Game>>
   setView: React.Dispatch<React.SetStateAction<GameView | null>>
 }
 

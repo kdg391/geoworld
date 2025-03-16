@@ -1,11 +1,16 @@
-import { generateState } from 'arctic'
+import { generateCodeVerifier, generateState } from 'arctic'
 import { cookies } from 'next/headers.js'
 
 import { discord } from '@/lib/oauth.js'
 
 export async function GET() {
   const state = generateState()
-  const url = discord.createAuthorizationURL(state, ['email', 'identify'])
+  const codeVerifier = generateCodeVerifier()
+
+  const url = discord.createAuthorizationURL(state, codeVerifier, [
+    'email',
+    'identify',
+  ])
 
   const cookieStore = await cookies()
 

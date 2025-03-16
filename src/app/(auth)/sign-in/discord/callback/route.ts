@@ -41,12 +41,20 @@ interface DiscordUser {
 
 export async function GET(request: Request): Promise<Response> {
   const url = new URL(request.url)
+
   const code = url.searchParams.get('code')
+  const codeVerifier = url.searchParams.get('code_verifier')
   const state = url.searchParams.get('state')
+
   const storedState =
     (await cookies()).get('discord_oauth_state')?.value ?? null
 
-  if (code === null || state === null || storedState === null)
+  if (
+    code === null ||
+    codeVerifier === null ||
+    state === null ||
+    storedState === null
+  )
     return new Response('Please restart the process.', {
       status: 400,
     })
@@ -59,7 +67,7 @@ export async function GET(request: Request): Promise<Response> {
   let tokens: OAuth2Tokens
 
   try {
-    tokens = await discord.validateAuthorizationCode(code)
+    tokens = await discord.validateAuthorizationCode(code, null)
   } catch {
     // Invalid code or client credentials
     return new Response('Please restart the process.', {

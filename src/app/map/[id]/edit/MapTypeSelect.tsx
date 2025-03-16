@@ -42,6 +42,8 @@ const MapTypeSelect = ({ map }: Props) => {
       defaultSelectedItem={items.find((i) => i.value === map.getMapTypeId())}
       items={items}
       onSelectedItemChange={({ selectedItem }) => {
+        if (selectedItem === null) return
+
         map.setMapTypeId(selectedItem.value)
       }}
     />
