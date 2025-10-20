@@ -16,7 +16,7 @@ const LeaderboardButton = () => {
 
   const [isOpen, setIsOpen] = useState(false)
 
-  const handleOutsideClick = (event: PointerEvent) => {
+  const handleOutsideClick = (event: MouseEvent) => {
     if (isOpen) {
       if (
         modalRef.current &&

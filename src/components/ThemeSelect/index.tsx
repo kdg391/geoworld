@@ -47,6 +47,7 @@ const ThemeSelect = () => {
       showLabel={false}
       menuPlacement="top"
       onSelectedItemChange={async ({ selectedItem }) => {
+        if (selectedItem === null) return
         if (selectedItem.value === theme) return
 
         setTheme(selectedItem.value as Theme)
