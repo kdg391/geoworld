@@ -79,9 +79,19 @@ const ResultMap = ({
     resultMapRef.current.fitBounds(bounds, 15)
     resultMapRef.current.setCenter(bounds.getCenter())
 
+    const guess = guessedLocations[round].position
+
     const zoom = resultMapRef.current.getZoom()
 
-    if (zoom !== undefined) resultMapRef.current.setZoom(zoom - 0.25)
+    if (guess === null && view !== 'finalResult') {
+      setTimeout(() => {
+        const zoom = resultMapRef.current?.getZoom()
+
+        if (zoom !== undefined) resultMapRef.current?.setZoom(zoom - 8)
+      }, 500)
+    } else if (zoom !== undefined) {
+      resultMapRef.current.setZoom(zoom - 0.25)
+    }
   }
 
   const renderMarkers = () => {

@@ -1,6 +1,13 @@
-import ThemeSelect from '@/components/ThemeSelect/index.tsx'
+'use client'
+
+import dynamic from 'next/dynamic'
 
 import styles from './Footer.module.css'
+
+const ThemeSelect = dynamic(
+  () => import('@/components/ThemeSelect/index.tsx'),
+  { ssr: false },
+)
 
 const Footer = () => {
   return (

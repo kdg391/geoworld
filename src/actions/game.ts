@@ -140,8 +140,6 @@ export const createGame = async ({
     .select('*')
     .single<Location>()
 
-  console.log(lErr)
-
   if (!location || lErr)
     return {
       data: null,
@@ -175,8 +173,6 @@ export const createGame = async ({
     })
     .select()
     .single<Game>()
-
-  console.log(error)
 
   return {
     data,
@@ -306,8 +302,6 @@ export const getSchoolRankedGames = async () => {
       p_map_id: OFFICIAL_MAP_WORLD_ID,
     })
     .select('*')
-
-  console.log(error)
 
   return {
     data,
