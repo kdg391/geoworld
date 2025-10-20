@@ -1,0 +1,45 @@
+.map-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.map-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.map-details h4,
+.map-details p {
+  margin: 0.25rem 0;
+}
+
+.setting {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.rounds-input {
+  width: 3rem;
+  background-color: var(--bg);
+  border: 1px solid #333;
+  outline: 0;
+}
+
+.rounds-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--bg);
+  border: 1px solid #000;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  padding: 2px;
+
+  & > svg {
+    color: var(--color);
+  }
+}

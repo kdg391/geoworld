@@ -1,0 +1,7 @@
+.map-card {
+  width: 100%;
+  background-color: var(--map-card-bg);
+  border: 1px solid var(--map-card-border);
+  border-radius: 8px;
+  height: 196px;
+}

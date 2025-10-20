@@ -1,0 +1,11 @@
+[data-theme='light'] {
+  --ds: #fff;
+  --ds-selected: #eaeaea;
+  --ds-indicator: #a9a9a9;
+}
+
+[data-theme='dark'] {
+  --ds: #000;
+  --ds-selected: #333;
+  --ds-indicator: #9b9b9b;
+}

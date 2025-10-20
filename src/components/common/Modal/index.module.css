@@ -1,0 +1,59 @@
+.container {
+  inset: 0px;
+  position: fixed;
+  left: 0;
+  right: 0;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--modal);
+  width: 100%;
+  height: 100%;
+}
+
+.wrapper {
+  position: relative;
+  overflow: hidden;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  min-width: 16rem;
+  background-color: var(--modal-content);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.125rem 1rem;
+}
+
+.title {
+  font-size: 1.25rem;
+}
+
+.close-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  padding: 0;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  background-color: transparent;
+  padding: 0.875rem 1rem;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  background-color: var(--modal-actions);
+  padding: 0.75rem 1rem;
+}

@@ -1,0 +1,15 @@
+.section {
+  padding: 1rem 1.5rem;
+  margin: 0 auto;
+  max-width: 80rem;
+}
+
+.title {
+  margin-bottom: 0.5rem;
+}
+
+.btn-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}

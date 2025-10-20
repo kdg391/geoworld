@@ -1,0 +1,70 @@
+import dynamic from 'next/dynamic'
+import { cookies } from 'next/headers'
+import Link from 'next/link'
+
+import { createTranslation } from '@/i18n/server.ts'
+
+import homeStyles from '../page.module.css'
+
+import styles from './page.module.css'
+
+import type { Map } from '@/types/map.ts'
+
+const MapCard = dynamic(() => import('@/components/MapCard/index.tsx'))
+
+const Maps = async () => {
+  const cookieStore = await cookies()
+
+  const { data: officialMaps } = (await fetch(
+    `${process.env.NEXT_PUBLIC_URL}/api/maps/official?page=0`,
+    {
+      headers: {
+        'Content-Type': 'application/json',
+        Cookie: cookieStore.toString(),
+      },
+    },
+  ).then((res) => res.json())) as { data: Map[] | null }
+
+  const { data: communityMaps } = (await fetch(
+    `${process.env.NEXT_PUBLIC_URL}/api/maps/community?page=0`,
+    {
+      headers: {
+        'Content-Type': 'application/json',
+        Cookie: cookieStore.toString(),
+      },
+    },
+  ).then((res) => res.json())) as { data: Map[] | null }
+
+  const { t } = await createTranslation('common')
+
+  return (
+    <main>
+      <section className={styles.section}>
+        <div
+          style={{
+            marginBottom: '1rem',
+          }}
+        >
+          <h2 className={styles.title}>{t('official_maps')}</h2>
+          <div className={homeStyles['map-cards']}>
+            {officialMaps?.map((map) => (
+              <MapCard key={map.id} mapData={map} />
+            ))}
+          </div>
+          <Link href="/maps/official">{t('more_official_maps')}</Link>
+        </div>
+        <div>
+          <h2 className={styles.title}>{t('community_maps')}</h2>
+          <div className={homeStyles['map-cards']}>
+            {communityMaps?.map((map) => (
+              <MapCard key={map.id} mapData={map} />
+            ))}
+          </div>
+          <Link href="/maps/community">{t('more_community_maps')}</Link>
+        </div>
+      </section>
+    </main>
+  )
+}
+
+export default Maps

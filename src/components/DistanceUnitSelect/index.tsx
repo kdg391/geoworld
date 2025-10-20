@@ -1,0 +1,52 @@
+'use client'
+
+import dynamic from 'next/dynamic'
+import { useMemo } from 'react'
+import { useLocalStorage } from 'usehooks-ts'
+
+import { useTranslation } from '@/i18n/client.ts'
+
+import type { DistanceUnit } from '@/types/index.ts'
+
+const Select = dynamic(() => import('../common/Select/index.tsx'))
+
+const DistanceUnitSelect = () => {
+  const [distanceUnit, setDistanceUnit] = useLocalStorage(
+    'distanceUnit',
+    'metric',
+  )
+
+  const { t } = useTranslation('common')
+
+  const distanceUnitOptions = useMemo(
+    () => [
+      {
+        value: 'imperial',
+        label: t('distance_unit.imperial'),
+      },
+      {
+        value: 'metric',
+        label: t('distance_unit.metric'),
+      },
+    ],
+    [t],
+  )
+
+  return (
+    <Select
+      items={distanceUnitOptions}
+      label={t('distance_unit')}
+      menuPlacement="bottom"
+      onSelectedItemChange={({ selectedItem }) => {
+        if (selectedItem === null) return
+
+        setDistanceUnit(selectedItem.value as DistanceUnit)
+      }}
+      selectedItem={distanceUnitOptions.find(
+        (opt) => opt.value === distanceUnit,
+      )}
+    />
+  )
+}
+
+export default DistanceUnitSelect

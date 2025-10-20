@@ -1,0 +1,92 @@
+import { z } from 'zod'
+
+export const emailSchema = z
+  .email('This is not a valid email.')
+  .trim()
+  .min(1, 'The email has to be filled.')
+
+export const passwordSchema = z
+  .string()
+  .min(8, 'The password must be at least 8 characters.')
+  .max(96, 'The password must be at most 96 characters.')
+
+export const signUpSchema = z
+  .object({
+    email: emailSchema,
+    password: passwordSchema,
+    confirmPassword: z.string(),
+  })
+  .superRefine(({ password, confirmPassword }, ctx) => {
+    if (password !== confirmPassword) {
+      ctx.addIssue({
+        code: 'custom',
+        message: 'The password is not matched.',
+        path: ['confirmPassword'],
+      })
+    }
+  })
+
+export const signInCredentialsSchema = z.object({
+  email: emailSchema,
+  password: z.string(),
+})
+
+export const signInEmailSchema = z.object({
+  email: emailSchema,
+})
+
+export const forgotPasswordSchema = z.object({
+  email: emailSchema,
+})
+
+export const resetPasswordSchema = z
+  .object({
+    password: passwordSchema,
+    confirmPassword: z.string(),
+    token: z.string(),
+  })
+  .superRefine(({ password, confirmPassword }, ctx) => {
+    if (password !== confirmPassword) {
+      ctx.addIssue({
+        code: 'custom',
+        message: 'The password is not matched.',
+        path: ['confirmPassword'],
+      })
+    }
+  })
+
+export const changeEmailSchema = z
+  .object({
+    oldEmail: emailSchema,
+    newEmail: emailSchema,
+  })
+  .superRefine(({ oldEmail, newEmail }, ctx) => {
+    if (oldEmail === newEmail) {
+      ctx.addIssue({
+        code: 'custom',
+        message: 'The email is the same as before.',
+        path: ['newEmail'],
+      })
+    }
+  })
+
+export const changePasswordSchema = z
+  .object({
+    oldPassword: z.string(),
+    newPassword: passwordSchema,
+    confirmPassword: z.string(),
+  })
+  .superRefine(({ newPassword, confirmPassword }, ctx) => {
+    if (newPassword !== confirmPassword) {
+      ctx.addIssue({
+        code: 'custom',
+        message: 'The confirm password is not matched.',
+        path: ['confirmPassword'],
+      })
+    }
+  })
+
+export const deleteAccountSchema = z.object({
+  password: z.string(),
+  confirmMessage: z.literal('DELETE'),
+})

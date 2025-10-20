@@ -1,0 +1,7 @@
+[data-theme='light'] {
+  --setting-border: var(--gray-150);
+}
+
+[data-theme='dark'] {
+  --setting-border: var(--gray-750);
+}

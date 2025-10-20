@@ -1,0 +1,13 @@
+[data-theme='light'] {
+  --header-border: rgba(0, 0, 0, 0.15);
+  --header-selected: var(--gray-150);
+
+  --nav-border: rgba(0, 0, 0, 0.1);
+}
+
+[data-theme='dark'] {
+  --header-border: rgba(255, 255, 255, 0.15);
+  --header-selected: var(--gray-800);
+
+  --nav-border: rgba(255, 255, 255, 0.1);
+}

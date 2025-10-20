@@ -1,0 +1,25 @@
+import Link from 'next/link'
+
+import Header from '@/components/Header/index.tsx'
+import { createTranslation } from '@/i18n/server.ts'
+
+import styles from './not-found.module.css'
+
+const NotFound = async () => {
+  const { t } = await createTranslation('common')
+
+  return (
+    <>
+      <Header />
+
+      <main className={styles.main}>
+        <h1 className={styles.title}>404 Not Found</h1>
+        <p>
+          <Link href="/">{t('back_to_home')}</Link>
+        </p>
+      </main>
+    </>
+  )
+}
+
+export default NotFound

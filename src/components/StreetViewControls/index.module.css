@@ -1,0 +1,23 @@
+.street-view-controls {
+  position: absolute;
+  left: 10px;
+  bottom: 96px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  &:global(.not-pan) {
+    bottom: 36px;
+  }
+}
+
+.return-to-start-btn,
+.undo-btn {
+  width: 48px;
+  height: 48px;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+  background-color: #222;
+  color: #fff;
+}

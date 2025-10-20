@@ -1,0 +1,14 @@
+.git
+.gitignore
+
+.env*
+
+.idea/
+.vscode/
+
+.DS_Store
+
+drizzle/
+
+/.next/
+/out/

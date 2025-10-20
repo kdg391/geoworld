@@ -1,0 +1,7 @@
+[data-theme='light'] {
+  --result-modal: #fff;
+}
+
+[data-theme='dark'] {
+  --result-modal: #272727;
+}

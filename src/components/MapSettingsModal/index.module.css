@@ -1,0 +1,10 @@
+.required {
+  color: var(--danger);
+  margin-left: 0.25rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}

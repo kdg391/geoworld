@@ -1,0 +1,15 @@
+import { createTranslation } from '@/i18n/server.ts'
+
+import type { Metadata } from 'next'
+
+export const metadata = async (): Promise<Metadata> => {
+  const { t } = await createTranslation('common')
+
+  return {
+    title: `${t('terms_of_service')} - GeoWorld`,
+  }
+}
+
+export default function Layout({ children }: { children: React.ReactNode }) {
+  return children
+}

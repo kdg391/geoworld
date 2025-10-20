@@ -1,0 +1,16 @@
+{
+  "avg_score": "Average Score",
+  "created": "Created by {{displayName}}",
+  "explorers": "Explorers",
+  "likes": "Likes",
+  "locations_one": "Location",
+  "locations_other": "Locations",
+  "leaderboard": "Leaderboard",
+  "leaderboard.rank": "Rank",
+  "leaderboard.user": "User",
+  "leaderboard.score": "Score",
+  "leaderboard.time": "Time",
+  "updated": "Updated {{val, datetime}}",
+  "edit": "Edit",
+  "delete": "Delete"
+}

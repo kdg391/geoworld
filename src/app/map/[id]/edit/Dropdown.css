@@ -1,0 +1,9 @@
+[data-theme='light'] {
+  --dropdown: var(--gray-100);
+  --dropdown-hover: var(--gray-150);
+}
+
+[data-theme='dark'] {
+  --dropdown: var(--gray-800);
+  --dropdown-hover: var(--gray-700);
+}
