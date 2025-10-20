@@ -125,6 +125,7 @@
       display: flex;
 
       & .guess-btn {
+        display: inline-block;
         border-radius: 0;
         margin-top: 0;
         padding: 1rem 1.5rem;
