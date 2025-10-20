@@ -1,6 +1,6 @@
-import styles from './Loading.module.css'
+import Spinner from '@/components/common/Spinner/index.tsx'
 
-import Spinner from '@/components/common/Spinner/index.js'
+import styles from './Loading.module.css'
 
 const Loading = () => (
   <div className={styles.container}>

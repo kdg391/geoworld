@@ -1,13 +1,11 @@
 import {
   OFFICIAL_MAP_COUNTRY_CODES,
   OFFICIAL_MAP_WORLD_ID,
-} from '@/constants/index.js'
+} from '@/constants/index.ts'
+import { createTranslation } from '@/i18n/server.ts'
+import { createClient } from '@/utils/supabase/server.ts'
 
-import { createTranslation } from '@/i18n/server.js'
-
-import { createClient } from '@/utils/supabase/server.js'
-
-import type { Map } from '@/types/index.js'
+import type { Map } from '@/types/index.ts'
 
 export const GET = async (
   _: Request,

@@ -36,6 +36,7 @@
   --gray-900: #141414;
 
   --header-h: 60px;
+  --footer-h: 48px;
 }
 
 [data-theme='light'] {

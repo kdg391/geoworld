@@ -47,6 +47,10 @@
 .timer-text {
   text-align: center;
   font-size: 14px;
+
+  &:global(.red) {
+    color: #ff4f4f;
+  }
 }
 
 .timer-svg {

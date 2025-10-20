@@ -6,7 +6,7 @@ export const createClient = () =>
     process.env.SUPABASE_SERVICE_ROLE_KEY as string,
     {
       db: {
-        schema: 'next_auth',
+        schema: 'public',
       },
       auth: {
         persistSession: false,

@@ -3,7 +3,7 @@
 import { Minus, Plus } from 'lucide-react'
 import { memo, useEffect, useState } from 'react'
 
-import { useTranslation } from '@/i18n/client.js'
+import { useTranslation } from '@/i18n/client.ts'
 
 import styles from './index.module.css'
 

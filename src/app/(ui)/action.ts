@@ -3,16 +3,15 @@
 import { redirect } from 'next/navigation'
 import { z } from 'zod'
 
-import { createGame } from '@/actions/game.js'
-import { getMap } from '@/actions/map.js'
-
-import { OFFICIAL_MAP_WORLD_ID } from '@/constants/index.js'
+import { createGame } from '@/actions/game.ts'
+import { getMap } from '@/actions/map.ts'
+import { OFFICIAL_MAP_WORLD_ID } from '@/constants/index.ts'
 
 const schema = z.object({
   name: z
     .string()
     .min(1, '이름을 입력해 주세요.')
-    .max(10, '이름이 너무 깁니다.')
+    .max(12, '이름은 12자 이하로 입력해 주세요.')
     .trim(),
 })
 
@@ -25,7 +24,7 @@ export const playGame = async (_: unknown, formData: FormData) => {
 
   if (!validated.success)
     return {
-      errors: validated.error.flatten().fieldErrors,
+      errors: z.flattenError(validated.error).fieldErrors,
     }
 
   const { data: mapData } = await getMap(OFFICIAL_MAP_WORLD_ID)

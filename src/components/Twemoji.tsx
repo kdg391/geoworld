@@ -1,6 +1,6 @@
 import Image from 'next/image'
 
-import { toCodePoint } from '../utils/index.js'
+import { toCodePoint } from '../utils/index.ts'
 
 interface Props {
   emoji: string

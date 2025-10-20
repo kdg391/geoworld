@@ -4,7 +4,7 @@ import { memo, useEffect, useRef, useState } from 'react'
 
 import { useTranslation } from '@/i18n/client.js'
 
-import { formatTimeLeft } from '@/utils/index.js'
+import { classNames, formatTimeLeft } from '@/utils/index.js'
 
 import styles from './index.module.css'
 
@@ -101,7 +101,14 @@ const GameStatus = ({
     <div className={styles['game-status-container']}>
       {timeLimit !== 0 && timeLeft !== 0 && (
         <div className={styles['timer-container']}>
-          <div className={styles['timer-text']}>{formatTimeLeft(timeLeft)}</div>
+          <div
+            className={classNames(
+              styles['timer-text'],
+              timeLeft <= 10 ? 'red' : '',
+            )}
+          >
+            {formatTimeLeft(timeLeft)}
+          </div>
           <svg width="100%" height="100%" className={styles['timer-svg']}>
             <circle
               cx="24"

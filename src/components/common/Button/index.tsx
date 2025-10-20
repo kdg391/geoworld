@@ -1,10 +1,10 @@
 import { forwardRef } from 'react'
 
-import { classNames } from '@/utils/index.js'
+import { classNames } from '@/utils/index.ts'
 
 import styles from './index.module.css'
 
-import Spinner from '../Spinner/index.js'
+import Spinner from '../Spinner/index.tsx'
 
 import type React from 'react'
 

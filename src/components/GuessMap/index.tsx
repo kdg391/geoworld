@@ -5,22 +5,20 @@ import dynamic from 'next/dynamic'
 import { useEffect, useRef, useState } from 'react'
 import { useLocalStorage } from 'usehooks-ts'
 
-import { DEFAULT_MAP_CENTER, OFFICIAL_MAP_WORLD_ID } from '@/constants/index.js'
+import { DEFAULT_MAP_CENTER, OFFICIAL_MAP_WORLD_ID } from '@/constants/index.ts'
+import { useTranslation } from '@/i18n/client.ts'
+import { classNames } from '@/utils/index.ts'
 
-import { useTranslation } from '@/i18n/client.js'
-
-import { classNames } from '@/utils/index.js'
-
-import Button from '../common/Button/index.js'
+import Button from '../common/Button/index.tsx'
 
 import styles from './index.module.css'
 
-import type { GameView, Map } from '@/types/index.js'
+import type { GameView, Map } from '@/types/index.ts'
 
-const GoogleMap = dynamic(() => import('../GoogleMap.js'))
-const GuessMapControls = dynamic(() => import('../GuessMapControls/index.js'))
+const GoogleMap = dynamic(() => import('../GoogleMap.tsx'))
+const GuessMapControls = dynamic(() => import('../GuessMapControls/index.tsx'))
 const GuessMapZoomControls = dynamic(
-  () => import('../GuessMapZoomControls/index.js'),
+  () => import('../GuessMapZoomControls/index.tsx'),
 )
 
 interface Props {
@@ -161,7 +159,7 @@ const GuessMap = ({
               disableDefaultUI: true,
               draggableCursor: 'crosshair',
               fullscreenControl: false,
-              mapId: process.env.NEXT_PUBLIC_GOOGLE_MAPS_MAP,
+              mapId: process.env.NEXT_PUBLIC_GOOGLE_MAPS_GUESS_MAP_ID,
               zoomControl: false,
             }}
             onLoaded={(map) => init(map)}

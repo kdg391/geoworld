@@ -1,7 +1,7 @@
 import { cookies } from 'next/headers'
 import { NextResponse, type NextRequest } from 'next/server'
 
-import { LANGUAGE_COOKIE } from './constants/i18n.js'
+import { LANGUAGE_COOKIE } from './constants/i18n.ts'
 
 export const middleware = async (request: NextRequest) => {
   const response = NextResponse.next({

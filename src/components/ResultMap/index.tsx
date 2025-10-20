@@ -78,6 +78,10 @@ const ResultMap = ({
 
     resultMapRef.current.fitBounds(bounds, 15)
     resultMapRef.current.setCenter(bounds.getCenter())
+
+    const zoom = resultMapRef.current.getZoom()
+
+    if (zoom !== undefined) resultMapRef.current.setZoom(zoom - 0.25)
   }
 
   const renderMarkers = () => {
@@ -223,7 +227,7 @@ const ResultMap = ({
         disableDefaultUI: true,
         gestureHandling: 'greedy',
         zoomControl: true,
-        mapId: process.env.NEXT_PUBLIC_GOOGLE_MAPS_MAP,
+        mapId: process.env.NEXT_PUBLIC_GOOGLE_MAPS_RESULT_MAP_ID,
       }}
       onLoaded={(map) => {
         resultMapRef.current = map

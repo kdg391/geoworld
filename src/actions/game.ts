@@ -1,10 +1,10 @@
 'use server'
 
-import { OFFICIAL_MAP_WORLD_ID } from '../constants/index.js'
+import { OFFICIAL_MAP_WORLD_ID } from '../constants/index.ts'
 
-import { calculateDistance, calculateRoundScore } from '../utils/game.js'
-import { createClient } from '../utils/supabase/server.js'
-import { getGameSettingsSchema } from '../utils/validations/game.js'
+import { calculateDistance, calculateRoundScore } from '../utils/game.ts'
+import { createClient } from '../utils/supabase/server.ts'
+import { getGameSettingsSchema } from '../utils/validations/game.ts'
 
 import type {
   Game,
@@ -12,7 +12,7 @@ import type {
   Location,
   Map,
   RoundLocation,
-} from '../types/index.js'
+} from '../types/index.ts'
 
 export const startGameRound = async (id: string) => {
   'use server'
@@ -20,7 +20,7 @@ export const startGameRound = async (id: string) => {
   const supabase = createClient()
 
   const { data: gameData, error: gErr } = await supabase
-    .from('school_games')
+    .from('games')
     .select('*')
     .eq('id', id)
     .single<Game>()
@@ -92,7 +92,7 @@ export const startGameRound = async (id: string) => {
     updateData.rounds = [...gameData.rounds, actualLocation]
 
     const { data: updatedData, error: updatedErr } = await supabase
-      .from('school_games')
+      .from('games')
       .update<Partial<Game>>(updateData)
       .eq('id', id)
       .select()
@@ -140,6 +140,8 @@ export const createGame = async ({
     .select('*')
     .single<Location>()
 
+    console.log(lErr)
+
   if (!location || lErr)
     return {
       data: null,
@@ -159,7 +161,7 @@ export const createGame = async ({
   }
 
   const { data, error } = await supabase
-    .from('school_games')
+    .from('games')
     .insert<Partial<Game>>({
       bounds: null,
       guesses: [],
@@ -173,6 +175,8 @@ export const createGame = async ({
     })
     .select()
     .single<Game>()
+
+    console.log(error)
 
   return {
     data,
@@ -191,7 +195,7 @@ export const updateGame = async (id: string, data: GuessData) => {
   const supabase = createClient()
 
   const { data: gameData, error: gErr } = await supabase
-    .from('school_games')
+    .from('games')
     .select('*')
     .eq('id', id)
     .single<Game>()
@@ -282,7 +286,7 @@ export const updateGame = async (id: string, data: GuessData) => {
   updateData.state = isFinalRound ? 'finished' : 'started'
 
   const { data: updatedData, error: updatedErr } = await supabase
-    .from('school_games')
+    .from('games')
     .update<Partial<Game>>(updateData)
     .eq('id', id)
     .select()
@@ -298,10 +302,12 @@ export const getSchoolRankedGames = async () => {
   const supabase = createClient()
 
   const { data, error } = await supabase
-    .rpc('get_ranked_school_games', {
+    .rpc('get_ranked_games', {
       p_map_id: OFFICIAL_MAP_WORLD_ID,
     })
     .select('*')
+
+    console.log(error)
 
   return {
     data,

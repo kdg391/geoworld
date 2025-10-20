@@ -2,7 +2,7 @@
 
 import { useFormStatus } from 'react-dom'
 
-import Button from '../Button/index.js'
+import Button from '../Button/index.tsx'
 
 import type { ComponentProps } from 'react'
 

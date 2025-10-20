@@ -2,9 +2,8 @@
 
 import { useEffect, useState } from 'react'
 
-import { getSchoolRankedGames } from '@/actions/game.js'
-
-import { formatRankTime } from '@/utils/index.js'
+import { getSchoolRankedGames } from '@/actions/game.ts'
+import { formatRankTime } from '@/utils/index.ts'
 
 import styles from './Leaderboard.module.css'
 
@@ -35,7 +34,7 @@ const Leaderboard = () => {
   if (data === undefined) return <p>로딩 중...</p>
   if (data === null || error)
     return <p>데이터를 불러오는 데 오류가 발생했습니다.</p>
-  if (data.length === 0) return <p>데이터 없음</p>
+  if (data.length === 0) return <p>랭킹 데이터 없음</p>
 
   return (
     <table className={styles.table}>

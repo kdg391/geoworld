@@ -11,7 +11,7 @@ export const GET = async (
   const params = await segmentData.params
 
   const { data, error } = await supabase
-    .from('school_games')
+    .from('games')
     .select('*')
     .eq('id', params.id)
     .single<Game>()

@@ -2,7 +2,7 @@
 
 import { ArrowUpLeft, ArrowDownRight, Pin, PinOff } from 'lucide-react'
 
-import { useTranslation } from '@/i18n/client.js'
+import { useTranslation } from '@/i18n/client.ts'
 
 import styles from './index.module.css'
 

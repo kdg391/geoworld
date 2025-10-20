@@ -3,10 +3,10 @@
 import { Play } from 'lucide-react'
 import { useActionState } from 'react'
 
-import { playGame } from './action.js'
+import SubmitButton from '@/components/common/SubmitButton/index.tsx'
+import TextInput from '@/components/common/TextInput/index.tsx'
 
-import SubmitButton from '@/components/common/SubmitButton/index.js'
-import TextInput from '@/components/common/TextInput/index.js'
+import { playGame } from './action.ts'
 
 import styles from './Form.module.css'
 
@@ -38,7 +38,7 @@ const Form = () => {
       <div>
         <SubmitButton
           formAction={action}
-          leftIcon={<Play size={16} fill="var(--color)" />}
+          leftIcon={<Play size={16} fill="#fff" stroke="#fff" />}
           size="m"
           variant="primary"
         >

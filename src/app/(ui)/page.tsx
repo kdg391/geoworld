@@ -1,19 +1,20 @@
 'use server'
 
-import Form from './Form.js'
-import LeaderboardButton from './LeaderboardButton.js'
+import Form from './Form.tsx'
+import LeaderboardButton from './LeaderboardButton.tsx'
 
 import styles from './page.module.css'
 
+import Marker from './Marker.tsx'
+
 import './page.css'
-import { MapPin } from 'lucide-react'
 
 const Home = () => (
   <main>
     <section className={styles.container}>
-      <div className={styles['play-container']}>
+      <div className={styles.wrapper}>
         <h1 className={styles.title}>
-          <MapPin size={20} fill="red" stroke="var(--bg)" />
+          <Marker size={20} className={styles.marker} />
           스트리트 뷰를 보고 위치를 찍어 점수를 획득하세요!
         </h1>
         <Form />

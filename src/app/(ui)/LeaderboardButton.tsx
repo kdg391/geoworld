@@ -1,27 +1,49 @@
 'use client'
 
 import { Trophy } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
-import Leaderboard from './Leaderboard.js'
+import Button from '@/components/common/Button/index.tsx'
 
-import Button from '@/components/common/Button/index.js'
+import Leaderboard from './Leaderboard.tsx'
 
 import styles from './LeaderboardButton.module.css'
 
+import './LeaderboardButton.css'
+
 const LeaderboardButton = () => {
+  const modalRef = useRef<HTMLDivElement>(null)
+
   const [isOpen, setIsOpen] = useState(false)
 
+  const handleOutsideClick = (event: PointerEvent) => {
+    if (isOpen) {
+      if (
+        modalRef.current &&
+        !modalRef.current.contains(event.target as HTMLElement)
+      )
+        setIsOpen(false)
+    }
+  }
+
+  useEffect(() => {
+    window.addEventListener('click', handleOutsideClick)
+
+    return () => {
+      window.removeEventListener('click', handleOutsideClick)
+    }
+  }, [isOpen])
+
   return (
-    <>
+    <div ref={modalRef}>
       <Button
-        variant="primary"
+        variant={isOpen ? 'gray' : 'primary'}
         size="m"
         className={styles.button}
         onClick={() => setIsOpen((o) => !o)}
       >
-        <Trophy size={16} fill="var(--color)" />
-        랭킹 보기
+        <Trophy size={16} fill="#fff" stroke="#fff" />
+        랭킹 {isOpen ? '닫기' : '보기'}
       </Button>
 
       <div
@@ -32,7 +54,7 @@ const LeaderboardButton = () => {
       >
         <Leaderboard />
       </div>
-    </>
+    </div>
   )
 }
 

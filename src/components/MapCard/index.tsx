@@ -8,18 +8,18 @@ import {
   OFFICIAL_MAP_COUNTRY_CODES,
   OFFICIAL_MAP_WORLD_ID,
   WORLD_EMOJI,
-} from '@/constants/index.js'
+} from '@/constants/index.ts'
+import { useTranslation } from '@/i18n/client.ts'
 
-import { useTranslation } from '@/i18n/client.js'
+import Button from '../common/Button/index.tsx'
+
+import Twemoji from '../Twemoji.tsx'
 
 import styles from './index.module.css'
 
 import './index.css'
 
-import type { Map } from '@/types/index.js'
-
-import Button from '../common/Button/index.js'
-import Twemoji from '../Twemoji.js'
+import type { Map } from '@/types/index.ts'
 
 interface Props {
   mapData: Map

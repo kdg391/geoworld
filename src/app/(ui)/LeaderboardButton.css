@@ -1,0 +1,7 @@
+[data-theme='light'] {
+  --leaderboard-c: var(--gray-200);
+}
+
+[data-theme='dark'] {
+  --leaderboard-c: var(--gray-800);
+}

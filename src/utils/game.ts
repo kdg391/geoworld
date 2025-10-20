@@ -1,7 +1,7 @@
 import bbox from '@turf/bbox'
 import { featureCollection, point } from '@turf/helpers'
 
-import type { DistanceUnit } from '../types/index.js'
+import type { DistanceUnit } from '../types/index.ts'
 
 const EARTH_RADIUS = {
   imperial: 3958.8,
