@@ -1,6 +1,6 @@
 'use client'
 
-import { Trophy } from 'lucide-react'
+import { Trophy, X } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 
 import Button from '@/components/common/Button/index.tsx'
@@ -42,7 +42,11 @@ const LeaderboardButton = () => {
         className={styles.button}
         onClick={() => setIsOpen((o) => !o)}
       >
-        <Trophy size={16} fill="#fff" stroke="#fff" />
+        {isOpen ? (
+          <X size={16} fill="#fff" stroke="#fff" />
+        ) : (
+          <Trophy size={16} fill="#fff" stroke="#fff" />
+        )}
         랭킹 {isOpen ? '닫기' : '보기'}
       </Button>
 

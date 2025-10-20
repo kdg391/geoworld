@@ -1,5 +1,5 @@
 [data-theme='light'] {
-  --leaderboard-c: var(--gray-200);
+  --leaderboard-c: #ededed;
 }
 
 [data-theme='dark'] {
