@@ -11,6 +11,9 @@
   "dependencies": {
     "@formatjs/intl-localematcher": "^0.6.2",
     "@googlemaps/js-api-loader": "^1.16.10",
+    "@node-rs/argon2": "^2.0.2",
+    "@oslojs/crypto": "^1.0.1",
+    "@oslojs/encoding": "^1.1.0",
     "@supabase/supabase-js": "^2.75.1",
     "@turf/bbox": "^7.2.0",
     "@turf/boolean-point-in-polygon": "^7.2.0",
