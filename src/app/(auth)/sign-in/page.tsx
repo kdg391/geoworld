@@ -14,7 +14,7 @@ const SignIn = async () => {
 
   const { session } = await getCurrentSession()
 
-  if (session) redirect('/dashboard')
+  if (session) redirect('/')
 
   const { t } = await createTranslation('auth')
 

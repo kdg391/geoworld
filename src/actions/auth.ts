@@ -16,7 +16,7 @@ import {
 import { generateSessionToken } from '../lib/session-utils.ts'
 
 import { createClient } from '../utils/supabase/server.js'
-import { signInCredentialsSchema } from '../utils/validations/auth.js'
+import { signInSchema } from '../utils/validations/auth.js'
 
 import type { APIAccount } from '@/types/account.ts'
 import type { APIUser } from '@/types/user.ts'
@@ -35,31 +35,6 @@ export const signOut = async () => {
 
   await invalidateSession(session.id)
   await deleteSessionTokenCookie()
-}
-
-export const signOutSession = async (_: unknown, formData: FormData) => {
-  'use server'
-
-  const { session } = await getCurrentSession()
-
-  if (!session)
-    return {
-      errors: {
-        message: 'Unauthorized',
-      },
-    }
-
-  const sessionId = formData.get('session-id')
-
-  if (sessionId) {
-    await invalidateSession(sessionId.toString())
-
-    if (session.id === sessionId) await deleteSessionTokenCookie()
-  }
-
-  return {
-    errors: null,
-  }
 }
 
 export const signOutAllSessions = async () => {
@@ -97,11 +72,10 @@ export const signOutAllSessions = async () => {
   }
 }
 
-export const signInWithCredentials = async (_: unknown, formData: FormData) => {
+export const signIn = async (_: unknown, formData: FormData) => {
   'use server'
 
-  const validated = await signInCredentialsSchema.safeParseAsync({
-    email: formData.get('email'),
+  const validated = await signInSchema.safeParseAsync({
     password: formData.get('password'),
   })
 
@@ -126,7 +100,7 @@ export const signInWithCredentials = async (_: unknown, formData: FormData) => {
   const { data: user } = await supabase
     .from('users')
     .select('*')
-    .eq('email', validated.data.email)
+    .eq('id', process.env.ADMIN_USER_ID)
     .single<APIUser>()
 
   if (user === null)
@@ -139,10 +113,7 @@ export const signInWithCredentials = async (_: unknown, formData: FormData) => {
   const { data: account } = await supabase
     .from('accounts')
     .select('*')
-    .match({
-      provider: 'credentials',
-      user_id: user.id,
-    })
+    .eq('user_id', user.id)
     .single<APIAccount>()
 
   if (account === null)

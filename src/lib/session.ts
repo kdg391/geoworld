@@ -2,7 +2,7 @@
 
 import { sha256 } from '@oslojs/crypto/sha2'
 import { encodeHexLowerCase } from '@oslojs/encoding'
-import { cookies } from 'next/headers.js'
+import { cookies } from 'next/headers'
 import { cache } from 'react'
 
 import { createClient } from '../utils/supabase/server.js'

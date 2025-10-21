@@ -2,7 +2,7 @@
 
 import { useActionState } from 'react'
 
-import { signInWithCredentials } from '@/actions/auth.js'
+import { signIn } from '@/actions/auth.js'
 import { useTranslation } from '@/i18n/client.js'
 
 import SubmitButton from '@/components/common/SubmitButton/index.js'
@@ -12,7 +12,6 @@ import styles from './page.module.css'
 
 interface FormState {
   errors: {
-    email?: string[]
     password?: string[]
     message?: string
   } | null
@@ -21,25 +20,20 @@ interface FormState {
 const Form = () => {
   'use client'
 
-  const [state, action] = useActionState<FormState, FormData>(
-    signInWithCredentials,
-    {
-      errors: null,
-    },
-  )
+  const [state, action] = useActionState<FormState, FormData>(signIn, {
+    errors: null,
+  })
 
-  const { t } = useTranslation(['auth', 'account'])
+  const { t } = useTranslation('auth')
 
   return (
     <form action={action} className={styles.form}>
       <div>
         <label htmlFor="password" className={styles.label}>
-          {t('password', {
-            ns: 'account',
-          })}
+          {t('password')}
         </label>
         <TextInput
-          //   fullWidth
+          fullWidth
           type="password"
           id="password"
           name="password"
