@@ -34,3 +34,5 @@ export const formatRankTime = (seconds: number) => {
 
   return arr.join(' ')
 }
+
+export const delay = (ms: number) => new Promise((res) => setTimeout(res, ms))

@@ -4,9 +4,10 @@ import dynamic from 'next/dynamic'
 import { useEffect, useRef } from 'react'
 import { createRoot } from 'react-dom/client'
 
-import useGoogleApi from '@/hooks/useGoogleApi.js'
+import useGoogleApi from '@/hooks/useGoogleApi.ts'
+import { delay } from '@/utils/index.ts'
 
-import ActualMarker from './ActualMarker.js'
+import ActualMarker from './ActualMarker.tsx'
 
 import styles from './index.module.css'
 
@@ -57,7 +58,7 @@ const ResultMap = ({
 
   const { isGoogleLoaded } = useGoogleApi()
 
-  const fitMapBounds = () => {
+  const fitMapBounds = async () => {
     if (!resultMapRef.current) return
 
     const bounds = new google.maps.LatLngBounds()
@@ -83,12 +84,12 @@ const ResultMap = ({
 
     const zoom = resultMapRef.current.getZoom()
 
-    if (guess === null && view !== 'finalResult') {
-      setTimeout(() => {
-        const zoom = resultMapRef.current?.getZoom()
+    await delay(500)
 
-        if (zoom !== undefined) resultMapRef.current?.setZoom(zoom - 8)
-      }, 500)
+    if (guess === null && view !== 'finalResult') {
+      const zoom = resultMapRef.current.getZoom()
+
+      if (zoom !== undefined) resultMapRef.current.setZoom(zoom - 8)
     } else if (zoom !== undefined) {
       resultMapRef.current.setZoom(zoom - 0.25)
     }
