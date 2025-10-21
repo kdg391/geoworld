@@ -1,10 +1,10 @@
 'use server'
 
 import { verify } from '@node-rs/argon2'
-import { headers } from 'next/headers.js'
-import { redirect } from 'next/navigation.js'
+import { headers } from 'next/headers'
+import { redirect } from 'next/navigation'
 
-import { passwordOptions } from '../lib/password.js'
+import { passwordOptions } from '../lib/password.ts'
 import {
   createSession,
   deleteSessionTokenCookie,
@@ -12,14 +12,15 @@ import {
   getCurrentSession,
   invalidateSession,
   setSessionTokenCookie,
-} from '../lib/session.js'
+} from '../lib/session.ts'
 import { generateSessionToken } from '../lib/session-utils.ts'
 
-import { createClient } from '../utils/supabase/server.js'
-import { signInSchema } from '../utils/validations/auth.js'
+import { createClient } from '../utils/supabase/server.ts'
+import { signInSchema } from '../utils/validations/auth.ts'
 
 import type { APIAccount } from '@/types/account.ts'
 import type { APIUser } from '@/types/user.ts'
+import z from 'zod'
 
 export const signOut = async () => {
   'use server'
@@ -81,10 +82,10 @@ export const signIn = async (_: unknown, formData: FormData) => {
 
   if (!validated.success)
     return {
-      errors: validated.error.flatten().fieldErrors,
+      errors: z.flattenError(validated.error).fieldErrors,
     }
 
-  let redirectTo = '/dashboard'
+  let redirectTo = '/'
 
   const headerStore = await headers()
   const referrer = headerStore.get('referer')
