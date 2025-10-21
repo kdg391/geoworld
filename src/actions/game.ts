@@ -1,7 +1,6 @@
 'use server'
 
 import { OFFICIAL_MAP_WORLD_ID } from '../constants/index.ts'
-
 import { calculateDistance, calculateRoundScore } from '../utils/game.ts'
 import { createClient } from '../utils/supabase/server.ts'
 import { getGameSettingsSchema } from '../utils/validations/game.ts'
@@ -294,12 +293,21 @@ export const updateGame = async (id: string, data: GuessData) => {
   }
 }
 
-export const getSchoolRankedGames = async () => {
+interface Options {
+  mapId?: string
+  limit?: number
+}
+
+export const getSchoolRankedGames = async ({
+  mapId = OFFICIAL_MAP_WORLD_ID,
+  limit = 10,
+}: Options = {}) => {
   const supabase = createClient()
 
   const { data, error } = await supabase
     .rpc('get_ranked_games', {
-      p_map_id: OFFICIAL_MAP_WORLD_ID,
+      p_map_id: mapId,
+      p_limit: limit,
     })
     .select('*')
 

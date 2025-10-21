@@ -2,7 +2,7 @@ import { useContext } from 'react'
 
 import GoogleApiContext, {
   type ContextValue,
-} from '../contexts/GoogleApiContext.js'
+} from '../contexts/GoogleApiContext.ts'
 
 const useGoogleApi = () =>
   useContext(GoogleApiContext) ??

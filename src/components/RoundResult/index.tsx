@@ -5,17 +5,16 @@ import { useState } from 'react'
 import { Trans } from 'react-i18next'
 import { useLocalStorage } from 'usehooks-ts'
 
-import { startGameRound } from '@/actions/game.js'
-
-import { useTranslation } from '@/i18n/client.js'
+import { startGameRound } from '@/actions/game.ts'
+import { useTranslation } from '@/i18n/client.ts'
 
 import styles from './index.module.css'
 
 import './index.css'
 
-import type { DistanceUnit, Game, GameView, Guess } from '@/types/index.js'
+import type { DistanceUnit, Game, GameView, Guess } from '@/types/index.ts'
 
-const Button = dynamic(() => import('../common/Button/index.js'))
+const Button = dynamic(() => import('../common/Button/index.tsx'))
 
 interface Props {
   gameId: string

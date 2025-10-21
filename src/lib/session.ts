@@ -5,7 +5,7 @@ import { encodeHexLowerCase } from '@oslojs/encoding'
 import { cookies } from 'next/headers'
 import { cache } from 'react'
 
-import { createClient } from '../utils/supabase/server.js'
+import { createClient } from '../utils/supabase/server.ts'
 
 import type { APIUser, User } from '../types/user.ts'
 
@@ -46,7 +46,7 @@ export async function createSession(
   const session: Session = {
     id: sessionId,
     userId,
-    expiresAt: new Date(now.getTime() + 1000 * 60 * 60 * 24 * 30),
+    expiresAt: new Date(now.getTime() + 1000 * 60 * 60),
     createdAt: now,
   }
 
@@ -117,8 +117,8 @@ export async function validateSessionToken(
     }
   }
 
-  if (Date.now() >= session.expiresAt.getTime() - 1000 * 60 * 60 * 24 * 15) {
-    session.expiresAt = new Date(Date.now() + 1000 * 60 * 60 * 24 * 30)
+  if (Date.now() >= session.expiresAt.getTime() - 1000 * 60 * 30) {
+    session.expiresAt = new Date(Date.now() + 1000 * 60 * 60)
 
     await supabase
       .from('sessions')

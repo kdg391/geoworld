@@ -2,7 +2,7 @@
 
 import { memo, useEffect, useRef } from 'react'
 
-import useGoogleApi from '../hooks/useGoogleApi.js'
+import useGoogleApi from '../hooks/useGoogleApi.ts'
 
 interface Props {
   defaultOptions?: google.maps.StreetViewPanoramaOptions

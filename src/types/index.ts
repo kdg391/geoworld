@@ -1,5 +1,5 @@
-import type { OFFICIAL_COUNTRY_CODES } from '../constants/index.js'
-import type { SUPPORTED_LOCALES } from '../constants/i18n.js'
+import type { OFFICIAL_COUNTRY_CODES } from '../constants/index.ts'
+import type { SUPPORTED_LOCALES } from '../constants/i18n.ts'
 
 export type Locales = (typeof SUPPORTED_LOCALES)[number]
 

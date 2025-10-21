@@ -1,8 +1,8 @@
 'use client'
 
-import LocaleContext from '../contexts/LocaleContext.js'
+import LocaleContext from '../contexts/LocaleContext.ts'
 
-import type { Locales } from '../types/index.js'
+import type { Locales } from '../types/index.ts'
 
 export default function LocaleProvider({
   children,

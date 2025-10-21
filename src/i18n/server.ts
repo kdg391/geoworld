@@ -9,9 +9,9 @@ import {
   DEFAULT_LOCALE,
   LANGUAGE_COOKIE,
   SUPPORTED_LOCALES,
-} from '../constants/i18n.js'
+} from '../constants/i18n.ts'
 
-import type { Locales } from '../types/index.js'
+import type { Locales } from '../types/index.ts'
 
 async function initI18next(lng: Locales, namespace: string | string[]) {
   const instance = createInstance()

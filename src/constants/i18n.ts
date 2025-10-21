@@ -1,15 +1,13 @@
-import { FLAG_ENOJIS } from './index.js'
+import { FLAG_ENOJIS } from './index.ts'
 
-export const DEFAULT_LOCALE = 'en-US'
-export const SUPPORTED_LOCALES = ['en-US', 'ko'] as const
+export const DEFAULT_LOCALE = 'ko'
+export const SUPPORTED_LOCALES = ['ko'] as const
 
 export const LOCALE_NAMES = {
-  'en-US': 'English',
   ko: '한국어',
 }
 
 export const LOCALE_FLAGS = {
-  'en-US': FLAG_ENOJIS.us,
   ko: FLAG_ENOJIS.kr,
 }
 

@@ -4,13 +4,12 @@ import { Laptop, Moon, Sun } from 'lucide-react'
 import dynamic from 'next/dynamic'
 import { useMemo } from 'react'
 
-import useTheme from '@/hooks/useTheme.js'
+import useTheme from '@/hooks/useTheme.ts'
+import { useTranslation } from '@/i18n/client.ts'
 
-import { useTranslation } from '@/i18n/client.js'
+import type { Theme } from '@/types/index.ts'
 
-import type { Theme } from '@/types/index.js'
-
-const Select = dynamic(() => import('../common/Select/index.js'))
+const Select = dynamic(() => import('../common/Select/index.tsx'))
 
 const ThemeSelect = () => {
   const { theme, setTheme } = useTheme()

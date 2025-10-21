@@ -50,14 +50,7 @@ const LeaderboardButton = () => {
         랭킹 {isOpen ? '닫기' : '보기'}
       </Button>
 
-      <div
-        className={styles['leaderboard-container']}
-        style={{
-          display: isOpen ? 'flex' : 'none',
-        }}
-      >
-        <Leaderboard />
-      </div>
+      <Leaderboard isOpen={isOpen} />
     </div>
   )
 }

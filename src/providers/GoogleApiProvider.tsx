@@ -3,7 +3,7 @@
 import { Loader } from '@googlemaps/js-api-loader'
 import { useCallback, useMemo, useState } from 'react'
 
-import GoogleApiContext from '../contexts/GoogleApiContext.js'
+import GoogleApiContext from '../contexts/GoogleApiContext.ts'
 
 interface Props {
   children?: React.ReactNode

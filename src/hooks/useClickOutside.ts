@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 
 const useClickOutside = (
-  ref: React.MutableRefObject<HTMLElement | null>,
+  ref: React.RefObject<HTMLElement | null>,
 ): [boolean, React.Dispatch<React.SetStateAction<boolean>>] => {
   const [isOpen, setIsOpen] = useState(false)
 

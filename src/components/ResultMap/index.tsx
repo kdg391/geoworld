@@ -11,7 +11,7 @@ import ActualMarker from './ActualMarker.tsx'
 
 import styles from './index.module.css'
 
-import type { GameView, Guess, RoundLocation } from '@/types/index.js'
+import type { GameView, Guess, RoundLocation } from '@/types/index.ts'
 
 const lineSymbol: google.maps.Symbol = {
   path: 'M 0,-1 0,1',
@@ -31,7 +31,7 @@ const polylineOptions: google.maps.PolylineOptions = {
   ],
 }
 
-const GoogleMap = dynamic(() => import('../GoogleMap.js'))
+const GoogleMap = dynamic(() => import('../GoogleMap.tsx'))
 
 interface Props {
   actualLocations: RoundLocation[]

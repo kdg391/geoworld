@@ -13,11 +13,10 @@ import {
   DEFAULT_LOCALE,
   LANGUAGE_COOKIE,
   SUPPORTED_LOCALES,
-} from '../constants/i18n.js'
+} from '../constants/i18n.ts'
+import useLocale from '../hooks/useLocale.ts'
 
-import useLocale from '../hooks/useLocale.js'
-
-import type { Locales } from '../types/index.js'
+import type { Locales } from '../types/index.ts'
 
 const runsOnServerSide = typeof window === 'undefined'
 

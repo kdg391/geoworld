@@ -2,9 +2,9 @@
 
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
-import ThemeContext from '../contexts/ThemeContext.js'
+import ThemeContext from '../contexts/ThemeContext.ts'
 
-import type { LightDark, Theme } from '../types/index.js'
+import type { LightDark, Theme } from '../types/index.ts'
 
 interface Props {
   children: React.ReactNode
