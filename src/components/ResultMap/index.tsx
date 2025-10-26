@@ -77,14 +77,14 @@ const ResultMap = ({
       if (guess !== null) bounds.extend(guess)
     }
 
-    resultMapRef.current.fitBounds(bounds, 15)
     resultMapRef.current.setCenter(bounds.getCenter())
+    resultMapRef.current.fitBounds(bounds, 15)
 
     const guess = guessedLocations[round].position
 
     const zoom = resultMapRef.current.getZoom()
 
-    await delay(500)
+    await delay(400)
 
     if (guess === null && view !== 'finalResult') {
       const zoom = resultMapRef.current.getZoom()
@@ -93,6 +93,8 @@ const ResultMap = ({
     } else if (zoom !== undefined) {
       resultMapRef.current.setZoom(zoom - 0.25)
     }
+
+    google.maps.event.trigger(resultMapRef.current, 'resize')
   }
 
   const renderMarkers = () => {

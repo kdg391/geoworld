@@ -10,8 +10,8 @@ import { OFFICIAL_MAP_WORLD_ID } from '@/constants/index.ts'
 const schema = z.object({
   name: z
     .string()
-    .min(1, '이름을 입력해 주세요.')
-    .max(12, '이름은 12자 이하로 입력해 주세요.')
+    .min(1, '학번과 이름을 입력해 주세요.')
+    .max(12, '학번과 이름은 12자 이하로 입력해 주세요.')
     .trim(),
 })
 

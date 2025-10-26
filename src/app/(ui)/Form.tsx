@@ -33,7 +33,7 @@ const Form = () => {
         <TextInput id="name" name="name" minLength={1} maxLength={20} />
       </div>
 
-      <p className={styles.desc}>예시: 21001 홍길동</p>
+      <p className={styles.desc}>예시: 20101 홍길동</p>
 
       <div>
         <SubmitButton
