@@ -71,6 +71,25 @@ const Game = ({ params }: Props) => {
     loadGame()
   }, [])
 
+  useEffect(() => {
+    const onKeydown = (event: KeyboardEvent) => {
+      if (
+        event.key === 'F12' ||
+        ((event.ctrlKey || event.metaKey) &&
+          event.shiftKey &&
+          (event.key.toLowerCase() === 'i' || event.key.toLowerCase() === 'j'))
+      ) {
+        event.preventDefault()
+
+        return false
+      }
+    }
+
+    document.addEventListener('keydown', onKeydown)
+
+    return () => document.removeEventListener('keydown', onKeydown)
+  }, [])
+
   const finishRound = useCallback(
     async (timedOut: boolean) => {
       if (!gameData) return
