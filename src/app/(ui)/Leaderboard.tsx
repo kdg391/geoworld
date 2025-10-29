@@ -51,11 +51,17 @@ const Leaderboard = ({ isOpen }: Props) => {
       )}
     >
       {data === undefined ? (
-        <p>로딩 중...</p>
-      ) : data === null || error ? (
-        <p>데이터를 불러오는 데 오류가 발생했습니다.</p>
+        <div>
+          <p>로딩 중...</p>
+        </div>
+      ) : data === null || error !== null ? (
+        <div>
+          <p>데이터를 불러오는 데 오류가 발생했습니다.</p>
+        </div>
       ) : data.length === 0 ? (
-        <p>랭킹 데이터 없음</p>
+        <div>
+          <p>랭킹 데이터 없음</p>
+        </div>
       ) : (
         <table className={styles.table}>
           <thead>
