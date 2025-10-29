@@ -42,6 +42,12 @@ const Leaderboard = ({ isOpen }: Props) => {
       className={classNames(
         styles['leaderboard-container'],
         isOpen ? 'open' : '',
+        data === undefined ||
+          data === null ||
+          data.length === 0 ||
+          error !== null
+          ? 'no-data'
+          : '',
       )}
     >
       {data === undefined ? (

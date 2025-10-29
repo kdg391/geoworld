@@ -11,6 +11,13 @@
   &:global(.open) {
     display: flex;
   }
+
+  &:global(.no-data) {
+    width: 256px;
+    height: 200px;
+    align-items: center;
+    justify-content: center;
+  }
 }
 
 @media only screen and (max-width: 480px) {
