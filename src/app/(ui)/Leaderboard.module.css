@@ -12,7 +12,7 @@
     display: flex;
   }
 
-  &:global(.no-data) {
+  &:global(.no-data) div {
     width: 240px;
     height: 200px;
     display: flex;
