@@ -1,17 +1,15 @@
 'use client'
 
 import { Play } from 'lucide-react'
-import { useActionState, useState } from 'react'
+import { useActionState } from 'react'
 
 import SubmitButton from '@/components/common/SubmitButton/index.tsx'
 import TextInput from '@/components/common/TextInput/index.tsx'
-import { OFFICIAL_MAP_WORLD_ID } from '@/constants/index.ts'
 
 import { playGame } from './action.ts'
 
-import MapSelect from './MapSelect.tsx'
-
 import styles from './Form.module.css'
+import Select from './select.tsx'
 
 interface FormState {
   errors: {
@@ -23,11 +21,12 @@ interface FormState {
 const Form = () => {
   'use client'
 
-  const [selectedMap, setSelectedMap] = useState<string>(OFFICIAL_MAP_WORLD_ID)
-
-  const [state, action] = useActionState<FormState, FormData>(playGame, {
-    errors: null,
-  })
+  const [state, action, isPending] = useActionState<FormState, FormData>(
+    playGame,
+    {
+      errors: null,
+    },
+  )
 
   return (
     <form action={action} className={styles.form}>
@@ -36,25 +35,21 @@ const Form = () => {
           학번과 이름을 입력해 주세요.
         </label>
         <TextInput id="name" name="name" minLength={1} maxLength={20} />
-        <input type="hidden" name="map-id" value={selectedMap} />
       </div>
 
       <p className={styles.desc}>예시: 20101 홍길동</p>
 
       <div className={styles.settings}>
-        <div>
-          <MapSelect
-            selectedMap={selectedMap}
-            setSelectedMap={setSelectedMap}
-          />
-        </div>
+        <Select />
 
         <SubmitButton
-          className={styles.play}
           formAction={action}
+          className={styles.play}
           leftIcon={<Play size={16} fill="#fff" stroke="#fff" />}
           size="m"
           variant="primary"
+          isLoading={isPending}
+          disabled={isPending}
         >
           플레이
         </SubmitButton>

@@ -59,7 +59,7 @@
   top: 0;
 
   & > circle {
-    stroke: var(--secondary);
+    stroke: #ff6b30;
     fill: transparent;
     stroke-width: 2px;
   }
