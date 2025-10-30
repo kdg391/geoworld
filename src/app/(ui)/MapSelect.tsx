@@ -45,9 +45,9 @@ const mapOptions = [
     icon: <Twemoji width={18} height={18} alt="미국" emoji={FLAG_ENOJIS.us} />,
   },
   {
-    value: COUNTRY_CODE_TO_OFFICIAL_MAP_ID.cn,
-    label: '중국',
-    icon: <Twemoji width={18} height={18} alt="중국" emoji={FLAG_ENOJIS.cn} />,
+    value: COUNTRY_CODE_TO_OFFICIAL_MAP_ID.hk,
+    label: '홍콩',
+    icon: <Twemoji width={18} height={18} alt="홍콩" emoji={FLAG_ENOJIS.hk} />,
   },
   {
     value: COUNTRY_CODE_TO_OFFICIAL_MAP_ID.jp,
