@@ -40,9 +40,11 @@ const mapOptions = [
     ),
   },
   {
-    value: COUNTRY_CODE_TO_OFFICIAL_MAP_ID.us,
-    label: '미국',
-    icon: <Twemoji width={18} height={18} alt="미국" emoji={FLAG_ENOJIS.us} />,
+    value: COUNTRY_CODE_TO_OFFICIAL_MAP_ID.fr,
+    label: '프랑스',
+    icon: (
+      <Twemoji width={18} height={18} alt="프랑스" emoji={FLAG_ENOJIS.fr} />
+    ),
   },
   {
     value: COUNTRY_CODE_TO_OFFICIAL_MAP_ID.hk,
@@ -50,9 +52,9 @@ const mapOptions = [
     icon: <Twemoji width={18} height={18} alt="홍콩" emoji={FLAG_ENOJIS.hk} />,
   },
   {
-    value: COUNTRY_CODE_TO_OFFICIAL_MAP_ID.jp,
-    label: '일본',
-    icon: <Twemoji width={18} height={18} alt="일본" emoji={FLAG_ENOJIS.jp} />,
+    value: COUNTRY_CODE_TO_OFFICIAL_MAP_ID.us,
+    label: '미국',
+    icon: <Twemoji width={18} height={18} alt="미국" emoji={FLAG_ENOJIS.us} />,
   },
   {
     value: COUNTRY_CODE_TO_OFFICIAL_MAP_ID.tw,
@@ -60,11 +62,9 @@ const mapOptions = [
     icon: <Twemoji width={18} height={18} alt="대만" emoji={FLAG_ENOJIS.tw} />,
   },
   {
-    value: COUNTRY_CODE_TO_OFFICIAL_MAP_ID.fr,
-    label: '프랑스',
-    icon: (
-      <Twemoji width={18} height={18} alt="프랑스" emoji={FLAG_ENOJIS.fr} />
-    ),
+    value: COUNTRY_CODE_TO_OFFICIAL_MAP_ID.jp,
+    label: '일본',
+    icon: <Twemoji width={18} height={18} alt="일본" emoji={FLAG_ENOJIS.jp} />,
   },
 ]
 
