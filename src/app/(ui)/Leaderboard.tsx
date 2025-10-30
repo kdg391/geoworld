@@ -26,7 +26,7 @@ const Leaderboard = ({ isOpen }: Props) => {
 
   const loadData = async () => {
     const { data, error } = await getSchoolRankedGames({
-      limit: 50,
+      limit: 100,
     })
 
     setData(data)
