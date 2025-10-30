@@ -2,7 +2,7 @@
 
 import { Map as MapIcon, X } from 'lucide-react'
 import dynamic from 'next/dynamic'
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useLocalStorage } from 'usehooks-ts'
 
 import { DEFAULT_MAP_CENTER, OFFICIAL_MAP_WORLD_ID } from '@/constants/index.ts'

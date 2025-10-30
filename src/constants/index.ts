@@ -209,3 +209,16 @@ export const OFFICIAL_MAP_COUNTRY_CODES: Record<
   'b1b41f42-24f9-4f50-bff2-43f909c0b970': 'vn',
   'a806aab1-d130-4c6d-b097-2f33c75d3e14': 'za',
 }
+
+function invertObject<K extends PropertyKey, V extends PropertyKey>(
+  obj: Record<K, V>,
+): Record<V, K> {
+  const entries = Object.entries(obj) as [K, V][]
+  const invertedEntries = entries.map(([key, value]): [V, K] => [value, key])
+
+  return Object.fromEntries(invertedEntries) as Record<V, K>
+}
+
+export const COUNTRY_CODE_TO_OFFICIAL_MAP_ID = invertObject(
+  OFFICIAL_MAP_COUNTRY_CODES,
+)

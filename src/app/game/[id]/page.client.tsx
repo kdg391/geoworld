@@ -4,25 +4,24 @@ import dynamic from 'next/dynamic'
 import { notFound } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
 
-import { startGameRound, updateGame } from '@/actions/game.js'
-import { getMap } from '@/actions/map.js'
+import { startGameRound, updateGame } from '@/actions/game.ts'
+import { getMap } from '@/actions/map.ts'
+import useGoogleApi from '@/hooks/useGoogleApi.ts'
 
-import useGoogleApi from '@/hooks/useGoogleApi.js'
-
-import Loading from './Loading.js'
+import Loading from './Loading.tsx'
 
 import styles from './page.module.css'
 
-import type { Game, GameView, Map } from '@/types/index.js'
+import type { Game, GameView, Map } from '@/types/index.ts'
 
 const FinalRoundResult = dynamic(
-  () => import('@/components/FinalRoundResult/index.js'),
+  () => import('@/components/FinalRoundResult/index.tsx'),
 )
-const GameStatus = dynamic(() => import('@/components/GameStatus/index.js'))
-const GuessMap = dynamic(() => import('@/components/GuessMap/index.js'))
-const ResultMap = dynamic(() => import('@/components/ResultMap/index.js'))
-const RoundResult = dynamic(() => import('@/components/RoundResult/index.js'))
-const StreetView = dynamic(() => import('@/components/StreetView/index.js'))
+const GameStatus = dynamic(() => import('@/components/GameStatus/index.tsx'))
+const GuessMap = dynamic(() => import('@/components/GuessMap/index.tsx'))
+const ResultMap = dynamic(() => import('@/components/ResultMap/index.tsx'))
+const RoundResult = dynamic(() => import('@/components/RoundResult/index.tsx'))
+const StreetView = dynamic(() => import('@/components/StreetView/index.tsx'))
 
 interface Props {
   params: {
@@ -41,7 +40,7 @@ const Game = ({ params }: Props) => {
 
   const [isGuessClicked, setIsGuessClicked] = useState(false)
 
-  const { isGoogleLoaded, loadGoogleApi } = useGoogleApi()
+  const { isGoogleApiLoaded, loadGoogleApi } = useGoogleApi()
 
   useEffect(() => {
     const loadGame = async () => {
@@ -61,7 +60,7 @@ const Game = ({ params }: Props) => {
       }
       if (mDataErr) return
 
-      if (!isGoogleLoaded) await loadGoogleApi()
+      if (!isGoogleApiLoaded) await loadGoogleApi()
 
       setGameData(gData)
       setMapData(mData)

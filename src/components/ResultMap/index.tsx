@@ -56,7 +56,7 @@ const ResultMap = ({
   )
   const polylinesRef = useRef<google.maps.Polyline[]>([])
 
-  const { isGoogleLoaded } = useGoogleApi()
+  const { isGoogleApiLoaded } = useGoogleApi()
 
   const fitMapBounds = async () => {
     if (!resultMapRef.current) return
@@ -128,13 +128,6 @@ const ResultMap = ({
           content: container,
         })
 
-        actualMarker.addListener('click', () => {
-          window.open(
-            `https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${actualLoc.lat},${actualLoc.lng}&heading=${actualLoc.heading}&pitch=${actualLoc.pitch}&fov=180&pano=${actualLoc.pano_id}`,
-            '_blank',
-          )
-        })
-
         const guessedMarker = new google.maps.marker.AdvancedMarkerElement({
           map: resultMapRef.current,
           position: guessedLocations[i].position,
@@ -158,13 +151,6 @@ const ResultMap = ({
           lng: actualLoc.lng,
         },
         content: container,
-      })
-
-      actualMarker.addListener('click', () => {
-        window.open(
-          `https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${actualLoc.lat},${actualLoc.lng}&heading=${actualLoc.heading}&pitch=${actualLoc.pitch}&fov=180&pano=${actualLoc.pano_id}`,
-          '_blank',
-        )
       })
 
       const guessedMarker = new google.maps.marker.AdvancedMarkerElement({
@@ -224,14 +210,14 @@ const ResultMap = ({
   }
 
   useEffect(() => {
-    if (!isGoogleLoaded) return
+    if (!isGoogleApiLoaded) return
     if (guessedLocations.length === 0) return
     if (!(view === 'result' || view === 'finalResult')) return
 
     renderMarkers()
     renderPolylines()
     fitMapBounds()
-  }, [isGoogleLoaded, actualLocations, guessedLocations, view])
+  }, [isGoogleApiLoaded, actualLocations, guessedLocations, view])
 
   return (
     <GoogleMap

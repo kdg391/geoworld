@@ -1,9 +1,10 @@
 'use server'
 
 import { redirect } from 'next/navigation'
-import ClientPage from './page.client.tsx'
 
 import { getCurrentSession } from '@/lib/session.ts'
+
+import ClientPage from './page.client.tsx'
 
 interface Props {
   params: Promise<{

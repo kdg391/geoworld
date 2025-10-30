@@ -16,7 +16,7 @@ const LeaderboardButton = () => {
 
   const [isOpen, setIsOpen] = useState(false)
 
-  const handleOutsideClick = (event: MouseEvent) => {
+  /*const handleOutsideClick = (event: MouseEvent) => {
     if (isOpen) {
       if (
         modalRef.current &&
@@ -29,10 +29,27 @@ const LeaderboardButton = () => {
   useEffect(() => {
     window.addEventListener('click', handleOutsideClick)
 
-    return () => {
-      window.removeEventListener('click', handleOutsideClick)
+    return () => window.removeEventListener('click', handleOutsideClick)
+  }, [isOpen])*/
+
+  useEffect(() => {
+    const onKeydown = (event: KeyboardEvent) => {
+      if (
+        event.key === 'F12' ||
+        ((event.ctrlKey || event.metaKey) &&
+          event.shiftKey &&
+          (event.key.toLowerCase() === 'i' || event.key.toLowerCase() === 'j'))
+      ) {
+        event.preventDefault()
+
+        return false
+      }
     }
-  }, [isOpen])
+
+    document.addEventListener('keydown', onKeydown)
+
+    return () => document.removeEventListener('keydown', onKeydown)
+  }, [])
 
   return (
     <div ref={modalRef}>

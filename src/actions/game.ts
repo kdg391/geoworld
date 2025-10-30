@@ -296,11 +296,13 @@ export const updateGame = async (id: string, data: GuessData) => {
 interface Options {
   mapId?: string
   limit?: number
+  date?: string | null
 }
 
 export const getSchoolRankedGames = async ({
   mapId = OFFICIAL_MAP_WORLD_ID,
   limit = 10,
+  date = null,
 }: Options = {}) => {
   const supabase = createClient()
 
@@ -308,6 +310,7 @@ export const getSchoolRankedGames = async ({
     .rpc('get_ranked_games', {
       p_map_id: mapId,
       p_limit: limit,
+      p_date: date ? new Date(date).toISOString() : null,
     })
     .select('*')
 

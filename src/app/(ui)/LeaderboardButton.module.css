@@ -3,4 +3,5 @@
   top: calc(var(--header-h) + 1rem);
   right: 2rem;
   z-index: 5;
+  height: 36px;
 }

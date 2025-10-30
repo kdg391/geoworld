@@ -25,3 +25,14 @@
   flex-direction: column;
   text-align: center;
 }
+
+.settings {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.play {
+  height: 36px;
+}

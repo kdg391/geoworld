@@ -53,6 +53,7 @@ const ThemeProvider = ({ children }: Props) => {
 
       if (theme === 'system') {
         document.documentElement.setAttribute('data-theme', resolved)
+        document.documentElement.className = resolved
       }
     },
     [theme],
@@ -94,6 +95,7 @@ const ThemeProvider = ({ children }: Props) => {
     }
 
     document.documentElement.setAttribute('data-theme', newTheme)
+    document.documentElement.className = newTheme
   }, [theme])
 
   const providerValue = useMemo(

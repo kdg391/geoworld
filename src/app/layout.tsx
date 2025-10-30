@@ -1,7 +1,7 @@
-import { createTranslation, getLocale } from '../i18n/server.js'
+import { createTranslation, getLocale } from '../i18n/server.ts'
 
-import LocaleProvider from '../providers/LocaleProvider.js'
-import ThemeProvider from '../providers/ThemeProvider.js'
+import LocaleProvider from '../providers/LocaleProvider.tsx'
+import ThemeProvider from '../providers/ThemeProvider.tsx'
 
 import './pretendard.css'
 import './globals.css'

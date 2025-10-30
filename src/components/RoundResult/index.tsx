@@ -56,7 +56,7 @@ const RoundResult = ({
 
   return (
     <>
-      <h2>
+      <h2 className={styles.title}>
         {t('round_result.points', {
           count: guessedRound.score,
         })}

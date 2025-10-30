@@ -1,7 +1,7 @@
 'use client'
 
-import { Loader } from '@googlemaps/js-api-loader'
-import { useCallback, useMemo, useState } from 'react'
+import { importLibrary, setOptions } from '@googlemaps/js-api-loader'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import GoogleApiContext from '../contexts/GoogleApiContext.ts'
 
@@ -10,32 +10,30 @@ interface Props {
 }
 
 const GoogleApiProvider = ({ children }: Props) => {
-  const [isGoogleLoaded, setIsGoogleLoaded] = useState(false)
+  const [isGoogleApiLoaded, setIsGoogleApiLoaded] = useState(false)
 
-  const loader = useMemo(
-    () =>
-      new Loader({
-        apiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string,
-        version: 'weekly',
-        language: 'ko',
-      }),
-    [],
-  )
+  useEffect(() => {
+    setOptions({
+      key: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string,
+      v: 'weekly',
+      language: 'ko',
+    })
+  }, [])
 
   const loadGoogleApi = useCallback(async () => {
-    if (isGoogleLoaded) return
+    if (isGoogleApiLoaded) return
 
-    await loader.importLibrary('core')
-    await loader.importLibrary('maps')
-    await loader.importLibrary('marker')
-    await loader.importLibrary('streetView')
+    await importLibrary('core')
+    await importLibrary('maps')
+    await importLibrary('marker')
+    await importLibrary('streetView')
 
-    setIsGoogleLoaded(true)
-  }, [isGoogleLoaded, loader])
+    setIsGoogleApiLoaded(true)
+  }, [isGoogleApiLoaded])
 
   const providerValue = useMemo(
-    () => ({ isGoogleLoaded, loadGoogleApi }),
-    [isGoogleLoaded, loadGoogleApi],
+    () => ({ isGoogleApiLoaded, loadGoogleApi }),
+    [isGoogleApiLoaded, loadGoogleApi],
   )
 
   return (

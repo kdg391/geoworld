@@ -21,10 +21,10 @@ const GoogleMap = ({
   >) => {
   const mapElRef = useRef<HTMLDivElement | null>(null)
 
-  const { isGoogleLoaded } = useGoogleApi()
+  const { isGoogleApiLoaded } = useGoogleApi()
 
   useEffect(() => {
-    if (!isGoogleLoaded) return
+    if (!isGoogleApiLoaded) return
 
     const map = new google.maps.Map(
       mapElRef.current as HTMLDivElement,
@@ -32,7 +32,7 @@ const GoogleMap = ({
     )
 
     onLoaded(map)
-  }, [isGoogleLoaded])
+  }, [isGoogleApiLoaded])
 
   return <div ref={mapElRef} {...props}></div>
 }

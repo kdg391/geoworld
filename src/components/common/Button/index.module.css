@@ -24,10 +24,10 @@
   }
 
   &:global(.primary) {
-    background-color: var(--primary);
+    background-color: var(--primary-g);
 
     &:hover:not(:disabled) {
-      background-color: var(--primary-hover);
+      background-color: var(--primary-g-hover);
     }
   }
 

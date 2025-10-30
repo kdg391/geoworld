@@ -9,7 +9,7 @@
   height: 36px;
 
   &:focus {
-    border: 1px solid var(--primary);
+    border: 1px solid var(--primary-g);
   }
 
   &::placeholder {

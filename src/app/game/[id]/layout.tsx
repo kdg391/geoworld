@@ -1,13 +1,12 @@
 import { redirect } from 'next/navigation'
 
-import { createTranslation } from '@/i18n/server.js'
-
-import GoogleApiProvider from '@/providers/GoogleApiProvider.js'
+import { createTranslation } from '@/i18n/server.ts'
+import { getCurrentSession } from '@/lib/session.ts'
+import GoogleApiProvider from '@/providers/GoogleApiProvider.tsx'
 
 import styles from './page.module.css'
 
 import type { Metadata } from 'next'
-import { getCurrentSession } from '@/lib/session'
 
 export const generateMetadata = async (): Promise<Metadata> => {
   const { t } = await createTranslation('common')

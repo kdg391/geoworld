@@ -1,10 +1,10 @@
 import Link from 'next/link'
 
-import { createTranslation } from '@/i18n/server.js'
+import { createTranslation } from '@/i18n/server.ts'
+
+import Header from '@/components/Header/index.tsx'
 
 import styles from './not-found.module.css'
-
-import Header from '@/components/Header/index.js'
 
 const NotFound = async () => {
   const { t } = await createTranslation('common')

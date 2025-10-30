@@ -2,15 +2,14 @@
 
 import { memo, useEffect, useRef, useState } from 'react'
 
-import { useTranslation } from '@/i18n/client.js'
-
-import { classNames, formatTimeLeft } from '@/utils/index.js'
+import { useTranslation } from '@/i18n/client.ts'
+import { classNames, formatTimeLeft } from '@/utils/index.ts'
 
 import styles from './index.module.css'
 
 import './index.css'
 
-import type { RoundLocation } from '@/types/index.js'
+import type { RoundLocation } from '@/types/index.ts'
 
 interface Props {
   finishRound: (timedOut: boolean) => Promise<void>
@@ -81,9 +80,8 @@ const GameStatus = ({
         clearTimeout(timerRef.current)
       } else {
         const currentTime = new Date().getTime()
-        const timeElapsed = Math.floor(
-          (currentTime - new Date(location.started_at).getTime()) / 1000,
-        )
+        const timeElapsed =
+          (currentTime - new Date(location.started_at).getTime()) / 1000
         const left = timeLimit - timeElapsed
 
         setTimeLeft(left)
@@ -107,7 +105,7 @@ const GameStatus = ({
               timeLeft <= 10 ? 'red' : '',
             )}
           >
-            {formatTimeLeft(timeLeft)}
+            {formatTimeLeft(Math.floor(timeLeft))}
           </div>
           <svg width="100%" height="100%" className={styles['timer-svg']}>
             <circle

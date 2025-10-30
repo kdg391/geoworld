@@ -5,7 +5,6 @@ import { z } from 'zod'
 
 import { createGame } from '@/actions/game.ts'
 import { getMap } from '@/actions/map.ts'
-import { OFFICIAL_MAP_WORLD_ID } from '@/constants/index.ts'
 
 const schema = z.object({
   name: z
@@ -13,6 +12,7 @@ const schema = z.object({
     .min(5, '학번과 이름은 5글자 이상이어야 합니다.')
     .max(12, '학번과 이름은 12글자 이하여야 합니다.')
     .trim(),
+  mapId: z.uuid(),
 })
 
 export const playGame = async (_: unknown, formData: FormData) => {
@@ -20,6 +20,7 @@ export const playGame = async (_: unknown, formData: FormData) => {
 
   const validated = await schema.safeParseAsync({
     name: formData.get('name'),
+    mapId: formData.get('map-id'),
   })
 
   if (!validated.success)
@@ -27,7 +28,7 @@ export const playGame = async (_: unknown, formData: FormData) => {
       errors: z.flattenError(validated.error).fieldErrors,
     }
 
-  const { data: mapData } = await getMap(OFFICIAL_MAP_WORLD_ID)
+  const { data: mapData } = await getMap(validated.data.mapId)
   const { data: gameData, error } = await createGame({
     mapData,
     settings: {
