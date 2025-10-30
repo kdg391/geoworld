@@ -2,10 +2,10 @@
 
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
-import { memo, useState } from 'react'
+// import { useRouter } from 'next/navigation'
+import { memo /*, useState */ } from 'react'
 
-import { createGame } from '@/actions/game.js'
+// import { createGame } from '@/actions/game.js'
 
 import { useTranslation } from '@/i18n/client.js'
 
@@ -23,13 +23,14 @@ interface Props {
 }
 
 const FinalRoundResult = ({ mapData, settings, totalScore, name }: Props) => {
-  const router = useRouter()
+  void [mapData, settings, name]
+  // const router = useRouter()
 
-  const [isLoading, setIsLoading] = useState(false)
+  // const [isLoading, setIsLoading] = useState(false)
 
   const { t } = useTranslation('game')
 
-  const onReplayClick = async () => {
+  /*const onReplayClick = async () => {
     setIsLoading(true)
 
     const { data: gameData, error } = await createGame({
@@ -44,7 +45,7 @@ const FinalRoundResult = ({ mapData, settings, totalScore, name }: Props) => {
     }
 
     router.push(`/game/${gameData.id}`)
-  }
+  }*/
 
   return (
     <>
@@ -54,7 +55,7 @@ const FinalRoundResult = ({ mapData, settings, totalScore, name }: Props) => {
         })}
       </h2>
       <div className={styles['result-actions']}>
-        <Button
+        {/*<Button
           variant="primary"
           size="l"
           isLoading={isLoading}
@@ -62,7 +63,7 @@ const FinalRoundResult = ({ mapData, settings, totalScore, name }: Props) => {
           onClick={onReplayClick}
         >
           {t('final_round_result.replay')}
-        </Button>
+        </Button>*/}
         <Button as={Link} href="/" variant="gray" size="l">
           {t('final_round_result.exit')}
         </Button>

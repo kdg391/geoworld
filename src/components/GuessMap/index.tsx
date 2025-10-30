@@ -2,7 +2,7 @@
 
 import { Map as MapIcon, X } from 'lucide-react'
 import dynamic from 'next/dynamic'
-import { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useLocalStorage } from 'usehooks-ts'
 
 import { DEFAULT_MAP_CENTER, OFFICIAL_MAP_WORLD_ID } from '@/constants/index.ts'
@@ -23,6 +23,8 @@ const GuessMapZoomControls = dynamic(
 
 interface Props {
   finishRound: (timedOut: boolean) => Promise<void>
+  isGuessClicked: boolean
+  setIsGuessClicked: React.Dispatch<React.SetStateAction<boolean>>
   mapData: Map
   markerPosition: google.maps.LatLngLiteral | null
   setMarkerPosition: React.Dispatch<
@@ -34,6 +36,8 @@ interface Props {
 
 const GuessMap = ({
   finishRound,
+  isGuessClicked,
+  setIsGuessClicked,
   mapData,
   markerPosition,
   setMarkerPosition,
@@ -50,7 +54,7 @@ const GuessMap = ({
   const [isMapActive, setIsMapActive] = useState(isMapPinned)
   const [isMobileOpen, setIsMobileOpen] = useState(false)
 
-  const [isLoading, setIsLoading] = useState(false)
+  const [isBtnLoading, setIsBtnLoading] = useState(false)
 
   const { t } = useTranslation('game')
 
@@ -77,6 +81,8 @@ const GuessMap = ({
     guessMapRef.current = map
 
     map.addListener('click', (event: google.maps.MapMouseEvent) => {
+      if (isGuessClicked) return
+
       setMarkerPosition(event.latLng?.toJSON() ?? null)
 
       if (markerRef.current) {
@@ -94,11 +100,13 @@ const GuessMap = ({
   }
 
   const onGuessClick = async () => {
-    setIsLoading(true)
+    setIsBtnLoading(true)
+    setIsGuessClicked(true)
 
     await finishRound(false)
 
-    setIsLoading(false)
+    setIsBtnLoading(false)
+    setIsGuessClicked(false)
   }
 
   useEffect(() => {
@@ -171,8 +179,8 @@ const GuessMap = ({
 
         <Button
           full
-          isLoading={isLoading}
-          disabled={markerPosition === null || isLoading}
+          isLoading={isBtnLoading}
+          disabled={markerPosition === null || isBtnLoading}
           className={styles['guess-btn']}
           onClick={onGuessClick}
         >

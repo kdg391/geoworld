@@ -4,7 +4,7 @@ const NotFound = () => {
   return (
     <section>
       <h1>Game Not Found</h1>
-      <Link href="/">Go to Home</Link>
+      <Link href="/">홈으로 돌아가기</Link>
     </section>
   )
 }

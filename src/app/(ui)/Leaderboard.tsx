@@ -78,7 +78,7 @@ const Leaderboard = ({ isOpen }: Props) => {
                 <td>{l.rank}</td>
                 <td>{l.name}</td>
                 <td>{l.total_score.toLocaleString()}</td>
-                <td>{formatRankTime(l.total_time)}</td>
+                <td>{formatRankTime(Math.floor(l.total_time))}</td>
               </tr>
             ))}
           </tbody>

@@ -105,7 +105,9 @@ const StreetView = ({ location, settings, view }: Props) => {
 
         posHistoryRef.current = []
       })
-      .catch(console.error)
+      .catch((e) => {
+        console.error(e)
+      })
   }
 
   const onReturnToStartClick = () => {

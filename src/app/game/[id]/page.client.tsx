@@ -39,6 +39,8 @@ const Game = ({ params }: Props) => {
   const [markerPosition, setMarkerPosition] =
     useState<google.maps.LatLngLiteral | null>(null)
 
+  const [isGuessClicked, setIsGuessClicked] = useState(false)
+
   const { isGoogleLoaded, loadGoogleApi } = useGoogleApi()
 
   useEffect(() => {
@@ -95,6 +97,8 @@ const Game = ({ params }: Props) => {
       if (!gameData) return
 
       if (markerPosition || timedOut) {
+        setIsGuessClicked(true)
+
         const { data: updatedData, error: uErr } = await updateGame(
           gameData.id,
           {
@@ -103,10 +107,11 @@ const Game = ({ params }: Props) => {
           },
         )
 
+        setIsGuessClicked(false)
+
         if (!updatedData || uErr) return
 
         setGameData(updatedData)
-
         setView('result')
       }
     },
@@ -172,6 +177,8 @@ const Game = ({ params }: Props) => {
 
       <GuessMap
         finishRound={finishRound}
+        isGuessClicked={isGuessClicked}
+        setIsGuessClicked={setIsGuessClicked}
         mapData={mapData}
         markerPosition={markerPosition}
         setMarkerPosition={setMarkerPosition}

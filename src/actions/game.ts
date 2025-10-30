@@ -1,5 +1,7 @@
 'use server'
 
+import { z } from 'zod'
+
 import { OFFICIAL_MAP_WORLD_ID } from '../constants/index.ts'
 import { calculateDistance, calculateRoundScore } from '../utils/game.ts'
 import { createClient } from '../utils/supabase/server.ts'
@@ -128,7 +130,7 @@ export const createGame = async ({
   if (!validated.success)
     return {
       data: null,
-      error: validated.error.flatten().fieldErrors,
+      error: z.flattenError(validated.error).fieldErrors,
     }
 
   const { data: location, error: lErr } = await supabase
@@ -251,11 +253,9 @@ export const updateGame = async (id: string, data: GuessData) => {
 
   const time = data.timedOut
     ? gameData.settings.timeLimit
-    : Math.floor(
-        (now.getTime() -
-          new Date(gameData.rounds[gameData.round].started_at).getTime()) /
-          1000,
-      )
+    : (now.getTime() -
+        new Date(gameData.rounds[gameData.round].started_at).getTime()) /
+      1000
 
   const rounds = [...gameData.rounds]
 
